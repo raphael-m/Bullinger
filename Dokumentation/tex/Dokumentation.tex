@@ -1,0 +1,658 @@
+\input{commands.tex}
+
+\usepackage{caption}
+\usepackage{subcaption}
+
+
+\begin{document}
+\sloppy  % Silbentrennung+
+
+
+\input{0-Titelseite}
+%===================
+% Inhaltsverzeichnis
+\newpage
+\tableofcontents
+\newpage
+
+
+\section{Anforderungsspezifikation}
+
+
+\subsection{IST-Zustand}
+
+
+\subsubsection{Schema der Karteikarten}
+
+{\small \input{Bilder/Schemata.tex}}
+
+\vspace*{-0.3cm}
+{\small \input{Tabellen/Karteikarte_Felder_Attribute.tex}}
+
+Die Attributnamen \quotes{\code{Standort}}, \quotes{\code{Sign.}}, \quotes{\code{Umfang}} und \quotes{\code{Bull. Corr.}} sind auf den Karteikarten doppelt enthalten.
+
+\bigskip
+
+\subsubsection{Schemata nach OCR}
+
+\begin{itemize}
+\item Version 1:
+\url{http://www.abbyy.com/FineReader_xml/FineReader10-schema-v1.xml}
+
+\item Version 2:
+\url{http://www.loc.gov/standards/alto/alto-v2.0.xsd}
+\end{itemize}
+
+Positionsangaben:
+
+
+\input{Bilder/Schwerpunkte.tex}
+
+
+
+
+%
+%
+%\ssss{Struktur Version 1}
+%
+%\noindent
+%Schema: \url{http://www.abbyy.com/FineReader_xml/FineReader10-schema-v1.xml}
+%
+%\medskip\noindent
+%Beobachtungen am Beispiel der Datei \code{Karteikarten\_HBBW\_1551\_1000012.xml}:
+%
+%\begin{itemize}
+%
+%\item
+%Das \code{<page>}-Element beschreit den Inhalt der Karteikarte (9851x6994px) und gliedert sich zunächst seriell in verschiedene \code{<block>}-Elemente. Grösse und Position derselben sind durch die \code{t,r,b,l}-Attribute (top, right, bottom, left) exakt definiert, welche sich stets auf die linke/obere Seite der Karteikarte (\code{<page>}) beziehen.
+%
+%\input{Bilder/tlrb.tex}
+%
+%\item
+%Das erste \code{<block>}-Element enthält eine Tabelle (\code{blockType="'Table"'}) mit den OCR-Daten (\code{<row>}/\code{<cell>}). Die Höhe der einzelnen Zeilen ist nur implizit durch deren Inhalt gegeben (Zellen, \code{height}/\code{width}). Alle weiteren \code{<block>}-Elemente beschreiben Linien oder Rechtecke (\code{blockType="'Separator"'}).
+%
+%\vspace*{-0.7cm}
+%\begin{figure}[H]
+%\begin{eqnarray*}
+%\mu_{\text{(\#rows)}}&\pm &\sigma_{\text{(\#rows)}} = 8.09\pm 2.32\\
+%\mu_{\text{(\#cells)}}&\pm &\sigma_{\text{(\#cells)}} = 21.96\pm 10.38\\
+%\mu_{\text{(\#texts)}}&\pm &\sigma_{\text{(\#texts)}} = 21.29\pm 10.43\\
+%\end{eqnarray*}
+%
+%\vspace*{-1cm}
+%\begin{quote}
+%\begin{quote}
+%\caption{Anzahl Zeilen/Zellen variieren von Karteikarte zu Karteikarte: Alignierte Textelemente ergeben jeweils \textit{potentiell} eine Zeile.\\
+%Code: \hyperref[code:xml_analysen]{\code{xml.py/calculate\_element\_stats(directory\_path\_to\_xml\_files)}}\\
+%Alle Daten: siehe \autoref{tabelle:ocr_statistik}}
+%\end{quote}
+%\end{quote}
+%\end{figure}
+%
+%\vspace*{-1.3cm}
+%\item
+%Die Höhe/Breite einzelner Zellen einer Zeile sind explizit gegeben (\code{width}/\code{height}).
+%
+%\item
+%Zellen enthalten in \code{<par>}-Elementen gegliederten Text (\code{<text>}). Paragraphen definieren den Zeilenabstand (\code{lineSpacing}) der darin enthaltenen Textzeilen (\code{<line>}), wie auch eine Einrückung (\code{leftIndent}/\code{align}).
+%
+%\item
+%Das \code{baseline}-Attribute einer Linie definiert den Abstand zwischen dem oberen Rand der Seite (\code{<page>}) und dem Text (den Zeichendaten) innerhalb einer Linie (\code{<formatting>}).
+%
+%\item
+%Die Grösse/Position einer Textbox (\code{<line>}/\code{<formatting>}) ist durch \code{t,r,b,l}-Attribute gegeben, die sich (wie die \code{block}-Elemente) auf die Ränder der gesamten Seite beziehen (siehe Abbildung \ref{fig:mittelpunkt}, links).
+%\end{itemize}
+%
+%
+%
+%\ssss{Struktur Version 2}
+%
+%\noindent
+%Schema: \url{http://www.loc.gov/standards/alto/alto-v2.0.xsd}
+%
+%\medskip\noindent
+%Beobachtungen am Beispiel der Datei \code{Karteikarten\_HBBW\_1551\_1000012.xml}:
+%
+%\begin{itemize}
+%
+%\item
+%Die Daten einer Karteikarte befinden sich innerhalb des \code{<page>}- (\code{height}/\code{width}), bzw. des darin enthaltenen \code{<PrintSpace>}-Elements (\code{height, width, vpos, hpos}). Dieses beinhaltet  \code{<GraphicalElement>}-Elemente und (genau) ein \code{<ComposedBlock>}-Element (\code{height, width, vpos, hpos}).
+%
+%\item
+%Das \code{<ComposedBlock>}-Element der Karteikarte glieder sich in \code{<TextBlock>}-Elemente, welche ein oder mehrere \quotes{Textzeilen} (\code{<TextLine>}) enthalten (\code{height-, width-, vpos-, hpos-} sowie ein \code{baseline-}Attribut).
+%
+%\item
+%Letztere enthalten u.A. \code{<String>}-Elemente (\code{CONTENT}, \code{HEIGHT}, \code{WIDTH}, \code{VPOS} \& \code{HPOS}). Das \code{CONTENT}-Attribut enthält jeweils \quotes{ein Stück} Zeichendaten, und die anderen Attribute definieren dessen Position.
+%
+%
+%\begin{figure}[H]
+%\begin{minipage}[c]{0.47\textwidth}
+%	\begin{flushright}
+%\begin{tikzpicture}[fill=blue!20, scale=0.4]
+%% Koordinaten/Beschriftungen
+%\draw[line width=2pt] (0,-5) -- (0,0) -- (10,0);
+%\draw (-2,0) node[anchor=south]{\scriptsize obere Seitenkante (\code{page})};
+%
+%% Element
+%\fill (2,-2) -- (6,-2) -- (6,-3) -- (2,-3) -- (2,-2);
+%
+%\draw[>=latex,<->] (2,0) -- (2,-2);
+%\draw (2,-1) node[anchor=west]{{\tiny VPOS}};
+%\draw[>=latex,<->] (0,-2) -- (2,-2);
+%\draw (1,-2) node[anchor=south]{{\tiny HPOS}};
+%\draw[>=latex,<->] (2,-3.3) -- (6,-3.3);
+%\draw (4,-3.3) node[anchor=north]{{\tiny WIDTH}};
+%\draw[>=latex,<->] (6.3,-2) -- (6.3,-3);
+%\draw (6.3,-2.5) node[anchor=west]{{\tiny HEIGH}};
+%
+%\draw[red, densely dotted] (2,-3)--(2,-3.5);
+%\draw[red, densely dotted] (6,-3)--(6,-3.5);
+%\draw[red, densely dotted] (6,-3)--(6.5,-3);
+%\draw[red, densely dotted] (6,-2)--(6.5,-2);
+%
+%\draw[dashed] (4,0)--(4,-2.5);
+%\draw[dashed] (0,-2.5)--(4,-2.5);
+%
+%\draw (4,0) circle (2pt);
+%\draw (4,-2.5) circle (2pt);
+%\draw (0,-2.5) circle (2pt);
+%
+%\draw (4,0) node[anchor=south]{$S_x$};
+%\draw (4,-2.5) node[anchor=west]{$S$};
+%\draw (0,-2.5) node[anchor=east]{$S_y$};
+%
+%\end{tikzpicture}
+%	\end{flushright}
+%\end{minipage}
+%\begin{minipage}[c]{0.47\textwidth}
+%\begin{flushleft}
+%{\footnotesize $S_{xy} = \left(\text{HPOS}+\frac{\text{WIDTH}}{2}, \text{VPOS}+\frac{\text{HEIGHT}}{2}\right)$}
+%\end{flushleft}
+%\end{minipage}
+%\caption{Koordinaten des Schwerpunkts $S_{xy}$ eines graphischen Elements}
+%\label{fig:mittelpunkt}
+%\end{figure}
+%
+%
+%
+%
+%
+%\end{itemize}
+
+
+
+
+
+
+
+\subsection{SOLL-Zustand}
+
+\subsubsection{Schema der Daten}
+
+Wir sollten die Daten so differenziert wie möglich erfassen (Datum $\rightarrow$ [Jahr, Monat, Tag]), Redundantes entfernen (Bull. Corr. $\rightarrow$ [Bull. Corr., Blatt, Seite]), und Attributwerte normieren (Jan., 1., 01., etc. $\rightarrow$ Januar).
+
+{\small \input{Tabellen/Schemata.tex}}
+
+
+
+
+
+\subsection{Anforderungsanalyse}
+
+
+\subsubsection{Anwendungsfälle (User Stories)}
+
+Die folgenden Anwendungsszenarien dienen zur Analyse der Softwareanforderungen und so als Basis für die Formulierung der funktionalen Anforderungen. 
+
+Als Besucher/Anwender der Website/-applikation möchte ich...
+
+\begin{itemize}
+
+\item die Webseite über einen Link erreichen,
+\item allgemeine Informationen über Sinn/Zweck der Initiative erhalten,
+\item 
+
+\end{itemize}
+
+
+
+
+
+
+
+\subsubsection{Funktionale Anforderungen}
+
+Webapplikation 
+
+
+
+\ssss{Front-End (Client: Webbrowser)}
+
+\begin{itemize}
+
+\item Erreichbare Website
+\item Benutzer Authentifizierung (Anmeldung)
+\item 
+
+\end{itemize}
+
+
+
+\ssss{Back-End} (Server)
+
+\begin{itemize}
+
+\item
+
+\end{itemize}
+
+
+
+
+\subsection{Turkle}
+
+\subsubsection{Dokumentation}
+Offiziell
+
+\begin{itemize}
+\item Allgemein
+\url{https://github.com/hltcoe/turkle}
+
+\item Server/DB
+\url{https://github.com/hltcoe/turkle/blob/master/docs/ADMINISTRATION.md}
+
+\item Templates
+\url{https://github.com/hltcoe/turkle/blob/master/docs/TEMPLATE-GUIDE.md}
+\end{itemize}
+
+
+
+\begin{itemize}
+\item
+Download Turkle from
+\url{https://github.com/hltcoe/turkle.git}
+
+\item
+Dependencies:
+\code{pip install -r requirements.txt}
+
+\item
+Database (Init):
+\code{python manage.py migrate}
+
+\item
+Admin:
+\code{python manage.py createsuperuser}
+
+\item
+Upgrade.
+\code{python manage.py migrate}
+
+\item
+Start Server
+\code{python manage.py runserver 0.0.0.0:8000}
+
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+\section{Implementation}
+
+\subsection{Datenextraktion}
+
+\subsubsection{Karteikartengrösse}
+
+Die Seitengrössen beider OCR-Versionen stimmen exakt überein.
+
+\begin{center}
+\begin{minipage}[t]{0.45\textwidth}
+\begin{center}
+\includegraphics[scale=0.45]{Bilder/page_size.png}
+\end{center}
+\end{minipage}
+\begin{minipage}[t]{0.45\textwidth}
+\begin{center}
+\includegraphics[scale=0.45]{Bilder/page_size_adjusted.png}
+\end{center}
+\end{minipage}
+\end{center}
+
+\vspace*{-1.5cm}
+
+\begin{center}
+\begin{minipage}[t]{0.45\textwidth}
+
+\begin{center}
+\begin{table}[H]
+\centering
+\begin{scriptsize}
+\begin{tabular}{lcccc}
+\toprule
+Seite &  $\mu_a$ &  $\sigma_a$ &  min &  max \\
+\midrule
+Breite	&    9661  &		975 &     4922 &     9902 \\
+Höhe 	&    6837  &		690 &     3488 &     7012 \\
+\bottomrule
+\end{tabular}
+\caption{Dimensionen einer Karteikarte}
+\end{scriptsize}
+\end{table}
+\end{center}
+
+\end{minipage}
+\begin{minipage}[t]{0.45\textwidth}
+
+\begin{center}
+\begin{table}[H]
+\centering
+\begin{scriptsize}
+\begin{tabular}{lcccc}
+\toprule
+Seite &  $\mu_b$ &  $\sigma_b$ &  min &  max \\
+\midrule
+Breite	&    \textbf{9860} &		11 & 9843 & 9902 \\
+Höhe	&    \textbf{6978} &		10 & 6949 & 7012 \\
+\bottomrule
+\end{tabular}
+\caption{ohne Ausreisser}
+\end{scriptsize}
+\end{table}
+\end{center}
+
+\end{minipage}
+\end{center}
+
+\vspace*{-0.3cm}
+Durch Ausreisser verursachter Fehler:
+
+
+\begin{footnotesize}
+\begin{eqnarray*}
+\Delta\mu_{x}^\% &=& 1 - \frac{9661}{9860} = 2.0183 \%\\
+\Delta\mu_{y}^\% &=& 1 - \frac{6837}{6978} = 2.0206 \%
+\end{eqnarray*}
+\end{footnotesize}
+
+
+\vspace*{-0cm}
+Ausreisser: $4/99 \approx 4 \%$
+
+\begin{scriptsize}
+\begin{itemize}
+\setlength\itemsep{-0.1em}
+\item $(4922, 3488)$ \code{Karteikarten\_HBBW\_1551\_1000010.xml}
+\item $(4923, 3489)$ \code{Karteikarten\_HBBW\_1551\_1000041.xml}
+\item $(4935, 3492)$ \code{Karteikarten\_HBBW\_1551\_1000069.xml}
+\item $(4937, 3489)$ \code{Karteikarten\_HBBW\_1551\_1000095.xml}
+\end{itemize}
+\end{scriptsize}
+
+
+
+Skalierung für Seitenlängen $(x,y)^T < \vec{\mu_b} - 4\vec{\sigma_b}$:
+
+\begin{eqnarray}
+\mu_{bx}	&=& \alpha\mu_{ax}
+\quad\Leftrightarrow\quad \alpha = \frac{\mu_{bx}}{\mu_{ax}}
+\quad\Rightarrow\quad\alpha (\mu_{ax}) = \frac{9860}{\mu_{ax}}\\
+\mu_{by}	&=& \beta\mu_{ay}
+\quad\Leftrightarrow\quad \beta = \frac{\mu_{by}}{\mu_{ay}}
+\quad\Rightarrow\quad\beta (\mu_{ay}) = \frac{6978}{\mu_{ay}}
+\end{eqnarray}
+
+
+
+
+
+
+
+
+\subsubsection{Datenfelder}
+\vspace*{0cm}
+
+% Bilder: Manuelle Vermessung/Partitionierung
+\begin{figure}[H]
+	\begin{minipage}[t]{0.45\textwidth}
+		\begin{center}
+			\includegraphics[scale=0.25]{Bilder/Karteikarte_Original.png}
+		\end{center}
+	\end{minipage}
+	\begin{minipage}[t]{0.45\textwidth}
+		\begin{center}
+			\includegraphics[scale=0.25]{Bilder/Karteikartenmasse.png}
+		\end{center}
+	\end{minipage}
+    \caption{Manuelle Vermessung/Partitionierung einer Karteikarte}
+    \label{fig:sample_figure}
+\end{figure}
+
+% Berechnung
+\begin{lstlisting}
+f = lambda l: [sum(l[:i+1]) for i, _ in enumerate(l)]  # Partialsummen
+f([b*9860 for b in [0.31, 0.35, 0.34]])                # [3057, 6508, 9860]
+f([h*6978 for h in [0.22, 0.29, 0.1, 0.39]])           # [1535, 3559, 4257, 6978]
+f([h*6978 for h in [0.22, 0.14, 0.15, 0.25, 0.24]])    # [1535, 2512, 3559, 5303, 6978]
+[1535+i*0.29*6978/4 for i in range(1,5)]               # [2041, 2547, 3053, 3559]
+\end{lstlisting}
+
+
+
+
+
+\subsubsection{OCR-Text}
+\vspace*{-0.3cm}
+
+% Schwerpunkte
+\begin{figure}[H]
+\centering
+	\begin{subfigure}[t]{0.47\textwidth}
+	\centering
+		\subcaption{\code{ocr\_sample\_100\_v1}}		
+		\includegraphics[scale=0.5]{Bilder/scatter_v1_final.png}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.47\textwidth}
+	\centering
+		\subcaption{\code{ocr\_sample\_100\_v2}}		
+		\includegraphics[scale=0.5]{Bilder/scatter_v2_final.png}
+	\end{subfigure}
+\caption{Schwerpunkte von OCR-Text-Elementen von jeweils 100 Karteikarten}
+\end{figure}
+
+
+\subsubsection{OCR-Attribute}
+\vspace*{-0.3cm}
+
+Attribute total: 1728. Gefiltert (FP): 1660
+
+\begin{figure}[H]
+\centering
+	\begin{subfigure}[t]{0.243\textwidth}
+	\centering
+		%\subcaption{\code{ocr\_sample\_100\_v1}}		
+		\includegraphics[scale=0.28]{Bilder/attributes_0.png}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.243\textwidth}
+	\centering
+		%\subcaption{\code{ocr\_sample\_100\_v2}}		
+		\includegraphics[scale=0.28]{Bilder/attributes_1.png}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.243\textwidth}
+	\centering
+		%\subcaption{\code{ocr\_sample\_100\_v1}}		
+		\includegraphics[scale=0.28]{Bilder/attributes_2.png}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.243\textwidth}
+	\centering
+		%\subcaption{\code{ocr\_sample\_100\_v2}}		
+		\includegraphics[scale=0.28]{Bilder/attributes_3.png}
+	\end{subfigure}
+\caption{Verteilung einzelner Attributnamen}
+\end{figure}
+
+
+
+
+
+% \input{Bilder/Haeufungen.tex}
+%
+%\ssss{Lücken (Koordinaten)}
+%
+%Wir teilen eine Koordinatenachse sukzessive in immer kleinere \quotes{Buckets} ein: Die ersten auftretenden leeren Buckets sollten erwartungsgemäss mit den Feldgrenzen der Attribute korrelieren.
+%
+%\begin{scriptsize}
+%\begin{table}[H]
+%\begin{center}
+%\begin{minipage}[t]{0.45\textwidth}
+%\centering
+%$x$-Koordinaten\\
+%\smallskip
+%\includegraphics[scale=0.5]{Bilder/gaps_x.png}
+%\end{minipage}
+%\begin{minipage}[t]{0.45\textwidth}
+%\centering
+%$y$-Koordinaten\\
+%\smallskip
+%\includegraphics[scale=0.5]{Bilder/gaps_y.png}
+%\end{minipage}
+%\end{center}
+%\vspace*{-0.5cm}
+%\caption{Abschätzung der Feldgrenzen}
+%\end{table}
+%\end{scriptsize}
+
+\begin{figure}[H]
+\centering
+	\begin{subfigure}[t]{0.47\textwidth}
+	\begin{flushright}
+		%\centering\subcaption{\code{ocr\_sample\_100\_v1}}
+		\includegraphics[scale=0.5]{Bilder/ocr_attributes_1.png}
+	\end{flushright}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.47\textwidth}
+	\begin{flushleft}
+		%\centering\subcaption{\code{ocr\_sample\_100\_v2}}
+		\includegraphics[scale=0.5]{Bilder/ocr_attributes_2.png}
+	\end{flushleft}
+	\end{subfigure}
+\caption{Durchschnittliche Attributpositionen (korrigiert/unkorrigiert)} 
+\end{figure}
+
+Lineare Separierung:
+
+\begin{minipage}{0.45\textwidth}
+\begin{center}
+\begin{eqnarray*}
+y[\text{Standort}_1] &\approx & y[\text{Standort}_2]\\
+y[\text{Sign.}_1] &\approx & y[\text{Sign.}_2]\\
+y[\text{Umfang}_1] &\approx & y[\text{Umfang}_2]\\
+x[\text{Bull. Corr.}_1] &\approx & x[\text{Bull. Corr.}_2]
+\end{eqnarray*}
+\end{center}
+\end{minipage}
+\begin{minipage}{0.45\textwidth}
+\begin{eqnarray*}
+x[\text{Standort}_1] &<& x[\text{Standort}_2]\\
+x[\text{Sign.}_1] &<& x[\text{Sign.}_2]\\
+x[\text{Umfang}_1] &<& x[\text{Umfang}_2]\\
+y[\text{Bull. Corr.}_1] &< & y[\text{Bull. Corr.}_2]
+\end{eqnarray*}
+\end{minipage}
+
+
+
+\begin{figure}[H]
+\centering
+	\begin{subfigure}[t]{0.47\textwidth}
+	\begin{flushright}
+		%\centering\subcaption{\code{ocr\_sample\_100\_v1}}
+		\includegraphics[scale=0.5]{Bilder/ocr_attributes_3.png}
+	\end{flushright}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.47\textwidth}
+	\begin{flushleft}
+		%\centering\subcaption{\code{ocr\_sample\_100\_v2}}
+
+	\end{flushleft}
+	\end{subfigure}
+\caption{Attributwerte} 
+\end{figure}
+
+
+
+
+\subsubsection{Algorithmus}
+
+
+
+
+
+\subsection{Webserver}
+
+Flask (Framework für Webapplikationen); nutzt \quotes{Werkzeug WSGI} (Web Server Gateway Interface) als universelle Schnittstelle wz. Webservern und -applikationen und Jinja2 und rendern dynamischer Webseiten)). Benötigt mindestens Python 2.7.
+
+\begin{lstlisting}
+pip install Flask
+\end{lstlisting}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%\begin{scriptsize}
+%\begin{table}[H]
+%\begin{center}
+%\begin{minipage}[t]{0.45\textwidth}
+%\centering
+%$x$-Koordinaten\\
+%\smallskip
+%{\scriptsize \input{Tabellen/ocr_attribute_x.tex}}
+%\end{minipage}
+%\begin{minipage}[t]{0.45\textwidth}
+%\centering
+%$y$-Koordinaten\\
+%\smallskip
+%{\scriptsize \input{Tabellen/ocr_attribute_y.tex}}
+%\end{minipage}
+%\end{center}
+%\vspace*{-0.5cm}
+%\caption{Abschätzung der Position der Attributnamen auf einer typischen Karteikarte}
+%\end{table}
+%\end{scriptsize}
+
+
+
+
+\newpage
+\input{Z-Anhang.tex}
+
+
+
+
+
+
+\end{document}

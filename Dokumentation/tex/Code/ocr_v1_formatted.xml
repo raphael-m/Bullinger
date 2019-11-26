@@ -1,0 +1,390 @@
+\begin{tiny}
+\begin{lstlisting}
+<document xmlns="http://www.abbyy.com/FineReader_xml/FineReader10-schema-v1.xml" version="1.0" producer="" languages="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.abbyy.com/FineReader_xml/FineReader10-schema-v1.xml http://www.abbyy.com/FineReader_xml/FineReader10-schema-v1.xml">
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<documentData>
+   <sections>
+      <section>
+         <stream role="text" beginPage="0">
+            <mainText columnCount="1"/>
+            <elemId id="{5602AE7C-9916-4028-A87C-D0C8717F904B}"/>
+         </stream>
+      </section>
+   </sections>
+</documentData>
+<page width="9851" height="6994" resolution="1200">
+   <block blockType="Table" pageElemId="{5602AE7C-9916-4028-A87C-D0C8717F904B}" l="4" t="0" r="9848" b="6994">
+      <region>
+         <rect l="4" t="0" r="9848" b="6994"/>
+      </region>
+      <row>
+         <cell leftBorder="White" topBorder="White" width="3068" height="1592">
+            <text id="{50FDE2C2-8C1C-4D1A-9E6D-D245E6B9DA23}">
+               <par align="Justified" lineSpacing="1360">
+                  <line baseline="388" l="110" t="258" r="2042" b="394">
+                     <formatting lang="GermanNewSpelling">
+                        Datum.....................
+                     </formatting>
+                  </line>
+               </par>
+               <par leftIndent="2100" lineSpacing="1360">
+                  <line baseline="702" l="358" t="550" r="2270" b="722">
+                     <formatting lang="GermanNewSpelling">
+                        1551 Oktober 10.
+                     </formatting>
+                  </line>
+               </par>
+            </text>
+         </cell>
+         <cell topBorder="White" width="3476" height="1592">
+            <text id="{435055F0-FC4E-4199-8D97-6216683C70B8}">
+               <par align="Justified" leftIndent="1100" lineSpacing="2720">
+                  <line baseline="560" l="3244" t="172" r="5940" b="588">
+                     <formatting lang="GermanNewSpelling">
+                        ttWfRAT ......    apos;
+                     </formatting>
+                  </line>
+               </par>
+               <par align="Justified" leftIndent="1100" lineSpacing="1360">
+                  <line baseline="704" l="3290" t="550" r="5486" b="746">
+                     <formatting lang="GermanNewSpelling">
+                        Feyerthoy Johannes
+                     </formatting>
+                  </line>
+               </par>
+               <par align="Justified" leftIndent="1100" lineSpacing="1360">
+                  <line baseline="1112" l="3290" t="970" r="3782" b="1114">
+                     <formatting lang="GermanNewSpelling">
+                        Wien
+                     </formatting>
+                  </line>
+               </par>
+            </text>
+         </cell>
+         <cell topBorder="White" rightBorder="White" width="3300" height="1592">
+            <text id="{A2C724D8-7590-4EAC-9EB3-039FEC098F5B}">
+               <par align="Justified" leftIndent="800" lineSpacing="1360">
+                  <line baseline="400" l="6714" t="270" r="8898" b="434">
+                     <formatting lang="GermanNewSpelling">
+                        Empfanger ...
+                     </formatting>
+                  </line>
+               </par>
+               <par leftIndent="1900" lineSpacing="1360">
+                  <line baseline="700" l="6858" t="554" r="9046" b="742">
+                     <formatting lang="GermanNewSpelling">Bullinger Heinrich</formatting>
+                  </line>
+               </par>
+               <par leftIndent="1900" lineSpacing="1360">
+                  <line baseline="1108" l="6858" t="962" r="7578" b="1110">
+                     <formatting lang="GermanNewSpelling">Zuerich</formatting>
+                  </line>
+               </par>
+            </text>
+         </cell>
+      </row>
+      <row>
+         <cell rowSpan="2" leftBorder="White" width="3068" height="2012">
+            <text id="{25EBF6D7-8027-4493-90BC-7A297F4743EE}">
+               <par align="Justified" lineSpacing="1120">
+                  <line baseline="1948" l="98" t="1818" r="914" b="1982">
+                     <formatting lang="GermanNewSpelling">Autograph</formatting>
+                  </line>
+               </par>
+               <par align="Justified" lineSpacing="1250">
+                  <line baseline="2347" l="98" t="2202" r="1986" b="2402">
+                     <formatting lang="GermanNewSpelling">Standort . 4.</formatting>
+                  </line>
+               </par>
+               <par align="Justified" lineSpacing="1360">
+                  <line baseline="2972" l="94" t="2826" r="2134" b="3138">
+                     <formatting lang="GermanNewSpelling">Sign.    C J    </formatting>
+                  </line>
+               </par>
+               <par align="Justified" lineSpacing="1120">
+                  <line baseline="3348" l="98" t="3218" r="674" b="3382">
+                     <formatting lang="GermanNewSpelling">Umfang</formatting>
+                  </line>
+               </par>
+            </text>
+         </cell>
+         <cell rowSpan="2" width="3476" height="2012">
+            <text id="{9DDAB928-A90D-49C0-A802-D03967F6C2B7}">
+               <par align="Justified" leftIndent="1100" lineSpacing="1120">
+                  <line baseline="1952" l="3242" t="1822" r="3666" b="1986">
+                     <formatting lang="GermanNewSpelling">Kopie</formatting>
+                  </line>
+               </par>
+               <par align="Justified" leftIndent="1100" lineSpacing="1360">
+                  <line baseline="2346" l="3234" t="2214" r="5086" b="2350">
+                     <formatting lang="GermanNewSpelling">Standort    J</formatting>
+                  </line>
+               </par>
+               <par align="Justified" leftIndent="5100" lineSpacing="1360">
+                  <line baseline="2522" l="3918" t="2358" r="6274" b="2594">
+                     <formatting lang="GermanNewSpelling">lt;7    -fif/ij gt;w</formatting>
+                  </line>
+               </par>
+               <par align="Justified" leftIndent="1100" lineSpacing="1360">
+                  <line baseline="2956" l="3238" t="2798" r="6514" b="2986">
+                     <formatting lang="GermanNewSpelling">Sign.    apos;</formatting>
+                  </line>
+               </par>
+               <par align="Justified" leftIndent="1100" lineSpacing="1120">
+                  <line baseline="3352" l="3242" t="3218" r="3818" b="3382">
+                     <formatting lang="GermanNewSpelling">Umfang</formatting>
+                  </line>
+               </par>
+            </text>
+         </cell>
+         <cell rightBorder="White" width="3300" height="1000">
+            <text id="{43A62CAC-F01E-4F13-8868-8F448A23D4D4}">
+               <par align="Justified" leftIndent="800" lineSpacing="1120">
+                  <line baseline="1950" l="6678" t="1782" r="7946" b="1986">
+                     <formatting lang="GermanNewSpelling">Photokopie ZB</formatting>
+                  </line>
+               </par>
+               <par align="Justified" leftIndent="800" lineSpacing="1360">
+                  <line baseline="2339" l="6678" t="2178" r="9418" b="2366">
+                     <formatting lang="GermanNewSpelling">Bull.Corr. 77    Bl.4, S.4</formatting>
+                  </line>
+               </par>
+            </text>
+         </cell>
+      </row>
+      <row>
+         <cell rightBorder="White" width="3300" height="1012">
+            <text id="{9E6CEBDE-D503-435E-977F-A050AACD92E4}">
+               <par align="Justified" leftIndent="800" lineSpacing="1360">
+                  <line baseline="2953" l="6674" t="2802" r="7946" b="2962">
+                     <formatting lang="GermanNewSpelling">Abschrift ZB</formatting>
+                  </line>
+               </par>
+               <par align="Justified" leftIndent="800" lineSpacing="1120">
+                  <line baseline="3347" l="6678" t="3194" r="9418" b="3382">
+                     <formatting lang="GermanNewSpelling">Bull.Corr. 16    Bl.2, S.4</formatting>
+                  </line>
+               </par>
+            </text>
+         </cell>
+      </row>
+      <row>
+         <cell rowSpan="2" leftBorder="White" bottomBorder="White" width="3068" height="3390">
+            <text id="{2BA9D218-5AE0-443D-9DDD-3EC756237D37}">
+               <par align="Justified" lineSpacing="1120">
+                  <line baseline="3964" l="90" t="3834" r="718" b="3998">
+                     <formatting lang="GermanNewSpelling">Sprache</formatting>
+                  </line>
+               </par>
+               <par align="Justified" lineSpacing="1120">
+                  <line baseline="4656" l="90" t="4526" r="950" b="4662">
+                     <formatting lang="GermanNewSpelling">Gedruckt</formatting>
+                  </line>
+               </par>
+               <par align="Justified" leftIndent="1500" lineSpacing="1250">
+                  <line baseline="4889" l="230" t="4746" r="2314" b="4906">
+                     <formatting lang="GermanNewSpelling">amp;.    c //d*rlt;-Arcc*</formatting>
+                  </line>
+               </par>
+               <par align="Justified" lineSpacing="1360">
+                  <line baseline="5383" l="114" t="5114" r="2370" b="5414">
+                     <formatting lang="GermanNewSpelling">~    /iw/ amp;*,</formatting>
+                  </line>
+               </par>
+               <par leftIndent="11400" lineSpacing="1250">
+                  <line baseline="5568" l="1907" t="5405" r="2259" b="5617">
+                     <formatting lang="GermanNewSpelling">!h </formatting>
+                  </line>
+               </par>
+               <par align="Justified" lineSpacing="510">
+                  <line baseline="5695" l="90" t="5592" r="990" b="5705">
+                     <formatting lang="GermanNewSpelling">ArK4Wuy4</formatting>
+                  </line>
+               </par>
+               <par align="Justified" leftIndent="1500" lineSpacing="1360">
+                  <line baseline="5934" l="267" t="5837" r="2019" b="5965">
+                     <formatting lang="GermanNewSpelling"> xxx </formatting>
+                  </line>
+               </par>
+            </text>
+         </cell>
+         <cell colSpan="2" rightBorder="White" width="6776" height="1768">
+            <text id="{F58B7F07-4841-4ECD-9F23-11493F5565E4}">
+               <par align="Justified" leftIndent="900" lineSpacing="1360">
+                  <line baseline="3949" l="3229" t="3787" r="7059" b="3969">
+                     <formatting lang="GermanNewSpelling">Literatur    r    o****-    **japos;H*i* j</formatting>
+                  </line>
+               </par>
+            </text>
+         </cell>
+      </row>
+      <row>
+         <cell colSpan="2" rightBorder="White" bottomBorder="White" width="6776" height="1622">
+            <text id="{9DF6A937-B519-4E09-BFB6-8E17A19B0B96}">
+               <par leftIndent="900" startIndent="8500" lineSpacing="1134">
+                  <line baseline="5572" l="4646" t="5422" r="9778" b="5610">
+                     <formatting lang="GermanNewSpelling">Benedictus dominus dei et pater domini </formatting>
+                     <formatting lang="GermanStandard">no</formatting>
+                     <formatting lang="GermanNewSpelling"></formatting>
+                  </line>
+                  <line baseline="5764" l="3226" t="5610" r="9410" b="5814">
+                     <formatting lang="GermanStandard">Bemerkungen</formatting>
+                     <formatting lang="GermanNewSpelling">    stri Jesu Christi, qui dignatus est pro</formatting>
+                  </line>
+               </par>
+               <par align="Justified" leftIndent="6600" lineSpacing="1360">
+                  <line baseline="5973" l="4166" t="5826" r="9666" b="5986">
+                     <formatting lang="GermanNewSpelling">sua immensa clementia mittere filium suum</formatting>
+                  </line>
+               </par>
+               <par align="Justified" leftIndent="12500" lineSpacing="1360">
+                  <line baseline="6231" l="5154" t="6134" r="9202" b="6318">
+                     <formatting lang="GermanNewSpelling">1 r..yA..LPXlfr7imiL</formatting>
+                  </line>
+               </par>
+            </text>
+         </cell>
+      </row>
+   </block>
+   <block blockType="Separator" l="4" t="1568" r="9844" b="1616">
+      <region>
+         <rect l="2232" t="1568" r="2908" b="1572"/>
+         <rect l="4" t="1572" r="3244" b="1576"/>
+         <rect l="4" t="1576" r="6464" b="1580"/>
+         <rect l="4" t="1580" r="9568" b="1588"/>
+         <rect l="4" t="1588" r="9844" b="1596"/>
+         <rect l="4" t="1596" r="9844" b="1600"/>
+         <rect l="3244" t="1600" r="9844" b="1604"/>
+         <rect l="6464" t="1604" r="9844" b="1612"/>
+         <rect l="9568" t="1612" r="9844" b="1616"/>
+      </region>
+      <separator type="Black" thickness="7">
+         <start x="4" y="1592"/>
+         <end x="9844" y="1592"/>
+      </separator>
+   </block>
+   <block blockType="Separator" l="6532" t="2576" r="9844" b="2612">
+      <region>
+         <rect l="6532" t="2576" r="9548" b="2580"/>
+         <rect l="6532" t="2580" r="9844" b="2608"/>
+         <rect l="9548" t="2608" r="9844" b="2612"/>
+      </region>
+      <separator type="Black" thickness="8">
+         <start x="6532" y="2594"/>
+         <end x="9844" y="2594"/>
+      </separator>
+   </block>
+   <block blockType="Separator" l="4" t="3588" r="9844" b="3624">
+      <region>
+         <rect l="3060" t="3588" r="8116" b="3592"/>
+         <rect l="4" t="3592" r="9844" b="3620"/>
+         <rect l="4" t="3620" r="3084" b="3624"/>
+      </region>
+      <separator type="Black" thickness="7">
+         <start x="4" y="3606"/>
+         <end x="9844" y="3606"/>
+      </separator>
+   </block>
+   <block blockType="Separator" l="7756" t="3724" r="8624" b="3756">
+      <region>
+         <rect l="7756" t="3724" r="8516" b="3728"/>
+         <rect l="7756" t="3728" r="8516" b="3736"/>
+         <rect l="7816" t="3736" r="8516" b="3740"/>
+         <rect l="7816" t="3740" r="8624" b="3744"/>
+         <rect l="7944" t="3744" r="8624" b="3748"/>
+         <rect l="8496" t="3748" r="8624" b="3752"/>
+         <rect l="8520" t="3752" r="8624" b="3756"/>
+      </region>
+      <separator type="Black" thickness="5">
+         <start x="7756" y="3740"/>
+         <end x="8624" y="3740"/>
+      </separator>
+   </block>
+   <block blockType="Separator" l="4724" t="3748" r="5252" b="3784">
+      <region>
+         <rect l="4724" t="3748" r="4880" b="3760"/>
+         <rect l="4724" t="3760" r="5252" b="3764"/>
+         <rect l="4724" t="3764" r="5252" b="3772"/>
+         <rect l="4820" t="3772" r="5252" b="3776"/>
+         <rect l="4820" t="3776" r="5224" b="3780"/>
+         <rect l="5076" t="3780" r="5224" b="3784"/>
+      </region>
+      <separator type="Black" thickness="5">
+         <start x="4724" y="3766"/>
+         <end x="5252" y="3766"/>
+      </separator>
+   </block>
+   <block blockType="Separator" l="4" t="4280" r="3080" b="4312">
+      <region>
+         <rect l="536" t="4280" r="3080" b="4284"/>
+         <rect l="4" t="4284" r="3080" b="4308"/>
+         <rect l="4" t="4308" r="3080" b="4312"/>
+      </region>
+      <separator type="Black" thickness="7">
+         <start x="4" y="4296"/>
+         <end x="3080" y="4296"/>
+      </separator>
+   </block>
+   <block blockType="Separator" l="3052" t="5356" r="9840" b="5392">
+      <region>
+         <rect l="8988" t="5356" r="9568" b="5360"/>
+         <rect l="4780" t="5360" r="9840" b="5364"/>
+         <rect l="3052" t="5364" r="9840" b="5384"/>
+         <rect l="3052" t="5384" r="9840" b="5388"/>
+         <rect l="3052" t="5388" r="4780" b="5392"/>
+      </region>
+      <separator type="Black" thickness="7">
+         <start x="3052" y="5374"/>
+         <end x="9840" y="5374"/>
+      </separator>
+   </block>
+   <block blockType="Separator" l="668" t="5904" r="1104" b="5928">
+      <region>
+         <rect l="668" t="5904" r="980" b="5908"/>
+         <rect l="668" t="5908" r="1104" b="5920"/>
+         <rect l="796" t="5920" r="1104" b="5928"/>
+      </region>
+      <separator type="Black" thickness="5">
+         <start x="668" y="5916"/>
+         <end x="1104" y="5916"/>
+      </separator>
+   </block>
+   <block blockType="Separator" l="3048" t="4" r="3096" b="6984">
+      <region>
+         <rect l="3068" t="4" r="3096" b="424"/>
+         <rect l="3064" t="424" r="3092" b="2844"/>
+         <rect l="3060" t="2844" r="3088" b="3592"/>
+         <rect l="3060" t="3592" r="3084" b="3616"/>
+         <rect l="3052" t="3616" r="3084" b="4520"/>
+         <rect l="3048" t="4520" r="3076" b="6984"/>
+      </region>
+      <separator type="Black" thickness="7">
+         <start x="3072" y="4"/>
+         <end x="3072" y="6984"/>
+      </separator>
+   </block>
+   <block blockType="Separator" l="6532" t="8" r="6568" b="3620">
+      <region>
+         <rect l="6536" t="8" r="6568" b="744"/>
+         <rect l="6536" t="744" r="6564" b="1580"/>
+         <rect l="6532" t="1580" r="6568" b="1608"/>
+         <rect l="6532" t="1608" r="6564" b="3620"/>
+      </region>
+      <separator type="Black" thickness="7">
+         <start x="6550" y="8"/>
+         <end x="6550" y="3620"/>
+      </separator>
+   </block>
+   <block blockType="Separator" l="7708" t="320" r="7868" b="332">
+      <region>
+         <rect l="7708" t="320" r="7868" b="332"/>
+      </region>
+      <separator type="Dotted" thickness="2">
+         <start x="7708" y="326"/>
+         <end x="7868" y="326"/>
+      </separator>
+   </block>
+</page>
+</document>
+\end{lstlisting}
+\end{tiny}

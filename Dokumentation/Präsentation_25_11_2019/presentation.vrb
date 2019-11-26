@@ -1,0 +1,31 @@
+
+\frametitle{\textbf{Silbentrennungen}}
+
+Viele Bindestriche: Bspw. \quotes{Baselines} [['Ein', 'Bei-'], ['spiel']]
+
+\begin{lstlisting}
+if (lines[i][-1][-1] == '-'):
+	 lines[i][-1][-1] = ''
+	 concat(lines[i][-1], lines[i+1][0])
+\end{lstlisting}
+\vspace*{-0.5cm}
+$\quad\rightarrow$ Erfolgsquote bei ca. 40\% (9:13 über 100)
+
+\begin{center}
+\includegraphics[scale=0.55]{Bilder/Bindestriche.png}
+\end{center}
+
+Lösung (Parser):
+
+\begin{footnotesize}
+\begin{lstlisting}
+d, v = dict(), None
+for a in attr.getNames(): d[a] = attr.getValue(a)
+if ("SUBS_TYPE" in d) and ("SUBS_CONTENT" in d):
+	 if (d["SUBS_TYPE"] == "HypPart1"):
+		  v = d["SUBS_CONTENT"]
+else: v = d["CONTENT"]
+\end{lstlisting}
+
+\end{footnotesize}
+
