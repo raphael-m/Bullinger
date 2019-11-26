@@ -1,0 +1,299 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Navigation -->
+<h1><a href="{{url_for('overview')}}">Übersicht</a> /
+    <a href="{{url_for('overview_year', year=form.year_a.default)}}">{{ form.year_a.default }}</a> /
+    <a href="{{url_for('overview_month', year=form.year_a.default, month=month)}}">{{ month }}</a> /
+    {{ form.day_a.default }}{% if form.day_a.default != 's.d.'%}.{% endif %}
+    <!-- Status -->
+    <div id="status_info">
+        Rezensionen: {{ variable["reviews"] }};
+        Status:
+        {% if variable["state"] == "offen" %}
+            <span class="status_open"> {{ variable["state"] }}</span>
+        {% elif variable["state"] == "unklar" %}
+            <span class="status_unclear"> {{ variable["state"] }}</span>
+        {% elif variable["state"] == "ungültig" %}
+            <span class="status_invalid"> {{ variable["state"] }}</span>
+        {% else %}
+            <span class="status_closed"> {{ variable["state"] }}</span>
+        {% endif %}
+    </div>
+</h1>
+
+
+<!-- File Card -->
+<div id="card_image">
+    <img id="card_drag" src="{{url_for('static', filename=card_path)}}"/>
+</div>
+
+<!-- Toolbar -->
+<div id="is_movable">
+    <div id="card_options">
+        <!-- Zoom -->
+        <div class="img_icon"><img id="zoom_out" src="{{url_for('static', filename='images/zoom-out-3.png')}}"/></div>
+        <div class="img_icon"><img id="zoom_in" src="{{url_for('static', filename='images/zoom-in-3.png')}}"/></div>
+        <!-- Move/Jump -->
+        <div class="img_icon"><img id="move_up" src="{{url_for('static', filename='images/arrow-up-2.png')}}"/></div>
+        <div class="img_icon"><img id="move_down" src="{{url_for('static', filename='images/arrow-down-2.png')}}"/></div>
+        <div class="img_icon"><img id="move_left" src="{{url_for('static', filename='images/arrow-left-2.png')}}"/></div>
+        <div class="img_icon"><img id="move_right" src="{{url_for('static', filename='images/arrow-right-2.png')}}"/></div>
+        <div class="img_icon"><img id="move_upmost" src="{{url_for('static', filename='images/arrow-up-double-2.png')}}"/></div>
+        <div class="img_icon"><img id="move_downmost" src="{{url_for('static', filename='images/arrow-down-double-2.png')}}"/></div>
+        <div class="img_icon"><img id="move_leftmost" src="{{url_for('static', filename='images/arrow-left-double-2.png')}}"/></div>
+        <div class="img_icon"><img id="move_rightmost" src="{{url_for('static', filename='images/arrow-right-double-2.png')}}"/></div>
+        <!-- Fit -->
+        <div class="img_icon"><img id="fit_width" src="{{url_for('static', filename='images/zoom-fit-width.png')}}"/></div>
+        <div class="img_icon"><img id="fit_height" src="{{url_for('static', filename='images/zoom-fit-height.png')}}"/></div>
+    </div>
+</div>
+
+<!-- Form -->
+<form action="" method="post" novalidate>
+    {{ form.csrf_token }}
+    {{ form.hidden_tag() }}
+    <!-- Hidden Variables -->
+    {{ form.image_height(class="hidden") }}
+    {{ form.img_height(class="hidden") }}
+    {{ form.img_width(class="hidden") }}
+    <!-- Actions -->
+    <div id="card_options2" class="actions">
+            <!-- set status -->
+        <div class="status_options">
+            Status:
+            {% for state in form.state %}
+            <tr>
+                <td>{{ state }}</td>
+                <td>{{ state.label }}</td>
+            </tr>
+            {% endfor %}
+        </div>
+        <div id="center_wrapper">
+            <div class="center_div">
+                {{ form.prev_card(class="buttonX button_frills") }}
+                {{ form.submit(class="buttonX button_frills") }}
+                {{ form.next_card (class="buttonX button_frills") }}
+            </div>
+        </div>
+    </div>
+    <div class="form_table">
+        <!-- column 1 -->
+        <div class="card_col1">
+            <!-- Date -->
+            <div class="attr_top">Datum</div>
+            <div class="card_row">
+                <div id="card_year" class="card_input">
+                     {{ form.year_a(placeholder="Jahr") }}
+                </div>
+                <select name="card_month_a" id="card_month" class="card_input">
+                    {% if form.month_a %}
+                        {% for option in form.month_a %}
+                        <option {% if form.month_a[option] %} selected="selected" {% endif %}>
+                            {{ option }}
+                        </option>
+                        {% endfor %}
+                    {% else %}
+                        <option value="Monat">Monat (s.d.)</option>
+                        <option value="Januar">Januar</option>
+                        <option value="Februar">Februar</option>
+                        <option value="März">März</option>
+                        <option value="April">April</option>
+                        <option value="Mai">Mai</option>
+                        <option value="Juni">Juni</option>
+                        <option value="Juli">Juli</option>
+                        <option value="August">August</option>
+                        <option value="September">September</option>
+                        <option value="Oktober">Oktober</option>
+                        <option value="November">November</option>
+                        <option value="Dezember">Dezember</option>
+                    {% endif %}
+                </select>
+                <div id="card_day" class="card_input">
+                    {{ form.day_a(placeholder="Tag A") }}
+                </div>
+            </div>
+            <div class="card_row">
+                <div id="card_year_2" class="card_input">
+                    {{ form.year_b(placeholder="Jahr B") }}
+                </div>
+                <select name="card_month_b" id="card_month_2" class="card_input">
+                    {% if form.month_b %}
+                        {% for option in form.month_a %}
+                        <option {% if form.month_b[option] %} selected="selected" {% endif %}>
+                            {{ option }}
+                        </option>
+                        {% endfor %}
+                    {% else %}
+                        <option value="Monat">Monat (s.d.)</option>
+                        <option value="Januar">Januar</option>
+                        <option value="Februar">Februar</option>
+                        <option value="März">März</option>
+                        <option value="April">April</option>
+                        <option value="Mai">Mai</option>
+                        <option value="Juni">Juni</option>
+                        <option value="Juli">Juli</option>
+                        <option value="August">August</option>
+                        <option value="September">September</option>
+                        <option value="Oktober">Oktober</option>
+                        <option value="November">November</option>
+                        <option value="Dezember">Dezember</option>
+                    {% endif %}
+                </select>
+                <div id="card_day_2" class="card_input">
+                    {{ form.day_b(placeholder="Tag B") }}
+                </div>
+            </div>
+            <div class="card_row">
+                <div id="card_date_remark" class="card_input">
+                    {{ form.remark_date(placeholder="Bemerkung zum Datum") }}
+                </div>
+            </div>
+            <div class="card_row"><div class="card_row_empty"></div></div>
+            <div class="h_separator"></div>
+            <!-- Autograph -->
+            <div class="attr_top"> Autograph </div>
+                <div class="card_row"><div id="card_a_standort" class="card_input">
+                    {{ form.place_autograph(placeholder="Standort") }}
+                </div>
+            </div>
+                <div class="card_row"><div id="card_a_signatur" class="card_input">
+                    {{ form.signature_autograph(placeholder="Signatur") }}
+                </div>
+            </div>
+                <div class="card_row"><div id="card_a_umfang" class="card_input">
+                    {{ form.scope_autograph(placeholder="Umfang") }}
+                </div>
+            </div>
+            <div class="h_separator"></div>
+        </div>
+        <!-- column 2 -->
+        <div class="card_col2">
+            <!-- Absender -->
+            <div class="attr_top"> Absender </div>
+                <div class="card_row"><div id="card_sender_title" class="card_input">
+                    {{ form.title_sender(placeholder="Titel") }}
+                </div>
+            </div>
+            <div class="card_row">
+                <div id="card_sender_name" class="card_input">
+                    {{ form.name_sender(placeholder="Nachname") }}
+                </div>
+                <div id="card_sender_forename" class="card_input">
+                    {{ form.forename_sender(placeholder="Vorname") }}
+                </div>
+            </div>
+            <div class="card_row">
+                <div id="card_sender_place" class="card_input">
+                    {{ form.place_sender(placeholder="Ort") }}
+                </div>
+            </div>
+            <div class="card_row">
+                <div id="card_sender_remark" class="card_input">
+                    {{ form.remark_sender(placeholder="Bemerkung zum Absender") }}
+                </div>
+            </div>
+            <!-- Kopie -->
+            <div class="h_separator"></div>
+            <div class="attr_top"> Kopie </div>
+            <div class="card_row">
+                <div id="card_k_standort" class="card_input">
+                    {{ form.place_copy(placeholder="Standort") }}
+                </div>
+            </div>
+            <div class="card_row">
+                <div id="card_k_signatur" class="card_input">
+                    {{ form.signature_copy(placeholder="Signatur") }}
+                </div>
+            </div>
+            <div class="card_row"><div id="card_k_umfang" class="card_input">
+                {{ form.scope_copy(placeholder="Umfang") }}
+            </div></div>
+        <div class="h_separator"></div>
+        </div>
+        <!-- column 3 -->
+        <div class="card_col3">
+            <!-- Empfänger -->
+            <div class="attr_top"> Empfänger </div>
+            <div class="card_row">
+                <div id="card_receiver_title" class="card_input">
+                    {{ form.title_receiver(placeholder="Titel") }}
+                </div>
+            </div>
+            <div class="card_row">
+                <div id="card_receiver_name" class="card_input">
+                    {{ form.name_receiver(placeholder="Nachname") }}
+                </div>
+                <div id="card_receiver_forename" class="card_input">
+                    {{ form.forename_receiver(placeholder="Vorname") }}
+                </div>
+            </div>
+            <div class="card_row">
+                <div id="card_receiver_place" class="card_input">
+                    {{ form.place_receiver(placeholder="Ort") }}
+                </div>
+            </div>
+            <div class="card_row">
+                <div id="card_receiver_remark" class="card_input">
+                    {{ form.remark_receiver(placeholder="Bemerkung zum Empfänger") }}
+                </div>
+            </div>
+            <!-- Photokopie -->
+            <div class="h_separator"></div>
+                <div class="card_row"><div id="card_photocopy" class="card_input">
+                    {{ form.place_photocopy(placeholder="Standort") }}
+                </div>
+            </div>
+            <div class="card_row">
+                <div id="card_pbc" class="card_input">
+                    {{ form.bull_corr_photocopy(placeholder="Bull. Corr.") }}
+                </div>
+                <div id="card_p_paper" class="card_input">
+                    {{ form.paper_photocopy(placeholder="Blatt") }}
+                </div>
+                <div id="card_p_page" class="card_input">
+                    {{ form.page_photocopy(placeholder="Seite") }}
+                </div>
+            </div>
+            <!-- Abschrift -->
+            <div class="card_row"><div id="card_transcript" class="card_input">
+                {{ form.place_transcript(placeholder="Standort") }}
+            </div>
+            </div>
+            <div class="card_row">
+                <div id="card_tbc" class="card_input">
+                    {{ form.bull_corr_transcript(placeholder="Bull. Corr.") }}
+                </div>
+                <div id="card_t_paper" class="card_input">
+                    {{ form.paper_transcript(placeholder="Blatt") }}
+                </div>
+                <div id="card_t_page" class="card_input">
+                    {{ form.page_transcript(placeholder="Seite") }}
+                </div>
+            </div>
+            <div class="h_separator"></div>
+        </div>
+        <div class="card_col1">
+            <div id="card_language" class="card_input">
+                {{ form.language(placeholder="Sprache") }}
+            </div>
+            <div id="card_printed" class="card_input">
+                {{ form.printed(placeholder="Gedruckt") }}
+            </div>
+        </div>
+        <div class="card_col4">
+            <div class="card_row">
+                <div id="card_literature" class="card_input">
+                    {{ form.literature(placeholder="Literatur") }}
+                </div>
+            </div>
+            <div id="card_remark" class="card_input">
+                {{ form.sentence(placeholder="erster Satz") }}
+            </div>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

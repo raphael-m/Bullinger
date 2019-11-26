@@ -1,0 +1,20 @@
+#login_form, #register_form {
+    margin: 0px;
+    padding: 15px 15px;
+}
+
+.prompt, .prompt_input, .error_msg, .error_notification, input[type=text], input[type=password] {
+    margin: 0px;
+    width: 100%;
+    height: 20px;
+    line-height: 20px;
+    padding: 0px; 0px;
+    font-size: 13pt;
+    font-weight: 5;
+    /*border-bottom: 1px solid #123;*/
+}
+
+.error_notification {
+    color: red;
+    font-size: 10pt;
+}
