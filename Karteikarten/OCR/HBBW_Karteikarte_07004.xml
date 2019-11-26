@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<alto xmlns="http://www.loc.gov/standards/alto/ns-v2#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/standards/alto/ns-v2# http://www.loc.gov/standards/alto/alto-v2.0.xsd">
+<Description>
+<MeasurementUnit>pixel</MeasurementUnit>
+<OCRProcessing ID="IdOcr"><ocrProcessingStep><processingDateTime>2019-10-28</processingDateTime><processingSoftware><softwareCreator>ABBYY</softwareCreator><softwareName>ABBYY Recognition Server</softwareName><softwareVersion>4.0</softwareVersion></processingSoftware></ocrProcessingStep></OCRProcessing>
+</Description>
+<Styles>
+<ParagraphStyle ID="StyleId-FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0."/>
+<ParagraphStyle ID="StyleId-2CD785E7-2395-403D-A6BC-ADE9843ACF14-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="5.5"/>
+<ParagraphStyle ID="StyleId-8E0C40F4-D522-44ED-91C2-FEA8084B806D-" ALIGN="Right" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="12.19999981"/>
+<ParagraphStyle ID="StyleId-2E0670BD-331D-4FC4-8579-4179A0605531-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="7.199999809"/>
+<ParagraphStyle ID="StyleId-93BD1496-ADBE-4587-BAB7-F44DABB55256-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0."/>
+<ParagraphStyle ID="StyleId-E3ED5B89-348E-4908-8CB5-61F00C3ED235-" ALIGN="Center" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="7.699999809"/>
+<ParagraphStyle ID="StyleId-2615EBEC-EB90-434E-BBF4-391BBF3238D5-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="6.099999905"/>
+</Styles>
+<Layout>
+<Page ID="Page1" PHYSICAL_IMG_NR="1" HEIGHT="7091" WIDTH="9923">
+<TopMargin HEIGHT="212" WIDTH="9923" VPOS="0" HPOS="0">
+</TopMargin>
+<LeftMargin HEIGHT="2464" WIDTH="556" VPOS="212" HPOS="0">
+</LeftMargin>
+<RightMargin HEIGHT="2464" WIDTH="4839" VPOS="212" HPOS="5084">
+</RightMargin>
+<BottomMargin HEIGHT="4415" WIDTH="9923" VPOS="2676" HPOS="0">
+<TextBlock ID="Page1_Block1" HEIGHT="132" WIDTH="144" VPOS="2792" HPOS="7604" language="de" STYLEREFS="StyleId-2CD785E7-2395-403D-A6BC-ADE9843ACF14-">
+<TextLine BASELINE="2896" HEIGHT="82" WIDTH="119" VPOS="2817" HPOS="7629"><String CONTENT="»V-" HEIGHT="82" WIDTH="119" VPOS="2817" HPOS="7629"/></TextLine>
+</TextBlock>
+</BottomMargin>
+<PrintSpace HEIGHT="2464" WIDTH="4528" VPOS="212" HPOS="556">
+<TextBlock ID="Page1_Block2" HEIGHT="676" WIDTH="1284" VPOS="2000" HPOS="556" language="de" STYLEREFS="StyleId-8E0C40F4-D522-44ED-91C2-FEA8084B806D-">
+<TextLine BASELINE="2416" HEIGHT="96" WIDTH="392" VPOS="2325" HPOS="919" STYLEREFS="StyleId-E3ED5B89-348E-4908-8CB5-61F00C3ED235-"><String CONTENT="&apos;UrHA" HEIGHT="96" WIDTH="392" VPOS="2325" HPOS="919"/></TextLine>
+<TextLine BASELINE="2603" HEIGHT="178" WIDTH="858" VPOS="2475" HPOS="979"><String CONTENT="A" HEIGHT="124" WIDTH="136" VPOS="2475" HPOS="979"/><SP WIDTH="78" VPOS="2475" HPOS="1116"/><String CONTENT="ZA7/" HEIGHT="132" WIDTH="338" VPOS="2493" HPOS="1195"/><SP WIDTH="74" VPOS="2495" HPOS="1534"/><String CONTENT="5" HEIGHT="88" WIDTH="70" VPOS="2495" HPOS="1609"/><SP WIDTH="126" VPOS="2495" HPOS="1680"/><String STYLE="subscript" CONTENT="/" HEIGHT="60" WIDTH="30" VPOS="2593" HPOS="1807"/></TextLine>
+</TextBlock>
+<ComposedBlock ID="Page1_Block3" HEIGHT="2232" WIDTH="3108" VPOS="400" HPOS="1976" TYPE="container">
+<TextBlock ID="Page1_Block4" HEIGHT="608" WIDTH="1660" VPOS="400" HPOS="3424" language="de" STYLEREFS="StyleId-2E0670BD-331D-4FC4-8579-4179A0605531-">
+<TextLine BASELINE="566" HEIGHT="192" WIDTH="858" VPOS="425" HPOS="3449"><String CONTENT="&quot;2urii&gt;" HEIGHT="154" WIDTH="392" VPOS="425" HPOS="3449"/><SP WIDTH="32" VPOS="491" HPOS="3842"/><String CONTENT="^^" HEIGHT="126" WIDTH="284" VPOS="491" HPOS="3875"/><SP WIDTH="112" VPOS="489" HPOS="4160"/><String CONTENT="*," HEIGHT="70" WIDTH="34" VPOS="489" HPOS="4273"/></TextLine>
+</TextBlock>
+<TextBlock ID="Page1_Block5" HEIGHT="172" WIDTH="332" VPOS="2460" HPOS="1976" language="de" STYLEREFS="StyleId-2615EBEC-EB90-434E-BBF4-391BBF3238D5-">
+<TextLine BASELINE="2604" HEIGHT="120" WIDTH="284" VPOS="2487" HPOS="2001"><String CONTENT="^•4" HEIGHT="120" WIDTH="284" VPOS="2487" HPOS="2001"/></TextLine>
+</TextBlock></ComposedBlock><GraphicalElement ID="Page1_Block6" HEIGHT="32" WIDTH="276" VPOS="852" HPOS="4808"/><GraphicalElement ID="Page1_Block7" HEIGHT="28" WIDTH="436" VPOS="864" HPOS="3952"/>
+</PrintSpace>
+</Page>
+</Layout>
+</alto>

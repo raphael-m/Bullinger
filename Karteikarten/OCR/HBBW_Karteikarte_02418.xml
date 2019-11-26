@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<alto xmlns="http://www.loc.gov/standards/alto/ns-v2#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/standards/alto/ns-v2# http://www.loc.gov/standards/alto/alto-v2.0.xsd">
+<Description>
+<MeasurementUnit>pixel</MeasurementUnit>
+<OCRProcessing ID="IdOcr"><ocrProcessingStep><processingDateTime>2019-10-28</processingDateTime><processingSoftware><softwareCreator>ABBYY</softwareCreator><softwareName>ABBYY Recognition Server</softwareName><softwareVersion>4.0</softwareVersion></processingSoftware></ocrProcessingStep></OCRProcessing>
+</Description>
+<Styles>
+<ParagraphStyle ID="StyleId-FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0."/>
+<ParagraphStyle ID="StyleId-EAF4763A-82AB-4743-BB6C-B503C980A788-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="16.60000038"/>
+<ParagraphStyle ID="StyleId-81221351-5D03-4514-B409-A6B3268C33E2-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="12.19999981"/>
+<ParagraphStyle ID="StyleId-50C886DB-EE94-4931-9EE5-40B386520711-" ALIGN="Block" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="14.39999962"/>
+<ParagraphStyle ID="StyleId-40879EE6-23EA-436D-A2CC-89D86DCBCFD2-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0."/>
+<ParagraphStyle ID="StyleId-030B39B2-4229-49E5-95D4-C27A7F9F24CB-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="6.599999905"/>
+<ParagraphStyle ID="StyleId-AE63C7B2-D9D6-47A0-BB24-D9D9404080CF-" ALIGN="Block" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="11.10000038"/>
+<ParagraphStyle ID="StyleId-FBF0F54E-8F5C-440C-BCBE-21264EC0DCAF-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="8.300000191"/>
+</Styles>
+<Layout>
+<Page ID="Page1" PHYSICAL_IMG_NR="1" HEIGHT="7366" WIDTH="10155">
+<TopMargin HEIGHT="452" WIDTH="10155" VPOS="0" HPOS="0">
+</TopMargin>
+<LeftMargin HEIGHT="5080" WIDTH="320" VPOS="452" HPOS="0">
+</LeftMargin>
+<RightMargin HEIGHT="5080" WIDTH="495" VPOS="452" HPOS="9660">
+</RightMargin>
+<BottomMargin HEIGHT="1834" WIDTH="10155" VPOS="5532" HPOS="0">
+</BottomMargin>
+<PrintSpace HEIGHT="5080" WIDTH="9340" VPOS="452" HPOS="320">
+<TextBlock ID="Page1_Block1" HEIGHT="220" WIDTH="696" VPOS="452" HPOS="836" language="de" STYLEREFS="StyleId-FBF0F54E-8F5C-440C-BCBE-21264EC0DCAF-">
+<TextLine BASELINE="628" HEIGHT="164" WIDTH="646" VPOS="479" HPOS="861"><String CONTENT="H~*n" HEIGHT="164" WIDTH="308" VPOS="479" HPOS="861"/><SP WIDTH="36" VPOS="557" HPOS="1170"/><String CONTENT="v*»" HEIGHT="76" WIDTH="216" VPOS="557" HPOS="1207"/><SP WIDTH="40" VPOS="571" HPOS="1424"/><String CONTENT="»" HEIGHT="62" WIDTH="42" VPOS="571" HPOS="1465"/></TextLine>
+</TextBlock>
+<ComposedBlock ID="Page1_Block2" HEIGHT="5076" WIDTH="9340" VPOS="456" HPOS="320" TYPE="container">
+<TextBlock ID="Page1_Block3" HEIGHT="2352" WIDTH="9248" VPOS="456" HPOS="412" language="de" STYLEREFS="StyleId-EAF4763A-82AB-4743-BB6C-B503C980A788-"><Shape><Polygon POINTS="3236,456 9660,456 9660,2808 412,2808 412,1036 3232,1036 3232,1032 3236,1032 3236,456"/></Shape>
+<TextLine BASELINE="730" HEIGHT="278" WIDTH="6413" VPOS="485" HPOS="3252" STYLEREFS="StyleId-50C886DB-EE94-4931-9EE5-40B386520711-"><String CONTENT="Loctmc," HEIGHT="222" WIDTH="840" VPOS="541" HPOS="3252"/><SP WIDTH="2367" VPOS="485" HPOS="4093"/><String CONTENT="i" HEIGHT="202" WIDTH="124" VPOS="485" HPOS="6461"/><SP WIDTH="51" VPOS="485" HPOS="6586"/><String CONTENT="&quot;&quot;" HEIGHT="90" WIDTH="226" VPOS="544" HPOS="6638"/><SP WIDTH="75" VPOS="501" HPOS="6865"/><String CONTENT="/" HEIGHT="186" WIDTH="99" VPOS="501" HPOS="6941"/><SP WIDTH="2223" VPOS="501" HPOS="7041"/><String CONTENT="‘--&quot;•J" HEIGHT="218" WIDTH="402" VPOS="506" HPOS="9263"/></TextLine>
+<TextLine BASELINE="1246" HEIGHT="340" WIDTH="1100" VPOS="1056" HPOS="961"><String CONTENT="A" HEIGHT="142" WIDTH="142" VPOS="1091" HPOS="961"/><SP WIDTH="157" VPOS="1056" HPOS="1104"/><String CONTENT="Juli" HEIGHT="340" WIDTH="448" VPOS="1056" HPOS="1262"/><SP WIDTH="168" VPOS="1171" HPOS="1711"/><String CONTENT="&lt;f." HEIGHT="198" WIDTH="181" VPOS="1167" HPOS="1880"/></TextLine>
+<TextLine BASELINE="2711" HEIGHT="218" WIDTH="826" VPOS="2514" HPOS="883" STYLEREFS="StyleId-81221351-5D03-4514-B409-A6B3268C33E2-"><String CONTENT="A^5T?." HEIGHT="218" WIDTH="629" VPOS="2514" HPOS="883"/><SP WIDTH="74" VPOS="2630" HPOS="1513"/><String CONTENT="-7" HEIGHT="133" WIDTH="121" VPOS="2599" HPOS="1588"/></TextLine>
+</TextBlock>
+<TextBlock ID="Page1_Block4" HEIGHT="704" WIDTH="2828" VPOS="4828" HPOS="320" STYLEREFS="StyleId-030B39B2-4229-49E5-95D4-C27A7F9F24CB-">
+<TextLine BASELINE="4919" HEIGHT="68" WIDTH="74" VPOS="4854" HPOS="491"><String CONTENT="X" HEIGHT="68" WIDTH="74" VPOS="4854" HPOS="491"/></TextLine>
+<TextLine BASELINE="5415" HEIGHT="294" WIDTH="2778" VPOS="5215" HPOS="346" STYLEREFS="StyleId-AE63C7B2-D9D6-47A0-BB24-D9D9404080CF-"><String CONTENT="^" HEIGHT="118" WIDTH="112" VPOS="5268" HPOS="346"/><SP WIDTH="44" VPOS="5254" HPOS="459"/><String CONTENT="^^*r" HEIGHT="255" WIDTH="444" VPOS="5254" HPOS="504"/><String STYLE="subscript" CONTENT="y" HEIGHT="46" WIDTH="32" VPOS="5395" HPOS="934"/><SP WIDTH="1390" VPOS="5266" HPOS="967"/><String CONTENT="fi*”" HEIGHT="168" WIDTH="232" VPOS="5266" HPOS="2358"/><SP WIDTH="292" VPOS="5313" HPOS="2591"/><String CONTENT="2$" HEIGHT="120" WIDTH="104" VPOS="5313" HPOS="2884"/><SP WIDTH="72" VPOS="5215" HPOS="2989"/><String CONTENT="i" HEIGHT="198" WIDTH="62" VPOS="5215" HPOS="3062"/></TextLine>
+</TextBlock></ComposedBlock>
+<ComposedBlock ID="Page1_Block5" HEIGHT="816" WIDTH="5960" VPOS="4472" HPOS="3480" TYPE="container"><Illustration ID="Page1_Block6" HEIGHT="816" WIDTH="5368" VPOS="4472" HPOS="4072"/></ComposedBlock><GraphicalElement ID="Page1_Block7" HEIGHT="48" WIDTH="828" VPOS="4664" HPOS="4032"/><GraphicalElement ID="Page1_Block8" HEIGHT="44" WIDTH="700" VPOS="4924" HPOS="4784"/><GraphicalElement ID="Page1_Block9" HEIGHT="32" WIDTH="592" VPOS="5140" HPOS="348"/>
+</PrintSpace>
+</Page>
+</Layout>
+</alto>

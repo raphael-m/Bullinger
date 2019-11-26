@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    {% block head %}
+    <meta charset="UTF-8">
+
+    {% if title %}
+    <title> {{ title }} </title>
+    {% else %}
+    <title> Bullingerkartei </title>
+    {% endif %}
+
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/reset.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/home.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/account.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/form.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/admin.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/table.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/menu_items.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/menu_account.css') }}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src = "{{ url_for('static', filename='js/account.js') }}"></script>
+    <script type="text/javascript" src = "{{ url_for('static', filename='js/load.js') }}"></script>
+    {% endblock %}
+
+</head>
+<body>
+    <div id="content">
+        <div id="head">
+            <div class="hlcell">
+                <a href="https://www.uzh.ch/de.html">
+                    <img class="img" src="{{url_for('static', filename='images/logo.png')}}"/>
+                </a>
+            </div>
+            <div class="hlsep"></div>
+            <div id="menu_home" class="hlcell"> Allgemeines </div>
+            <div id="menu_cards" class="hlcell"> Karteikarten </div>
+            <div id="account" class="hrcell"> {% include 'button_start.html' %} </div>
+        </div>
+
+        <div id="main">
+
+            <!-- Actual Content -->
+            {% block content %}{% endblock %}
+
+            <!-- Flash messages -->
+            <div id="error_msg">
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endwith %}
+            </div>
+
+        </div>
+        <div id="foot">
+            Institut für Schweizerische Reformationsgeschichte,
+            Institut für Computerlinguistik,
+            Universität Zürich,
+            2020
+        </div>
+    </div>
+</body>
+</html>

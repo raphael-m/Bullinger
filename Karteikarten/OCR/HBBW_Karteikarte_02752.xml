@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<alto xmlns="http://www.loc.gov/standards/alto/ns-v2#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/standards/alto/ns-v2# http://www.loc.gov/standards/alto/alto-v2.0.xsd">
+<Description>
+<MeasurementUnit>pixel</MeasurementUnit>
+<OCRProcessing ID="IdOcr"><ocrProcessingStep><processingDateTime>2019-10-28</processingDateTime><processingSoftware><softwareCreator>ABBYY</softwareCreator><softwareName>ABBYY Recognition Server</softwareName><softwareVersion>4.0</softwareVersion></processingSoftware></ocrProcessingStep></OCRProcessing>
+</Description>
+<Styles>
+<ParagraphStyle ID="StyleId-FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0."/>
+<ParagraphStyle ID="StyleId-AE04BA37-E5D1-49AB-9258-886E354B6C0D-" ALIGN="Block" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="25.55999947"/>
+<ParagraphStyle ID="StyleId-F0683A2E-6159-4304-B4EC-7B79BCC8D15C-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="13.60000038"/>
+<ParagraphStyle ID="StyleId-81493234-4665-44BB-8AA8-FAAB38C0D815-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="13.60000038"/>
+</Styles>
+<Layout>
+<Page ID="Page1" PHYSICAL_IMG_NR="1" HEIGHT="7108" WIDTH="9975">
+<TopMargin HEIGHT="136" WIDTH="9975" VPOS="0" HPOS="0">
+</TopMargin>
+<LeftMargin HEIGHT="4896" WIDTH="632" VPOS="136" HPOS="0">
+</LeftMargin>
+<RightMargin HEIGHT="4896" WIDTH="579" VPOS="136" HPOS="9396">
+</RightMargin>
+<BottomMargin HEIGHT="2076" WIDTH="9975" VPOS="5032" HPOS="0">
+</BottomMargin>
+<PrintSpace HEIGHT="4896" WIDTH="8764" VPOS="136" HPOS="632">
+<TextBlock ID="Page1_Block1" HEIGHT="1408" WIDTH="1640" VPOS="136" HPOS="632" language="de" STYLEREFS="StyleId-AE04BA37-E5D1-49AB-9258-886E354B6C0D-">
+<TextLine BASELINE="368" HEIGHT="192" WIDTH="1472" VPOS="186" HPOS="666"><String CONTENT="Terweisfeaite" HEIGHT="192" WIDTH="1472" VPOS="186" HPOS="666"/></TextLine>
+<TextLine BASELINE="800" HEIGHT="188" WIDTH="1544" VPOS="630" HPOS="698"><String CONTENT="1555" HEIGHT="180" WIDTH="468" VPOS="638" HPOS="698"/><SP WIDTH="138" VPOS="634" HPOS="1167"/><String CONTENT="Juli" HEIGHT="156" WIDTH="472" VPOS="634" HPOS="1306"/><SP WIDTH="142" VPOS="638" HPOS="1779"/><String CONTENT="15." HEIGHT="172" WIDTH="320" VPOS="630" HPOS="1922"/></TextLine>
+<TextLine BASELINE="1184" HEIGHT="148" WIDTH="680" VPOS="1050" HPOS="830" STYLEREFS="StyleId-F0683A2E-6159-4304-B4EC-7B79BCC8D15C-"><String CONTENT="siehe:" HEIGHT="148" WIDTH="680" VPOS="1050" HPOS="830"/></TextLine>
+<TextLine BASELINE="1498" HEIGHT="224" WIDTH="1548" VPOS="1298" HPOS="702" STYLEREFS="StyleId-81493234-4665-44BB-8AA8-FAAB38C0D815-"><String CONTENT="1555" HEIGHT="176" WIDTH="472" VPOS="1346" HPOS="702"/><SP WIDTH="130" VPOS="1298" HPOS="1175"/><String STYLE="superscript" CONTENT="J" HEIGHT="144" WIDTH="104" VPOS="1298" HPOS="1306"/><String CONTENT="uni" HEIGHT="152" WIDTH="364" VPOS="1342" HPOS="1422"/><SP WIDTH="142" VPOS="1342" HPOS="1787"/><String CONTENT="15-" HEIGHT="168" WIDTH="320" VPOS="1334" HPOS="1930"/></TextLine>
+</TextBlock>
+<TextBlock ID="Page1_Block2" HEIGHT="220" WIDTH="1888" VPOS="560" HPOS="3612" language="de" STYLEREFS="StyleId-F0683A2E-6159-4304-B4EC-7B79BCC8D15C-">
+<TextLine BASELINE="728" HEIGHT="172" WIDTH="1820" VPOS="586" HPOS="3638"><String CONTENT="Calvin" HEIGHT="152" WIDTH="732" VPOS="606" HPOS="3638"/><SP WIDTH="134" VPOS="586" HPOS="4371"/><String STYLE="superscript" CONTENT="u" HEIGHT="68" WIDTH="76" VPOS="586" HPOS="4506"/><String CONTENT="ohannes" HEIGHT="148" WIDTH="836" VPOS="598" HPOS="4622"/></TextLine>
+</TextBlock>
+<TextBlock ID="Page1_Block3" HEIGHT="248" WIDTH="2232" VPOS="504" HPOS="7164" language="de" STYLEREFS="StyleId-F0683A2E-6159-4304-B4EC-7B79BCC8D15C-">
+<TextLine BASELINE="675" HEIGHT="208" WIDTH="2184" VPOS="522" HPOS="7190"><String CONTENT="Bullinger" HEIGHT="180" WIDTH="1088" VPOS="550" HPOS="7190"/><SP WIDTH="122" VPOS="534" HPOS="8279"/><String CONTENT="Heinrich" HEIGHT="156" WIDTH="972" VPOS="522" HPOS="8402"/></TextLine>
+</TextBlock>
+<TextBlock ID="Page1_Block4" HEIGHT="260" WIDTH="2824" VPOS="4772" HPOS="3784" STYLEREFS="StyleId-F0683A2E-6159-4304-B4EC-7B79BCC8D15C-">
+<TextLine BASELINE="4948" HEIGHT="212" WIDTH="2676" VPOS="4798" HPOS="3810"><String CONTENT="Quanquam" HEIGHT="180" WIDTH="976" VPOS="4830" HPOS="3810"/><SP WIDTH="142" VPOS="4850" HPOS="4787"/><String CONTENT="satis" HEIGHT="140" WIDTH="580" VPOS="4814" HPOS="4930"/><SP WIDTH="142" VPOS="4842" HPOS="5511"/><String CONTENT="apparet" HEIGHT="184" WIDTH="832" VPOS="4798" HPOS="5654"/></TextLine>
+</TextBlock>
+</PrintSpace>
+</Page>
+</Layout>
+</alto>

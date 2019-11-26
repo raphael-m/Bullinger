@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Task</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    {% load staticfiles %}
+  </head>
+  <body>
+    <form name="mturk_form" method="post" id="mturk_form" target="_parent"
+          action="{% url 'task_assignment' task.id task_assignment.id %}"
+          data-iframe-height="">
+
+      {% csrf_token %}
+      {% autoescape off %}{{ task.populate_html_template }}{% endautoescape %}
+
+      {% if not task.batch.project.html_template_has_submit_button %}
+      <p class="text-center">
+        <input type="submit" id="submitButton" class="btn btn-primary" value="Submit" />
+      </p>
+      {% endif %}
+    </form>
+  </body>
+</html>

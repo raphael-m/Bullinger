@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<alto xmlns="http://www.loc.gov/standards/alto/ns-v2#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/standards/alto/ns-v2# http://www.loc.gov/standards/alto/alto-v2.0.xsd">
+<Description>
+<MeasurementUnit>pixel</MeasurementUnit>
+<OCRProcessing ID="IdOcr"><ocrProcessingStep><processingDateTime>2019-10-28</processingDateTime><processingSoftware><softwareCreator>ABBYY</softwareCreator><softwareName>ABBYY Recognition Server</softwareName><softwareVersion>4.0</softwareVersion></processingSoftware></ocrProcessingStep></OCRProcessing>
+</Description>
+<Styles>
+<ParagraphStyle ID="StyleId-FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0."/>
+<ParagraphStyle ID="StyleId-95FA6B61-CAAC-4A1B-88A7-D5199024EB65-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="15.60000038"/>
+<ParagraphStyle ID="StyleId-61BF5974-B87F-46C7-84D4-650A432F9733-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="11.88000011"/>
+<ParagraphStyle ID="StyleId-4EFA8777-195E-44DB-983C-A538E1930D8C-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="10.60000038"/>
+<ParagraphStyle ID="StyleId-8D67CC51-AF87-4270-B212-E657D64BD764-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0."/>
+</Styles>
+<Layout>
+<Page ID="Page1" PHYSICAL_IMG_NR="1" HEIGHT="6975" WIDTH="9883">
+<TopMargin HEIGHT="264" WIDTH="9883" VPOS="0" HPOS="0">
+</TopMargin>
+<LeftMargin HEIGHT="5704" WIDTH="3168" VPOS="264" HPOS="0">
+</LeftMargin>
+<RightMargin HEIGHT="5704" WIDTH="7" VPOS="264" HPOS="9876">
+</RightMargin>
+<BottomMargin HEIGHT="1007" WIDTH="9883" VPOS="5968" HPOS="0">
+</BottomMargin>
+<PrintSpace HEIGHT="5704" WIDTH="6708" VPOS="264" HPOS="3168">
+<ComposedBlock ID="Page1_Block1" HEIGHT="3752" WIDTH="5984" VPOS="264" HPOS="3168" TYPE="container">
+<TextBlock ID="Page1_Block2" HEIGHT="184" WIDTH="912" VPOS="264" HPOS="3200" language="de" STYLEREFS="StyleId-4EFA8777-195E-44DB-983C-A538E1930D8C-">
+<TextLine BASELINE="432" HEIGHT="136" WIDTH="780" VPOS="298" HPOS="3266"><String CONTENT="Absender-" HEIGHT="136" WIDTH="780" VPOS="298" HPOS="3266"/></TextLine>
+</TextBlock>
+<TextBlock ID="Page1_Block3" HEIGHT="456" WIDTH="2184" VPOS="576" HPOS="3168" language="de" STYLEREFS="StyleId-61BF5974-B87F-46C7-84D4-650A432F9733-">
+<TextLine BASELINE="777" HEIGHT="200" WIDTH="1944" VPOS="594" HPOS="3342"><String CONTENT="Czikowski" HEIGHT="188" WIDTH="1084" VPOS="594" HPOS="3342"/><SP WIDTH="114" VPOS="622" HPOS="4427"/><String CONTENT="Andres" HEIGHT="168" WIDTH="744" VPOS="626" HPOS="4542"/></TextLine>
+<TextLine BASELINE="972" HEIGHT="220" WIDTH="856" VPOS="798" HPOS="3210"><String CONTENT="Leipzig" HEIGHT="220" WIDTH="856" VPOS="798" HPOS="3210"/></TextLine>
+</TextBlock>
+<TextBlock ID="Page1_Block4" HEIGHT="632" WIDTH="2472" VPOS="264" HPOS="6680" language="de" STYLEREFS="StyleId-61BF5974-B87F-46C7-84D4-650A432F9733-">
+<TextLine BASELINE="432" HEIGHT="168" WIDTH="808" VPOS="302" HPOS="6746" STYLEREFS="StyleId-4EFA8777-195E-44DB-983C-A538E1930D8C-"><String CONTENT="Empfänger" HEIGHT="168" WIDTH="808" VPOS="302" HPOS="6746"/></TextLine>
+<TextLine BASELINE="853" HEIGHT="208" WIDTH="2208" VPOS="674" HPOS="6882"><String CONTENT="Bullinger" HEIGHT="208" WIDTH="1104" VPOS="674" HPOS="6882"/><SP WIDTH="110" VPOS="678" HPOS="7987"/><String CONTENT="Heinrich" HEIGHT="196" WIDTH="992" VPOS="678" HPOS="8098"/></TextLine>
+</TextBlock>
+<TextBlock ID="Page1_Block5" HEIGHT="1608" WIDTH="792" VPOS="1824" HPOS="3192" language="de" STYLEREFS="StyleId-4EFA8777-195E-44DB-983C-A538E1930D8C-">
+<TextLine BASELINE="1988" HEIGHT="160" WIDTH="424" VPOS="1858" HPOS="3266"><String CONTENT="Kopie" HEIGHT="160" WIDTH="424" VPOS="1858" HPOS="3266"/></TextLine>
+<TextLine BASELINE="2380" HEIGHT="136" WIDTH="656" VPOS="2246" HPOS="3262"><String CONTENT="Standort" HEIGHT="136" WIDTH="656" VPOS="2246" HPOS="3262"/></TextLine>
+<TextLine BASELINE="2988" HEIGHT="160" WIDTH="384" VPOS="2858" HPOS="3258"><String CONTENT="Sign." HEIGHT="160" WIDTH="384" VPOS="2858" HPOS="3258"/></TextLine>
+<TextLine BASELINE="3380" HEIGHT="164" WIDTH="580" VPOS="3250" HPOS="3262"><String CONTENT="Umfang" HEIGHT="164" WIDTH="580" VPOS="3250" HPOS="3262"/></TextLine>
+</TextBlock>
+<TextBlock ID="Page1_Block6" HEIGHT="568" WIDTH="968" VPOS="1832" HPOS="6656" language="de" STYLEREFS="StyleId-4EFA8777-195E-44DB-983C-A538E1930D8C-">
+<TextLine BASELINE="1988" HEIGHT="156" WIDTH="848" VPOS="1862" HPOS="6710"><String CONTENT="Photokopie" HEIGHT="156" WIDTH="848" VPOS="1862" HPOS="6710"/></TextLine>
+<TextLine BASELINE="2380" HEIGHT="136" WIDTH="748" VPOS="2250" HPOS="6706"><String CONTENT="Bull." HEIGHT="128" WIDTH="324" VPOS="2254" HPOS="6706"/><SP WIDTH="50" VPOS="2250" HPOS="7031"/><String CONTENT="Corr." HEIGHT="136" WIDTH="372" VPOS="2250" HPOS="7082"/></TextLine>
+</TextBlock>
+<TextBlock ID="Page1_Block7" HEIGHT="608" WIDTH="1488" VPOS="2800" HPOS="6648" language="de" STYLEREFS="StyleId-4EFA8777-195E-44DB-983C-A538E1930D8C-">
+<TextLine BASELINE="2990" HEIGHT="164" WIDTH="1376" VPOS="2830" HPOS="6698"><String CONTENT="Abschrift" HEIGHT="132" WIDTH="724" VPOS="2862" HPOS="6698"/><SP WIDTH="410" VPOS="2830" HPOS="7423"/><String CONTENT="ZB" HEIGHT="152" WIDTH="240" VPOS="2830" HPOS="7834"/></TextLine>
+<TextLine BASELINE="3216" HEIGHT="180" WIDTH="228" VPOS="3038" HPOS="7834" STYLEREFS="StyleId-95FA6B61-CAAC-4A1B-88A7-D5199024EB65-"><String CONTENT="33" HEIGHT="180" WIDTH="228" VPOS="3038" HPOS="7834"/></TextLine>
+<TextLine BASELINE="3384" HEIGHT="136" WIDTH="748" VPOS="3254" HPOS="6702"><String CONTENT="Bull." HEIGHT="132" WIDTH="328" VPOS="3254" HPOS="6702"/><SP WIDTH="46" VPOS="3254" HPOS="7031"/><String CONTENT="Corr." HEIGHT="136" WIDTH="372" VPOS="3254" HPOS="7078"/></TextLine>
+</TextBlock>
+<TextBlock ID="Page1_Block8" HEIGHT="184" WIDTH="768" VPOS="3832" HPOS="3192" language="de" STYLEREFS="StyleId-4EFA8777-195E-44DB-983C-A538E1930D8C-">
+<TextLine BASELINE="3996" HEIGHT="132" WIDTH="636" VPOS="3866" HPOS="3258"><String CONTENT="Literatur" HEIGHT="132" WIDTH="636" VPOS="3866" HPOS="3258"/></TextLine>
+</TextBlock></ComposedBlock><GraphicalElement ID="Page1_Block9" HEIGHT="36" WIDTH="6704" VPOS="1608" HPOS="3168"/><GraphicalElement ID="Page1_Block10" HEIGHT="36" WIDTH="3308" VPOS="2612" HPOS="6564"/><GraphicalElement ID="Page1_Block11" HEIGHT="40" WIDTH="6708" VPOS="3620" HPOS="3168"/><GraphicalElement ID="Page1_Block12" HEIGHT="32" WIDTH="6708" VPOS="5396" HPOS="3168"/><GraphicalElement ID="Page1_Block13" HEIGHT="3388" WIDTH="40" VPOS="264" HPOS="6560"/><GraphicalElement ID="Page1_Block14" HEIGHT="16" WIDTH="684" VPOS="476" HPOS="8376"/><GraphicalElement ID="Page1_Block15" HEIGHT="28" WIDTH="700" VPOS="576" HPOS="3344"/>
+</PrintSpace>
+</Page>
+</Layout>
+</alto>

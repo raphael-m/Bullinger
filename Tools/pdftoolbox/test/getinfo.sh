@@ -1,0 +1,1 @@
+../bin/pdftoolbox sample_in1.pdf -getinfo -outfile "_getinfo_out.txt"

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<alto xmlns="http://www.loc.gov/standards/alto/ns-v2#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/standards/alto/ns-v2# http://www.loc.gov/standards/alto/alto-v2.0.xsd">
+   <Description>
+      <MeasurementUnit>pixel</MeasurementUnit>
+      <OCRProcessing ID="IdOcr">
+         <ocrProcessingStep>
+            <processingDateTime>2019-09-23</processingDateTime>
+            <processingSoftware>
+               <softwareCreator>ABBYY</softwareCreator>
+               <softwareName>ABBYY Recognition Server</softwareName>
+               <softwareVersion>4.0</softwareVersion>
+            </processingSoftware>
+         </ocrProcessingStep>
+      </OCRProcessing>
+   </Description>
+   <Styles>
+      <ParagraphStyle ID="StyleId-FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0."/>
+      <ParagraphStyle ID="StyleId-D8E03A23-DD6F-4722-95C6-4F232309DAAF-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="24.84000015"/>
+      <ParagraphStyle ID="StyleId-119009A2-6CEF-412F-A3D9-8AA0EF36AFDF-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="11.19999981"/>
+      <ParagraphStyle ID="StyleId-D8C312FB-8DC0-45FE-9E74-E4E470892AAB-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="12.5"/>
+      <ParagraphStyle ID="StyleId-5D9DF184-405E-400F-8E5E-77930E251D77-" ALIGN="Block" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="32.27999878"/>
+   </Styles>
+   <Layout>
+      <Page ID="Page1" PHYSICAL_IMG_NR="1" HEIGHT="3488" WIDTH="4922">
+         <TopMargin HEIGHT="120" WIDTH="4922" VPOS="0" HPOS="0"></TopMargin>
+         <LeftMargin HEIGHT="2900" WIDTH="1600" VPOS="120" HPOS="0"></LeftMargin>
+         <BottomMargin HEIGHT="468" WIDTH="4922" VPOS="3020" HPOS="0"></BottomMargin>
+         <PrintSpace HEIGHT="2900" WIDTH="3322" VPOS="120" HPOS="1600">
+            <ComposedBlock ID="Page1_Block1" HEIGHT="1876" WIDTH="1430" VPOS="120" HPOS="1602" TYPE="container">
+               <TextBlock ID="Page1_Block2" HEIGHT="456" WIDTH="976" VPOS="120" HPOS="1606" language="de" STYLEREFS="StyleId-D8E03A23-DD6F-4722-95C6-4F232309DAAF-">
+                  <TextLine BASELINE="194" HEIGHT="64" WIDTH="374" VPOS="133" HPOS="1621" STYLEREFS="StyleId-119009A2-6CEF-412F-A3D9-8AA0EF36AFDF-">
+                     <String CONTENT="Absender" HEIGHT="64" WIDTH="374" VPOS="133" HPOS="1621"/>
+                  </TextLine>
+                  <TextLine BASELINE="357" HEIGHT="94" WIDTH="916" VPOS="285" HPOS="1655">
+                     <String CONTENT="Myconius" HEIGHT="94" WIDTH="484" VPOS="285" HPOS="1655"/>
+                     <SP WIDTH="70" VPOS="287" HPOS="2140"/>
+                     <String CONTENT="Oswald" HEIGHT="72" WIDTH="360" VPOS="287" HPOS="2211"/>
+                  </TextLine>
+                  <TextLine BASELINE="564" HEIGHT="70" WIDTH="292" VPOS="495" HPOS="1661">
+                     <String CONTENT="Basel" HEIGHT="70" WIDTH="292" VPOS="495" HPOS="1661"/>
+                  </TextLine>
+               </TextBlock>
+               <TextBlock ID="Page1_Block3" HEIGHT="1094" WIDTH="1430" VPOS="902" HPOS="1602" language="de" STYLEREFS="StyleId-119009A2-6CEF-412F-A3D9-8AA0EF36AFDF-">
+                  <TextLine BASELINE="976" HEIGHT="78" WIDTH="208" VPOS="915" HPOS="1621">
+                     <String CONTENT="Kopie" HEIGHT="78" WIDTH="208" VPOS="915" HPOS="1621"/>
+                  </TextLine>
+                  <TextLine BASELINE="1182" HEIGHT="132" WIDTH="1126" VPOS="1111" HPOS="1617" STYLEREFS="StyleId-D8C312FB-8DC0-45FE-9E74-E4E470892AAB-">
+                     <String CONTENT="Standort^v^Z^j-.^" HEIGHT="132" WIDTH="1126" VPOS="1111" HPOS="1617"/>
+                  </TextLine>
+                  <TextLine BASELINE="1476" HEIGHT="76" WIDTH="190" VPOS="1415" HPOS="1619">
+                     <String CONTENT="Sign." HEIGHT="76" WIDTH="190" VPOS="1415" HPOS="1619"/>
+                  </TextLine>
+                  <TextLine BASELINE="1672" HEIGHT="78" WIDTH="284" VPOS="1611" HPOS="1623">
+                     <String CONTENT="Umfang" HEIGHT="78" WIDTH="284" VPOS="1611" HPOS="1623"/>
+                  </TextLine>
+                  <TextLine BASELINE="1957" HEIGHT="122" WIDTH="1404" VPOS="1863" HPOS="1615">
+                     <String CONTENT="Literatur" HEIGHT="64" WIDTH="312" VPOS="1921" HPOS="1615"/>
+                     <SP WIDTH="154" VPOS="1863" HPOS="1928"/>
+                     <String STYLE="superscript" CONTENT="Z,t" HEIGHT="66" WIDTH="122" VPOS="1863" HPOS="2083"/>
+                     <String CONTENT=":t’GP»t,Togebuch" HEIGHT="84" WIDTH="798" VPOS="1871" HPOS="2221"/>
+                  </TextLine>
+               </TextBlock>
+            </ComposedBlock>
+            <TextBlock ID="Page1_Block4" HEIGHT="452" WIDTH="1196" VPOS="122" HPOS="3346" language="de" STYLEREFS="StyleId-D8E03A23-DD6F-4722-95C6-4F232309DAAF-">
+               <TextLine BASELINE="194" HEIGHT="78" WIDTH="400" VPOS="135" HPOS="3359" STYLEREFS="StyleId-119009A2-6CEF-412F-A3D9-8AA0EF36AFDF-">
+                  <String CONTENT="Empfänger" HEIGHT="78" WIDTH="400" VPOS="135" HPOS="3359"/>
+               </TextLine>
+               <TextLine BASELINE="353" HEIGHT="92" WIDTH="1092" VPOS="283" HPOS="3439">
+                  <String CONTENT="Bullinger" HEIGHT="90" WIDTH="542" VPOS="285" HPOS="3439"/>
+                  <SP WIDTH="60" VPOS="285" HPOS="3982"/>
+                  <String CONTENT="Heinrich" HEIGHT="72" WIDTH="488" VPOS="283" HPOS="4043"/>
+               </TextLine>
+               <TextLine BASELINE="558" HEIGHT="72" WIDTH="356" VPOS="491" HPOS="3441">
+                  <String CONTENT="Zürich" HEIGHT="72" WIDTH="356" VPOS="491" HPOS="3441"/>
+               </TextLine>
+            </TextBlock>
+            <TextBlock ID="Page1_Block5" HEIGHT="1074" WIDTH="1612" VPOS="886" HPOS="3112" language="de" STYLEREFS="StyleId-119009A2-6CEF-412F-A3D9-8AA0EF36AFDF-">
+               <TextLine BASELINE="974" HEIGHT="92" WIDTH="640" VPOS="899" HPOS="3341">
+                  <String CONTENT="Photokopie" HEIGHT="76" WIDTH="422" VPOS="915" HPOS="3341"/>
+                  <SP WIDTH="104" VPOS="899" HPOS="3764"/>
+                  <String CONTENT="ZB" HEIGHT="68" WIDTH="112" VPOS="899" HPOS="3869"/>
+               </TextLine>
+               <TextLine BASELINE="1169" HEIGHT="86" WIDTH="1370" VPOS="1099" HPOS="3341" STYLEREFS="StyleId-D8E03A23-DD6F-4722-95C6-4F232309DAAF-">
+                  <String CONTENT="Bull." HEIGHT="60" WIDTH="160" VPOS="1111" HPOS="3341"/>
+                  <SP WIDTH="26" VPOS="1111" HPOS="3502"/>
+                  <String CONTENT="Corr." HEIGHT="62" WIDTH="182" VPOS="1111" HPOS="3529"/>
+                  <SP WIDTH="154" VPOS="1101" HPOS="3712"/>
+                  <String CONTENT="??" HEIGHT="84" WIDTH="110" VPOS="1101" HPOS="3867"/>
+                  <SP WIDTH="194" VPOS="1099" HPOS="3978"/>
+                  <String CONTENT="Bl.l," HEIGHT="86" WIDTH="284" VPOS="1099" HPOS="4173"/>
+                  <SP WIDTH="76" VPOS="1099" HPOS="4458"/>
+                  <String CONTENT="S.l" HEIGHT="68" WIDTH="176" VPOS="1099" HPOS="4535"/>
+               </TextLine>
+               <TextLine BASELINE="1472" HEIGHT="68" WIDTH="644" VPOS="1407" HPOS="3339">
+                  <String CONTENT="Abschrift" HEIGHT="62" WIDTH="356" VPOS="1413" HPOS="3339"/>
+                  <SP WIDTH="172" VPOS="1407" HPOS="3696"/>
+                  <String CONTENT="ZB" HEIGHT="68" WIDTH="114" VPOS="1407" HPOS="3869"/>
+               </TextLine>
+               <TextLine BASELINE="1672" HEIGHT="98" WIDTH="1374" VPOS="1597" HPOS="3339" STYLEREFS="StyleId-D8E03A23-DD6F-4722-95C6-4F232309DAAF-">
+                  <String CONTENT="Bull." HEIGHT="62" WIDTH="162" VPOS="1609" HPOS="3339"/>
+                  <SP WIDTH="26" VPOS="1609" HPOS="3502"/>
+                  <String CONTENT="Corr." HEIGHT="64" WIDTH="186" VPOS="1609" HPOS="3529"/>
+                  <SP WIDTH="154" VPOS="1613" HPOS="3716"/>
+                  <String CONTENT="16" HEIGHT="72" WIDTH="110" VPOS="1609" HPOS="3871"/>
+                  <SP WIDTH="190" VPOS="1609" HPOS="3982"/>
+                  <String CONTENT="Bl.l," HEIGHT="86" WIDTH="284" VPOS="1609" HPOS="4173"/>
+                  <SP WIDTH="78" VPOS="1597" HPOS="4458"/>
+                  <String CONTENT="S.2" HEIGHT="78" WIDTH="176" VPOS="1597" HPOS="4537"/>
+               </TextLine>
+               <TextLine BASELINE="1943" HEIGHT="148" WIDTH="772" VPOS="1798" HPOS="3126" STYLEREFS="StyleId-5D9DF184-405E-400F-8E5E-77930E251D77-">
+                  <String CONTENT="Hoi■“&gt;" HEIGHT="100" WIDTH="348" VPOS="1846" HPOS="3126"/>
+                  <SP WIDTH="322" VPOS="1798" HPOS="3475"/>
+                  <String CONTENT="™&quot;" HEIGHT="8" WIDTH="100" VPOS="1798" HPOS="3798"/>
+               </TextLine>
+            </TextBlock>
+            <TextBlock ID="Page1_Block6" HEIGHT="100" WIDTH="534" VPOS="2794" HPOS="1600" language="de" STYLEREFS="StyleId-119009A2-6CEF-412F-A3D9-8AA0EF36AFDF-">
+               <TextLine BASELINE="2864" HEIGHT="74" WIDTH="510" VPOS="2809" HPOS="1613">
+                  <String CONTENT="Bemerkungen" HEIGHT="74" WIDTH="510" VPOS="2809" HPOS="1613"/>
+               </TextLine>
+            </TextBlock>
+            <TextBlock ID="Page1_Block7" HEIGHT="316" WIDTH="2720" VPOS="2704" HPOS="2202" language="de" STYLEREFS="StyleId-D8E03A23-DD6F-4722-95C6-4F232309DAAF-">
+               <TextLine BASELINE="2789" HEIGHT="90" WIDTH="2707" VPOS="2717" HPOS="2215">
+                  <String CONTENT="Gratus" HEIGHT="72" WIDTH="356" VPOS="2725" HPOS="2215"/>
+                  <SP WIDTH="74" VPOS="2725" HPOS="2572"/>
+                  <String CONTENT="fuit" HEIGHT="70" WIDTH="232" VPOS="2725" HPOS="2647"/>
+                  <SP WIDTH="66" VPOS="2729" HPOS="2880"/>
+                  <String CONTENT="mihi" HEIGHT="70" WIDTH="236" VPOS="2723" HPOS="2947"/>
+                  <SP WIDTH="72" VPOS="2723" HPOS="3184"/>
+                  <String CONTENT="adventus" HEIGHT="66" WIDTH="476" VPOS="2725" HPOS="3257"/>
+                  <SP WIDTH="70" VPOS="2721" HPOS="3734"/>
+                  <String CONTENT="L^lii," HEIGHT="88" WIDTH="348" VPOS="2719" HPOS="3805"/>
+                  <SP WIDTH="86" VPOS="2739" HPOS="4154"/>
+                  <String CONTENT="qui" HEIGHT="90" WIDTH="166" VPOS="2717" HPOS="4241"/>
+                  <SP WIDTH="74" VPOS="2717" HPOS="4408"/>
+                  <String CONTENT="tuas" HEIGHT="66" WIDTH="232" VPOS="2721" HPOS="4483"/>
+                  <SP WIDTH="72" VPOS="2733" HPOS="4716"/>
+                  <String CONTENT="ad-" HEIGHT="66" WIDTH="133" VPOS="2719" HPOS="4789"/>
+               </TextLine>
+               <TextLine BASELINE="2889" HEIGHT="98" WIDTH="2620" VPOS="2817" HPOS="2217">
+                  <String CONTENT="tulit" HEIGHT="72" WIDTH="292" VPOS="2827" HPOS="2217"/>
+                  <SP WIDTH="76" VPOS="2829" HPOS="2510"/>
+                  <String CONTENT="longe" HEIGHT="86" WIDTH="288" VPOS="2829" HPOS="2587"/>
+                  <SP WIDTH="78" VPOS="2843" HPOS="2876"/>
+                  <String CONTENT="gratissimas." HEIGHT="90" WIDTH="706" VPOS="2823" HPOS="2955"/>
+                  <SP WIDTH="80" VPOS="2821" HPOS="3662"/>
+                  <String CONTENT="Nihil" HEIGHT="70" WIDTH="298" VPOS="2821" HPOS="3743"/>
+                  <SP WIDTH="70" VPOS="2823" HPOS="4042"/>
+                  <String CONTENT="retulit" HEIGHT="70" WIDTH="418" VPOS="2819" HPOS="4113"/>
+                  <SP WIDTH="70" VPOS="2821" HPOS="4532"/>
+                  <String CONTENT="nisi" HEIGHT="68" WIDTH="234" VPOS="2817" HPOS="4603"/>
+               </TextLine>
+               <TextLine BASELINE="2995" HEIGHT="86" WIDTH="1752" VPOS="2923" HPOS="2219">
+                  <String CONTENT="communia" HEIGHT="72" WIDTH="474" VPOS="2929" HPOS="2219"/>
+                  <SP WIDTH="72" VPOS="2947" HPOS="2694"/>
+                  <String CONTENT="adductus" HEIGHT="70" WIDTH="478" VPOS="2929" HPOS="2767"/>
+                  <SP WIDTH="74" VPOS="2947" HPOS="3246"/>
+                  <String CONTENT="a" HEIGHT="50" WIDTH="50" VPOS="2947" HPOS="3321"/>
+                  <SP WIDTH="68" VPOS="2925" HPOS="3372"/>
+                  <String CONTENT="D." HEIGHT="68" WIDTH="98" VPOS="2925" HPOS="3441"/>
+                  <SP WIDTH="86" VPOS="2923" HPOS="3540"/>
+                  <String CONTENT="C$lio;" HEIGHT="86" WIDTH="344" VPOS="2923" HPOS="3627"/>
+               </TextLine>
+            </TextBlock>
+            <GraphicalElement ID="Page1_Block8" HEIGHT="16" WIDTH="3322" VPOS="788" HPOS="1600"/>
+            <GraphicalElement ID="Page1_Block9" HEIGHT="12" WIDTH="1654" VPOS="1288" HPOS="3268"/>
+            <GraphicalElement ID="Page1_Block10" HEIGHT="16" WIDTH="3322" VPOS="1794" HPOS="1600"/>
+            <GraphicalElement ID="Page1_Block11" HEIGHT="20" WIDTH="3322" VPOS="2676" HPOS="1600"/>
+            <GraphicalElement ID="Page1_Block12" HEIGHT="1686" WIDTH="12" VPOS="120" HPOS="3268"/>
+         </PrintSpace>
+      </Page>
+   </Layout>
+</alto>

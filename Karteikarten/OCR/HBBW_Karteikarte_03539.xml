@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<alto xmlns="http://www.loc.gov/standards/alto/ns-v2#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/standards/alto/ns-v2# http://www.loc.gov/standards/alto/alto-v2.0.xsd">
+<Description>
+<MeasurementUnit>pixel</MeasurementUnit>
+<OCRProcessing ID="IdOcr"><ocrProcessingStep><processingDateTime>2019-10-28</processingDateTime><processingSoftware><softwareCreator>ABBYY</softwareCreator><softwareName>ABBYY Recognition Server</softwareName><softwareVersion>4.0</softwareVersion></processingSoftware></ocrProcessingStep></OCRProcessing>
+</Description>
+<Styles>
+<ParagraphStyle ID="StyleId-FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0."/>
+<ParagraphStyle ID="StyleId-78700C10-BAFF-4C78-9642-B35FD1183C2F-" ALIGN="Block" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="13.60000038"/>
+<ParagraphStyle ID="StyleId-99DD0D19-9866-43E8-89B4-82079A894D94-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="9.100000381"/>
+</Styles>
+<Layout>
+<Page ID="Page1" PHYSICAL_IMG_NR="1" HEIGHT="6952" WIDTH="9852">
+<TopMargin HEIGHT="228" WIDTH="9852" VPOS="0" HPOS="0">
+</TopMargin>
+<LeftMargin HEIGHT="1676" WIDTH="308" VPOS="228" HPOS="0">
+</LeftMargin>
+<RightMargin HEIGHT="1676" WIDTH="2808" VPOS="228" HPOS="7044">
+</RightMargin>
+<BottomMargin HEIGHT="5048" WIDTH="9852" VPOS="1904" HPOS="0">
+</BottomMargin>
+<PrintSpace HEIGHT="1676" WIDTH="6736" VPOS="228" HPOS="308">
+<TextBlock ID="Page1_Block1" HEIGHT="1676" WIDTH="6736" VPOS="228" HPOS="308" language="de" STYLEREFS="StyleId-78700C10-BAFF-4C78-9642-B35FD1183C2F-"><Shape><Polygon POINTS="308,228 7044,228 7044,1100 3996,1100 3996,1104 3992,1104 3992,1904 308,1904 308,228"/></Shape>
+<TextLine BASELINE="404" HEIGHT="172" WIDTH="856" VPOS="242" HPOS="334"><String CONTENT="Hinweis" HEIGHT="172" WIDTH="856" VPOS="242" HPOS="334"/></TextLine>
+<TextLine BASELINE="831" HEIGHT="224" WIDTH="5356" VPOS="658" HPOS="350"><String CONTENT="1558" HEIGHT="180" WIDTH="480" VPOS="662" HPOS="350"/><SP WIDTH="2102" VPOS="666" HPOS="831"/><String CONTENT="&quot;Der" HEIGHT="176" WIDTH="464" VPOS="658" HPOS="2934"/><SP WIDTH="126" VPOS="682" HPOS="3399"/><String CONTENT="Luggarneren" HEIGHT="196" WIDTH="1352" VPOS="682" HPOS="3526"/><SP WIDTH="110" VPOS="690" HPOS="4879"/><String CONTENT="begär&quot;" HEIGHT="200" WIDTH="716" VPOS="682" HPOS="4990"/></TextLine>
+<TextLine BASELINE="1043" HEIGHT="232" WIDTH="5578" VPOS="846" HPOS="1466"><String CONTENT="." HEIGHT="4" WIDTH="4" VPOS="1010" HPOS="1466"/><SP WIDTH="230" VPOS="990" HPOS="1471"/><String CONTENT="," HEIGHT="56" WIDTH="20" VPOS="990" HPOS="1702"/><SP WIDTH="1214" VPOS="866" HPOS="1723"/><String CONTENT="(wegen" HEIGHT="212" WIDTH="708" VPOS="866" HPOS="2938"/><SP WIDTH="130" VPOS="898" HPOS="3647"/><String CONTENT="freien" HEIGHT="160" WIDTH="728" VPOS="898" HPOS="3778"/><SP WIDTH="118" VPOS="846" HPOS="4507"/><String STYLE="superscript" CONTENT="n" HEIGHT="92" WIDTH="132" VPOS="846" HPOS="4626"/><String CONTENT="andels" HEIGHT="144" WIDTH="716" VPOS="902" HPOS="4754"/><SP WIDTH="138" VPOS="942" HPOS="5471"/><String CONTENT="mit" HEIGHT="144" WIDTH="352" VPOS="906" HPOS="5610"/><SP WIDTH="130" VPOS="898" HPOS="5963"/><String CONTENT="Mailand)" HEIGHT="192" WIDTH="950" VPOS="878" HPOS="6094"/></TextLine>
+<TextLine BASELINE="1539" HEIGHT="196" WIDTH="2432" VPOS="1382" HPOS="350"><String CONTENT="ZSA," HEIGHT="188" WIDTH="448" VPOS="1382" HPOS="350"/><SP WIDTH="142" VPOS="1382" HPOS="799"/><String CONTENT="A" HEIGHT="156" WIDTH="124" VPOS="1382" HPOS="942"/><SP WIDTH="92" VPOS="1458" HPOS="1086"/><String CONTENT="350*1," HEIGHT="188" WIDTH="688" VPOS="1390" HPOS="1210"/><SP WIDTH="80" VPOS="1470" HPOS="1950"/><String CONTENT="Fasz.6" HEIGHT="152" WIDTH="728" VPOS="1394" HPOS="2054"/></TextLine>
+<TextLine BASELINE="1848" HEIGHT="212" WIDTH="2032" VPOS="1670" HPOS="354"><String CONTENT="(Bullingers" HEIGHT="212" WIDTH="1320" VPOS="1670" HPOS="354"/><SP WIDTH="134" VPOS="1694" HPOS="1675"/><String CONTENT="Hand)" HEIGHT="204" WIDTH="576" VPOS="1674" HPOS="1810"/></TextLine>
+</TextBlock>
+<TextBlock ID="Page1_Block2" HEIGHT="256" WIDTH="1076" VPOS="1296" HPOS="4088" language="de" STYLEREFS="StyleId-99DD0D19-9866-43E8-89B4-82079A894D94-">
+<TextLine BASELINE="1460" HEIGHT="68" WIDTH="252" VPOS="1402" HPOS="4626"><String CONTENT="&quot;xrj-" HEIGHT="68" WIDTH="252" VPOS="1402" HPOS="4626"/></TextLine>
+</TextBlock><GraphicalElement ID="Page1_Block3" HEIGHT="12" WIDTH="424" VPOS="452" HPOS="5084"/>
+</PrintSpace>
+</Page>
+</Layout>
+</alto>

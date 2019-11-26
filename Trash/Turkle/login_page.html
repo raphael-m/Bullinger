@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% block body %}
+<head>
+    <meta charset="UTF-8">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/reset.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/home.css') }}">
+
+    <title>Heinrich Bullinger</title>
+
+    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+        $('#login').click(function() {
+            alert('clicked');
+        });
+        $("#login").click(function() {
+           $("html").load("/load_login");
+        }
+    </script>
+
+</head>
+
+<body>
+
+<div id="head">
+    <img id="logo" src="{{url_for('static', filename='logo.png')}}"/>
+    <form action="/load_login" method="post" class="menu">
+        <button type="submit" id="load_login" class="button"> Anmelden </button>
+    </form>
+    <form action="/home" method="post" class="menu">
+        <button type="submit" id="index2" class="button"> Home </button>
+    </form>
+</div>
+
+<div id="main">
+    <div id="title_dummy"></div>
+
+    <h2> Anmeldung </h2>
+
+    <form action="/login" method="post" role="form">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Ihr Name">
+            <label for="email">E-Mail:</label>
+            <input type="text" class="form-control" id="email" name="email" placeholder="Ihre E-Mail Adresse">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Passwort">
+        </div>
+        <button type="submit">Login</button>
+    </form>
+
+    <h2> Registrierung </h2>
+
+    <form action="/registration" method="post" role="form">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Ihr Name">
+            <label for="email">E-Mail:</label>
+            <input type="text" class="form-control" id="email" name="email" placeholder="Ihre E-Mail Adresse">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" id="password1" name="password" placeholder="Passwort">
+            <label for="password">Password (Wiederholung):</label>
+            <input type="password" class="form-control" id="password2" name="password" placeholder="Passwort">
+        </div>
+        <button type="submit">Login</button>
+    </form>
+
+
+</div>
+
+<div id="foot">
+    <div class="impressum">
+        Institut für Schweizerische Reformationsgeschichte, Institut für Computerlinguistik, Universität Zürich, 2020
+    </div>
+</div>
+
+</body>
+</html>
+{% endblock %}

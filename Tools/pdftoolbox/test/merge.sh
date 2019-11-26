@@ -1,0 +1,1 @@
+../bin/pdftoolbox sample_in1.pdf sample_in2.pdf -merge -outfile "_merge_out.pdf"
