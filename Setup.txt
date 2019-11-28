@@ -26,7 +26,7 @@ Database
 (venv) $ flask db migrate -m "init"
 (venv) $ flask db upgrade
 
-Execution
+Execution (locally)
 ---------
 (venv) $ export FLASK_APP=App.py
 (venv) $ export FLASK_ENV=development
@@ -34,4 +34,9 @@ Execution
 ((source venv/bin/activate))
 (venv) $ flask run
 
-
+GitHub
+------
+(git status)
+git add -A
+git commit -m "whatever"
+git push origin master

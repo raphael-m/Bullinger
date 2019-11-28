@@ -23,7 +23,6 @@ from Tools.BullingerData import BullingerData
 from Tools.Dictionaries import CountDict
 
 
-
 SRC_PATH_DATA = "Karteikarten/"
 
 
@@ -66,7 +65,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         u = User.query.filter_by(username=form.username.data).first()
-        login_user(u, remember=False)
+        login_user(u, remember=True)
         return redirect(url_for('index'))
     return render_template('account_register.html', title='Registrieren', form=form)
 
@@ -111,11 +110,11 @@ def assignment(id_brief):
     receiver = Empfaenger.query.filter_by(id_brief=i).order_by(desc(Empfaenger.zeit)).first()  # receiver
     if receiver:
         person = Person.query.get(receiver.id_person)
-        card_form.set_receiver_as_default(receiver, person)
+        card_form.set_receiver_as_default(person, receiver.bemerkung)
     sender = Absender.query.filter_by(id_brief=i).order_by(desc(Absender.zeit)).first()  # sender
     if sender:
         person = Person.query.get(sender.id_person)
-        card_form.set_sender_as_default(sender, person)
+        card_form.set_sender_as_default(person, sender.bemerkung)
     autograph = Autograph.query.filter_by(id_brief=i).order_by(desc(Autograph.zeit)).first()  # autograph
     card_form.set_autograph_as_default(autograph)
     copy = Kopie.query.filter_by(id_brief=i).order_by(desc(Kopie.zeit)).first()  # copy
@@ -187,39 +186,99 @@ def assignment(id_brief):
             db.session.commit()
 
         # Empfänger
+        pre = number_of_changes
         emp_old = Empfaenger.query.filter_by(id_brief=i).order_by(desc(Empfaenger.zeit)).first()
-        """
+        pers_old = Person.query.filter_by(id=emp_old.id_person).order_by(desc(Person.zeit)).first()
+        p_new_query = Person.query.filter_by(titel=card_form.title_receiver.data, name=card_form.name_receiver.data,
+                                             vorname=card_form.forename_receiver.data, ort=card_form.place_receiver.data)\
+                                             .order_by(desc(Person.zeit)).first()
+        new_person = Person(title=card_form.title_receiver.data, name=card_form.name_receiver.data,
+                            forename=card_form.forename_receiver.data, place=card_form.place_receiver.data,
+                            user=user, time=time_stamp)
         if emp_old:
-            pers_old = Person.query.filter_by(id_person=emp_old.id_person).order_by(desc(Person.zeit)).first()
             if pers_old:
-                if card_form.differns_from_receiver(pers_old):
-                    if Person.query.filter_by():
-                        pass
-                # if there are differences
-                    # if pers_card_emp already exists    --> is_wellknown(pers)
-                        # create new emp -> p
-                    # else :
-                        # create new person p
-                        # create new emp -> p           --> register_emp_to_person(emp, p)
-                # else:
-                #   -
-                pass
+                n = card_form.differs_from_receiver(pers_old)
+                if n:
+                    number_of_changes += n
+                    if p_new_query:  # p_new well known ==> (r_new -> p)
+                        db.session.add(Empfaenger(id_brief=i, id_person=p_new_query.id, remark=card_form.remark_receiver.data,
+                                                  user=user, time=time_stamp))
+                    else:  # new p, new e->p
+                        db.session.add(new_person)
+                        db.session.commit()  # id
+                        db.session.add(Empfaenger(id_brief=i, id_person=new_person.id,
+                                                  remark=card_form.remark_receiver.data, user=user, time=time_stamp))
+                else:  # comment changes only
+                    if card_form.has_changed__receiver_comment(emp_old):
+                        db.session.add(Empfaenger(id_brief=i, id_person=pers_old.id,
+                                                  remark=card_form.remark_receiver.data, user=user, time=time_stamp))
+                        number_of_changes += 1
             else:
-                # create new person p
-                # create new emp -> p
-                pass
+                db.session.add(new_person)
+                db.session.commit()  # id
+                db.session.add(Empfaenger(id_brief=i, id_person=new_person.id,
+                                          remark=card_form.remark_receiver.data, user=user, time=time_stamp))
+                number_of_changes += 4
         else:
-            # if person p already exists
-                # create new emp -> p
-            # else:
-                # create new person p
-                # create new emp -> p
-            pass
-        """
-
+            if p_new_query:
+                db.session.add(Empfaenger(id_brief=i, id_person=p_new_query.id, remark=card_form.remark_receiver.data,
+                                          user=user, time=time_stamp))
+            else:
+                db.session.add(new_person)
+                db.session.commit()  # id
+                db.session.add(Empfaenger(id_brief=i, id_person=new_person.id,
+                                          remark=card_form.remark_receiver.data, user=user, time=time_stamp))
+            number_of_changes += 4
+        db.session.commit()
+        if number_of_changes > pre:
+            card_form.set_receiver_as_default(new_person, card_form.remark_receiver.data)
 
         # Absender
+        pre = number_of_changes
         abs_old = Absender.query.filter_by(id_brief=i).order_by(desc(Absender.zeit)).first()
+        pers_old = Person.query.filter_by(id=abs_old.id_person).order_by(desc(Person.zeit)).first()
+        p_new_query = Person.query.filter_by(titel=card_form.title_sender.data, name=card_form.name_sender.data,
+                                             vorname=card_form.forename_sender.data, ort=card_form.place_sender.data)\
+                                             .order_by(desc(Person.zeit)).first()
+        new_person = Person(title=card_form.title_sender.data, name=card_form.name_sender.data,
+                            forename=card_form.forename_sender.data, place=card_form.place_sender.data,
+                            user=user, time=time_stamp)
+        if abs_old:
+            if pers_old:
+                n = card_form.differences_from_sender(pers_old)
+                if n:
+                    number_of_changes += n
+                    if p_new_query:  # p_new well known ==> (r_new -> p)
+                        db.session.add(Absender(id_brief=i, id_person=p_new_query.id,
+                                                remark=card_form.remark_sender.data, user=user, time=time_stamp))
+                    else:  # new p, new e->p
+                        db.session.add(new_person)
+                        db.session.commit()  # id
+                        db.session.add(Absender(id_brief=i, id_person=new_person.id,
+                                                remark=card_form.remark_sender.data, user=user, time=time_stamp))
+                else:  # comment changes only
+                    if card_form.has_changed__sender_comment(abs_old):
+                        db.session.add(Absender(id_brief=i, id_person=pers_old.id,
+                                                  remark=card_form.remark_sender.data, user=user, time=time_stamp))
+                        number_of_changes += 1
+            else:
+                db.session.add(new_person)
+                db.session.commit()  # id
+                db.session.add(Absender(id_brief=i, id_person=new_person.id,
+                                          remark=card_form.remark_sender.data, user=user, time=time_stamp))
+                number_of_changes += 4
+        else:
+            if p_new_query:
+                db.session.add(Absender(id_brief=i, id_person=p_new_query.id, remark=card_form.remark_sender.data,
+                                          user=user, time=time_stamp))
+            else:
+                db.session.add(new_person)
+                db.session.commit()  # id
+                db.session.add(Absender(id_brief=i, id_person=new_person.id,
+                                          remark=card_form.remark_sender.data, user=user, time=time_stamp))
+        db.session.commit()
+        if number_of_changes > pre:
+            card_form.set_sender_as_default(new_person, card_form.remark_sender.data)
 
         # Kopie
         copy_old = Kopie.query.filter_by(id_brief=i).order_by(desc(Kopie.zeit)).first()
@@ -354,7 +413,7 @@ def assignment(id_brief):
 
         # user changes
         user = User.query.filter_by(username=user).first()
-        if user.changes is None:
+        if not user.changes:
             user.changes = 0
         user.changes += number_of_changes
         db.session.commit()
@@ -397,8 +456,7 @@ def create_date_selection(selection):
     }
     if selection and selection != "s.d.":
         date["s.d."] = False
-        if selection in date:
-            date[selection] = True
+        if selection in date: date[selection] = True
         else: date["s.d."] = True
     return date
 
@@ -573,6 +631,26 @@ def analyze():
     return redirect(url_for('admin'))
 
 
+@app.route('/admin/wrong_bullingers', methods=['post', 'get'])
+def wrong_bullingers():
+    """ 89 Karten
+    [864, 3483, 2066, 2783, 4254, 5788, 6079, 6159, 6429, 6698, 6742, 6846, 6969, 7008, 7013, 7070, 7093, 7112, 7126,
+    7144, 7244, 7285, 7296, 7403, 7460, 7479, 7505, 7603, 7632, 7634, 7684, 7706, 7734, 7744, 7800, 7841, 7848, 8268,
+    8279, 8384, 8437, 8438, 8567, 8712, 8724, 8749, 8756, 8801, 8814, 8845, 8857, 8871, 8928, 9000, 9003, 9018, 9019,
+    9022, 9034, 9039, 9059, 9083, 9085, 9110, 9113, 9121, 9122, 9132, 9199, 9249, 9285, 9286, 9290, 9328, 9354, 9521,
+    9571, 9580, 9608, 9609, 9661, 9665, 9716, 9815, 9848, 9863, 9928, 9934, 9944] """
+    results = []
+    for e in Empfaenger.query.all():
+        p = Person.query.get(e.id_person)
+        if p.name == "Bullinger" and p.vorname == "Heinrich" and p.titel == "":
+            results.append(e.id_brief)
+    for a in Absender.query.all():
+        p = Person.query.get(a.id_person)
+        if p.name == "Bullinger" and p.vorname == "Heinrich" and p.titel == "":
+            results.append(a.id_brief)
+    print(results, len(results))
+
+
 @app.route('/admin/print_analysis', methods=['post', 'get'])
 def print_analysis():
     df = pd.read_sql(db.session.query(Person).statement, db.session.bind)
@@ -588,7 +666,7 @@ def print_analysis():
     a = df_a.to_latex(index=False)
 
     print(e, a)
-
+    """
     tfile = open('Dokumentation/Counts/emp.tex', 'w')
     tfile.write(e)
     tfile.close()
@@ -604,6 +682,7 @@ def print_analysis():
     tfile = open('Dokumentation/Counts/sort_by_abs.csv', 'w')
     tfile.write(df_a.to_csv(index=False))
     tfile.close()
+    """
 
 
     return redirect(url_for('admin'))

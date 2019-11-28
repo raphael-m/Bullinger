@@ -14,7 +14,7 @@ from flask_login import UserMixin
     Variable/Class names (!) correspond to actual DB-Column/Relation names.
     The character '_' will be replaced by ' ' (1st subsequent letter uppercase) """
 
-T0 = '0:00:00'
+T0 = '0'
 
 
 class Kartei(db.Model):

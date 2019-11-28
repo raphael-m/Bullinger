@@ -76,36 +76,24 @@ class FormFileCard(FlaskForm):
     place_sender = StringField("Ort", id=IDC + _NSS + "place")
     remark_sender = StringField("Bemerkung", id=IDC + _NSS + "remark")
 
-    def differns_from_sender(self, person):
-        if person.name != self.name_sender.data.strip() \
-                or person.vorname != self.forename_sender.data.strip() \
-                or person.ort != self.place_sender.data.strip() \
-                or person.titel != self.title_sender.data.strip():
-            return True
-        return False
+    def differences_from_sender(self, person):
+        n = 0
+        if person.name != self.name_sender.data.strip(): n += 1
+        if person.vorname != self.forename_sender.data.strip(): n += 1
+        if person.ort != self.place_sender.data.strip(): n += 1
+        if person.titel != self.title_sender.data.strip(): n += 1
+        return n
 
-    def set_sender_as_default(self, sender, person):
-        if sender:
-            if person.titel: self.title_sender.default = person.titel
-            if person.name: self.name_sender.default = person.name
-            if person.vorname: self.forename_sender.default = person.vorname
-            if person.ort: self.place_sender.default = person.ort
-            if sender.bemerkung: self.remark_sender.default = sender.bemerkung
+    def has_changed__sender_comment(self, receiver):
+        return True if receiver.bemerkung != self.remark_receiver else False
 
-    """
-    def update_sender(self, sender_old):
-        new_sender, number_of_changes = Absender(), 0
-        if sender_old.titel != self.title_sender.data: number_of_changes += 1
-        new_sender.title = self.title_sender.data
-        if sender_old.name != self.name_sender.data: number_of_changes += 1
-        new_sender.name = self.name_sender.data
-        if sender_old.vorname != self.forename_sender.data: number_of_changes += 1
-        new_sender.vorname = self.forename_sender.data
-        if number_of_changes > 0:
-            self.set_sender_as_default(new_sender)
-            return new_sender, number_of_changes
-        return None, 0
-    """
+    def set_sender_as_default(self, person, remark):
+        if person:
+            self.title_sender.default = person.titel if person.titel else ''
+            self.name_sender.default = person.name if person.name else ''
+            self.forename_sender.default = person.vorname if person.vorname else ''
+            self.place_sender.default = person.ort if person.ort else ''
+        self.remark_sender.default = remark if remark else ''
 
     _NSR = "receiver_"
     title_receiver = StringField("Titel", id=IDC + _NSR + "title")
@@ -114,36 +102,24 @@ class FormFileCard(FlaskForm):
     place_receiver = StringField("Ort", id=IDC + _NSR + "place")
     remark_receiver = StringField("Bemerkung", id=IDC + _NSR + "remark")
 
-    def differns_from_receiver(self, person):
-        if person.name != self.name_receiver.data.strip() \
-                or person.vorname != self.forename_receiver.data.strip() \
-                or person.ort != self.place_receiver.data.strip() \
-                or person.titel != self.title_receiver.data.strip():
-            return True
-        return False
+    def differs_from_receiver(self, person):
+        differences = 0
+        if person.name != self.name_receiver.data.strip(): differences += 1
+        if person.vorname != self.forename_receiver.data.strip(): differences += 1
+        if person.ort != self.place_receiver.data.strip(): differences += 1
+        if person.titel != self.title_receiver.data.strip(): differences += 1
+        return differences
 
-    def set_receiver_as_default(self, emp, person):
-        if emp:
-            if person.titel: self.title_receiver.default = person.titel
-            if person.name: self.name_receiver.default = person.name
-            if person.vorname: self.forename_receiver.default = person.vorname
-            if person.ort: self.place_receiver.default = person.ort
-            if emp.bemerkung: self.remark_receiver.default = emp.bemerkung
+    def has_changed__receiver_comment(self, receiver):
+        return True if receiver.bemerkung != self.remark_receiver else False
 
-    """
-    def update_receiver(self, receiver_old):
-        new_emp, number_of_changes = Empfaenger(), 0
-        if receiver_old.titel != self.title_sender.data: number_of_changes += 1
-        new_emp.title = self.title_sender.data
-        if receiver_old.name != self.name_sender.data: number_of_changes += 1
-        new_emp.name = self.name_sender.data
-        if receiver_old.vorname != self.forename_sender.data: number_of_changes += 1
-        new_emp.vorname = self.forename_sender.data
-        if number_of_changes > 0:
-            self.set_sender_as_default(new_emp)
-            return new_emp, number_of_changes
-        return None, 0
-    """
+    def set_receiver_as_default(self, person, remark):
+        if person:
+            self.title_receiver.default = person.titel if person.titel else ''
+            self.name_receiver.default = person.name if person.name else ''
+            self.forename_receiver.default = person.vorname if person.vorname else ''
+            self.place_receiver.default = person.ort if person.ort else ''
+        self.remark_receiver.default = remark if remark else ''
 
     _NSA = "autograph_"
     place_autograph = StringField("Standort", id=IDC + _NSA + "standort")

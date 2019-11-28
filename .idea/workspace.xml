@@ -1,6 +1,534 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="6d2cb28e-bb45-42c9-b203-59c8af68dfbb" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Arbeitszeit.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/DB_Spezifikation.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Datenbankbeschreibung.pages" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/Bilder/Bindestriche.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/Bilder/HBBW_Karteikarte_00007.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/Bilder/Interface.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/Bilder/Karteikarte_Original.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/Bilder/Karteikartenmasse.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/Bilder/admin_view.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/Bilder/get_attribute_name.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/Bilder/is_attribute.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/Bilder/ocr_attributes_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/Bilder/ocr_attributes_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/Bilder/ocr_output.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/Bilder/page_size.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/Bilder/page_size_adjusted.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/Bilder/pagesize_all.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/Bilder/suspect_size.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/commands.tex" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/missfont.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/presentation.aux" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/presentation.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/presentation.nav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/presentation.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/presentation.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/presentation.snm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/presentation.synctex.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/presentation.tex" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/presentation.toc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dokumentation/Präsentation_25_11_2019/presentation.vrb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Setup.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Setup.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Formular.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/HTML/Entwurf_Karteikarte.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/HTML/Entwurf_Startseite.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/HTML/account_menu_offline.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/HTML/admin.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/HTML/base.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/HTML/home.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/HTML/login.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/HTML/register.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Screenshots.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Screenshots/Datenbank.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Screenshots/Formular.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Screenshots/Übersicht-Jahr-Monat.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Screenshots/Übersicht-Jahr.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Screenshots/Übersicht.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/.gitlab-ci.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/.travis.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/CHANGELOG.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/Dockerfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/Dockerfile-MySQL" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/docker-compose.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/docker-config/create_turkle_admin.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/docker-config/turkle.crontab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/docs/ADMINISTRATION.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/docs/DOCKER.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/docs/REQUESTERS.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/docs/TEMPLATE-GUIDE.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/docs/images/Batch_list.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/docs/images/Turkle_admin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/examples/audio_transcription.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/examples/audio_transcription.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/examples/audio_transcription.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/examples/emotion_detection.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/examples/emotion_detection.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/examples/image_contains.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/examples/image_contains.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/examples/image_contains_birds.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/examples/translate_minimal.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/examples/translate_two_cities.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/examples/translate_validate.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/login_page.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/manage.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/scripts/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/scripts/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/scripts/add_user.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/scripts/client.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/scripts/download_results.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/scripts/import_users.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/scripts/upload_tasks.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/setup.cfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/admin.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/apps.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/management/commands/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/management/commands/expire_assignments.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/migrations/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/models.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-4.1.3/css/bootstrap-grid.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-4.1.3/css/bootstrap-grid.css.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-4.1.3/css/bootstrap-grid.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-4.1.3/css/bootstrap-grid.min.css.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-4.1.3/css/bootstrap-reboot.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-4.1.3/css/bootstrap-reboot.css.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-4.1.3/css/bootstrap-reboot.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-4.1.3/css/bootstrap-reboot.min.css.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-4.1.3/css/bootstrap.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-4.1.3/css/bootstrap.css.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-4.1.3/css/bootstrap.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-4.1.3/css/bootstrap.min.css.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-4.1.3/js/bootstrap.bundle.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-4.1.3/js/bootstrap.bundle.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-4.1.3/js/bootstrap.bundle.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-4.1.3/js/bootstrap.bundle.min.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-4.1.3/js/bootstrap.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-4.1.3/js/bootstrap.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-4.1.3/js/bootstrap.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-4.1.3/js/bootstrap.min.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/css/bootstrap-datepicker.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/css/bootstrap-datepicker.css.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/css/bootstrap-datepicker.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/css/bootstrap-datepicker.standalone.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/css/bootstrap-datepicker.standalone.css.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/css/bootstrap-datepicker.standalone.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/css/bootstrap-datepicker3.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/css/bootstrap-datepicker3.css.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/css/bootstrap-datepicker3.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/css/bootstrap-datepicker3.standalone.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/css/bootstrap-datepicker3.standalone.css.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/css/bootstrap-datepicker3.standalone.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/js/bootstrap-datepicker.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/js/bootstrap-datepicker.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker-en-CA.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.ar-tn.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.ar.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.az.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.bg.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.bn.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.br.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.bs.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.ca.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.cs.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.cy.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.da.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.de.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.el.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.en-AU.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.en-CA.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.en-GB.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.en-IE.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.en-NZ.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.en-ZA.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.eo.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.es.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.et.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.eu.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.fa.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.fi.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.fo.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.fr-CH.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.fr.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.gl.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.he.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.hi.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.hr.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.hu.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.hy.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.id.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.is.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.it-CH.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.it.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.ja.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.ka.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.kh.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.kk.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.km.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.ko.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.kr.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.lt.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.lv.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.me.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.mk.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.mn.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.ms.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.nl-BE.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.nl.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.no.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.oc.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.pl.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.pt-BR.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.pt.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.ro.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.rs-latin.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.rs.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.ru.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.si.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.sk.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.sl.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.sq.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.sr-latin.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.sr.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.sv.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.sw.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.ta.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.tg.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.th.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.tk.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.tr.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.uk.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.uz-cyrl.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.uz-latn.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.vi.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.zh-CN.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.zh-TW.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/css/bootstrap-glyphicons.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/css/bootstrap-glyphicons.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/fonts/fontawesome/fa-brands-400.eot" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/fonts/fontawesome/fa-brands-400.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/fonts/fontawesome/fa-brands-400.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/fonts/fontawesome/fa-brands-400.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/fonts/fontawesome/fa-brands-400.woff2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/fonts/fontawesome/fa-regular-400.eot" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/fonts/fontawesome/fa-regular-400.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/fonts/fontawesome/fa-regular-400.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/fonts/fontawesome/fa-regular-400.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/fonts/fontawesome/fa-regular-400.woff2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/fonts/fontawesome/fa-solid-900.eot" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/fonts/fontawesome/fa-solid-900.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/fonts/fontawesome/fa-solid-900.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/fonts/fontawesome/fa-solid-900.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/fonts/fontawesome/fa-solid-900.woff2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/fonts/glyphicons/glyphicons-halflings-regular.eot" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/fonts/glyphicons/glyphicons-halflings-regular.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/fonts/glyphicons/glyphicons-halflings-regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/fonts/glyphicons/glyphicons-halflings-regular.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/fonts/glyphicons/glyphicons-halflings-regular.woff2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/maps/glyphicons-fontawesome.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/maps/glyphicons-fontawesome.less" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/bootstrap4-glyphicons/maps/glyphicons-fontawesome.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/css/turkle.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/jquery-3.3.1.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/jquery.countdown-2.2.0.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/static/turkle/parsley-2.9.1.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/admin/base_bootcamp.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/admin/forms/widgets/custom_button_file_widget.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/admin/turkle/about.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/admin/turkle/app_index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/admin/turkle/batch/change_form.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/admin/turkle/batch/change_list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/admin/turkle/batch_stats.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/admin/turkle/project/change_form.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/admin/turkle/review_batch.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/base.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/preview.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/preview_iframe.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/registration/logged_out.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/registration/login.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/registration/password_change_done.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/registration/password_change_form.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/registration/password_reset_complete.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/registration/password_reset_confirm.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/registration/password_reset_done.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/registration/password_reset_email.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/registration/password_reset_form.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/stats.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/task_assignment.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/task_assignment_iframe.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/templates/task_base.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/tests/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/tests/resources/form_0.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/tests/resources/form_0_filled.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/tests/resources/form_1.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/tests/resources/sentiment.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/tests/resources/test_db.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/tests/test_admin_views.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/tests/test_client.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/tests/test_models.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/tests/test_views.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/tests/utility.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/utils.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle/views.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle_site/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle_site/settings.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle_site/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/Turkle/turkle_site/wsgi.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/account.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/account_admin.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/account_menu_online.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/admin.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/login_register.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/server.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/static/bullinger.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/static/css/admin.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/static/css/home.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/static/css/login.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/static/css/menu_account.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/static/css/menu_items.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/static/css/register.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/static/css/reset.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/static/css/table.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/static/logo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/static/logo_original.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trash/static/main.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/app.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pdf_to_jpg.py" beforeDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="597">
+              <caret line="104" column="13" selection-start-line="104" selection-start-column="6" selection-end-line="104" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/routes.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-551">
+              <caret line="196" column="55" selection-start-line="196" selection-start-column="55" selection-end-line="196" selection-end-column="55" />
+              <folding>
+                <element signature="e#172#181#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Setup.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="302">
+              <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/forms.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="115" column="27" selection-start-line="115" selection-start-column="27" selection-end-line="115" selection-end-column="27" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/static/css/card.css">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/static/css/form.css">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/static/css/home.css">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Tools/BullingerData.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-857" />
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>Person(</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/App/models.py" />
+        <option value="$PROJECT_DIR$/App/forms.py" />
+        <option value="$PROJECT_DIR$/App/routes.py" />
+        <option value="$PROJECT_DIR$/Setup.txt" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
+    <option name="width" value="1440" />
+    <option name="height" value="820" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
   <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6d2cb28e-bb45-42c9-b203-59c8af68dfbb" name="Default Changelist" comment="" />
+      <created>1574792480391</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1574792480391</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="23" width="1440" height="820" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Favorites" side_tool="true" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2501762" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Version Control" />
+      <window_info anchor="bottom" id="Python Console" />
+      <window_info anchor="bottom" id="Terminal" visible="true" weight="0.28296703" />
+      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32967034" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/requirements.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tools/BullingerData.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-857" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/static/css/home.css">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/static/css/form.css">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/static/css/card.css">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="597">
+          <caret line="104" column="13" selection-start-line="104" selection-start-column="6" selection-end-line="104" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="115" column="27" selection-start-line="115" selection-start-column="27" selection-end-line="115" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/routes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-551">
+          <caret line="196" column="55" selection-start-line="196" selection-start-column="55" selection-end-line="196" selection-end-column="55" />
+          <folding>
+            <element signature="e#172#181#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Setup.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="302">
+          <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
+        </state>
+      </provider>
+    </entry>
   </component>
 </project>
