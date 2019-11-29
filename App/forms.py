@@ -8,7 +8,7 @@ from flask import request
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, HiddenField, FloatField, RadioField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
-from App.models import User, Datum, Empfaenger, Absender, Autograph, Kopie, Abschrift, Photokopie, Literatur, Gedruckt, \
+from App.models import User, Datum, Empfaenger, Absender, Autograph, Kopie, Abschrift, Photokopie, Literatur, Gedruckt,\
     Bemerkung, Sprache
 
 IDC = "card__"  # prefix for form IDs

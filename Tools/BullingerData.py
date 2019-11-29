@@ -14,15 +14,12 @@ from Tools.Plots import ScatterPlot
 from Tools.FileSystem import FileSystem
 from Tools.Dictionaries import ListDict, CountDict
 from Tools.Langid import *
-
 from App.models import *
-
 
 SN = 's.n.'  # sine nomine
 SL = 's.l.'  # sine loco
 SD = 's.d.'  # sine die
 ADMIN = 'Admin'  # username
-
 
 
 class BullingerData:
@@ -52,24 +49,7 @@ class BullingerData:
         pass
 
     @staticmethod
-    def get_sub_contents(dir_path):
-        for path in FileSystem.get_file_paths(dir_path, recursively=False):
-            table = SubContents.get_subcontents(path)
-            if table.shape[0] > 0:
-                print(SubContents.get_subcontents(path))
-
-    @staticmethod
-    def test_card():
-        path = "Karteikarten/OCR/HBBW_Karteikarte_09468.xml"
-        data = BullingerData.get_data_as_dict(path)
-        if "Literatur" in data:
-            literatur = ' '.join([t for s in data["Literatur"] for t in s])
-            # print(BullingerData.is_probably_junk(literatur))
-
-
-    @staticmethod
     def export(dir_path, database):
-
         card_nr, n_gram_max, threshold = 0, 4, 0.3
         n_grams_bullinger = [BullingerData.create_n_gram_dict(i, "Bullinger") for i in range(1, n_gram_max)]
         database.add(Person(name="Bullinger", title="", forename="Heinrich", place="Zürich", user=ADMIN, time=datetime.now()))
@@ -219,9 +199,6 @@ class BullingerData:
 
                 if kopie.signatur or kopie.standort:
                     database.add(kopie)
-
-
-
 
                 if "Photokopie" in data:
                     photokopie = Photokopie(id_brief=card_nr, user=ADMIN, time=T0)
