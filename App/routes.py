@@ -7,7 +7,6 @@
 """ Implementation of different URLs (view functions) """
 
 import os
-import pandas as pd
 
 from sqlalchemy import desc
 
@@ -593,9 +592,7 @@ def create_index():
 
 @app.route('/admin/read', methods=['POST', 'GET'])
 def read():
-    # BullingerData.test_card()
     BullingerData.export("Karteikarten/OCR", db.session)
-    # BullingerData.get_sub_contents("Karteikarten/OCR")
     return redirect(url_for('admin'))
 
 

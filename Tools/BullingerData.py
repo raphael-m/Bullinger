@@ -30,230 +30,118 @@ class BullingerData:
     ATTRIBUTES = ["Datum", "Absender", "Empfänger", "Autograph", "Kopie", "Photokopie", "Standort", "Bull.", "Corr.",
                   "Sign.", "Abschrift", "Umfang", "Sprache", "Literatur", "Gedruckt", "Bemerkungen"]
 
+    # Patterns for attributnames
+    p_standort = '[Ss$][tlf1I|]a[nm]d[o0°O]r[tlf1I]'
+    p_signatur = '[Ss][il][g8B]n[.]?'
+    p_umfang = '[Uu][mn][ftl]a[nm][g8B]'
+
     def __init__(self):
         pass
 
     @staticmethod
-    def export(dir_path, database):
-        card_nr, n_gram_max, threshold = 0, 4, 0.3
-        n_grams_bullinger = [BullingerData.create_n_gram_dict(i, "Bullinger") for i in range(1, n_gram_max)]
-        database.add(Person(name="Bullinger", title="", forename="Heinrich", place="Zürich", user=ADMIN, time=datetime.now()))
-        database.commit()
-        id_bullinger = Person.query.filter_by(name="Bullinger").first().id
-        for path in FileSystem.get_file_paths(dir_path, recursively=False):
-            card_nr += 1
-            T0 = datetime.now()
-            print(card_nr, path)
-            data = BullingerData.get_data_as_dict(path)
-            if data:
+    def get_ssu(data, index):
+        standort_baselines, baselines_signatur, is_typewriter = None, None, False
+        standort_str, standort, signatur_str, signatur = '', '', '', ''
+        umfang_baselines, umfang_str, umfang = '', '', ''
+        if "Standort "+index in data:
+            standort_baselines = data["Standort "+index]
+            standort_str = [t for s in data["Standort "+index] for t in s]
+            standort_str = re.sub(BullingerData.p_standort, '', ' '.join(standort_str))
+            standort = BullingerData.clean_str(standort_str)
+        if "Sign. "+index in data:
+            baselines_signatur = data["Sign. "+index]
+            signatur_str = [t for s in data["Sign. "+index] for t in s]
+            signatur_str = re.sub(BullingerData.p_signatur, '', ' '.join(signatur_str))
+            signatur = BullingerData.clean_str(signatur_str)
+        if "Umfang "+index in data:
+            umfang_str = [t for s in data["Umfang "+index] for t in s]
+            umfang_str = re.sub(BullingerData.p_umfang, '', ' '.join(umfang_str))
+            umfang = ' '.join(umfang_str)
 
-                # Datum
-                if "Datum" in data:
-                    BullingerData.extract_date(card_nr, [i for j in data["Datum"] for i in j], database)
-                else:
-                    database.add(Datum(id_brief=card_nr, year_a=SD, month_a=SD, day_a=SD, user=ADMIN, time=T0))
+        # 1. Typewriter Data
+        if BullingerData.is_typewriter(standort_baselines) or BullingerData.is_typewriter(baselines_signatur):
+            if standort:
+                d = standort + signatur + umfang
+                m = re.match("(.*)StA\s(E[\d\s,]*)([^\d]*)", d)
+                m = re.match("(.*)StA\s(A[\d\s,]*)([^\d]*)", d) if not m else None
+                m = re.match("(.*)ZB\s([MsS\d\s,]*)([^\d]*)", d) if not m else None
+                standort = m.group(1) if m else standort
+                signatur = ' '.join([m.group(2), ]) if m else signatur
+                umfang = m.group(3) if m else umfang
 
-                # Absender/Empfänger
-                if BullingerData.is_bullinger_sender(data, n_grams_bullinger, n_gram_max, threshold):
-                    # Bullinger ist Absender
-                    database.add(Absender(id_brief=card_nr, id_person=id_bullinger, user=ADMIN, time=T0))
-                    e = BullingerData.analyze_address(data["Empfänger"])
-                    known = Person.query.filter_by(name=e[0], vorname=e[1], titel=e[4], ort=e[2]).first()
-                    if not known:
-                        database.add(Person(title=e[4], name=e[0], forename=e[1], place=e[2], user=ADMIN, time=T0))
-                    ref = Person.query.filter_by(name=e[0], vorname=e[1], titel=e[4], ort=e[2]).first().id
-                    database.add(Empfaenger(id_brief=card_nr, id_person=ref, remark=e[3], user=ADMIN, time=T0))
-                else:
-                    # Bullinger ist Empfänger
-                    database.add(Empfaenger(id_brief=card_nr, id_person=id_bullinger, user=ADMIN, time=T0))
-                    a = BullingerData.analyze_address(data["Absender"])
-                    known = Person.query.filter_by(name=a[0], vorname=a[1], ort=a[2], titel=a[4]).first()
-                    if not known:
-                        database.add(Person(title=a[4], name=a[0], forename=a[1], place=a[2], user=ADMIN, time=T0))
-                        database.commit()
-                    ref = Person.query.filter_by(name=a[0], vorname=a[1], ort=a[2], titel=a[4]).first().id
-                    database.add(Absender(id_brief=card_nr, id_person=ref, remark=a[3], user=ADMIN, time=T0))
+        elif BullingerData.check_stdort_for_zuerich_sta(standort) or \
+                BullingerData.check_sign_for_zuerich_sta(signatur):
+            standort, is_zsta = "Zürich StA", True
+            number = re.sub(r'[^\d,f]', '', signatur + umfang)
+            n_I = BullingerData.how_many_I(signatur)
+            signatur = ' '.join(['E', n_I, number.strip(',')])
 
-                # Patterns for attributnames
-                p_standort = '[Ss$][tlf1I|]a[nm]d[o0°O]r[tlf1I]'
-                p_signatur = '[Ss][il][g8B]n[.]?'
-                p_umfang = '[Uu][mn][ftl]a[nm][g8B]'
+        elif BullingerData.check_standort_ZZB(standort):
+            standort = "Zürich ZB"
+            numbers = re.sub(r'[^\d,]', '', standort + signatur + umfang)
+            signatur = ''.join('Ms S ' + numbers)
 
-                # Autograph
-                autograph, is_zsta = Autograph(id_brief=card_nr, user=ADMIN, time=T0), False
-                standort_baselines, baselines_signatur, is_typewriter = None, None, False
-                standort_str, standort, signatur_str, signatur = '', '', '', ''
-                umfang_baselines, umfang_str, umfang = '', '', ''
-                if "Standort A" in data:
-                    standort_baselines = data["Standort A"]
-                    standort_str = [t for s in data["Standort A"] for t in s]
-                    standort_str = re.sub(p_standort, '', ' '.join(standort_str))
-                    standort = BullingerData.clean_str(standort_str)
-                if "Sign. A" in data:
-                    baselines_signatur = data["Sign. A"]
-                    signatur_str = [t for s in data["Sign. A"] for t in s]
-                    signatur_str = re.sub(p_signatur, '', ' '.join(signatur_str))
-                    signatur = BullingerData.clean_str(signatur_str)
-                if "Umfang A" in data:
-                    umfang_baselines = data["Umfang A"]
-                    umfang_str = [t for s in data["Umfang A"] for t in s]
-                    umfang_str = re.sub(p_umfang, '', ' '.join(umfang_str))
-                    umfang = ' '.join(umfang_str)
+        elif len(standort_str) or len(signatur_str) or len(umfang_str):
+            standort = "Zürich"
 
-                # 1. Typewriter Data
-                if BullingerData.is_typewriter(standort_baselines) or BullingerData.is_typewriter(baselines_signatur):
-                    if standort:
-                        d = standort + signatur + umfang
-                        m = re.match("(.*)StA\s(E[\d\s,]*)([^\d]*)", d)
-                        m = re.match("(.*)StA\s(A[\d\s,]*)([^\d]*)", d) if not m else None
-                        m = re.match("(.*)ZB\s([MsS\d\s,]*)([^\d]*)", d) if not m else None
-                        autograph.standort = m.group(1) if m else standort
-                        autograph.signatur = ' '.join([m.group(2), ]) if m else signatur
-                        autograph.umfang = m.group(3) if m else umfang
+        return standort, signatur, umfang
 
-                elif BullingerData.check_stdort_for_zuerich_sta(standort) or\
-                        BullingerData.check_sign_for_zuerich_sta(signatur):
-                        autograph.standort, is_zsta = "Zürich StA", True
-                        number = re.sub(r'[^\d,f]', '', signatur+umfang)
-                        n_I = BullingerData.how_many_I(signatur)
-                        autograph.signatur = ' '.join(['E', n_I, number.strip(',')])
+    @staticmethod
+    def get_literature(data):
+        if "Literatur" in data:
+            l = ' '.join([t for s in data["Literatur"] for t in s])
+            l = re.sub("Literatur", '', l)
+            if not BullingerData.is_probably_junk(l):
+                return BullingerData.clean_str(l)
+        return None
 
-                elif BullingerData.check_standort_ZZB(standort):
-                    autograph.standort = "Zürich ZB"
-                    numbers = re.sub(r'[^\d,]', '', standort+signatur+umfang)
-                    autograph.signatur = ''.join('Ms S ' + numbers)
+    @staticmethod
+    def get_printed(data):
+        if "Gedruckt" in data:
+            p = ' '.join([t for s in data["Gedruckt"] for t in s])
+            p = re.sub("Gedruckt", '', p)
+            if not BullingerData.is_probably_junk(p):
+                return BullingerData.clean_str(p)
+        return None
 
-                elif len(standort_str) or len(signatur_str) or len(umfang_str):
-                    autograph.standort = "Zürich"
+    @staticmethod
+    def get_remark(data):
+        if 'Bemerkungen' in data:
+            remark, concat = list(), [False]
+            for baseline in data["Bemerkungen"]:
+                bl = [BullingerData.clean_str(s) for s in baseline]
+                bl = [re.sub('Bemerkung', '', t) for t in bl if t]
+                if len(bl) > 0:
+                    if bl[-1][-1] == '-':
+                        bl[-1] = re.sub('-', '', bl[-1]).strip()
+                        concat += [True]
+                    else:
+                        concat += [False]
+                if len(bl) > 0:
+                    remark.append(bl)
+            rem = []
+            if len(remark) > 1:
+                for i, bl in enumerate(remark):
+                    if not concat[i]:
+                        rem += bl
+                    else:
+                        rem[-1] = rem[-1] + str(bl[0])
+                        if len(bl) > 1:
+                            rem += bl[1:]
+            rem = BullingerData.remove_leading_junk(' '.join(rem))
+            if rem:
+                return rem.replace(' ,', ',').replace(' .', '.')
+        return None
 
-                if autograph.standort or autograph.signatur:
-                    database.add(autograph)
+    @staticmethod
+    def get_lang(data, bemerkung):
+        langs = [Langid.classify(bemerkung)]
+        if "Sprache" in data:
+            for lang in BullingerData.analyze_language(data["Sprache"]):
+                if lang not in langs:
+                    langs.append(lang)
+        return langs
 
-
-
-                # Kopie
-                kopie = Kopie(id_brief=card_nr, user=ADMIN, time=T0)
-                standort_baselines, baselines_signatur, is_typewriter = None, None, False
-                standort_str, standort, signatur_str, signatur = '', '', '', ''
-                umfang_baselines, umfang_str, umfang = '', '', ''
-                if "Standort B" in data:
-                    standort_baselines = data["Standort B"]
-                    standort_str = [t for s in data["Standort B"] for t in s]
-                    standort_str = re.sub(p_standort, '', ' '.join(standort_str))
-                    standort = BullingerData.clean_str(standort_str)
-                if "Sign. B" in data:
-                    baselines_signatur = data["Sign. B"]
-                    signatur_str = [t for s in data["Sign. B"] for t in s]
-                    signatur_str = re.sub(p_signatur, '', ' '.join(signatur_str))
-                    signatur = BullingerData.clean_str(signatur_str)
-                if "Umfang B" in data:
-                    umfang_baselines = data["Umfang B"]
-                    umfang_str = [t for s in data["Umfang B"] for t in s]
-                    umfang_str = re.sub(p_umfang, '', ' '.join(umfang_str))
-                    umfang = ' '.join(umfang_str)
-
-                # Typewriter
-                if BullingerData.is_typewriter(standort_baselines) or BullingerData.is_typewriter(baselines_signatur):
-                    if standort:
-                        d = standort + signatur + umfang
-                        m = re.match("(.*)StA\s(E[\d\s,]*)([^\d]*)", d)
-                        m = re.match("(.*)StA\s(A[\d\s,]*)([^\d]*)", d) if not m else None
-                        m = re.match("(.*)ZB\s([MsSF\d\s,]*)([^\d]*)", d) if not m else None
-                        kopie.standort = m.group(1) if m else standort
-                        kopie.signatur = ' '.join([m.group(2), ]) if m else signatur
-                        kopie.umfang = m.group(3) if m else umfang
-
-                # Zürich StA
-                elif BullingerData.check_stdort_for_zuerich_sta(standort_str)\
-                        or BullingerData.check_sign_for_zuerich_sta(signatur):
-                        kopie.standort = "Zürich StA"
-                        if signatur:
-                            number = re.sub(r'[^\d,]*f*', '', signatur+umfang)
-                            n_I = BullingerData.how_many_I(signatur)
-                            kopie.signatur = ''.join('E '+n_I+' '+number.strip(','))
-
-                # ZZB
-                elif is_zsta and (len(standort_str) > 0 or len(signatur_str+umfang_str) > 0):
-                    kopie.standort = "Zürich ZB"
-                    numbers = re.sub(r'[^\d,]', '', standort+signatur+umfang)
-                    kopie.signatur = ''.join('Ms S ' + numbers)
-
-                # Zürich ?
-                elif len(standort_str) or len(signatur_str) or len(umfang_str):
-                    kopie.standort = "Zürich"
-
-                if kopie.signatur or kopie.standort:
-                    database.add(kopie)
-
-                if "Photokopie" in data:
-                    photokopie = Photokopie(id_brief=card_nr, user=ADMIN, time=T0)
-                    photokopie.standort = ' '.join([t for s in data["Photokopie"] for t in s]).replace('2', 'Z')
-                    e = BullingerData.analyze_bull_corr(data["Bull. Corr. A"], photokopie)
-                    if e: database.add(photokopie)
-                if "Abschrift" in data:
-                    abschrift = Abschrift(id_brief=card_nr, user=ADMIN, time=T0)
-                    abschrift.standort = ' '.join([t for s in data["Abschrift"] for t in s]).replace('2', 'Z')
-                    abschrift.standort = re.sub("Abschrift", '', abschrift.standort)
-                    d = BullingerData.analyze_bull_corr(data["Bull. Corr. B"], abschrift)
-                    if d: database.add(abschrift)
-
-                if "Literatur" in data:
-                    literatur = ' '.join([t for s in data["Literatur"] for t in s])
-                    literatur = re.sub("Literatur", '', literatur)
-                    if not BullingerData.is_probably_junk(literatur):
-                        literatur = ' '.join([BullingerData.clean_str(t) for s in data["Literatur"] for t in s])
-                        database.add(Literatur(id_brief=card_nr, literature=literatur, user=ADMIN, time=T0))
-                if "Gedruckt" in data:
-                    gedruckt = ' '.join([t for s in data["Gedruckt"] for t in s])
-                    if not BullingerData.is_probably_junk(gedruckt):
-                        gedruckt = ' '.join([BullingerData.clean_str(t) for s in data["Gedruckt"] for t in s])
-                        database.add(Gedruckt(id_brief=card_nr, printed=gedruckt, user=ADMIN, time=T0))
-
-                bemerkung = ''
-                if 'Bemerkungen' in data:
-                    b = Bemerkung(id_brief=card_nr, user=ADMIN, time=T0)
-                    remark, concat = list(), [False]
-                    for baseline in data["Bemerkungen"]:
-                        bl = [BullingerData.clean_str(s) for s in baseline]
-                        if len(bl)>0:
-                            if "Bemer" in bl[0] or "rkung" in bl[0]:
-                                bl[0] = ''
-                        bl = [re.sub('Bemerkung', '', t) for t in bl if t]
-
-                        if len(bl) > 0:
-                            if bl[-1][-1] == '-':
-                                bl[-1] = re.sub('-', '', bl[-1]).strip()
-                                concat += [True]
-                            else: concat += [False]
-                        if len(bl) > 0:
-                            remark.append(bl)
-                    rem = []
-                    if len(remark) > 1:
-                        for i, bl in enumerate(remark):
-                            if not concat[i]:
-                                rem += bl
-                            else:
-                                rem[-1] = rem[-1] + str(bl[0])
-                                if len(bl) > 1:
-                                    rem += bl[1:]
-                    rem = BullingerData.remove_leading_junk(' '.join(rem))
-                    if rem:
-                        rem = rem.replace(' ,', ',').replace(' .', '.')
-                        b.bemerkung = rem
-                        bemerkung = rem
-                        database.add(b)
-                langs = [Langid.classify(bemerkung)]
-                if "Sprache" in data:
-                    for lang in BullingerData.analyze_language(data["Sprache"]):
-                        if lang not in langs:
-                            langs.append(lang)
-                for lang in langs:
-                    database.add(Sprache(id_brief=card_nr, language=lang, user=ADMIN, time=T0))
-
-            else:
-                print("*** WARNING [file ignored]:", path)
-                database.add(Datum(id_brief=card_nr, year_a=SD, month_a=SD, day_a=SD, user=ADMIN, time=T0))
-            database.commit()
 
     @staticmethod
     def clean_str(s):
@@ -446,7 +334,9 @@ class BullingerData:
 
 
     @staticmethod
-    def is_bullinger_sender(data, hb_ngrams, precision, threshold):
+    def is_bullinger_sender(data, hb_ngrams):
+        precision = 4
+        threshold = 0.3
         if "Absender" in data and "Empfänger" in data:
             abs, emp = [t for s in data["Absender"] for t in s], [t for s in data["Empfänger"] for t in s]
             res_a, res_b = [], []
@@ -484,74 +374,72 @@ class BullingerData:
     ], 9  # October
 
     @staticmethod
-    def extract_date(id_brief, data, database):
-        data = [re.sub("[^A-Za-z0-9]", '', token).strip() for token in data]
-        data = [token for token in data if token != '']
-        year, month = BullingerData.year_predicted, BullingerData.month_predicted[BullingerData.index_predicted][0]
-        for token in data:  # year
-            if token == str(year):
-                data.remove(token)
-                break
-            if token == str(year+1):
-                BullingerData.year_predicted = int(token)
-                data.remove(token)
-                break
-        end = False # month
-        for token in data:
-            for m in BullingerData.month_predicted[BullingerData.index_predicted]:
-                if token in m and len(token)>2:
+    def extract_date(id_brief, data):
+        if "Datum" in data:
+            data = [i for j in data["Datum"] for i in j]
+            data = [re.sub("[^A-Za-z0-9]", '', token).strip() for token in data]
+            data = [token for token in data if token != '']
+            year, month = BullingerData.year_predicted, BullingerData.month_predicted[BullingerData.index_predicted][0]
+            for token in data:  # year
+                if token == str(year):
                     data.remove(token)
-                    end = True
                     break
-            if end:
-                break
-            else:
-                i = BullingerData.index_predicted
-                i = i+1 if i < 11 else 0
-                for m in BullingerData.month_predicted[i]:
-                    if token in m and len(token) > 2:
+                if token == str(year+1):
+                    BullingerData.year_predicted = int(token)
+                    data.remove(token)
+                    break
+            end = False # month
+            for token in data:
+                for m in BullingerData.month_predicted[BullingerData.index_predicted]:
+                    if token in m and len(token)>2:
                         data.remove(token)
-                        BullingerData.index_predicted = i
-        day = SD
-        for token in data:
-            if token.isdigit():
-                if 0 < int(token) < 32:
-                    day = int(token)
-                    data.remove(token)
+                        end = True
+                        break
+                if end:
                     break
-        # correction mechanisms
-        if str(BullingerData.year_predicted-1) in data:
-            BullingerData.year_predicted -= 1
-        if day == SD and len(data) > 0:
-            modified_tokens = []
-            for token in data:  # ocr-errors
-                token = token.replace('o', '0')
-                token = token.replace('O', '0')
-                token = token.replace('I', '1')
-                token = token.replace('i', '1')
-                token = token.replace('l', '1')
-                modified_tokens.append(token)
-            candidates = []  # split tokens into int/str
-            for token in modified_tokens:
-                match = re.match(r"[a-z]*([0-9]+)", token, re.I)
-                if match: candidates.append(match.group(1))
-            for token in candidates:  # retry
+                else:
+                    i = BullingerData.index_predicted
+                    i = i+1 if i < 11 else 0
+                    for m in BullingerData.month_predicted[i]:
+                        if token in m and len(token) > 2:
+                            data.remove(token)
+                            BullingerData.index_predicted = i
+            day = SD
+            for token in data:
                 if token.isdigit():
                     if 0 < int(token) < 32:
                         day = int(token)
+                        data.remove(token)
                         break
-        database.add(Datum(
-            id_brief=id_brief,
-            year_a=BullingerData.year_predicted,
-            month_a=BullingerData.month_predicted[BullingerData.index_predicted][0],
-            day_a=day,
-            year_b='',
-            month_b='',
-            day_b='',
-            user=ADMIN,
-            time=T0
-        ))
-        database.commit()
+            # correction mechanisms
+            if str(BullingerData.year_predicted-1) in data:
+                BullingerData.year_predicted -= 1
+            if day == SD and len(data) > 0:
+                modified_tokens = []
+                for token in data:  # ocr-errors
+                    token = token.replace('o', '0')
+                    token = token.replace('O', '0')
+                    token = token.replace('I', '1')
+                    token = token.replace('i', '1')
+                    token = token.replace('l', '1')
+                    modified_tokens.append(token)
+                candidates = []  # split tokens into int/str
+                for token in modified_tokens:
+                    match = re.match(r"[a-z]*([0-9]+)", token, re.I)
+                    if match: candidates.append(match.group(1))
+                for token in candidates:  # retry
+                    if token.isdigit():
+                        if 0 < int(token) < 32:
+                            day = int(token)
+                            break
+            return Datum(
+                id_brief=id_brief,
+                year_a=BullingerData.year_predicted,
+                month_a=BullingerData.month_predicted[BullingerData.index_predicted][0], day_a=day,
+                year_b='', month_b='', day_b='',
+                user=ADMIN, time=T0
+            )
+        return None
 
     @staticmethod
     def get_data_as_dict(path):
