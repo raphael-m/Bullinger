@@ -1,0 +1,149 @@
+
+Ziele Allg.
+- Redundanz/Modifikationsanomalien vermeiden
+- Nullwerte vermeiden
+- Join aller Relationen der Zerlegung erzeugt keine falschen Tupel
+- Vandalismus: Änderungen aller User persistent speichern (ohne zu überschreiben, inkl. Benutzer/Zeit)
+
+
+Relationen:
+-----------
+
+Kartennummer [
+    *Datum+,
+    *Absender+, *Empfänger+,
+    Autograph, Kopie, Photokopie, Abschrift,           # Urquellen
+    Sprache, Literatur, Gedruckt, Literatur, Bemerkung
+]
+
+- Datum:
+    (K_ID, [J_a, M_a, T_a], [J_b, M_b, T_b], Bemerkung, User, Zeit)
+    <int>, [<int>, <str>, <int>], [<int>, <str>, <int>], <str>, <str>, <int>
+    *, *(s.d., s.d, s.d.), (None, None, None), '', *, *)
+- Absender,
+  Empfänger
+    (K_ID, Titel, Name, Vorname, Ort, Bemerkung, User, Zeit)
+    <int>, <str> ..., <int>
+    *, -, s.n., s.n., s.l., -, *, *
+- Autograph,
+  Kopie,
+    (K_ID, Standort, SIGNATUR, Umfang, Bemerkung, User, Zeit)                  <-------- ?
+    <int>, <str> ..., <int>
+- Photokopie,
+  Abschrift
+    (K_ID, Standort, BC, Blatt, Seite, User, Zeit)
+- Sprache,
+  Literatur,
+  Gedruckt,
+  Bemerkung (1. Satz)
+    (K_ID, xxx, Bemerkung, User, Zeit)
+
+
+Briefkartei: Schema
+-------------------
+- Datum
+- Absender
+- Empfänger
+- Autograph/Kopie mit je
+    - Standort
+    - Signatur
+    - Umfang
+- Photokopie, Bull. Corr.
+- Abschrift, Bull. Corr.
+- Sprache
+- Gedruckt
+- Literatur
+- Bemerkung
+
+
+Anforderungsspezifikation
+-------------------------
+"-" optional; "+" mehrere Einträge möglich; "*": zwingend;
+                                                                                NULL
+*1  Briefnummer (~Datum)
+*2  Datum oder Intervall (von/bis, Bsp. S.194: Mai/Juni 1548);                  s.d. (sine die)
+*+  Absender/Ort                                                                s.n./s.l. (sine nomine/loco)
+*+  Empfänger/Ort (Bsp. "Geistliche von [Kantone]")                             s.n. (sine nomine)
+- Urquellen
+    - Autograph/Original
+        *1 Aufbewahrungsort
+        *1 Signatur (''=' '), (.=,=-), (Alpha, Römisch, Zahl, arab (ff) ??)
+    - Kopie/Druck
+        -1 Aufbewahrungsort
+        -1 Aufbewahrungsort
+- Abschriften
+    - Johann Jakob Simmler
+    - andere
+- Veröffentlichungen
+- Bemerkungen
+    - Datum
+    - Sender/Empfänger
+    - 1. Satz + Hinweis
+- Karteikarte
+- Quellenband
+- Ausgabeband
+
+
+Funktionale Abhängigkeiten
+--------------------------
+Bsp. X --> Y    <==>    (gleiches X ==> gleiches Y)
+
+-------------------------------------
+B-Nr.   Datum   Absender    Empfänger
+-------------------------------------                     Lösung:
+1       a       H.B.        Mykotikus   ->                              (1   Mykotikus)
+1       a       H.B.        Musculus    -> Redundanz    -> (1, a, BH) + (1   Musculus)
+1       a       H.B.        Petrus      ->                              (1   Petrus)
+-------------------------------------
+2       b       H.B.        Johannes
+3       c       H.B.        Paulus
+...
+-------------------------------------
+
+Ziele, Überlegungen, Designprinzipien:
+--------------------------------------
+- Faktorisieren
+- Redundanzen/Änderungesanomalien vermeiden:
+    Bsp 1: Wir wollen DB Einträge wie (Bullinger, Heinrich, Zürich) nicht pro Karteikarte
+        speichern (also ca. 10'000x), sondern genau ein mal (Sender & Empfänger)
+    Bsp 2: Änderung der Sprache "lat." nach "Lateinisch" erfolgt and einer Stelle
+    Bsp 3: Das Löschen eines Tages löscht alle zugehörigen Karteikarten...
+        Aber: Pro Brief existieren möglicherweise mehrere Angaben...
+    Bsp. 3: Mehrere Korrespondenzen an nur einem Tag.
+- Nullwerte vermeiden:
+    Bsp: Für die Attribute "Literatur", "Gedruckt", "Sprache" und "Umfang" fehlt die Angabe
+        (relativ) oft. Auch ist die Quellenlagen idr dünn.
+- Möglichst auch nach Attributteilen sortieren können (Sprache, Ort, Jahr, EII, ZZB, ...)
+- Schutz vor Vandalismus:
+    Es besteht die Möglichkeit, alle Änderungen eines Users (Vandalen) zu löschen.
+- Jegliche Änderungen von Benutzern (inkl. Zeitstempel) loggen
+- Wir wollen iterativ und teilweise nur punkuell Änderungen vornehmen. Dazu ist es nicht
+    nötig immer alle Daten einer Karte erneut zu Speichern, sondern nur die von der Änderung
+    betroffenen Teile. (Grundsätzlich speichern wir alle Daten, die eingereicht werden, überschreiben
+    daher nichts, während wir immer nur die aktuellste Version einer Instanz ausgeben.
+    Schlussendlich ist von jeden Einträgen, die sich nur durch ihren Zeitstempel unterscheiden,
+    nur der aktuellste tatsächlich gültig ("finales Aufräumen", bzw. DB-Migration zur
+    Pereformanzoptimierung).
+- Möglichst sinnvolle Relationen bilden.
+
+Normalformmen
+-------------
+1. NF: atomare Werte
+2. NF: nicht-primär Attribute dürfen nicht nur partiell von Kandidatschlüsseln abhängen
+3. NF:
+
+Briefnummer --> Datum(Jahr, Monat, Tag, Bemerkung, is_min=None/True/False)
+Karteikarte[
+    Briefnummer: ID_CARD
+    Datum (Min.): ID_DATE
+    - Datum (Max.): ID_DATE
+    + Person: Absender
+    + Person: Empfänger
+]
+Datum[ID_DATE, Jahr, Monat, Tag, Bemerkung, is_min=None/True/False]
+Person[ID_GUY, Titel, Name, Vorname, Ort, Bemerkung, is_sender]
+
+Sign:
+- Ms. F. 62, 404
+- E II 360, 525
+- Ms. B. 1818, 28-289

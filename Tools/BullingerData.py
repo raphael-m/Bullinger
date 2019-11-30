@@ -4,15 +4,10 @@
 # Bernard Schroffenegger
 # 6th of October, 2019
 
-import statistics
-import re
-from datetime import datetime
-
-from Tools.OCR1 import *
 from Tools.OCR2 import *
-from Tools.Plots import ScatterPlot
 from Tools.FileSystem import FileSystem
-from Tools.Dictionaries import ListDict, CountDict
+from Tools.Dictionaries import ListDict
+from Tools.NGrams import NGrams
 from Tools.Langid import *
 from App.models import *
 
@@ -24,26 +19,16 @@ ADMIN = 'Admin'  # username
 
 class BullingerData:
 
-    ROUND = 0
-    SCHEMA_STATS = ['axis', 'mean', 'dev']
-
+    # Samples
     PATH_V1 = 'Karteikarten/ocr_sample_100_v1'
     PATH_V2 = 'Karteikarten/ocr_sample_100_v2'
 
-    IMG_PAGE_DIM_1 = 'Dokumentation/tex/Bilder/ocr_page_sizes_1.png'
-    IMG_PAGE_DIM_2 = 'Dokumentation/tex/Bilder/ocr_page_sizes_2.png'
-    IMG_TEXT_POSITIONS = 'Dokumentation/tex/Bilder/ocr_text_positions.png'  # all
-    IMG_ATTRIBUTES_2 = "Dokumentation/tex/Bilder/ocr_attributes_2.png"  # attr. separation
-    IMG_ATTRIBUTES_3 = "Dokumentation/tex/Bilder/ocr_attributes_3.png"  # scaled
-    IMG_ATTRIBUTES_4 = "Dokumentation/tex/Bilder/ocr_attributes_4.png"  # content
-    IMG_ATTRIBUTES_5 = "Dokumentation/tex/Bilder/ocr_attributes_5.png"  # ...
-
-    ATTRIBUTES = ["Datum", "Absender", "Empfänger", "Autograph", "Kopie", "Photokopie",
-                  "Standort", "Bull.", "Corr.", "Sign.", "Abschrift", "Umfang", "Sprache",
-                  "Literatur", "Gedruckt", "Bemerkungen"]
-
+    # Data
     AVG_PAGE_SIZE = [9860, 6978]
-    AVG_PAGE_DEV = [11, 10]
+    AVG_PAGE_SIZE_DEV = [11, 10]
+
+    ATTRIBUTES = ["Datum", "Absender", "Empfänger", "Autograph", "Kopie", "Photokopie", "Standort", "Bull.", "Corr.",
+                  "Sign.", "Abschrift", "Umfang", "Sprache", "Literatur", "Gedruckt", "Bemerkungen"]
 
     def __init__(self):
         pass
@@ -466,102 +451,44 @@ class BullingerData:
             abs, emp = [t for s in data["Absender"] for t in s], [t for s in data["Empfänger"] for t in s]
             res_a, res_b = [], []
             for a in abs:
-                nga = [BullingerData.create_n_gram_dict(i, a) for i in range(1, precision)]
-                dices = [BullingerData.compute_dice(nga[i], hb_ngrams[i]) for i in range(len(nga))]
+                nga = [NGrams.create_n_gram_dict(i, a) for i in range(1, precision)]
+                dices = [NGrams.compute_dice(nga[i], hb_ngrams[i]) for i in range(len(nga))]
                 res_a.append(sum(dices)/len(dices))
             for a in emp:
-                nga = [BullingerData.create_n_gram_dict(i, a) for i in range(1, precision)]
-                dices = [BullingerData.compute_dice(nga[i], hb_ngrams[i]) for i in range(len(nga))]
+                nga = [NGrams.create_n_gram_dict(i, a) for i in range(1, precision)]
+                dices = [NGrams.compute_dice(nga[i], hb_ngrams[i]) for i in range(len(nga))]
                 res_b.append(sum(dices)/len(dices))
             return max(res_a) > max(res_b)
         elif "Absender" in data:
             abs = [t for s in data["Absender"] for t in s]
             res_a = []
             for a in abs:
-                nga = [BullingerData.create_n_gram_dict(i, a) for i in range(1, precision)]
-                dices = [BullingerData.compute_dice(nga[i], hb_ngrams[i]) for i in range(len(nga))]
+                nga = [NGrams.create_n_gram_dict(i, a) for i in range(1, precision)]
+                dices = [NGrams.compute_dice(nga[i], hb_ngrams[i]) for i in range(len(nga))]
                 res_a.append(sum(dices)/len(dices))
             return max(res_a) > threshold
         elif "Empfänger" in data:
             emp = [t for s in data["Empfänger"] for t in s]
             res_b = []
             for a in emp:
-                nga = [BullingerData.create_n_gram_dict(i, a) for i in range(1, precision)]
-                dices = [BullingerData.compute_dice(nga[i], hb_ngrams[i]) for i in range(len(nga))]
+                nga = [NGrams.create_n_gram_dict(i, a) for i in range(1, precision)]
+                dices = [NGrams.compute_dice(nga[i], hb_ngrams[i]) for i in range(len(nga))]
                 res_b.append(sum(dices)/len(dices))
             return max(res_b) > threshold
         else: return False
-
-    @staticmethod
-    def create_n_gram_dict(n, string):
-        """ :param n: <int> 1..n
-            :param string: <str> """
-        dict_n_gram_count = CountDict()
-        boundaries = (n - 1) * '_'
-        test = boundaries + string + boundaries
-        for i in range(len(test) + 1 - n):
-            dict_n_gram_count.add(test[i: i + n])
-        return dict_n_gram_count
-
-    @staticmethod
-    def compute_dice(dict1, dict2):
-        d1, c1 = dict1, dict1.tot
-        d2, c2 = dict2, dict2.tot
-        return -1 if c1+c2 == 0 else 2.0 * BullingerData.compute_number_of_common_values(d1, d2) / (c1 + c2)
-
-    @staticmethod
-    def compute_number_of_common_values(dict1, dict2):
-        return sum([min(dict1[key], dict2[key]) for key in dict1 if key in dict2])
-
-    @staticmethod
-    def get_data_as_dict(path):
-        d = ListDict()
-        size = OCR2.get_page_size(path)
-        if size:
-            scale_factor_x = BullingerData.AVG_PAGE_SIZE[0]/size[0]
-            scale_factor_y = BullingerData.AVG_PAGE_SIZE[1]/size[1]
-            t = OCR2.get_attr_positions(path, (scale_factor_x, scale_factor_y), inverse=True)
-            t["Field"] = None
-            t.reset_index(inplace=True, drop=True)
-            for index, row in t.iterrows():
-                ad = BullingerData.get_attribute_name(row['x'], row['y'])
-                attribute = ' '.join([ad[0], ad[1]]) if ad[1] else ad[0]
-                t.loc[index, "Field"] = attribute
-            t = t[["Field", "Value", "x", "y", "Baseline"]]
-            fields = t.groupby('Field')
-            for attribute, group in fields:
-                group.sort_values(['x'], ascending=False).reset_index(drop=True)
-                group.sort_values(['Baseline'], ascending=False).reset_index(drop=True)
-                for index, row in group.iterrows():
-                    if BullingerData.is_attribute(row['Field'], row['x'], row['y']):
-                        group.drop(index, inplace=True)
-                lines, line, baseline = [], [], 0
-                for index, row in group.iterrows():
-                    if baseline != row['Baseline']:
-                        if len(line) != 0: lines.append(line)
-                        line = list()
-                        line.append(row['Value'])
-                        baseline = row['Baseline']
-                    else:
-                        line.append(row['Value'])
-                lines.append(line)
-                d.add(attribute, lines)
-            return d
-        else:
-            print("*** Warning, file ignored:", path)
-            return None
 
     year_predicted = 1547  # 1st file card
     month_predicted, index_predicted = [
         ["Januar"], ["Februar"], ["März", "Mrz"], ["April"], ["Mai", "Mal", "Mi", "Hai"], ["Juni"],
         ["Juli"], ["August"], ["September"], ["Oktober", ], ["November"], ["Dezember"]
     ], 9  # October
+
     @staticmethod
     def extract_date(id_brief, data, database):
         data = [re.sub("[^A-Za-z0-9]", '', token).strip() for token in data]
         data = [token for token in data if token != '']
         year, month = BullingerData.year_predicted, BullingerData.month_predicted[BullingerData.index_predicted][0]
-        for token in data: # year
+        for token in data:  # year
             if token == str(year):
                 data.remove(token)
                 break
@@ -627,235 +554,46 @@ class BullingerData:
         database.commit()
 
     @staticmethod
-    def extract(dir_path, recursively=True):
-
-        # Stats
-        # c = pd.DataFrame({'content': [], 'x': [], 'y': []})
-        a = pd.DataFrame({'Value': [], 'x': [], 'y': [], "Baseline": []})
-        # t = pd.DataFrame({'Attribute': [], 'x': [], 'y': []})
-
-        paths = FileSystem.get_file_paths(dir_path, recursively=recursively)
-        n, n_max = 0, len(paths)  # counter
-        for path in paths:
-
-            n += 1
-
-            print("\n\n"+74 * '=')
-            print('{:_>5}'.format(n), "-", path)
-            print(74 * '=')
-
-            size = OCR2.get_page_size(path)
-            if size:
-
-                scale_factor_x = BullingerData.AVG_PAGE_SIZE[0]/size[0]
-                scale_factor_y = BullingerData.AVG_PAGE_SIZE[1]/size[1]
-                print("Scaling x:", scale_factor_x, "\nScaling y:", scale_factor_y)
-                print("Width =", int(scale_factor_x*size[0]), "\nHeight =", int(scale_factor_y*size[1]))
-
-                df_attr = OCR2.get_attr_positions(path, (scale_factor_x, scale_factor_y))
-                t = OCR2.get_attr_positions(path, (scale_factor_x, scale_factor_y), inverse=True)
-
-                a = pd.concat([a, df_attr])
-                t["Field"] = None
-                t.reset_index(inplace=True, drop=True)
-                for index, row in t.iterrows():
-                    ad = BullingerData.get_attribute_name(row['x'], row['y'])
-                    attribute = ' '.join([ad[0], ad[1]]) if ad[1] else ad[0]
-                    t.loc[index, "Field"] = attribute
-
-                t = t[["Field", "Value", "x", "y", "Baseline"]]
-                fields = t.groupby('Field')
-                for attribute, group in fields:
-
-                    print(60*'-')
-                    print(attribute)
-                    print(60 * '-')
-
-                    group.sort_values(['x'], ascending=False).reset_index(drop=True)
-                    group.sort_values(['Baseline'], ascending=False).reset_index(drop=True)
-
-                    for index, row in group.iterrows():
-                        if BullingerData.is_attribute(row['Field'], row['x'], row['y']):
-                            group.drop(index, inplace=True)
-                    print(group.to_string())
-
-            else:
-                # Invalid Path
-                print("*** Warning, file ignored:", path)
-
-        # Visualization for 100
-
-        attr, err, stats = BullingerData._analyze_attribute_positions(a)
-        print(stats.to_latex(index=False))
-        """
-        print(err)  # is empty due to scaling :)
-        ScatterPlot.create(
-            [t['x']],
-            [t['y']],
-            alpha=[0.3], size=[1, 5, 100, 80], color=['black', 'green', 'red', 'navy'],
-            xlabel="width [px]", ylabel="height [px]", reverse_y=True,
-            output_path=BullingerData.IMG_ATTRIBUTES_4,
-            function=BullingerData.draw_grid
-        )"""
-
-    @staticmethod
-    def analyze_attribute_positions():
-        data, err, stats = BullingerData._analyze_attribute_positions(BullingerData.get_attribute_data())
-        c = BullingerData.get_text_coordinates(BullingerData.PATH_V2)  # scenery
-        ScatterPlot.create(
-            [c['x'], data['x'], err['x'], stats['x']],
-            [c['y'], data['y'], err['y'], stats['y']],
-            alpha=[0.1, 0.3, 0.3, 0.3], size=[1, 5, 5, 80], color=['black', 'green', 'red', 'navy'],
-            xlabel="width [px]", ylabel="height [px]", reverse_y=True,
-            output_path=BullingerData.IMG_ATTRIBUTES_2,
-            function=BullingerData.draw_grid
-        )
-
-    @staticmethod
-    def _analyze_attribute_positions(attribute_positions):
-        a = 'Value'
-        data = pd.DataFrame({a: [], 'x': [], 'y': []})
-        err = pd.DataFrame({a: [], 'x': [], 'y': []})  # outliers
-        stats = pd.DataFrame({a: [], 'x': [], 'y': [], 'xd': [], 'yd': []})
-        for attr in BullingerData.ATTRIBUTES:
-            d = attribute_positions[(attribute_positions[a] == attr)].copy()
-            d.reset_index(inplace=True, drop=True)
-            for index, row in d.iterrows():  # filter/collect outliers
-                if row[a] not in BullingerData.get_attribute_name(row['x'], row['y'])[0]:
-                    d.drop(index, inplace=True)
-                    err = pd.concat([err, pd.DataFrame(
-                        {a: [row[a]], 'x': [row['x']], 'y': [row['y']]})])
-            for ad in BullingerData.linear_separation(d, attr):
-                ad.reset_index(drop=True)
-                if not ad.empty:
-                    mean = list(BullingerData.stats(ad, columns=['x', 'y']).loc[:, 'mean'])
-                    dev = list(BullingerData.stats(ad, columns=['x', 'y']).loc[:, 'dev'])
-                    s = pd.DataFrame({
-                        a: [attr], 'x': [mean[0]], 'y': [mean[1]],
-                        'xd': [dev[0]], 'yd': [dev[1]]})
-                    stats = pd.concat([stats, s])
-            data = pd.concat([data, d], sort=True)
-        return data, err, stats
-
-    @staticmethod
-    def analyze_text_positions():
-        df1 = BullingerData.get_text_coordinates(BullingerData.PATH_V1, version=1)
-        df2 = BullingerData.get_text_coordinates(BullingerData.PATH_V2, version=2)
-        x, y = list(df1)[1], list(df1)[2] # schema names
-        ScatterPlot.create(
-            [df1[x], df2[x]],
-            [df1[y], df2[y]],
-            alpha=[0.1, 0.1], color=['red', 'blue'], size=[1, 1],
-            reverse_y=True, xlabel="width [px]", ylabel="height [py]",
-            function=BullingerData.draw_grid,
-            output_path=BullingerData.IMG_TEXT_POSITIONS
-        )
-
-    @staticmethod
-    def draw_grid(plt):
-        """ appends the grid of a typical index card to plot <plt> """
-        x0, x1, x2, x3 = 0, 3057, 6508, 9860
-        y0, y1, y2, y3, y4, y5, y6, y7, y8 = 0, 1535, 2041, 2547, 3053, 3559, 4257, 5303, 6978
-        alpha, linewidth = 0.3, 0.5
-
-        # Vertical Lines
-        plt.plot((x0, x0), (y0, y8), 'black', alpha=alpha, linewidth=linewidth)
-        plt.plot((x1, x1), (y0, y8), 'black', alpha=alpha, linewidth=linewidth)
-        plt.plot((x2, x2), (y0, y5), 'black', alpha=alpha, linewidth=linewidth)
-        plt.plot((x3, x3), (y0, y8), 'black', alpha=alpha, linewidth=linewidth)
-
-        # Horizontal Lines
-        plt.plot((x0, x3), (y0, y0), 'black', alpha=alpha, linewidth=linewidth)
-        plt.plot((x0, x3), (y1, y1), 'black', alpha=alpha, linewidth=linewidth)
-        plt.plot((x0, x3), (y2, y2), 'black', alpha=alpha, linewidth=linewidth)
-        plt.plot((x0, x3), (y3, y3), 'black', alpha=alpha, linewidth=linewidth)
-        plt.plot((x0, x3), (y4, y4), 'black', alpha=alpha, linewidth=linewidth)
-        plt.plot((x0, x3), (y5, y5), 'black', alpha=alpha, linewidth=linewidth)
-        plt.plot((x0, x1), (y6, y6), 'black', alpha=alpha, linewidth=linewidth)
-        plt.plot((x1, x3), (y7, y7), 'black', alpha=alpha, linewidth=linewidth)
-        plt.plot((x0, x3), (y8, y8), 'black', alpha=alpha, linewidth=linewidth)
-
-    @staticmethod
-    def analyze_page_sizes():
-
-        # Data
-        df1 = OCR1.get_page_sizes(BullingerData.PATH_V1)  # Version 1
-        df2 = OCR2.get_page_sizes(BullingerData.PATH_V2)  # Version 2
-        x, y, mean = list(df1)[1], list(df1)[2], BullingerData.SCHEMA_STATS[1]  # schema names
-        s1 = list(BullingerData.stats(df1, columns=[x, y]).loc[:, mean])  # stats 1
-        s2 = list(BullingerData.stats(df2, columns=[x, y]).loc[:, mean])  # stats 2
-        s3 = list(BullingerData.stats(pd.concat([df1, df2]), columns=[x, y]).loc[:, mean])  # s1+2
-
-        # Plot (uncorrected)
-        ScatterPlot.create(
-            [df1[x], [s1[0]], [s2[0]], [s3[0]]],
-            [df1[y], df2[y], [s1[1]], [s2[1]], [s3[1]]],
-            alpha=[0.3, 0.3, 0.1, 0.1, 0.1],
-            color=['green', 'blue', 'green', 'blue', 'red'],
-            size=[5, 5, 50, 50, 500],
-            xlabel="width [px]", ylabel="height [py]",
-            output_path=BullingerData.IMG_PAGE_DIM_1
-        )
-        # --> there is no difference between df1 and df2
-
-        # Plot (without outliers)
-        df = df1[df1.x > 6000]  # 4/99
-        sdf = list(BullingerData.stats(df, columns=[x, y]).loc[:, mean])
-        ScatterPlot.create(
-            [df[x], [sdf[0]]],
-            [df[y], [sdf[1]]],
-            alpha=[0.3, 0.5], color=['b', 'r'], size=[10, 100],
-            xlabel="width [px]", ylabel="height [py]",
-            output_path=BullingerData.IMG_PAGE_DIM_2
-        )
-
-        return int(sdf[0]), int(sdf[1])  # avg. (width, height)
-
-    @staticmethod
-    def stats(df, columns=None):
-        """ computes averages and standard deviations
-            :param columns: <list(int)>. indices
-            :param df: <DataFrame>
-            :return: <DataFrame> """
-        s = BullingerData.SCHEMA_STATS
-        d = pd.DataFrame(columns=s)
-        for column in columns:
-            mean = round(sum(df.loc[:, column]) / len(list(df.loc[:, column])), BullingerData.ROUND)
-            std_dev = round(statistics.stdev(df.loc[:, column]), BullingerData.ROUND)
-            d = pd.concat([d, pd.DataFrame({s[0]: [column], s[1]: [mean], s[2]: std_dev})])
-        return d
-
-    @staticmethod
-    def get_text_coordinates(dir_path_in, version=2):
-        parser = TextPositionParser1 if version is 1 else TextPositionParser2
-        data = pd.DataFrame({'content': [], 'x': [], 'y': []})
-        for path in FileSystem.get_file_paths(dir_path_in):
-            data = pd.concat([data, parser.get_coordinates(path, (1, 1))])
-        return data
-
-    @staticmethod  # ANALYSIS
-    def get_attribute_data():
-        data = pd.DataFrame({'Attribute': [], 'x': [], 'y': []})
-        for path in FileSystem.get_file_paths(BullingerData.PATH_V2):
-            data = pd.concat([data, AttributePositionParser.get_attributes(path, (1, 1))])
-        return data
-
-    @staticmethod
-    def get_attribute_indirectly(hpos_t, vpos_r, height_b, width_l, version=2):
-        """ key: position --> value: (attribute name, index)
-            :param hpos_t: <int>
-            :param vpos_r: <int>
-            :param height_b: <int>
-            :param width_l: <int>
-            :param version: <1|2>: (top/right/bottom/left) || (top/left, height/width) """
-        if version is 2:
-            mx, my = int(hpos_t + 0.5 * width_l), int(vpos_r + 0.5 * height_b)  # mass point
-        else:  # version 1
-            mx, my = int((hpos_t+height_b)/2), int((vpos_r+width_l)/2)
-        return BullingerData.get_attribute_name(mx, my)
+    def get_data_as_dict(path):
+        d = ListDict()
+        size = OCR2.get_page_size(path)
+        if size:
+            scale_factor_x = BullingerData.AVG_PAGE_SIZE[0]/size[0]
+            scale_factor_y = BullingerData.AVG_PAGE_SIZE[1]/size[1]
+            t = OCR2.get_attr_positions(path, (scale_factor_x, scale_factor_y), inverse=True)
+            t["Field"] = None
+            t.reset_index(inplace=True, drop=True)
+            for index, row in t.iterrows():
+                ad = BullingerData.get_attribute_name(row['x'], row['y'])
+                attribute = ' '.join([ad[0], ad[1]]) if ad[1] else ad[0]
+                t.loc[index, "Field"] = attribute
+            t = t[["Field", "Value", "x", "y", "Baseline"]]
+            fields = t.groupby('Field')
+            for attribute, group in fields:
+                group.sort_values(['x'], ascending=False).reset_index(drop=True)
+                group.sort_values(['Baseline'], ascending=False).reset_index(drop=True)
+                for index, row in group.iterrows():
+                    if BullingerData.is_attribute(row['Field'], row['x'], row['y']):
+                        group.drop(index, inplace=True)
+                lines, line, baseline = [], [], 0
+                for index, row in group.iterrows():
+                    if baseline != row['Baseline']:
+                        if len(line) != 0: lines.append(line)
+                        line = list()
+                        line.append(row['Value'])
+                        baseline = row['Baseline']
+                    else:
+                        line.append(row['Value'])
+                lines.append(line)
+                d.add(attribute, lines)
+            return d
+        else:
+            print("*** Warning, file ignored:", path)
+            return None
 
     @staticmethod
     def get_attribute_name(x, y):
+        """ <x_coord, y_coord> --> attribute name"""
         if x <= 3057:  # 1st column
             if y <= 1535: return "Datum", None
             elif y <= 2041: return "Autograph", None
@@ -883,8 +621,8 @@ class BullingerData:
 
     @staticmethod
     def linear_separation(df, attr):
-        a = "Value"
-        x_sep, y_sep, results = 2000, 3000, []
+        """ to distinguish between duplicate attribute names """
+        x_sep, y_sep, results, a = 2000, 3000, [], "Value"
         if attr in ['Standort', 'Sign.', 'Umfang']:  # duplicate
             d_l = df[(df[a] == attr) & (df['x'] < x_sep)].copy()
             d_r = df[(df[a] == attr) & (df['x'] > x_sep)].copy()
@@ -903,12 +641,12 @@ class BullingerData:
 
     @staticmethod
     def is_attribute(attribute_name, x_coord, y_coord, deviation=3):
-        """ checks if (<x_coord>, <y_coord>) corresponds to <attribute_name>
-            :param attribute_name: <str>
-            :param x_coord: <int>
-            :param y_coord: <int>
-            :param deviation <int>
-            :return: <bool> """
+        """ <x_coord>/<y_coord>  <-->  <attribute_name> ?
+        :param attribute_name: <str>
+        :param x_coord: <int>
+        :param y_coord: <int>
+        :param deviation <int>
+        :return: <bool> """
         d = deviation  # tolerance
         return {
             "Datum": lambda x, y: True if 364-d*20 < x < 364+d*20 and 320-d*13 < y < 320+d*13 else False,
@@ -932,32 +670,33 @@ class BullingerData:
             "Kopie": lambda x, y: True if 3465-d*17 < x < 3465+d*17 and 1903-d*12 < y < 1903+d*12 else False,
         }[attribute_name](x_coord, y_coord)
 
-'''
-\begin{tabular}{lrrrr}
-\toprule
-       Value &       x &       y &    xd &    yd \\
-\midrule
-       Datum &   364.0 &   320.0 &  20.0 &  13.0 \\
-    Absender &  3631.0 &   329.0 &  17.0 &  12.0 \\
-   Empfänger &  7134.0 &   349.0 &  18.0 &  12.0 \\
-   Autograph &   515.0 &  1901.0 &  19.0 &  13.0 \\
-       Kopie &  3465.0 &  1903.0 &  17.0 &  12.0 \\
-  Photokopie &  7120.0 &  1904.0 &  26.0 &  12.0 \\
-    Standort &   437.0 &  2281.0 &  20.0 &  12.0 \\
-    Standort &  3577.0 &  2283.0 &  19.0 &  12.0 \\
-       Bull. &  6861.0 &  2282.0 &  31.0 &  13.0 \\
-       Bull. &  6872.0 &  3284.0 &  37.0 &  18.0 \\
-       Corr. &  7261.0 &  2284.0 &  31.0 &  13.0 \\
-       Corr. &  7273.0 &  3285.0 &  36.0 &  17.0 \\
-       Sign. &   298.0 &  2903.0 &  18.0 &  12.0 \\
-       Sign. &  3442.0 &  2903.0 &  16.0 &  12.0 \\
-   Abschrift &  7049.0 &  2890.0 &  25.0 &  11.0 \\
-      Umfang &   397.0 &  3297.0 &  21.0 &  13.0 \\
-      Umfang &  3543.0 &  3299.0 &  17.0 &  12.0 \\
-     Sprache &   417.0 &  3917.0 &  22.0 &  13.0 \\
-   Literatur &  3560.0 &  3904.0 &  20.0 &  13.0 \\
-    Gedruckt &   448.0 &  4594.0 &  21.0 &  13.0 \\
- Bemerkungen &  3752.0 &  5691.0 &  19.0 &  15.0 \\
-\bottomrule
-\end{tabular}
-'''
+    '''
+    \begin{tabular}{lrrrr}
+    \toprule
+           Value &       x &       y &    xd &    yd \\
+    \midrule
+           Datum &   364.0 &   320.0 &  20.0 &  13.0 \\
+        Absender &  3631.0 &   329.0 &  17.0 &  12.0 \\
+       Empfänger &  7134.0 &   349.0 &  18.0 &  12.0 \\
+       Autograph &   515.0 &  1901.0 &  19.0 &  13.0 \\
+           Kopie &  3465.0 &  1903.0 &  17.0 &  12.0 \\
+      Photokopie &  7120.0 &  1904.0 &  26.0 &  12.0 \\
+        Standort &   437.0 &  2281.0 &  20.0 &  12.0 \\
+        Standort &  3577.0 &  2283.0 &  19.0 &  12.0 \\
+           Bull. &  6861.0 &  2282.0 &  31.0 &  13.0 \\
+           Bull. &  6872.0 &  3284.0 &  37.0 &  18.0 \\
+           Corr. &  7261.0 &  2284.0 &  31.0 &  13.0 \\
+           Corr. &  7273.0 &  3285.0 &  36.0 &  17.0 \\
+           Sign. &   298.0 &  2903.0 &  18.0 &  12.0 \\
+           Sign. &  3442.0 &  2903.0 &  16.0 &  12.0 \\
+       Abschrift &  7049.0 &  2890.0 &  25.0 &  11.0 \\
+          Umfang &   397.0 &  3297.0 &  21.0 &  13.0 \\
+          Umfang &  3543.0 &  3299.0 &  17.0 &  12.0 \\
+         Sprache &   417.0 &  3917.0 &  22.0 &  13.0 \\
+       Literatur &  3560.0 &  3904.0 &  20.0 &  13.0 \\
+        Gedruckt &   448.0 &  4594.0 &  21.0 &  13.0 \\
+     Bemerkungen &  3752.0 &  5691.0 &  19.0 &  15.0 \\
+    \bottomrule
+    \end{tabular}
+    '''
+

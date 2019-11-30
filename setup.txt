@@ -1,0 +1,61 @@
+Virtual Environment
+-------------------
+$ cd Bullinger
+Python 3.4+:    $ python -m venv venv
+Python <3.4     $ virtualenv venv
+Mac/Linux:      $ source venv/bin/activate
+Windows         $ venv\Scripts\activate
+
+Flask
+-----
+(venv) $ pip install flask
+(venv) $ pip install flask-wtf
+(venv) $ pip install flask-sqlalchemy
+(venv) $ pip install flask_migrate
+(venv) $ pip install flask-login
+(venv) $ pip install flask_admin
+
+Database
+--------
+(venv) $ flask db init
+(venv) $ flask db migrate -m "init"
+(venv) $ flask db upgrade
+
+Execution (locally)
+---------
+(venv) $ export FLASK_APP=App.py
+(venv) $ export FLASK_ENV=development
+((export FLASK_DEBUG=1))
+((source venv/bin/activate))
+(venv) $ flask run
+
+GitHub
+------
+(git status)
+git add -A
+git commit -m "whatever"
+git push origin master
+
+Server
+------
+$ ssh ubuntu@130.60.24.72
+
+# Starting the app manually:
+$ gunicorn -w 33 App:app
+
+# Starting the supervisor:
+$ sudo supervisorctl stop supervisor
+$ sudo systemctl stop nginx
+
+# Restart server
+$ sudo systemctl restart nginx
+$ sudo supervisorctl reload
+
+$ cd /etc/supervisor
+$ sudo service supervisor start
+$ sudo supervisorctl reload
+
+Tutorials
+---------
+- introduction too git concepts (3 parts, ca. 90min)
+- Python flask tutorial: deploying your application (option 1) - deploy to a linux server

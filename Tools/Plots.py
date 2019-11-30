@@ -4,8 +4,9 @@
 # Bernard Schroffenegger
 # 6th of October, 2019
 
-import pandas as pd
+import statistics
 import matplotlib.pyplot as plt
+from Tools.BullingerData import *
 
 # colors ('black'/'b', 'white'/'w')
 cb0, cb1, cb2, cb3 = 'royalblue', 'cornflowerblue', 'dodgerblue', 'navy'  # 'b'
@@ -13,8 +14,10 @@ cg0, cg1, cg2, cg3 = 'forestgreen', 'darkgreen', 'yellowgreen', 'olivedrab'  # '
 cr0, cr1, cr2, cr3 = 'orangered', 'firebrick', 'tomato', 'salmon'  # 'r'
 cp0, cp1, cp2, cp3 = 'purple', 'indigo', 'orchid', 'plum'  # 'm'
 cga, cgb, cgc, cgd = 'slategray', 'dimgrey', 'darkgrey', 'lightgray'  # 'grey'/'gray'
-# gold, silver, 'teal', 'chocolate', ...
+# gold, silver, ...
 # More: https://i.stack.imgur.com/lFZum.png
+
+ROUND = 0
 
 
 class ScatterPlot:
@@ -27,9 +30,9 @@ class ScatterPlot:
     @staticmethod
     def create(x, y, alpha=1, color='b', size=10,
                title='', xlabel='', ylabel='',
-               output_path=None, show=True,
                x_min=None, x_max=None,y_min=None, y_max=None,
                x_ticks=None, y_ticks=None,
+               output_path=None, show=True,
                reverse_x=False, reverse_y=False,
                function=None):
         if isinstance(alpha, list) and isinstance(size, list):
@@ -53,3 +56,41 @@ class ScatterPlot:
             fig.savefig(output_path, dpi=200)
         plt.show() if show else plt.close(fig)
 
+
+# Bullinger specific
+def stats(df, columns=None):
+    """ averages and standard deviations
+        :param columns: <list(int)>. indices
+        :param df: <DataFrame>
+        :return: <DataFrame> """
+    s = ['axis', 'mean', 'dev']
+    d = pd.DataFrame(columns=s)
+    for column in columns:
+        mean = round(sum(df.loc[:, column]) / len(list(df.loc[:, column])), ROUND)
+        std_dev = round(statistics.stdev(df.loc[:, column]), ROUND)
+        d = pd.concat([d, pd.DataFrame({s[0]: [column], s[1]: [mean], s[2]: std_dev})])
+    return d
+
+
+def draw_grid(plt):
+    """ appends the grid of a typical index card to plot <plt> """
+    x0, x1, x2, x3 = 0, 3057, 6508, 9860
+    y0, y1, y2, y3, y4, y5, y6, y7, y8 = 0, 1535, 2041, 2547, 3053, 3559, 4257, 5303, 6978
+    alpha, linewidth = 0.3, 0.5
+
+    # Vertical Lines
+    plt.plot((x0, x0), (y0, y8), 'black', alpha=alpha, linewidth=linewidth)
+    plt.plot((x1, x1), (y0, y8), 'black', alpha=alpha, linewidth=linewidth)
+    plt.plot((x2, x2), (y0, y5), 'black', alpha=alpha, linewidth=linewidth)
+    plt.plot((x3, x3), (y0, y8), 'black', alpha=alpha, linewidth=linewidth)
+
+    # Horizontal Lines
+    plt.plot((x0, x3), (y0, y0), 'black', alpha=alpha, linewidth=linewidth)
+    plt.plot((x0, x3), (y1, y1), 'black', alpha=alpha, linewidth=linewidth)
+    plt.plot((x0, x3), (y2, y2), 'black', alpha=alpha, linewidth=linewidth)
+    plt.plot((x0, x3), (y3, y3), 'black', alpha=alpha, linewidth=linewidth)
+    plt.plot((x0, x3), (y4, y4), 'black', alpha=alpha, linewidth=linewidth)
+    plt.plot((x0, x3), (y5, y5), 'black', alpha=alpha, linewidth=linewidth)
+    plt.plot((x0, x1), (y6, y6), 'black', alpha=alpha, linewidth=linewidth)
+    plt.plot((x1, x3), (y7, y7), 'black', alpha=alpha, linewidth=linewidth)
+    plt.plot((x0, x3), (y8, y8), 'black', alpha=alpha, linewidth=linewidth)

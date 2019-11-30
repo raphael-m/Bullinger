@@ -23,6 +23,8 @@ from Tools.BullingerData import BullingerData
 from Tools.Dictionaries import CountDict
 
 
+from Tools.OCR2 import *
+
 SRC_PATH_DATA = "Karteikarten/"
 
 
@@ -665,34 +667,4 @@ def print_analysis():
     e = df_e.to_latex(index=False)
     a = df_a.to_latex(index=False)
 
-    print(e, a)
-    """
-    tfile = open('Dokumentation/Counts/emp.tex', 'w')
-    tfile.write(e)
-    tfile.close()
-
-    tfile = open('Dokumentation/Counts/abs.tex', 'w')
-    tfile.write(a)
-    tfile.close()
-
-    tfile = open('Dokumentation/Counts/sort_by_emp.csv', 'w')
-    tfile.write(df_e.to_csv(index=False))
-    tfile.close()
-
-    tfile = open('Dokumentation/Counts/sort_by_abs.csv', 'w')
-    tfile.write(df_a.to_csv(index=False))
-    tfile.close()
-    """
-
-
     return redirect(url_for('admin'))
-
-
-"""
-def is_valid_date():
-    try:
-        datetime(2008, 11, 42)
-        return True
-    except ValueError:
-        return False
-"""

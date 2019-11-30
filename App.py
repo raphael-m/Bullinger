@@ -7,9 +7,10 @@
 from App import app
 
 HOST = 'localhost'
-PORT = 5000  # default=5000
+PORT = 5000
 DEBUG = True
 
 
 if __name__ == '__main__':
+
     app.run(debug=DEBUG, host=HOST, port=PORT)

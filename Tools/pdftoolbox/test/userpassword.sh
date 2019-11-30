@@ -1,1 +1,0 @@
-../bin/pdftoolbox sample_in1.pdf -outfile "_userpassword.pdf" -ownerpassword 123 -userpassword 456 -key128bit	

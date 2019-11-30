@@ -4,17 +4,18 @@
 # Bernard Schroffenegger
 # 5th of October, 2019
 
-""" Bullinger Parser OCR-V2"""
+""" Bullinger Parser OCR-V2 """
 
+import re
 import pandas as pd
 import xml.sax
-
 from xml.sax.handler import ContentHandler
 from Tools.FileSystem import FileSystem
-import re
 
 
 class OCR2:
+
+    """ ocr file analysis """
 
     SCHEMA = ['Path', 'x', 'y']
 
@@ -56,8 +57,7 @@ class OCR2:
 
 class PageSizeParser2(ContentHandler):
 
-    """ Avg. Page Size (x_may, y_may) [px]
-        E.g. <page width="9849" height="6989" resolution="1200"> """
+    """ path --> page size (x_max, y_max) [px] """
 
     def __init__(self, path):
         super(PageSizeParser2, self).__init__()
@@ -65,7 +65,7 @@ class PageSizeParser2(ContentHandler):
         self.path = path  # exceptions
 
     def startElement(self, element, attributes):
-        """ <page> --> (height/width) """
+        """ <page> --> (height/width). E.g. <page width="9849" height="6989" resolution="1200"> """
         if element.lower() == "page":
             height, width = -1, -1
             for a in attributes.getNames():
@@ -94,9 +94,7 @@ class PageSizeParser2(ContentHandler):
 
 class TextPositionParser2(ContentHandler):
 
-    """ Elements:
-            <String CONTENT="Johannes" HEIGHT="152" WIDTH="960" VPOS="554" HPOS="4526"/>
-        --> mass points (x, y) """
+    """ (path, scaling) {[content, h, w, vp, hp]} --> {(content, x, y)} mass-points """
 
     def __init__(self, scaling):
         super(TextPositionParser2, self).__init__()
@@ -132,7 +130,7 @@ class TextPositionParser2(ContentHandler):
 
 class AttributePositionParser(ContentHandler):
 
-    """ Extracts [Attribute, x, y] from [ATTR_NAME, HPOS, VPOS, HEIGHT, WIDTH] of ... """
+    """ [String, HPOS, VPOS, HEIGHT, WIDTH] --> [str, x, y, baseline] """
 
     NAMES = ["Datum", "Absender", "Empfänger", "Autograph", "Kopie", "Photokopie",
              "Standort", "Bull.", "Corr.", "Sign.", "Abschrift", "Umfang", "Sprache",
@@ -181,7 +179,7 @@ class AttributePositionParser(ContentHandler):
 
     @staticmethod
     def get_mass_point(hpos, vpos, width, height, scaling):
-        """ calculation: text center coordinates """
+        """ text center coordinates """
         x, y = hpos + 0.5 * width, vpos + 0.5 * height
         return int(scaling[0]*x), int(scaling[1]*y)
 
@@ -196,33 +194,3 @@ class AttributePositionParser(ContentHandler):
         except:
             print("*** Warning: attribute-parser failed on", path)
             return pd.DataFrame({'Value': [], 'x': [], 'y': [], "Baseline": []})
-
-
-
-class SubContents(ContentHandler):
-
-    NAMES = ["SUBS_CONTENT"]
-
-    def __init__(self, path):
-        super(SubContents, self).__init__()
-        self.path = path
-        self.data = pd.DataFrame({'Value': [], "Path": []})
-
-    def startElement(self, name, attributes):
-        for a in attributes.getNames():
-            if a == self.NAMES[0]:
-                content = attributes.getValue(a)
-                df = pd.DataFrame({'Value': [content], 'Path': [self.path]})
-                self.data = pd.concat([self.data, df])
-
-    @staticmethod
-    def get_subcontents(path):
-        try:
-            parser = xml.sax.make_parser()
-            counter = SubContents(path)
-            parser.setContentHandler(counter)
-            parser.parse(path)
-            return counter.data
-        except:
-            print("*** Warning: attribute-parser failed on", path)
-            return pd.DataFrame({'Value': [], "Path": []})
