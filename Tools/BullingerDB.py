@@ -4,8 +4,6 @@
 # Bernard Schroffenegger
 # 30th of November, 2019
 
-import datetime
-
 from Tools.BullingerData import *
 from Tools.NGrams import NGrams
 from App.models import *
@@ -29,7 +27,9 @@ class BullingerDB(db):
 
     def add_date(self, card_nr, data):
         date = BullingerData.extract_date(card_nr, data)
-        if not date: date = Datum(id_brief=card_nr, year_a=SD, month_a=SD, day_a=SD, user=ADMIN, time=self.t)
+        if not date:
+            date = Datum(id_brief=card_nr, year_a=SD, month_a=SD, day_a=SD)
+        date.user, data.time = ADMIN, self.t
         self.add(date)
 
     def add_correspondents(self, card_nr, data):
@@ -37,7 +37,7 @@ class BullingerDB(db):
         n_grams_bullinger = NGrams.get_dicts_bullinger(4)
         id_bullinger = BullingerDB.get_id_bullinger()
         if BullingerData.is_bullinger_sender(data, n_grams_bullinger):
-            self.add(Absender(id_brief=card_nr, id_person=id_bullinger, user=ADMIN, time=t))
+            self.add(Absender(id_brief=card_nr, id_person=id_bullinger, user=ADMIN, time=self.t))
             e = BullingerData.analyze_address(data["Empfänger"])
             match = Person.query.filter_by(name=e[0], vorname=e[1], titel=e[4], ort=e[2]).first()
             if not match:

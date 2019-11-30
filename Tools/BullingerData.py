@@ -4,8 +4,9 @@
 # Bernard Schroffenegger
 # 6th of October, 2019
 
+""" (OCR2 ->) Bullinger data analysis (-> DB) """
+
 from Tools.OCR2 import *
-from Tools.FileSystem import FileSystem
 from Tools.Dictionaries import ListDict
 from Tools.NGrams import NGrams
 from Tools.Langid import *
@@ -35,6 +36,9 @@ class BullingerData:
     p_signatur = '[Ss][il][g8B]n[.]?'
     p_umfang = '[Uu][mn][ftl]a[nm][g8B]'
 
+    TYPEWRITER = ['StA', 'StB', 'Nr.', 'Ms.', 'Hr.', 'ZB', 'Zürich', 'Genf', 'Basel', 'Zofingen', 'Schaffhausen',
+                  'London', 'Hamburg', 'Oxford', 'Gallen', 'Strassburg']
+
     def __init__(self):
         pass
 
@@ -62,21 +66,21 @@ class BullingerData:
         if BullingerData.is_typewriter(standort_baselines) or BullingerData.is_typewriter(baselines_signatur):
             if standort:
                 d = standort + signatur + umfang
-                m = re.match("(.*)StA\s(E[\d\s,]*)([^\d]*)", d)
-                m = re.match("(.*)StA\s(A[\d\s,]*)([^\d]*)", d) if not m else None
-                m = re.match("(.*)ZB\s([MsS\d\s,]*)([^\d]*)", d) if not m else None
+                m = re.match(r"(.*)StA\s(E[\d\s,]*)([^\d]*)", d)
+                m = re.match(r"(.*)StA\s(A[\d\s,]*)([^\d]*)", d) if not m else None
+                m = re.match(r"(.*)ZB\s([MsS\d\s,]*)([^\d]*)", d) if not m else None
                 standort = m.group(1) if m else standort
                 signatur = ' '.join([m.group(2), ]) if m else signatur
                 umfang = m.group(3) if m else umfang
 
         elif BullingerData.check_stdort_for_zuerich_sta(standort) or \
-                BullingerData.check_sign_for_zuerich_sta(signatur):
+                BullingerData.check_sign_for_zurich_sta(signatur):
             standort, is_zsta = "Zürich StA", True
             number = re.sub(r'[^\d,f]', '', signatur + umfang)
-            n_I = BullingerData.how_many_I(signatur)
-            signatur = ' '.join(['E', n_I, number.strip(',')])
+            n_i = BullingerData.how_many_i(signatur)
+            signatur = ' '.join(['E', n_i, number.strip(',')])
 
-        elif BullingerData.check_standort_ZZB(standort):
+        elif BullingerData.check_place_zzb(standort):
             standort = "Zürich ZB"
             numbers = re.sub(r'[^\d,]', '', standort + signatur + umfang)
             signatur = ''.join('Ms S ' + numbers)
@@ -89,10 +93,10 @@ class BullingerData:
     @staticmethod
     def get_literature(data):
         if "Literatur" in data:
-            l = ' '.join([t for s in data["Literatur"] for t in s])
-            l = re.sub("Literatur", '', l)
-            if not BullingerData.is_probably_junk(l):
-                return BullingerData.clean_str(l)
+            literature = ' '.join([t for s in data["Literatur"] for t in s])
+            literature = re.sub("Literatur", '', literature)
+            if not BullingerData.is_probably_junk(literature):
+                return BullingerData.clean_str(literature)
         return None
 
     @staticmethod
@@ -142,18 +146,17 @@ class BullingerData:
                     langs.append(lang)
         return langs
 
-
     @staticmethod
     def clean_str(s):
         if s:
-            s = re.sub('[^\w\d.,:;\-?!() ]', '', str(s))
-            return re.sub('\s+', ' ', str(s)).strip()
-        else: return ''
+            s = re.sub(r'[^\w\d.,:;\-?!() ]', '', str(s))
+            return re.sub(r'\s+', ' ', str(s)).strip()
+        return ''
 
     @staticmethod
     def is_probably_junk(s):
         # more than 42% symbols
-        s2, s1 = re.sub('[^\w\d]', '', s), re.sub('[\s]', '', s)
+        s2, s1 = re.sub(r'[^\w\d]', '', s), re.sub(r'[\s]', '', s)
         if len(s1) == 0:
             return True
         if 0.58 > len(s2) / len(s1):
@@ -174,28 +177,29 @@ class BullingerData:
         s = s.replace('_', ' ')
         m, i = re.match(r'^([^\w\d(.]*)(.*)$', s, re.M | re.I), 0
         if m.group(2):
-            while i < len(m.group(2)) and m.group(2)[i] == '.': i += 1
-            if i >= 3: return m.group(2)[(i-3):].strip()
-            else: return m.group(2)[i:].strip()
+            while i < len(m.group(2)) and m.group(2)[i] == '.':
+                i += 1
+            if i >= 3:
+                return m.group(2)[(i-3):].strip()
+            return m.group(2)[i:].strip()
 
     @staticmethod
     def is_typewriter(baselines):
-        keywords = ['StA', 'StB', 'Nr.', 'Ms.', 'Hr.', 'ZB', 'Zürich', 'Genf', 'Basel', 'Zofingen', 'Schaffhausen', 'London', 'Hamburg', 'Oxford', 'Gallen', 'Strassburg']
         if baselines:
             for b in baselines:
                 if b:
                     for t in b:
-                        for k in keywords:
+                        for k in BullingerData.TYPEWRITER:
                             if k in t:
                                 return True
         return False
 
     @staticmethod
-    def check_sign_for_zuerich_sta(s):
-        l = len(s)
-        if l:
-            l = s[0:(4 if l > 4 else l)]
-            if 'E' in l or '£' in l or '€' in l or 'T' in l or 'X' in l or 'B' in l or 'II' in l:
+    def check_sign_for_zurich_sta(s):
+        j = len(s)
+        if j:
+            j = s[0:(4 if j > 4 else j)]
+            if 'E' in j or '£' in j or '€' in j or 'T' in j or 'X' in j or 'B' in j or 'II' in j:
                 return True
         return False
 
@@ -204,63 +208,37 @@ class BullingerData:
         """ :param s: <str>
             :return: True, if there is an 'A' or '4' within the last four characters """
         if s:
-            l = len(s)
-            if l:
-                l = s[-(4 if l > 4 else l):]
-                if 'A' in l or '4' in l or 't' in l or 'S' in l:
+            j = len(s)
+            if j:
+                j = s[-(4 if j > 4 else j):]
+                if 'A' in j or '4' in j or 't' in j or 'S' in j:
                     return True
                 if re.match(r'\d\d\d,', s):
                     return True
         return False
 
     @staticmethod
-    def check_standort_ZZB(s):
-        l = len(s)
+    def check_place_zzb(s):
+        j = len(s)
         post = ['Z', '2', 'B', '8']
-        if l:
-            s1 = s[-(2 if l > 2 else l):]
+        if j:
+            s1 = s[-(2 if j > 2 else j):]
             for c in post:
                 if c in s1:
                     return True
-            s2 = s[:(3 if l > 3 else l)]
+            s2 = s[:(3 if j > 3 else j)]
             if len(re.findall(r'[Z2]', s2)) > 1:
                 return True
         return False
 
-
     @staticmethod
-    def how_many_I(s):
+    def how_many_i(s):
         m = re.match(r'[^E£€]*([^\d]*)\d.*', s)
         if m:
             s = m.group(1).replace('U', 'II').replace('X', 'II').replace('i', 'I').replace('J', 'I').replace('T', 'I')
             count = sum([1 for c in s if c == 'I'])
             return 'II' if count > 1 else 'I'
         return 'II'
-
-    @staticmethod
-    def analyze_bull_corr(baselines, record):
-        if len(baselines) > 0:
-            bc, bcc = [t.replace("Bull.Corr.", '') for s in baselines for t in s], []
-            for t in bc:
-                if "Corr" not in t:
-                    t = re.sub("[A-Za-z]{3,}", '', t)
-                    if t:
-                        t = t.replace("Bl.", '').replace("Bl", '').replace("B1.", '').replace("B.", '')\
-                             .replace("ßl.", '').replace("ßl", '').replace("ß1.", '').replace("ß.", '')\
-                             .replace("8l.", '').replace("8l", '').replace("81.", '').replace("8.", '')\
-                             .replace("S.", '').replace("S", '').replace("$.", '')\
-                             .replace('l', '1').replace('I', '1')\
-                             .replace('£', '2')\
-                             .replace('?', '7').replace('y', '7')\
-                             .replace('g', '8').replace('B', '8').replace('ß', '8').replace('$', '8')\
-                             .replace('°', '0').replace('O', '0').replace('o', '0')
-                        t = re.sub("[^0-9]", '', t)
-                        if len(t) is not 0 and t is not '0': bcc.append(t)
-            if len(bcc) == 1: record.bull_corr = int(bcc[0])
-            elif len(bcc) == 2: record.blatt, record.seite = int(bcc[0]), int(bcc[1])
-            elif len(bcc) > 2: record.bull_corr, record.blatt, record.seite = int(bcc[0]), int(bcc[1]), int(bcc[2])
-            if len(bcc) is not 0: return record
-        return None
 
     @staticmethod
     def analyze_language(baselines):
@@ -270,16 +248,19 @@ class BullingerData:
             for t in s:
                 t = t.lower()
                 if t in "dts" or t in "deutsch":
-                    if "Deutsch" not in lang: lang.append("Deutsch")
+                    if "Deutsch" not in lang:
+                        lang.append("Deutsch")
                 elif t in "lateinisch":
-                    if "Lateinisch" not in lang: lang.append("Lateinisch")
+                    if "Lateinisch" not in lang:
+                        lang.append("Lateinisch")
                 elif t in "griechisch":
-                    if "Griechisch" not in lang: lang.append("Griechisch")
-                else: junk.append(t)
+                    if "Griechisch" not in lang:
+                        lang.append("Griechisch")
+                else:
+                    junk.append(t)
             # lang += junk
             return lang if len(lang) > 0 else []
-        else: return []
-
+        return []
 
     @staticmethod
     def analyze_address(baselines):
@@ -296,24 +277,23 @@ class BullingerData:
             if len(baselines[0]) > 1:
                 vn = ' '.join(baselines[0][1:])
                 if nn != 'Geistliche':
-                    # Titel
-                    if 'von' in vn:
+                    # Title
+                    if ' von' in vn:
                         title = 'von'
-                        vn = vn.replace('von', '').strip()
-                    if 'de' in vn:
+                        vn = vn.replace(' von', '').strip()
+                    if ' de' in vn:
                         title = 'de'
-                        vn = vn.replace('de', '').strip()
+                        vn = vn.replace(' de', '').strip()
                 else:  # Geistliche
                     ort = vn.replace('von', '').strip()
                     vn, nn = '', ''
                     title = "Geistliche"
         if len(baselines) > 1:
             ort = ' '.join(baselines[-1])
-            ort = re.sub('\s+', ' ', ort.replace('.', '. '))
+            ort = re.sub(r'\s+', ' ', ort.replace('.', '. '))
         if len(baselines) > 2:
             bemerkung = ' '.join([t for b in baselines[1:-1] for t in b])
         return nn, vn, ort, bemerkung, title
-
 
     @staticmethod
     def clean_up_baselines_sender_receiver(bl):
@@ -332,15 +312,14 @@ class BullingerData:
                 new_baselines += [new_b]
         return new_baselines
 
-
     @staticmethod
     def is_bullinger_sender(data, hb_ngrams):
         precision = 4
         threshold = 0.3
         if "Absender" in data and "Empfänger" in data:
-            abs, emp = [t for s in data["Absender"] for t in s], [t for s in data["Empfänger"] for t in s]
+            ab, emp = [t for s in data["Absender"] for t in s], [t for s in data["Empfänger"] for t in s]
             res_a, res_b = [], []
-            for a in abs:
+            for a in ab:
                 nga = [NGrams.create_n_gram_dict(i, a) for i in range(1, precision)]
                 dices = [NGrams.compute_dice(nga[i], hb_ngrams[i]) for i in range(len(nga))]
                 res_a.append(sum(dices)/len(dices))
@@ -350,9 +329,9 @@ class BullingerData:
                 res_b.append(sum(dices)/len(dices))
             return max(res_a) > max(res_b)
         elif "Absender" in data:
-            abs = [t for s in data["Absender"] for t in s]
+            ab = [t for s in data["Absender"] for t in s]
             res_a = []
-            for a in abs:
+            for a in ab:
                 nga = [NGrams.create_n_gram_dict(i, a) for i in range(1, precision)]
                 dices = [NGrams.compute_dice(nga[i], hb_ngrams[i]) for i in range(len(nga))]
                 res_a.append(sum(dices)/len(dices))
@@ -365,7 +344,7 @@ class BullingerData:
                 dices = [NGrams.compute_dice(nga[i], hb_ngrams[i]) for i in range(len(nga))]
                 res_b.append(sum(dices)/len(dices))
             return max(res_b) > threshold
-        else: return False
+        return False
 
     year_predicted = 1547  # 1st file card
     month_predicted, index_predicted = [
@@ -388,10 +367,10 @@ class BullingerData:
                     BullingerData.year_predicted = int(token)
                     data.remove(token)
                     break
-            end = False # month
+            end = False  # month
             for token in data:
                 for m in BullingerData.month_predicted[BullingerData.index_predicted]:
-                    if token in m and len(token)>2:
+                    if token in m and len(token) > 2:
                         data.remove(token)
                         end = True
                         break
@@ -426,18 +405,17 @@ class BullingerData:
                 candidates = []  # split tokens into int/str
                 for token in modified_tokens:
                     match = re.match(r"[a-z]*([0-9]+)", token, re.I)
-                    if match: candidates.append(match.group(1))
+                    if match:
+                        candidates.append(match.group(1))
                 for token in candidates:  # retry
                     if token.isdigit():
                         if 0 < int(token) < 32:
                             day = int(token)
                             break
             return Datum(
-                id_brief=id_brief,
-                year_a=BullingerData.year_predicted,
+                id_brief=id_brief, year_a=BullingerData.year_predicted,
                 month_a=BullingerData.month_predicted[BullingerData.index_predicted][0], day_a=day,
-                year_b='', month_b='', day_b='',
-                user=ADMIN, time=T0
+                year_b='', month_b='', day_b=''
             )
         return None
 
@@ -466,7 +444,8 @@ class BullingerData:
                 lines, line, baseline = [], [], 0
                 for index, row in group.iterrows():
                     if baseline != row['Baseline']:
-                        if len(line) != 0: lines.append(line)
+                        if len(line) != 0:
+                            lines.append(line)
                         line = list()
                         line.append(row['Value'])
                         baseline = row['Baseline']
@@ -587,4 +566,3 @@ class BullingerData:
     \bottomrule
     \end{tabular}
     '''
-
