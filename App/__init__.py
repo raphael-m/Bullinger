@@ -33,7 +33,7 @@ admin = Admin(app)
 # no cyclic imports
 from App import routes, models
 from App.models import Kartei, User, Datum, Person, Absender, Empfaenger
-from App.models import Autograph, Kopie, Photokopie, Abschrift
+from App.models import Autograph, Kopie
 from App.models import Sprache, Literatur, Gedruckt, Bemerkung
 
 admin.add_view(ModelView(User, db.session))
@@ -44,8 +44,6 @@ admin.add_view(ModelView(Absender, db.session))
 admin.add_view(ModelView(Empfaenger, db.session))
 admin.add_view(ModelView(Autograph, db.session))
 admin.add_view(ModelView(Kopie, db.session))
-admin.add_view(ModelView(Photokopie, db.session))
-admin.add_view(ModelView(Abschrift, db.session))
 admin.add_view(ModelView(Sprache, db.session))
 admin.add_view(ModelView(Literatur, db.session))
 admin.add_view(ModelView(Gedruckt, db.session))

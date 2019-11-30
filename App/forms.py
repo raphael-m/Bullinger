@@ -4,28 +4,31 @@
 # Bernard Schroffenegger
 # 20th of October, 2019
 
+""" data exchange server/browser for file cards """
+
 from flask import request
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, HiddenField, FloatField, RadioField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, HiddenField, RadioField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
-from App.models import User, Datum, Empfaenger, Absender, Autograph, Kopie, Abschrift, Photokopie, Literatur, Gedruckt,\
-    Bemerkung, Sprache
+from App.models import User, Datum, Autograph, Kopie, Literatur, Gedruckt, Bemerkung, Sprache
 
 IDC = "card__"  # prefix for form IDs
 
 
 class FormFileCard(FlaskForm):
-    submit = SubmitField('Speichern', id="save_changes")  # buttons
+
+    # Buttons
+    submit = SubmitField('Speichern', id="save_changes")
     next_card = SubmitField('Vorwärts')
     prev_card = SubmitField('Zurück')
+    state = RadioField('Label', default='unklar',
+                       choices=[('unklar', 'unklar'), ('ungültig', 'ungültig'), ('abgeschlossen', 'abgeschlossen')])
+    # Properties
     image_height = HiddenField('image_height', id="image_height_value")  # window height
     img_height = HiddenField('img_height', id="img_height")  # image size
     img_width = HiddenField('img_width', id="img_width")
 
-    state = RadioField('Label',
-                       choices=[('unklar', 'unklar'), ('ungültig', 'ungültig'), ('abgeschlossen', 'abgeschlossen')],
-                       default='unklar')
-
+    # DATE
     _NSD = "date_"  # namespace
     year_a = StringField("Jahr A", id=IDC + _NSD + "year_a")
     month_a = None
@@ -37,7 +40,7 @@ class FormFileCard(FlaskForm):
 
     def set_date_as_default(self, date):
         """ :param date: database entry """
-        self.year_a.default = 's.d.'  # overwrite regular defaults (labels remain)
+        self.year_a.default = 's.d.'  # overwrite regular defaults
         self.day_a.default = 's.d.'
         if date:
             self.year_a.default = date.jahr_a if date.jahr_a else 's.d.'
@@ -167,62 +170,6 @@ class FormFileCard(FlaskForm):
         if number_of_changes > 0:
             self.set_copy_as_default(new_copy)
             return new_copy, number_of_changes
-        return None, 0
-
-    _NSP = "photocopy_"
-    place_photocopy = StringField("Standort", id=IDC + _NSP + "ort")
-    bull_corr_photocopy = StringField("Bull. Corr.", id=IDC + _NSP + "bull_corr")
-    paper_photocopy = StringField("Blatt", id=IDC + _NSP + "blatt")
-    page_photocopy = StringField("Seite", id=IDC + _NSP + "seite")
-
-    def set_photocopy_as_default(self, photo_copy):
-        if photo_copy:
-            if photo_copy.standort: self.place_photocopy.default = photo_copy.standort
-            if photo_copy.bull_corr: self.bull_corr_photocopy.default = photo_copy.bull_corr
-            if photo_copy.blatt: self.paper_photocopy.default = photo_copy.blatt
-            if photo_copy.seite: self.page_photocopy.default = photo_copy.seite
-
-    def update_photocopy(self, photocopy_old):
-        new_photocopy, number_of_changes = Photokopie(), 0
-        if photocopy_old.standort != self.place_photocopy.data: number_of_changes += 1
-        new_photocopy.standort = self.place_photocopy.data
-        if str(photocopy_old.bull_corr) != self.bull_corr_photocopy.data: number_of_changes += 1
-        new_photocopy.bull_corr = self.bull_corr_photocopy.data
-        if str(photocopy_old.blatt) != self.paper_photocopy.data: number_of_changes += 1
-        new_photocopy.blatt = self.paper_photocopy.data
-        if str(photocopy_old.seite) != self.page_photocopy.data: number_of_changes += 1
-        new_photocopy.seite = self.page_photocopy.data
-        if number_of_changes > 0:
-            self.set_photocopy_as_default(new_photocopy)
-            return new_photocopy, number_of_changes
-        return None, 0
-
-    _NST = "transcript_"
-    place_transcript = StringField("Standort", id=IDC + _NST + "ort")
-    bull_corr_transcript = StringField("Bull. Corr.", id=IDC + _NST + "bull_corr")
-    paper_transcript = StringField("Blatt", id=IDC + _NST + "blatt")
-    page_transcript = StringField("Seite", id=IDC + _NST + "seite")
-
-    def set_transcript_as_default(self, transcript):
-        if transcript:
-            if transcript.standort: self.place_transcript.default = transcript.standort
-            if transcript.bull_corr: self.bull_corr_transcript.default = transcript.bull_corr
-            if transcript.blatt: self.paper_transcript.default = transcript.blatt
-            if transcript.seite: self.page_transcript.default = transcript.seite
-
-    def update_transcript(self, transcript_old):
-        new_transcript, number_of_changes = Abschrift(), 0
-        if transcript_old.standort != self.place_transcript.data: number_of_changes += 1
-        new_transcript.standort = self.place_transcript.data
-        if str(transcript_old.bull_corr) != self.bull_corr_transcript.data: number_of_changes += 1
-        new_transcript.bull_corr = self.bull_corr_transcript.data
-        if str(transcript_old.blatt) != self.paper_transcript.data: number_of_changes += 1
-        new_transcript.blatt = self.paper_transcript.data
-        if str(transcript_old.seite) != self.page_transcript.data: number_of_changes += 1
-        new_transcript.seite = self.page_transcript.data
-        if number_of_changes > 0:
-            self.set_transcript_as_default(new_transcript)
-            return new_transcript, number_of_changes
         return None, 0
 
     language = StringField("Sprache", id=IDC + "language_" + "sprache")
