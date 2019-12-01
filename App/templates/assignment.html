@@ -24,7 +24,6 @@
     </div>
 </h1>
 
-
 <!-- File Card -->
 <div id="card_image">
     <img id="card_drag" src="{{url_for('static', filename=card_path)}}"/>
@@ -61,7 +60,7 @@
     {{ form.img_width(class="hidden") }}
     <!-- Actions -->
     <div id="card_options2" class="actions">
-            <!-- set status -->
+            <!-- Status -->
         <div class="status_options">
             Status:
             {% for state in form.state %}
@@ -242,8 +241,12 @@
             </div>
             <!-- Photokopie -->
             <div class="h_separator"></div>
-                <div class="card_row"><div id="card_photocopy" class="card_input">
-                    {{ form.place_photocopy(placeholder="Standort") }}
+            <div class="card_row"><div class="card_row_empty"></div></div>
+            <div class="card_row"><div class="card_row_empty"></div></div>
+            <!--
+            <div class="card_row">
+                <div id="card_photocopy" class="card_input">
+                {{ form.place_photocopy(placeholder="Standort") }}
                 </div>
             </div>
             <div class="card_row">
@@ -257,7 +260,11 @@
                     {{ form.page_photocopy(placeholder="Seite") }}
                 </div>
             </div>
+            -->
             <!-- Abschrift -->
+            <div class="card_row"><div class="card_row_empty"></div></div>
+            <div class="card_row"><div class="card_row_empty"></div></div>
+            <!--
             <div class="card_row"><div id="card_transcript" class="card_input">
                 {{ form.place_transcript(placeholder="Standort") }}
             </div>
@@ -273,6 +280,7 @@
                     {{ form.page_transcript(placeholder="Seite") }}
                 </div>
             </div>
+            -->
             <div class="h_separator"></div>
         </div>
         <div class="card_col1">

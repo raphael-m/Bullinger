@@ -2,19 +2,20 @@
 
 {% block content %}
 
-<h1><a href="{{url_for('overview')}}"> Übersicht</a> /
-    <a href="{{url_for('overview_year', year=year)}}"> {{ year }}</a> /
+<h1>
+    <a href="{{url_for('overview')}}">Übersicht</a> /
+    <a href="{{url_for('overview_year', year=year)}}">{{ year }}</a> /
     {{ month }}
 </h1>
 
 <table class="js-sort-table paleBlueRows">
 	<thead class="my_table_head">
-	<tr class="my_table_head_row">
-        <th class="js-sort-number my_table_head_cell"> Brief Nr. </th>
-        <th class="js-sort-number my_table_head_cell"> Datum </th>
-        <th class="js-sort-number my_table_head_cell"> Rezensionen </th>
-        <th class="js-sort-number my_table_head_cell"> Status </th>
-	</tr>
+        <tr class="my_table_head_row">
+            <th class="js-sort-number my_table_head_cell">Brief Nr.</th>
+            <th class="js-sort-number my_table_head_cell">Datum</th>
+            <th class="js-sort-number my_table_head_cell">Rezensionen</th>
+            <th class="js-sort-number my_table_head_cell">Status</th>
+        </tr>
 	</thead>
 	<tbody>
 	    {% for key in data %}

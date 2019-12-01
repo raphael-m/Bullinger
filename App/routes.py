@@ -34,7 +34,7 @@ def admin():
 
 @app.route('/admin/setup', methods=['POST', 'GET'])
 def setup():
-    # PASSWORD PROTECTION
+    # PASSWORD PROTECTION NEEDED
     BullingerDB.setup("Karteikarten/OCR")
     return redirect(url_for('admin'))
 
