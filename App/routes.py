@@ -16,7 +16,7 @@ from Tools.BullingerDB import BullingerDB
 from Tools.Dictionaries import CountDict
 
 APP_NAME = "KoKoS-Bullinger"
-database = BullingerDB()
+database = BullingerDB(db.session)
 
 
 @app.route('/')
@@ -35,7 +35,7 @@ def admin():
 @app.route('/admin/setup', methods=['POST', 'GET'])
 def setup():
     # PASSWORD PROTECTION NEEDED
-    BullingerDB.setup("Karteikarten/OCR")
+    BullingerDB.setup(db.session, "Karteikarten/OCR")
     return redirect(url_for('admin'))
 
 
@@ -181,7 +181,7 @@ def assignment(id_brief):
     card_form.img_height.default = session.get('img_height')
     card_form.img_width.default = session.get('img_width')
 
-    date = database.set_defaults(i, card_form)
+    client_variables["month"] = database.set_defaults(i, card_form)[1]
 
     # save
     user, number_of_changes, t = current_user.username, 0, datetime.now()
@@ -195,23 +195,20 @@ def assignment(id_brief):
         number_of_changes += database.save_language(i, card_form, user, t)
         number_of_changes += database.save_printed(i, card_form, user, t)
         number_of_changes += database.save_remark(i, card_form, user, t)
-
-        # updates
         database.update_user(user, number_of_changes)
         database.update_file_status(i, card_form.state.data)
 
-        kartei = Kartei.query.filter_by(id_brief=i).first()
-        client_variables["reviews"], client_variables["state"] = kartei.rezensionen, kartei.status
-        client_variables["path_ocr"], client_variables["path_pdf"] = kartei.pfad_OCR, kartei.pfad_PDF
-        card_form.state.default = kartei.status
+    kartei = Kartei.query.filter_by(id_brief=i).first()
+    client_variables["reviews"], client_variables["state"] = kartei.rezensionen, kartei.status
+    client_variables["path_ocr"], client_variables["path_pdf"] = kartei.pfad_OCR, kartei.pfad_PDF
+    card_form.state.default = kartei.status
 
     card_path = 'cards/HBBW_Karteikarte_' + (5 - len(str(i))) * '0' + str(i) + '.png'
     card_form.process()
 
     return render_template('assignment.html',
-                           title="Nr. "+str(i),
                            card_index=i,
+                           title="Nr. "+str(i),
                            card_path=card_path,
                            form=card_form,
-                           variable=client_variables,
-                           month=date[1])
+                           variable=client_variables)

@@ -255,7 +255,7 @@ class User(UserMixin, db.Model):
     changes = db.Column(db.Integer)
     finished = db.Column(db.Integer)
     password_hash = db.Column(db.String(128))
-    time = db.Column(datetime)
+    time = db.Column(db.String(64))
 
     def __init__(self, username=None, e_mail=None, changes=0, finished=0, time=datetime.now()):
         self.username = username

@@ -6,7 +6,7 @@
 <!-- Navigation -->
 <h1><a href="{{url_for('overview')}}">Übersicht</a> /
     <a href="{{url_for('overview_year', year=form.year_a.default)}}">{{ form.year_a.default }}</a> /
-    <a href="{{url_for('overview_month', year=form.year_a.default, month=month)}}">{{ month }}</a> /
+    <a href="{{url_for('overview_month', year=form.year_a.default, month=month)}}">{{ variable["month"] }}</a> /
     {{ form.day_a.default }}{% if form.day_a.default != 's.d.'%}.{% endif %}
     <!-- Status -->
     <div id="status_info">
@@ -243,44 +243,11 @@
             <div class="h_separator"></div>
             <div class="card_row"><div class="card_row_empty"></div></div>
             <div class="card_row"><div class="card_row_empty"></div></div>
-            <!--
-            <div class="card_row">
-                <div id="card_photocopy" class="card_input">
-                {{ form.place_photocopy(placeholder="Standort") }}
-                </div>
-            </div>
-            <div class="card_row">
-                <div id="card_pbc" class="card_input">
-                    {{ form.bull_corr_photocopy(placeholder="Bull. Corr.") }}
-                </div>
-                <div id="card_p_paper" class="card_input">
-                    {{ form.paper_photocopy(placeholder="Blatt") }}
-                </div>
-                <div id="card_p_page" class="card_input">
-                    {{ form.page_photocopy(placeholder="Seite") }}
-                </div>
-            </div>
-            -->
+
             <!-- Abschrift -->
             <div class="card_row"><div class="card_row_empty"></div></div>
             <div class="card_row"><div class="card_row_empty"></div></div>
-            <!--
-            <div class="card_row"><div id="card_transcript" class="card_input">
-                {{ form.place_transcript(placeholder="Standort") }}
-            </div>
-            </div>
-            <div class="card_row">
-                <div id="card_tbc" class="card_input">
-                    {{ form.bull_corr_transcript(placeholder="Bull. Corr.") }}
-                </div>
-                <div id="card_t_paper" class="card_input">
-                    {{ form.paper_transcript(placeholder="Blatt") }}
-                </div>
-                <div id="card_t_page" class="card_input">
-                    {{ form.page_transcript(placeholder="Seite") }}
-                </div>
-            </div>
-            -->
+
             <div class="h_separator"></div>
         </div>
         <div class="card_col1">

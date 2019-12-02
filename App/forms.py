@@ -210,21 +210,23 @@ class FormFileCard(FlaskForm):
 
     def set_literature_as_default(self, literatur):
         if literatur:
-            self.literature.default = literatur.literatur
+            self.literature.default = literatur.literatur if literatur.literatur else ''
+            print("setted")
 
     def update_literature(self, literatur_old):
+        print("OLD", literatur_old, "NEW", self.literature.data)
         new_literatur, number_of_changes = Literatur(), 0
         if literatur_old.literatur != self.literature.data: number_of_changes += 1
         new_literatur.literatur = self.literature.data
         if number_of_changes > 0:
+            print("change")
             self.set_literature_as_default(new_literatur)
             return new_literatur, number_of_changes
         return False, 0
 
     def set_printed_as_default(self, gedruckt):
         if gedruckt:
-            if gedruckt.gedruckt:
-                self.printed.default = gedruckt.gedruckt
+            self.printed.default = gedruckt.gedruckt if gedruckt.gedruckt else ''
 
     def update_printed(self, gedruckt_old):
         number_of_changes = 0
@@ -238,8 +240,7 @@ class FormFileCard(FlaskForm):
 
     def set_sentence_as_default(self, sentence):
         if sentence:
-            if sentence.bemerkung:
-                self.sentence.default = sentence.bemerkung
+            self.sentence.default = sentence.bemerkung if sentence.bemerkung else ''
 
     def update_sentence(self, sentence_old):
         number_of_changes = 0
