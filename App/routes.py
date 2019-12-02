@@ -14,6 +14,8 @@ from flask_login import current_user, login_user, login_required, logout_user
 from datetime import datetime
 from Tools.BullingerDB import BullingerDB
 from Tools.Dictionaries import CountDict
+from sqlalchemy import outerjoin
+
 
 APP_NAME = "KoKoS-Bullinger"
 database = BullingerDB(db.session)
@@ -81,28 +83,11 @@ def register():
 @app.route('/overview', methods=['post', 'get'])
 @login_required
 def overview():
-    year_count = CountDict()  # year --> letter count
-    for d in Datum.query:
-        year_count.add(d.jahr_a)
-    unclear_count = CountDict()
-    closed_count = CountDict()
-    invalid_count = CountDict()
-    open_count = CountDict()
-    r = (db.session.query(Datum, Kartei).filter(Datum.id_brief == Kartei.id_brief).all())
-    for i in r:
-        if i[1].status == 'abgeschlossen':
-            closed_count.add(i[0].jahr_a)
-        if i[1].status == 'unklar':
-            unclear_count.add(i[0].jahr_a)
-        if i[1].status == 'ungültig':
-            invalid_count.add(i[0].jahr_a)
-        if i[1].status == 'offen':
-            open_count.add(i[0].jahr_a)
-
+    [view_count, open_count, unclear_count, closed_count, invalid_count] = BullingerDB.get_status_counts(0)
     data = {}
-    for key in year_count:
-        data[key] = [year_count[key], open_count[key], unclear_count[key], closed_count[key], invalid_count[key]]
-
+    for key in view_count:
+        data[key] = [view_count[key], open_count[key], unclear_count[key], closed_count[key], invalid_count[key]]
+    
     return render_template('overview.html', title="Übersicht", data=data)
 
 
@@ -110,26 +95,10 @@ def overview():
 @app.route('/overview_year/<year>', methods=['POST', 'GET'])
 @login_required
 def overview_year(year):
-    month_count = CountDict()
-    unclear_count = CountDict()
-    closed_count = CountDict()
-    invalid_count = CountDict()
-    open_count = CountDict()
-    for d in Datum.query.filter_by(jahr_a=year):
-        month_count.add(d.monat_a)
-    r = (db.session.query(Datum, Kartei).filter((Datum.id_brief == Kartei.id_brief) & (Datum.jahr_a == year)).all())
-    for i in r:
-        if i[1].status == 'abgeschlossen':
-            closed_count.add(i[0].monat_a)
-        if i[1].status == 'unklar':
-            unclear_count.add(i[0].monat_a)
-        if i[1].status == 'ungültig':
-            invalid_count.add(i[0].monat_a)
-        if i[1].status == 'offen':
-            open_count.add(i[0].monat_a)
+    [view_count, open_count, unclear_count, closed_count, invalid_count] = BullingerDB.get_status_counts(1)
     data = {}
-    for key in month_count:
-        data[key] = [month_count[key], open_count[key], unclear_count[key], closed_count[key], invalid_count[key]]
+    for key in view_count:
+        data[key] = [view_count[key], open_count[key], unclear_count[key], closed_count[key], invalid_count[key]]
         print(data[key])
     return render_template("overview_year.html", title="Übersicht", year=year, data=data)
 
@@ -181,8 +150,6 @@ def assignment(id_brief):
     card_form.img_height.default = session.get('img_height')
     card_form.img_width.default = session.get('img_width')
 
-    client_variables["month"] = database.set_defaults(i, card_form)[1]
-
     # save
     user, number_of_changes, t = current_user.username, 0, datetime.now()
     if card_form.validate_on_submit():
@@ -201,6 +168,7 @@ def assignment(id_brief):
     kartei = Kartei.query.filter_by(id_brief=i).first()
     client_variables["reviews"], client_variables["state"] = kartei.rezensionen, kartei.status
     client_variables["path_ocr"], client_variables["path_pdf"] = kartei.pfad_OCR, kartei.pfad_PDF
+    client_variables["month"] = database.set_defaults(i, card_form)[1]
     card_form.state.default = kartei.status
 
     card_path = 'cards/HBBW_Karteikarte_' + (5 - len(str(i))) * '0' + str(i) + '.png'

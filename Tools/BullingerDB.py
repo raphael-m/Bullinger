@@ -7,8 +7,9 @@
 import os
 from Tools.BullingerData import *
 from Tools.NGrams import NGrams
+from Tools.Dictionaries import CountDict
 from App.models import *
-from sqlalchemy import desc
+from sqlalchemy import desc, func, and_
 from flask import request
 
 ADMIN = 'Admin'
@@ -421,3 +422,43 @@ class BullingerDB:
             db_record.anwender = user
             db_record.zeit = time_stamp
             self.dbs.add(db_record)
+
+    # other queries
+    @staticmethod
+    def get_most_recent_only(database, relation):
+        sub_query = database.query(
+            relation.id_brief,
+            func.max(relation.zeit).label('max_date')
+        ).group_by(relation.id_brief).subquery('t2')
+        query = database.query(relation).join(
+            sub_query,
+            and_(relation.id_brief == sub_query.c.id_brief,
+                 relation.zeit == sub_query.c.max_date)
+        )
+        return query
+
+    @staticmethod
+    def get_status_counts(mode):
+        """ 0^="year", 1^="month" """
+        recent_dates = BullingerDB.get_most_recent_only(db.session, Datum)
+        view_count = CountDict()  # year or month --> letter count
+        unclear_count, closed_count, invalid_count, open_count = CountDict(), CountDict(), CountDict(), CountDict()
+        for d in recent_dates:
+            view_count.add(d.jahr_a if not mode else d.monat_a)
+        recent_dates = recent_dates.subquery()
+        join_file_date = db.session.query(
+            Kartei.id_brief,
+            Kartei.status,
+            recent_dates.c.jahr_a if not mode else recent_dates.c.monat_a
+        ).join(recent_dates, recent_dates.c.id_brief == Kartei.id_brief)
+        for r in join_file_date:
+            i = r.jahr_a if not mode else r.monat_a
+            if r.status == 'abgeschlossen':
+                closed_count.add(i)
+            if r.status == 'unklar':
+                unclear_count.add(i)
+            if r.status == 'ungültig':
+                invalid_count.add(i)
+            if r.status == 'offen':
+                open_count.add(i)
+        return [view_count, open_count, unclear_count, closed_count, invalid_count]

@@ -6,7 +6,7 @@
 <!-- Navigation -->
 <h1><a href="{{url_for('overview')}}">Übersicht</a> /
     <a href="{{url_for('overview_year', year=form.year_a.default)}}">{{ form.year_a.default }}</a> /
-    <a href="{{url_for('overview_month', year=form.year_a.default, month=month)}}">{{ variable["month"] }}</a> /
+    <a href="{{url_for('overview_month', year=form.year_a.default, month=variable['month'])}}">{{ variable["month"] }}</a> /
     {{ form.day_a.default }}{% if form.day_a.default != 's.d.'%}.{% endif %}
     <!-- Status -->
     <div id="status_info">
