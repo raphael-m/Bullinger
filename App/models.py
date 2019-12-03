@@ -105,18 +105,16 @@ class Person(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
     vorname = db.Column(db.String(50))
-    titel = db.Column(db.String(50))
     ort = db.Column(db.String(50))
     empfangen = db.Column(db.Integer)
     gesendet = db.Column(db.Integer)
     anwender = db.Column(db.String(50))
     zeit = db.Column(db.String(50))
 
-    def __init__(self, name=None, forename=None, title=None, place=None, remark=None,
+    def __init__(self, name=None, forename=None, place=None, remark=None,
                  empfangen=0, gesendet=0, user=None, time=datetime.now()):
         self.name = name
         self.vorname = forename
-        self.titel = title
         self.ort = place
         self.bemerkung = remark
         self.empfangen = empfangen

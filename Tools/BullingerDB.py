@@ -83,7 +83,7 @@ class BullingerDB:
         self.dbs.commit()
 
     def add_bullinger(self):
-        bullinger = Person(name="Bullinger", title="", forename="Heinrich", place="Zürich", user=ADMIN, time=self.t)
+        bullinger = Person(name="Bullinger", forename="Heinrich", place="Zürich", user=ADMIN, time=self.t)
         self.dbs.add(bullinger)
         self.dbs.commit()
 
@@ -101,20 +101,20 @@ class BullingerDB:
         if BullingerData.is_bullinger_sender(data, n_grams_bullinger):
             self.dbs.add(Absender(id_brief=card_nr, id_person=id_bullinger, user=ADMIN, time=self.t))
             e = BullingerData.analyze_address(data["Empfänger"])
-            match = Person.query.filter_by(name=e[0], vorname=e[1], titel=e[4], ort=e[2]).first()
+            match = Person.query.filter_by(name=e[0], vorname=e[1], ort=e[2]).first()
             if not match:
-                self.dbs.add(Person(title=e[4], name=e[0], forename=e[1], place=e[2], user=ADMIN, time=self.t))
+                self.dbs.add(Person(name=e[0], forename=e[1], place=e[2], user=ADMIN, time=self.t))
                 self.dbs.commit()
-            ref = Person.query.filter_by(name=e[0], vorname=e[1], titel=e[4], ort=e[2]).first().id
+            ref = Person.query.filter_by(name=e[0], vorname=e[1], ort=e[2]).first().id
             self.dbs.add(Empfaenger(id_brief=card_nr, id_person=ref, remark=e[3], user=ADMIN, time=self.t))
         else:
             self.dbs.add(Empfaenger(id_brief=card_nr, id_person=id_bullinger, user=ADMIN, time=self.t))
             a = BullingerData.analyze_address(data["Absender"])
-            match = Person.query.filter_by(name=a[0], vorname=a[1], ort=a[2], titel=a[4]).first()
+            match = Person.query.filter_by(name=a[0], vorname=a[1], ort=a[2]).first()
             if not match:
-                self.dbs.add(Person(title=a[4], name=a[0], forename=a[1], place=a[2], user=ADMIN, time=self.t))
+                self.dbs.add(Person(name=a[0], forename=a[1], place=a[2], user=ADMIN, time=self.t))
                 self.dbs.commit()
-            ref = Person.query.filter_by(name=a[0], vorname=a[1], ort=a[2], titel=a[4]).first().id
+            ref = Person.query.filter_by(name=a[0], vorname=a[1], ort=a[2]).first().id
             self.dbs.add(Absender(id_brief=card_nr, id_person=ref, remark=a[3], user=ADMIN, time=self.t))
 
     def add_autograph(self, card_nr, data):
@@ -247,11 +247,10 @@ class BullingerDB:
     def save_sender(self, i, card_form, user, t):
         emp_old = Empfaenger.query.filter_by(id_brief=i).order_by(desc(Empfaenger.zeit)).first()
         pers_old = Person.query.filter_by(id=emp_old.id_person).order_by(desc(Person.zeit)).first()
-        p_new_query = Person.query.filter_by(titel=card_form.title_receiver.data,
-                                             name=card_form.name_receiver.data,
+        p_new_query = Person.query.filter_by(name=card_form.name_receiver.data,
                                              vorname=card_form.forename_receiver.data,
                                              ort=card_form.place_receiver.data).order_by(desc(Person.zeit)).first()
-        new_person = Person(title=card_form.title_receiver.data, name=card_form.name_receiver.data,
+        new_person = Person(name=card_form.name_receiver.data,
                             forename=card_form.forename_receiver.data, place=card_form.place_receiver.data,
                             user=user, time=t)
         if emp_old:
@@ -298,10 +297,10 @@ class BullingerDB:
     def save_receiver(self, i, card_form, user, t):
         abs_old = Absender.query.filter_by(id_brief=i).order_by(desc(Absender.zeit)).first()
         pers_old = Person.query.filter_by(id=abs_old.id_person).order_by(desc(Person.zeit)).first()
-        p_new_query = Person.query.filter_by(titel=card_form.title_sender.data, name=card_form.name_sender.data,
+        p_new_query = Person.query.filter_by(name=card_form.name_sender.data,
                                              vorname=card_form.forename_sender.data,
                                              ort=card_form.place_sender.data).order_by(desc(Person.zeit)).first()
-        new_person = Person(title=card_form.title_sender.data, name=card_form.name_sender.data,
+        new_person = Person(name=card_form.name_sender.data,
                             forename=card_form.forename_sender.data, place=card_form.place_sender.data,
                             user=user, time=t)
         if abs_old:

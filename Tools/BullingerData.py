@@ -268,32 +268,33 @@ class BullingerData:
             :param baselines: list of lists
             :return: <name>, <forename>, <location>, <remarks> """
         # default values
-        title, nn, vn, ort, bemerkung = '', 's.n.', 's.n.', 's.l.', None
+        nn, vn, ort, bemerkung = 's.n.', 's.n.', 's.l.', None
         baselines = BullingerData.clean_up_baselines_sender_receiver(baselines)
         if len(baselines) > 0:
             # Rule 1 - 1st line 1st word == name
             nn = baselines[0][0]
-            # Rule 2 - 1st line words 2-end == forename
             if len(baselines[0]) > 1:
                 vn = ' '.join(baselines[0][1:])
                 if nn != 'Geistliche':
                     # Title
-                    if ' von' in vn:
-                        title = 'von'
-                        vn = vn.replace(' von', '').strip()
-                    if ' de' in vn:
-                        title = 'de'
-                        vn = vn.replace(' de', '').strip()
+                    if re.match(r'.*von.*', vn):
+                        vn = vn.replace('von', '').strip()
+                        nn = 'von ' + nn
+                    if re.match(r'.*de.*', vn):
+                        vn = vn.replace('de', '').strip()
+                        nn = 'de ' + nn
+                    if re.match(r'.*du.*', vn):
+                        vn = vn.replace('du', '').strip()
+                        nn = 'du ' + nn
                 else:  # Geistliche
                     ort = vn.replace('von', '').strip()
-                    vn, nn = '', ''
-                    title = "Geistliche"
+                    nn = "Geistliche"
         if len(baselines) > 1:
             ort = ' '.join(baselines[-1])
             ort = re.sub(r'\s+', ' ', ort.replace('.', '. '))
         if len(baselines) > 2:
             bemerkung = ' '.join([t for b in baselines[1:-1] for t in b])
-        return nn, vn, ort, bemerkung, title
+        return nn, vn, ort, bemerkung
 
     @staticmethod
     def clean_up_baselines_sender_receiver(bl):

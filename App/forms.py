@@ -19,8 +19,8 @@ class FormFileCard(FlaskForm):
 
     # Buttons
     submit = SubmitField('Speichern', id="save_changes")
-    next_card = SubmitField('Vorwärts')
-    prev_card = SubmitField('Zurück')
+    next_card = SubmitField('>')
+    prev_card = SubmitField('<')
     state = RadioField('Label', default='unklar',
                        choices=[('unklar', 'unklar'), ('ungültig', 'ungültig'), ('abgeschlossen', 'abgeschlossen')])
     save_comment = SubmitField('Anmerkung speichern')
@@ -75,7 +75,6 @@ class FormFileCard(FlaskForm):
         return None, 0
 
     _NSS = "sender_"
-    title_sender = StringField("Titel", id=IDC + _NSS + "title")
     name_sender = StringField("Name", id=IDC + _NSS + "name")
     forename_sender = StringField("Vorname", id=IDC + _NSS + "forename")
     place_sender = StringField("Ort", id=IDC + _NSS + "place")
@@ -86,7 +85,6 @@ class FormFileCard(FlaskForm):
         if person.name != self.name_sender.data.strip(): n += 1
         if person.vorname != self.forename_sender.data.strip(): n += 1
         if person.ort != self.place_sender.data.strip(): n += 1
-        if person.titel != self.title_sender.data.strip(): n += 1
         return n
 
     def has_changed__sender_comment(self, receiver):
@@ -94,14 +92,12 @@ class FormFileCard(FlaskForm):
 
     def set_sender_as_default(self, person, remark):
         if person:
-            self.title_sender.default = person.titel if person.titel else ''
             self.name_sender.default = person.name if person.name else ''
             self.forename_sender.default = person.vorname if person.vorname else ''
             self.place_sender.default = person.ort if person.ort else ''
         self.remark_sender.default = remark if remark else ''
 
     _NSR = "receiver_"
-    title_receiver = StringField("Titel", id=IDC + _NSR + "title")
     name_receiver = StringField("Name", id=IDC + _NSR + "name")
     forename_receiver = StringField("Vorname", id=IDC + _NSR + "forename")
     place_receiver = StringField("Ort", id=IDC + _NSR + "place")
@@ -112,7 +108,6 @@ class FormFileCard(FlaskForm):
         if person.name != self.name_receiver.data.strip(): differences += 1
         if person.vorname != self.forename_receiver.data.strip(): differences += 1
         if person.ort != self.place_receiver.data.strip(): differences += 1
-        if person.titel != self.title_receiver.data.strip(): differences += 1
         return differences
 
     def has_changed__receiver_comment(self, receiver):
@@ -120,7 +115,6 @@ class FormFileCard(FlaskForm):
 
     def set_receiver_as_default(self, person, remark):
         if person:
-            self.title_receiver.default = person.titel if person.titel else ''
             self.name_receiver.default = person.name if person.name else ''
             self.forename_receiver.default = person.vorname if person.vorname else ''
             self.place_receiver.default = person.ort if person.ort else ''
