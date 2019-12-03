@@ -8,7 +8,7 @@
 
 from flask import request
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, HiddenField, RadioField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, HiddenField, RadioField, TextAreaField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from App.models import User, Datum, Autograph, Kopie, Literatur, Gedruckt, Bemerkung, Sprache
 
@@ -23,6 +23,8 @@ class FormFileCard(FlaskForm):
     prev_card = SubmitField('Zurück')
     state = RadioField('Label', default='unklar',
                        choices=[('unklar', 'unklar'), ('ungültig', 'ungültig'), ('abgeschlossen', 'abgeschlossen')])
+    save_comment = SubmitField('Anmerkung speichern')
+
     # Properties
     image_height = HiddenField('image_height', id="image_height_value")  # window height
     img_height = HiddenField('img_height', id="img_height")  # image size
@@ -172,11 +174,11 @@ class FormFileCard(FlaskForm):
             return new_copy, number_of_changes
         return None, 0
 
-    language = StringField("Sprache", id=IDC + "language_" + "sprache")
-    literature = StringField("Literatur", id=IDC + "literature_" + "literature")
-    printed = StringField("Gedruckt", id=IDC + "printed_" + "printed")
-    sentence = StringField("Erster Satz", id=IDC + "printed_" + "opening")
-    remark = StringField("Bemerkung", id=IDC + "printed_" + "remark")
+    language = StringField("Sprache", id=IDC + "language_")
+    literature = StringField("Literatur", id=IDC + "literature_")
+    printed = StringField("Gedruckt", id=IDC + "printed_")
+    sentence = StringField("Erster Satz", id=IDC + "sentence_")
+    remark = StringField("Bemerkung", id=IDC + "remark_")
 
     def set_language_as_default(self, sprache):
         if sprache:
@@ -254,6 +256,8 @@ class FormFileCard(FlaskForm):
 
     def set_remark_as_default(self, remark):
         pass
+
+    note = TextAreaField("Benutzerkommentar", id=IDC + "note")
 
 
 def create_date_selection(selection):

@@ -34,7 +34,7 @@ admin = Admin(app)
 from App import routes, models
 from App.models import Kartei, User, Datum, Person, Absender, Empfaenger
 from App.models import Autograph, Kopie
-from App.models import Sprache, Literatur, Gedruckt, Bemerkung
+from App.models import Sprache, Literatur, Gedruckt, Bemerkung, Notiz
 
 admin.add_view(ModelView(User, db.session))
 admin.add_view(ModelView(Kartei, db.session))
@@ -48,3 +48,4 @@ admin.add_view(ModelView(Sprache, db.session))
 admin.add_view(ModelView(Literatur, db.session))
 admin.add_view(ModelView(Gedruckt, db.session))
 admin.add_view(ModelView(Bemerkung, db.session))
+admin.add_view(ModelView(Notiz, db.session))

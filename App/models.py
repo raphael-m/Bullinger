@@ -243,6 +243,24 @@ class Bemerkung(db.Model):
         return '<Bemerkung {}>'.format(self.id)
 
 
+class Notiz(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    id_brief = db.Column(db.Integer, index=True)
+    notiz = db.Column(db.String(400))
+    anwender = db.Column(db.String(50))
+    zeit = db.Column(db.String(50))
+
+    def __init__(self, id_brief=None, notiz=None, user=None, time=datetime.now()):
+        self.id_brief = id_brief
+        self.notiz = notiz
+        self.anwender = user
+        self.zeit = time
+
+    def __repr__(self):
+        return '<Notiz {}>'.format(self.id)
+
+
 class User(UserMixin, db.Model):
 
     """ E.g.:

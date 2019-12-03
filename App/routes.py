@@ -162,6 +162,7 @@ def assignment(id_brief):
         number_of_changes += database.save_language(i, card_form, user, t)
         number_of_changes += database.save_printed(i, card_form, user, t)
         number_of_changes += database.save_remark(i, card_form, user, t)
+        database.save_comment(i, card_form, user, t)
         database.update_user(user, number_of_changes)
         database.update_file_status(i, card_form.state.data)
 
@@ -169,6 +170,7 @@ def assignment(id_brief):
     client_variables["reviews"], client_variables["state"] = kartei.rezensionen, kartei.status
     client_variables["path_ocr"], client_variables["path_pdf"] = kartei.pfad_OCR, kartei.pfad_PDF
     client_variables["month"] = database.set_defaults(i, card_form)[1]
+    client_variables["comments"] = BullingerDB.get_comments(i, current_user.username)
     card_form.state.default = kartei.status
 
     card_path = 'cards/HBBW_Karteikarte_' + (5 - len(str(i))) * '0' + str(i) + '.png'

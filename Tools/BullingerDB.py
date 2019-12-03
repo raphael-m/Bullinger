@@ -9,7 +9,7 @@ from Tools.BullingerData import *
 from Tools.NGrams import NGrams
 from Tools.Dictionaries import CountDict
 from App.models import *
-from sqlalchemy import desc, func, and_
+from sqlalchemy import asc, desc, func, and_
 from flask import request
 
 ADMIN = 'Admin'
@@ -371,8 +371,8 @@ class BullingerDB:
 
     def save_language(self, i, card_form, user, t):
         sprache_old = Sprache.query.filter_by(id_brief=i).order_by(desc(Sprache.zeit)).first()
-        sprache_old = Sprache.query.filter_by(id_brief=i).filter_by(zeit=sprache_old.zeit).order_by(desc(Sprache.zeit))
         if sprache_old:
+            sprache_old = Sprache.query.filter_by(id_brief=i).filter_by(zeit=sprache_old.zeit).order_by(desc(Sprache.zeit))
             new_sprachen, n = card_form.update_language(sprache_old)
             if not new_sprachen:
                 self.dbs.add(Sprache(id_brief=i, language='', user=user, time=t))
@@ -384,7 +384,7 @@ class BullingerDB:
             for s in card_form.split_lang(card_form.language.data):
                 self.dbs.add(Sprache(id_brief=i, language=s, user=user, time=t))
                 n += 1
-            card_form.language.default = card_form.language.data
+                card_form.language.default = card_form.language.data
         self.dbs.commit()
         sprache = Sprache.query.filter_by(id_brief=i).order_by(desc(Sprache.zeit))
         card_form.set_language_as_default([s for s in sprache if s.zeit == sprache.first().zeit])
@@ -415,6 +415,20 @@ class BullingerDB:
             n = 1
         self.dbs.commit()
         return n
+
+    def save_comment(self, i, card_form, user, t):
+        if card_form.note.data:
+            self.dbs.add(Notiz(id_brief=i, notiz=card_form.note.data, user=user, time=t))
+            self.dbs.commit()
+
+    @staticmethod
+    def get_comments(i, user):
+        comments = []
+        for c in Notiz.query.filter(Notiz.id_brief == i).order_by(asc(Notiz.zeit)).all():
+            datum, zeit = re.sub(r'\.\d*', '', c.zeit).split(' ')
+            u = "Sie" if c.anwender == user else User.query.filter(anwender=user).id
+            comments += [[u, datum, zeit, c.notiz]]
+        return comments
 
     def push2db(self, db_record, id_brief, user, time_stamp):
         if db_record:
