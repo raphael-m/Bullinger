@@ -106,17 +106,19 @@ class Person(db.Model):
     name = db.Column(db.String(50))
     vorname = db.Column(db.String(50))
     ort = db.Column(db.String(50))
+    verifiziert = db.Column(db.String(10))
     empfangen = db.Column(db.Integer)
     gesendet = db.Column(db.Integer)
     anwender = db.Column(db.String(50))
     zeit = db.Column(db.String(50))
 
-    def __init__(self, name=None, forename=None, place=None, remark=None,
+    def __init__(self, name=None, forename=None, place=None, remark=None, verified='Nein',
                  empfangen=0, gesendet=0, user=None, time=datetime.now()):
         self.name = name
         self.vorname = forename
         self.ort = place
         self.bemerkung = remark
+        self.verifiziert = verified
         self.empfangen = empfangen
         self.gesendet = gesendet
         self.anwender = user
@@ -132,7 +134,7 @@ class Autograph(db.Model):
     id_brief = db.Column(db.Integer, index=True)
     standort = db.Column(db.String(50))
     signatur = db.Column(db.String(50))
-    umfang = db.Column(db.String(50))
+    bemerkung = db.Column(db.String(50))
     anwender = db.Column(db.String(50))
     zeit = db.Column(db.String(50))
 
@@ -140,7 +142,7 @@ class Autograph(db.Model):
         self.id_brief = id_brief
         self.standort = standort
         self.signatur = signatur
-        self.umfang = umfang
+        self.bemerkung = umfang
         self.anwender = user
         self.zeit = time
 
@@ -154,7 +156,7 @@ class Kopie(db.Model):
     id_brief = db.Column(db.Integer, index=True)
     standort = db.Column(db.String(50))
     signatur = db.Column(db.String(50))
-    umfang = db.Column(db.String(50))
+    bemerkung = db.Column(db.String(50))
     anwender = db.Column(db.String(50))
     zeit = db.Column(db.String(50))
 
@@ -162,7 +164,7 @@ class Kopie(db.Model):
         self.id_brief = id_brief
         self.standort = standort
         self.signatur = signatur
-        self.umfang = umfang
+        self.bemerkung = umfang
         self.anwender = user
         self.zeit = time
 

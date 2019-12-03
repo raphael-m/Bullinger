@@ -57,7 +57,7 @@ class BullingerDB:
         self.dbs.commit()
 
     def delete_all(self):
-        self.dbs.query(User).delete()
+        # self.dbs.query(User).delete()
         self.dbs.query(Kartei).delete()
         self.dbs.query(Datum).delete()
         self.dbs.query(Person).delete()
@@ -103,7 +103,7 @@ class BullingerDB:
             e = BullingerData.analyze_address(data["Empfänger"])
             match = Person.query.filter_by(name=e[0], vorname=e[1], ort=e[2]).first()
             if not match:
-                self.dbs.add(Person(name=e[0], forename=e[1], place=e[2], user=ADMIN, time=self.t))
+                self.dbs.add(Person(name=e[0], forename=e[1], place=e[2], verified='Nein', user=ADMIN, time=self.t))
                 self.dbs.commit()
             ref = Person.query.filter_by(name=e[0], vorname=e[1], ort=e[2]).first().id
             self.dbs.add(Empfaenger(id_brief=card_nr, id_person=ref, remark=e[3], user=ADMIN, time=self.t))
@@ -112,7 +112,7 @@ class BullingerDB:
             a = BullingerData.analyze_address(data["Absender"])
             match = Person.query.filter_by(name=a[0], vorname=a[1], ort=a[2]).first()
             if not match:
-                self.dbs.add(Person(name=a[0], forename=a[1], place=a[2], user=ADMIN, time=self.t))
+                self.dbs.add(Person(name=a[0], forename=a[1], place=a[2], verified='Nein', user=ADMIN, time=self.t))
                 self.dbs.commit()
             ref = Person.query.filter_by(name=a[0], vorname=a[1], ort=a[2]).first().id
             self.dbs.add(Absender(id_brief=card_nr, id_person=ref, remark=a[3], user=ADMIN, time=self.t))
@@ -249,9 +249,13 @@ class BullingerDB:
         pers_old = Person.query.filter_by(id=emp_old.id_person).order_by(desc(Person.zeit)).first()
         p_new_query = Person.query.filter_by(name=card_form.name_receiver.data,
                                              vorname=card_form.forename_receiver.data,
-                                             ort=card_form.place_receiver.data).order_by(desc(Person.zeit)).first()
+                                             ort=card_form.place_receiver.data,
+                                             verifiziert=card_form.sender_verified.data
+        ).order_by(desc(Person.zeit)).first()
         new_person = Person(name=card_form.name_receiver.data,
-                            forename=card_form.forename_receiver.data, place=card_form.place_receiver.data,
+                            forename=card_form.forename_receiver.data,
+                            place=card_form.place_receiver.data,
+                            verified=card_form.sender_verified.data,
                             user=user, time=t)
         if emp_old:
             if pers_old:
@@ -299,13 +303,17 @@ class BullingerDB:
         pers_old = Person.query.filter_by(id=abs_old.id_person).order_by(desc(Person.zeit)).first()
         p_new_query = Person.query.filter_by(name=card_form.name_sender.data,
                                              vorname=card_form.forename_sender.data,
-                                             ort=card_form.place_sender.data).order_by(desc(Person.zeit)).first()
+                                             ort=card_form.place_sender.data,
+                                             verifiziert=card_form.sender_verified.data
+        ).order_by(desc(Person.zeit)).first()
         new_person = Person(name=card_form.name_sender.data,
-                            forename=card_form.forename_sender.data, place=card_form.place_sender.data,
+                            forename=card_form.forename_sender.data,
+                            place=card_form.place_sender.data,
+                            verified=card_form.receiver_verified.data,
                             user=user, time=t)
         if abs_old:
             if pers_old:
-                n = card_form.differences_from_sender(pers_old)
+                n = card_form.differs_from_sender(pers_old)
                 if n:
                     if p_new_query:  # p_new well known ==> (r_new -> p)
                         self.dbs.add(Absender(id_brief=i, id_person=p_new_query.id, remark=card_form.remark_sender.data,

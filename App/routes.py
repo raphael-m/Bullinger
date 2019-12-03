@@ -171,6 +171,8 @@ def assignment(id_brief):
     client_variables["path_ocr"], client_variables["path_pdf"] = kartei.pfad_OCR, kartei.pfad_PDF
     client_variables["month"] = database.set_defaults(i, card_form)[1]
     client_variables["comments"] = BullingerDB.get_comments(i, current_user.username)
+
+    # radio buttons
     card_form.state.default = kartei.status
 
     card_path = 'cards/HBBW_Karteikarte_' + (5 - len(str(i))) * '0' + str(i) + '.png'

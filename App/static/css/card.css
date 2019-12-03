@@ -1,17 +1,13 @@
-/* Status */
-#status_info {
-    float: right;
-}
+/* Hidden Variables */
+.hidden { height: 0px; }
 
+/* Status */
+#status_info { float: right; }
 .status_open { color: red; }
 .status_invalid { color: orange; }
 .status_unclear {color: yellow; }
 .status_closed {color: green; }
 
-.hidden {
-    height: 0px;
-    /*visibility: hidden;*/
-}
 
 .status_options {
     height: 100%;
@@ -114,8 +110,7 @@
     cursor: pointer;
 }
 
-#zoom_out, #zoom_in, #fit_height, #fit_width,
-#move_left, #move_right, #move_up, #move_down,
+#zoom_out, #zoom_in, #fit_height, #fit_width, #move_left, #move_right, #move_up, #move_down,
 #move_leftmost, #move_rightmost, #move_upmost, #move_downmost {
     height: 100%;
     width: 100%;
@@ -202,21 +197,11 @@
     color: black;
 }
 
-#card_year, #card_year_2 {width: 30%; }
-#card_month, #card_month_2 {width: 50%; }
-#card_day, #card_day_2 {width: 20%; }
-#card_date_remark {width: 100%; }
-#card_sender_name, #card_receiver_name, #card_sender_forename, #card_receiver_forename { width: 50%; }
-#card_sender_title, #card_receiver_title, #card_sender_place, #card_receiver_place, #card_k_standort,
-#card_sender_remark, #card_receiver_remark,
-#card_k_signatur, #card_k_umfang, #card_a_standort, #card_a_signatur, #card_a_umfang, #card_photocopy,
-#card_transcript { width: 100%; }
-#card_pbc, #card_tbc { width: 40%; }
-#card_p_paper, #card_p_page, #card_t_paper, #card_t_page { width: 30%; }
-#card_literature { width: 100%; }
-#card_language { width: 100%; }
-#card_printed { width: 100%; }
-#card_remark { width: 100%; }
+.input_year { width: 30%; }
+.input_month { width: 50%; }
+.input_day { width: 20%; }
+.input_std { width: 100%; }
+.input_half { width: 50%; }
 
 /* Text Areas */
 #card__language, #card__literature, #card__printed, #card__remark {

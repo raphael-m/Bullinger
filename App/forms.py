@@ -79,12 +79,15 @@ class FormFileCard(FlaskForm):
     forename_sender = StringField("Vorname", id=IDC + _NSS + "forename")
     place_sender = StringField("Ort", id=IDC + _NSS + "place")
     remark_sender = StringField("Bemerkung", id=IDC + _NSS + "remark")
+    sender_verified = RadioField('Absender verifiziert', default='Ja',
+                       choices=[('Ja', 'Ja'), ('Nein', 'Nein')])
 
-    def differences_from_sender(self, person):
+    def differs_from_sender(self, person):
         n = 0
         if person.name != self.name_sender.data.strip(): n += 1
         if person.vorname != self.forename_sender.data.strip(): n += 1
         if person.ort != self.place_sender.data.strip(): n += 1
+        if person.verifiziert != self.sender_verified.data: n += 1
         return n
 
     def has_changed__sender_comment(self, receiver):
@@ -95,6 +98,7 @@ class FormFileCard(FlaskForm):
             self.name_sender.default = person.name if person.name else ''
             self.forename_sender.default = person.vorname if person.vorname else ''
             self.place_sender.default = person.ort if person.ort else ''
+            self.sender_verified.default = person.verifiziert if person.verifiziert else 'Nein'
         self.remark_sender.default = remark if remark else ''
 
     _NSR = "receiver_"
@@ -102,12 +106,15 @@ class FormFileCard(FlaskForm):
     forename_receiver = StringField("Vorname", id=IDC + _NSR + "forename")
     place_receiver = StringField("Ort", id=IDC + _NSR + "place")
     remark_receiver = StringField("Bemerkung", id=IDC + _NSR + "remark")
+    receiver_verified = RadioField('Empfänger verifiziert', default='Ja',
+                       choices=[('Ja', 'Ja'), ('Nein', 'Nein')])
 
     def differs_from_receiver(self, person):
         differences = 0
         if person.name != self.name_receiver.data.strip(): differences += 1
         if person.vorname != self.forename_receiver.data.strip(): differences += 1
         if person.ort != self.place_receiver.data.strip(): differences += 1
+        if person.verifiziert != self.receiver_verified.data: differences += 1
         return differences
 
     def has_changed__receiver_comment(self, receiver):
@@ -118,6 +125,7 @@ class FormFileCard(FlaskForm):
             self.name_receiver.default = person.name if person.name else ''
             self.forename_receiver.default = person.vorname if person.vorname else ''
             self.place_receiver.default = person.ort if person.ort else ''
+            self.receiver_verified.default = person.verifiziert if person.verifiziert else 'Nein'
         self.remark_receiver.default = remark if remark else ''
 
     _NSA = "autograph_"
@@ -129,7 +137,7 @@ class FormFileCard(FlaskForm):
         if autograph:
             if autograph.standort: self.place_autograph.default = autograph.standort
             if autograph.signatur: self.signature_autograph.default = autograph.signatur
-            if autograph.umfang: self.scope_autograph.default = autograph.umfang
+            if autograph.bemerkung: self.scope_autograph.default = autograph.bemerkung
 
     def update_autograph(self, autograph_old):
         new_autograph, number_of_changes = Autograph(), 0
@@ -137,8 +145,8 @@ class FormFileCard(FlaskForm):
         new_autograph.standort = self.place_autograph.data
         if autograph_old.signatur != self.signature_autograph.data: number_of_changes += 1
         new_autograph.signatur = self.signature_autograph.data
-        if autograph_old.umfang != self.scope_autograph.data: number_of_changes += 1
-        new_autograph.umfang = self.scope_autograph.data
+        if autograph_old.bemerkung != self.scope_autograph.data: number_of_changes += 1
+        new_autograph.bemerkung = self.scope_autograph.data
         if number_of_changes > 0:
             self.set_autograph_as_default(new_autograph)
             return new_autograph, number_of_changes
@@ -147,13 +155,13 @@ class FormFileCard(FlaskForm):
     _NSC = "copy_"
     place_copy = StringField("Ort", id=IDC + _NSC + "standort")
     signature_copy = StringField("Signatur", id=IDC + _NSC + "signatur")
-    scope_copy = StringField("Umfang", id=IDC + _NSC + "umfang")
+    scope_copy = StringField("Bemerkung", id=IDC + _NSC + "Bemerkung")
 
     def set_copy_as_default(self, copy):
         if copy:
             if copy.standort: self.place_copy.default = copy.standort
             if copy.signatur: self.signature_copy.default = copy.signatur
-            if copy.umfang: self.scope_copy.default = copy.umfang
+            if copy.bemerkung: self.scope_copy.default = copy.bemerkung
 
     def update_copy(self, copy_old):
         new_copy, number_of_changes = Kopie(), 0
@@ -161,8 +169,8 @@ class FormFileCard(FlaskForm):
         new_copy.standort = self.place_copy.data
         if copy_old.signatur != self.signature_copy.data: number_of_changes += 1
         new_copy.signatur = self.signature_copy.data
-        if copy_old.umfang != self.scope_copy.data: number_of_changes += 1
-        new_copy.umfang = self.scope_copy.data
+        if copy_old.bemerkung != self.scope_copy.data: number_of_changes += 1
+        new_copy.bemerkung = self.scope_copy.data
         if number_of_changes > 0:
             self.set_copy_as_default(new_copy)
             return new_copy, number_of_changes

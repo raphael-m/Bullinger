@@ -1,8 +1,8 @@
-"""new without titles
+"""empty message
 
-Revision ID: 14d51fefdd5e
+Revision ID: 9ac6745c1218
 Revises: 
-Create Date: 2019-12-03 22:57:01.486332
+Create Date: 2019-12-04 00:08:49.223278
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '14d51fefdd5e'
+revision = '9ac6745c1218'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -33,7 +33,7 @@ def upgrade():
     sa.Column('id_brief', sa.Integer(), nullable=True),
     sa.Column('standort', sa.String(length=50), nullable=True),
     sa.Column('signatur', sa.String(length=50), nullable=True),
-    sa.Column('umfang', sa.String(length=50), nullable=True),
+    sa.Column('bemerkung', sa.String(length=50), nullable=True),
     sa.Column('anwender', sa.String(length=50), nullable=True),
     sa.Column('zeit', sa.String(length=50), nullable=True),
     sa.PrimaryKeyConstraint('id')
@@ -99,7 +99,7 @@ def upgrade():
     sa.Column('id_brief', sa.Integer(), nullable=True),
     sa.Column('standort', sa.String(length=50), nullable=True),
     sa.Column('signatur', sa.String(length=50), nullable=True),
-    sa.Column('umfang', sa.String(length=50), nullable=True),
+    sa.Column('bemerkung', sa.String(length=50), nullable=True),
     sa.Column('anwender', sa.String(length=50), nullable=True),
     sa.Column('zeit', sa.String(length=50), nullable=True),
     sa.PrimaryKeyConstraint('id')

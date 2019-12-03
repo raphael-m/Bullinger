@@ -86,10 +86,10 @@
                 <!-- Date -->
                 <div class="attr_top">Datum</div>
                 <div class="card_row">
-                    <div id="card_year" class="card_input">
+                    <div class="card_input input_year">
                          {{ form.year_a(placeholder="Jahr") }}
                     </div>
-                    <select name="card_month_a" id="card_month" class="card_input">
+                    <select name="card_month_a" class="card_input input_month">
                         {% if form.month_a %}
                             {% for option in form.month_a %}
                             <option {% if form.month_a[option] %} selected="selected" {% endif %}>
@@ -112,15 +112,15 @@
                             <option value="Dezember">Dezember</option>
                         {% endif %}
                     </select>
-                    <div id="card_day" class="card_input">
+                    <div class="card_input input_day">
                         {{ form.day_a(placeholder="Tag A") }}
                     </div>
                 </div>
                 <div class="card_row">
-                    <div id="card_year_2" class="card_input">
+                    <div class="card_input input_year">
                         {{ form.year_b(placeholder="Jahr B") }}
                     </div>
-                    <select name="card_month_b" id="card_month_2" class="card_input">
+                    <select name="card_month_b" class="card_input input_month">
                         {% if form.month_b %}
                             {% for option in form.month_a %}
                             <option {% if form.month_b[option] %} selected="selected" {% endif %}>
@@ -143,12 +143,12 @@
                             <option value="Dezember">Dezember</option>
                         {% endif %}
                     </select>
-                    <div id="card_day_2" class="card_input">
+                    <div class="card_input input_day">
                         {{ form.day_b(placeholder="Tag B") }}
                     </div>
                 </div>
                 <div class="card_row">
-                    <div id="card_date_remark" class="card_input">
+                    <div class="card_input input_std">
                         {{ form.remark_date(placeholder="Bemerkung zum Datum") }}
                     </div>
                 </div>
@@ -156,16 +156,19 @@
                 <div class="h_separator"></div>
                 <!-- Autograph -->
                 <div class="attr_top"> Autograph </div>
-                    <div class="card_row"><div id="card_a_standort" class="card_input">
+                <div class="card_row">
+                    <div class="card_input input_std">
                         {{ form.place_autograph(placeholder="Standort") }}
                     </div>
                 </div>
-                    <div class="card_row"><div id="card_a_signatur" class="card_input">
+                <div class="card_row">
+                    <div class="card_input input_std">
                         {{ form.signature_autograph(placeholder="Signatur") }}
                     </div>
                 </div>
-                    <div class="card_row"><div id="card_a_umfang" class="card_input">
-                        {{ form.scope_autograph(placeholder="Umfang") }}
+                <div class="card_row">
+                    <div class="card_input input_std">
+                        {{ form.scope_autograph(placeholder="Bemerkung (Autograph)") }}
                     </div>
                 </div>
                 <div class="h_separator"></div>
@@ -175,44 +178,52 @@
                 <!-- Absender -->
                 <div class="attr_top"> Absender </div>
                 <div class="card_row">
-                    <div id="card_sender_name" class="card_input">
+                    <div class="card_input input_half">
                         {{ form.name_sender(placeholder="Nachname") }}
                     </div>
-                    <div id="card_sender_forename" class="card_input">
+                    <div class="card_input input_half">
                         {{ form.forename_sender(placeholder="Vorname") }}
                     </div>
                 </div>
                 <div class="card_row">
-                    <div id="card_sender_place" class="card_input">
+                    <div class="card_input input_std">
                         {{ form.place_sender(placeholder="Ort") }}
                     </div>
                 </div>
                 <div class="card_row">
-                    <div id="card_sender_remark" class="card_input">
-                        {{ form.remark_sender(placeholder="Bemerkung zum Absender") }}
+                    <div class="card_input input_std">
+                        {{ form.remark_sender(placeholder="Bemerkung (Absender)") }}
                     </div>
                 </div>
                 <div class="card_row">
-                    <div class="card_input">
-                        Gültig/ungültig
+                    <div class="options_verified">
+                        Verifiziert:
+                        {% for s in form.sender_verified %}
+                        <tr>
+                            <td>{{ s }}</td>
+                            <td>{{ s.label }}</td>
+                        </tr>
+                        {% endfor %}
                     </div>
                 </div>
                 <!-- Kopie -->
                 <div class="h_separator"></div>
                 <div class="attr_top"> Kopie </div>
                 <div class="card_row">
-                    <div id="card_k_standort" class="card_input">
+                    <div class="card_input input_std">
                         {{ form.place_copy(placeholder="Standort") }}
                     </div>
                 </div>
                 <div class="card_row">
-                    <div id="card_k_signatur" class="card_input">
+                    <div class="card_input input_std">
                         {{ form.signature_copy(placeholder="Signatur") }}
                     </div>
                 </div>
-                <div class="card_row"><div id="card_k_umfang" class="card_input">
-                    {{ form.scope_copy(placeholder="Umfang") }}
-                </div></div>
+                <div class="card_row">
+                    <div class="card_input input_std">
+                        {{ form.scope_copy(placeholder="Bemerkung (Kopie)") }}
+                    </div>
+                </div>
             <div class="h_separator"></div>
             </div>
             <!-- column 3 -->
@@ -220,55 +231,58 @@
                 <!-- Empfänger -->
                 <div class="attr_top"> Empfänger </div>
                 <div class="card_row">
-                    <div id="card_receiver_name" class="card_input">
+                    <div class="card_input input_half">
                         {{ form.name_receiver(placeholder="Nachname") }}
                     </div>
-                    <div id="card_receiver_forename" class="card_input">
+                    <div class="card_input input_half">
                         {{ form.forename_receiver(placeholder="Vorname") }}
                     </div>
                 </div>
                 <div class="card_row">
-                    <div id="card_receiver_place" class="card_input">
+                    <div class="card_input input_std">
                         {{ form.place_receiver(placeholder="Ort") }}
                     </div>
                 </div>
                 <div class="card_row">
-                    <div id="card_receiver_remark" class="card_input">
-                        {{ form.remark_receiver(placeholder="Bemerkung zum Empfänger") }}
+                    <div class="card_input input_std">
+                        {{ form.remark_receiver(placeholder="Bemerkung (Empfänger)") }}
                     </div>
                 </div>
                 <div class="card_row">
-                    <div class="card_input">
-                        gültig/ungültig
+                    <div class="options_verified">
+                        Verifiziert:
+                        {% for s in form.receiver_verified %}
+                        <tr>
+                            <td>{{ s }}</td>
+                            <td>{{ s.label }}</td>
+                        </tr>
+                        {% endfor %}
                     </div>
                 </div>
-
                 <!-- Photokopie -->
                 <div class="h_separator"></div>
                 <div class="card_row"><div class="card_row_empty"></div></div>
                 <div class="card_row"><div class="card_row_empty"></div></div>
-
                 <!-- Abschrift -->
                 <div class="card_row"><div class="card_row_empty"></div></div>
                 <div class="card_row"><div class="card_row_empty"></div></div>
-
                 <div class="h_separator"></div>
             </div>
             <div class="card_col1">
-                <div id="card_language" class="card_input">
+                <div class="card_input input_std">
                     {{ form.language(placeholder="Sprache") }}
                 </div>
-                <div id="card_printed" class="card_input">
+                <div class="card_input input_std">
                     {{ form.printed(placeholder="Gedruckt") }}
                 </div>
             </div>
             <div class="card_col4">
                 <div class="card_row">
-                    <div id="card_literature" class="card_input">
+                    <div class="card_input input_std">
                         {{ form.literature(placeholder="Literatur") }}
                     </div>
                 </div>
-                <div id="card_remark" class="card_input">
+                <div class="card_input input_std">
                     {{ form.sentence(placeholder="erster Satz") }}
                 </div>
             </div>
