@@ -9,8 +9,12 @@ from Tools.BullingerData import *
 from Tools.NGrams import NGrams
 from Tools.Dictionaries import CountDict
 from App.models import *
-from sqlalchemy import asc, desc, func, and_
+from sqlalchemy import asc, desc, func, and_, or_
 from flask import request
+
+import matplotlib
+import matplotlib.pyplot as plt
+
 
 ADMIN = 'Admin'
 
@@ -26,11 +30,12 @@ class BullingerDB:
         """ creates the entire date base (ocr data) """
         d, card_nr = BullingerDB(db_session), 1
         d.delete_all()
-        d.set_index()
         d.add_bullinger()
         for path in FileSystem.get_file_paths(dir_path, recursively=False):
             print(card_nr, path)
             data = BullingerData.get_data_as_dict(path)
+            d.update_timestamp()
+            d.set_index(card_nr)
             if data:
                 d.add_date(card_nr, data)
                 d.add_correspondents(card_nr, data)
@@ -45,16 +50,17 @@ class BullingerDB:
                 d.dbs.add(Datum(id_brief=card_nr, year_a=SD, month_a=SD, day_a=SD, user=ADMIN, time=d.t))
             card_nr += 1
             d.dbs.commit()
+        # Postprocessing
         d.count_correspondence()
 
-    def set_index(self):
-        # self.session.query(Kartei).delete()
-        for i in range(1, 10094):
-            zeros = (5 - len(str(i))) * '0'
-            pdf = os.path.join("Karteikarten/PDF", "HBBW_Karteikarte_" + zeros + str(i) + ".pdf")
-            ocr = os.path.join("Karteikarten/OCR", "HBBW_Karteikarte_" + zeros + str(i) + ".ocr")
-            self.dbs.add(Kartei(id_brief=i, pfad_pdf=pdf, pfad_ocr=ocr))
-        self.dbs.commit()
+    def update_timestamp(self):
+        self.t = datetime.now()
+
+    def set_index(self, i):
+        zeros = (5 - len(str(i))) * '0'
+        pdf = os.path.join("Karteikarten/PDF", "HBBW_Karteikarte_" + zeros + str(i) + ".pdf")
+        ocr = os.path.join("Karteikarten/OCR", "HBBW_Karteikarte_" + zeros + str(i) + ".ocr")
+        self.dbs.add(Kartei(id_brief=i, pfad_pdf=pdf, pfad_ocr=ocr))
 
     def delete_all(self):
         # self.dbs.query(User).delete()
@@ -77,9 +83,10 @@ class BullingerDB:
         file.rezensionen += 1
         self.dbs.commit()
 
-    def update_user(self, user, number_of_changes):
+    def update_user(self, user, number_of_changes, state):
         user = User.query.filter_by(username=user).first()
         user.changes += number_of_changes
+        user.finished += 1 if state == 'abgeschlossen' else 0
         self.dbs.commit()
 
     def add_bullinger(self):
@@ -483,3 +490,65 @@ class BullingerDB:
             if r.status == 'offen':
                 open_count.add(i)
         return [view_count, open_count, unclear_count, closed_count, invalid_count]
+
+    @staticmethod
+    def quick_start():  # ">>"
+        """ return the first card with status 'offen'; if there is none anymore, return cards with state 'unklar'"""
+        e = Kartei.query.filter_by(status='offen').first()
+        if e: return e.id_brief
+        e = Kartei.query.filter_by(status='unklar').first()
+        if e: return e.id_brief
+        return None  # redirect to another page...
+
+    @staticmethod
+    def get_next_card_number(i):
+        return i+1 if i+1 <= Kartei.query.count() else 1
+
+    @staticmethod
+    def get_prev_card_number(i):
+        return i-1 if i-1 > 0 else Kartei.query.count()
+
+    @staticmethod
+    def get_prev_assignment(i):  # "<<"
+        i, j = BullingerDB.get_prev_card_number(i), Kartei.query.count()
+        while not BullingerDB.is_assignable(i) and j > 0:
+            i = BullingerDB.get_prev_card_number(i)
+            j -= 1
+        return i if BullingerDB.is_assignable(i) else None
+
+    @staticmethod
+    def get_next_assignment(i):
+        i, j = BullingerDB.get_next_card_number(i), Kartei.query.count()
+        while not BullingerDB.is_assignable(i) and j > 0:
+            i = BullingerDB.get_next_card_number(i)
+            j -= 1
+        return i if BullingerDB.is_assignable(i) else None
+
+    @staticmethod
+    def is_assignable(i):
+        c = Kartei.query.filter_by(id_brief=i).filter(or_(Kartei.status == 'offen', Kartei.status == 'unklar')).first()
+        return True if c else False
+
+    @staticmethod
+    def get_user_stats(user_name):
+        table = User.query.order_by(desc(User.changes)).all()
+        return [[row.id if user_name != row.username else user_name, row.changes, row.finished] for row in table]
+
+    @staticmethod
+    def create_plot_overview():
+        a = Kartei.query.filter(Kartei.status == "abgeschlossen").count()
+        u = Kartei.query.filter(Kartei.status == "unklar").count()
+        i = Kartei.query.filter(Kartei.status == "ungültig").count()
+        o = Kartei.query.filter(Kartei.status == "offen").count()
+
+        labels = 'abgeschlossen', 'offen', 'unklar', 'ungültig'
+        sizes = [a, o, u, i]
+        colors = ['green', 'blue', 'yellow', 'red']
+        explode = (0.1, 0, 0, 0)  # explode 1st slice
+
+        # Plot
+        fig = plt.figure()
+        plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=140)
+        plt.axis('equal')
+        fig.savefig('plot.png')
+        plt.close()

@@ -13,8 +13,6 @@ from flask import render_template, flash, redirect, url_for, session
 from flask_login import current_user, login_user, login_required, logout_user
 from datetime import datetime
 from Tools.BullingerDB import BullingerDB
-from Tools.Dictionaries import CountDict
-from sqlalchemy import outerjoin
 
 
 APP_NAME = "KoKoS-Bullinger"
@@ -29,7 +27,7 @@ def index():
     return render_template("index.html", title=APP_NAME)
 
 
-@app.route('/admin', methods=['post', 'get'])
+@app.route('/admin', methods=['POST', 'GET'])
 def admin():
     return render_template('admin.html', title="Admin")
 
@@ -41,7 +39,7 @@ def setup():
     return redirect(url_for('admin'))
 
 
-@app.route('/login', methods=['post', 'get'])
+@app.route('/login', methods=['POST', 'GET'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
@@ -80,7 +78,7 @@ def register():
 
 # Overviews
 # - year
-@app.route('/overview', methods=['post', 'get'])
+@app.route('/overview', methods=['POST', 'GET'])
 @login_required
 def overview():
     [view_count, open_count, unclear_count, closed_count, invalid_count] = BullingerDB.get_status_counts(0)
@@ -117,6 +115,21 @@ def overview_month(year, month):
     return render_template("overview_month.html", title="Übersicht", year=year, month=month, data=x)
 
 
+@app.route('/stats', methods=['POST', 'GET'])
+def stats():
+    data_stats = BullingerDB.get_user_stats(current_user.username)
+    BullingerDB.create_plot_overview()
+    return render_template("stats.html", title="Statistiken", data=data_stats)
+
+
+@app.route('/quick_start', methods=['POST', 'GET'])
+def quick_start():
+    i = BullingerDB.quick_start()
+    if i:  # next card with status 'offen' or 'unklar'
+        return redirect(url_for('assignment', id_brief=str(i)))
+    return redirect(url_for('overview'))
+
+
 @app.route('/assignment/<id_brief>', methods=['POST', 'GET'])
 @login_required
 def assignment(id_brief):
@@ -139,11 +152,19 @@ def assignment(id_brief):
             session["img_width"] = width
         else: session["img_width"] = '100%'
 
-    # handle back/forward (next/previous card)
-    if card_form.prev_card.data:
-        return redirect(url_for('assignment', id_brief=i - 1 if i > 1 else 10093))
-    if card_form.next_card.data:
-        return redirect(url_for('assignment', id_brief=i + 1 if i < 10092 else 1))
+    # next/previous card
+    if card_form.prev_card.data:  # <
+        return redirect(url_for('assignment', id_brief=BullingerDB.get_prev_card_number(i)))
+    elif card_form.next_card.data:  # >
+        return redirect(url_for('assignment', id_brief=BullingerDB.get_next_card_number(i)))
+    elif card_form.qs_prev_card.data:  # <<
+        i = BullingerDB.get_prev_assignment(i)
+        if i: return redirect(url_for('assignment', id_brief=i))
+        return redirect(url_for('index'))  # we are done !
+    elif card_form.qs_next_card.data:  # >>
+        i = BullingerDB.get_next_assignment(i)
+        if i: return redirect(url_for('assignment', id_brief=i))
+        return redirect(url_for('index'))  # we are done !
 
     # restore client properties
     card_form.image_height.default = session.get('image_height')
@@ -163,7 +184,7 @@ def assignment(id_brief):
         number_of_changes += database.save_printed(i, card_form, user, t)
         number_of_changes += database.save_remark(i, card_form, user, t)
         database.save_comment(i, card_form, user, t)
-        database.update_user(user, number_of_changes)
+        database.update_user(user, number_of_changes, card_form.state.data)
         database.update_file_status(i, card_form.state.data)
 
     kartei = Kartei.query.filter_by(id_brief=i).first()

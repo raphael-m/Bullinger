@@ -14,8 +14,14 @@ $(document).ready( function() {
 });
 
 $(document).ready( function() {
-    $('#menu_card').click( function() {
-        window.location.replace("/card");
+    $('#menu_stats').click( function() {
+        window.location.replace("/stats");
+    });
+});
+
+$(document).ready( function() {
+    $('#menu_gateway').click( function() {
+        window.location.replace("/quick_start");
     });
 });
 

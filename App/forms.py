@@ -19,8 +19,10 @@ class FormFileCard(FlaskForm):
 
     # Buttons
     submit = SubmitField('Speichern', id="save_changes")
-    next_card = SubmitField('>')
-    prev_card = SubmitField('<')
+    next_card = SubmitField('>')  # one card forward
+    prev_card = SubmitField('<')  # one card back
+    qs_next_card = SubmitField('>>')  # next card (offen/unklar)
+    qs_prev_card = SubmitField('<<')  # prev card (offen/unklar)
     state = RadioField('Label', default='unklar',
                        choices=[('unklar', 'unklar'), ('ungültig', 'ungültig'), ('abgeschlossen', 'abgeschlossen')])
     save_comment = SubmitField('Anmerkung speichern')
