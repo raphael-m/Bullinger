@@ -314,38 +314,34 @@ class BullingerData:
         return new_baselines
 
     @staticmethod
-    def is_bullinger_sender(data, hb_ngrams):
+    def is_bullinger_sender(data, b_n_grams, h_n_grams):
         precision = 4
-        threshold = 0.3
+        threshold = 0.5
         if "Absender" in data and "Empfänger" in data:
-            ab, emp = [t for s in data["Absender"] for t in s], [t for s in data["Empfänger"] for t in s]
-            res_a, res_b = [], []
-            for a in ab:
-                nga = [NGrams.create_n_gram_dict(i, a) for i in range(1, precision)]
-                dices = [NGrams.compute_dice(nga[i], hb_ngrams[i]) for i in range(len(nga))]
-                res_a.append(sum(dices)/len(dices))
-            for a in emp:
-                nga = [NGrams.create_n_gram_dict(i, a) for i in range(1, precision)]
-                dices = [NGrams.compute_dice(nga[i], hb_ngrams[i]) for i in range(len(nga))]
-                res_b.append(sum(dices)/len(dices))
-            return max(res_a) > max(res_b)
-        elif "Absender" in data:
-            ab = [t for s in data["Absender"] for t in s]
-            res_a = []
-            for a in ab:
-                nga = [NGrams.create_n_gram_dict(i, a) for i in range(1, precision)]
-                dices = [NGrams.compute_dice(nga[i], hb_ngrams[i]) for i in range(len(nga))]
-                res_a.append(sum(dices)/len(dices))
-            return max(res_a) > threshold
-        elif "Empfänger" in data:
-            emp = [t for s in data["Empfänger"] for t in s]
-            res_b = []
-            for a in emp:
-                nga = [NGrams.create_n_gram_dict(i, a) for i in range(1, precision)]
-                dices = [NGrams.compute_dice(nga[i], hb_ngrams[i]) for i in range(len(nga))]
-                res_b.append(sum(dices)/len(dices))
-            return max(res_b) > threshold
+            sender, receiver = [t for s in data["Absender"] for t in s], [t for s in data["Empfänger"] for t in s]
+            pbs, phs = BullingerData.compute_similarities(sender, precision, b_n_grams, h_n_grams)
+            pbr, phr = BullingerData.compute_similarities(receiver, precision, b_n_grams, h_n_grams)
+            return max(pbs) + max(phs) > max(pbr) + max(phr)
+        elif "Absender" in data:  # Empfänger missing
+            sender = [t for s in data["Absender"] for t in s]
+            pbs, phs = BullingerData.compute_similarities(sender, precision, b_n_grams, h_n_grams)
+            return max(pbs)+max(phs) > 2*threshold
+        elif "Empfänger" in data:  # Absender missing
+            receiver = [t for s in data["Empfänger"] for t in s]
+            pbr, phr = BullingerData.compute_similarities(receiver, precision, b_n_grams, h_n_grams)
+            return max(pbr)+max(phr) > 2*threshold
         return False
+
+    @staticmethod
+    def compute_similarities(tokens, precision, bng, hng):
+        pb, ph = [], []
+        for t in tokens:
+            nga = [NGrams.create_n_gram_dict(i, t) for i in range(1, precision)]
+            dices_bullinger = [NGrams.compute_dice(nga[i], bng[i]) for i in range(len(nga))]
+            dices_heiri = [NGrams.compute_dice(nga[i], hng[i]) for i in range(len(nga))]
+            pb.append(sum(dices_bullinger) / len(dices_bullinger))
+            ph.append(sum(dices_heiri) / len(dices_heiri))
+        return pb, ph
 
     year_predicted = 1547  # 1st file card
     month_predicted, index_predicted = [

@@ -23,9 +23,12 @@ class BullingerDB:
     @staticmethod
     def setup(db_session, dir_path):
         """ creates the entire date base (ocr data) """
-        d, card_nr = BullingerDB(db_session), 1
+        d, card_nr, ignored, errors = BullingerDB(db_session), 1, 0, []
         d.delete_all()
         d.add_bullinger()
+        n_grams_bullinger = NGrams.get_ngram_dicts_dicts("Bullinger", 4)
+        n_grams_heinrich = NGrams.get_ngram_dicts_dicts("Heinrich", 4)
+        id_bullinger = BullingerDB.get_id_bullinger()
         for path in FileSystem.get_file_paths(dir_path, recursively=False):
             print(card_nr, path)
             data = BullingerData.get_data_as_dict(path)
@@ -33,7 +36,7 @@ class BullingerDB:
             d.set_index(card_nr)
             if data:
                 d.add_date(card_nr, data)
-                d.add_correspondents(card_nr, data)
+                d.add_correspondents(card_nr, data, [n_grams_bullinger, n_grams_heinrich], id_bullinger)
                 d.add_autograph(card_nr, data)
                 d.add_copy(card_nr, data)
                 d.add_literature(card_nr, data)
@@ -43,8 +46,11 @@ class BullingerDB:
             else:
                 print("*** WARNING, file ignored:", path)
                 d.dbs.add(Datum(id_brief=card_nr, year_a=SD, month_a=SD, day_a=SD, user=ADMIN, time=d.t))
+                ignored += 1
+                errors.append(card_nr)
             card_nr += 1
             d.dbs.commit()
+        if ignored: print("*** WARNING,", ignored, "files ignored:", errors)
         # Postprocessing
         d.count_correspondence()
 
@@ -90,6 +96,10 @@ class BullingerDB:
         self.dbs.add(bullinger)
         self.dbs.commit()
 
+    @staticmethod
+    def get_id_bullinger():
+        return Person.query.filter_by(name="Bullinger", vorname="Heinrich", ort="Zürich").first().id
+
     def add_date(self, card_nr, data):
         date = BullingerData.extract_date(card_nr, data)
         if not date:
@@ -97,15 +107,12 @@ class BullingerDB:
         date.user, data.time = ADMIN, self.t
         self.dbs.add(date)
 
-    def add_correspondents(self, card_nr, data):
+    def add_correspondents(self, card_nr, data, n_grams, id_bullinger):
         """ one has to be bullinger """
-        n_grams_bullinger = NGrams.get_dicts_bullinger(4)
-        id_bullinger = Person.query.filter_by(name="Bullinger").order_by(desc(Person.zeit)).first().id
-        if BullingerData.is_bullinger_sender(data, n_grams_bullinger):
+        if BullingerData.is_bullinger_sender(data, n_grams[0], n_grams[1]):
             self.dbs.add(Absender(id_brief=card_nr, id_person=id_bullinger, user=ADMIN, time=self.t))
             e = BullingerData.analyze_address(data["Empfänger"])
-            match = Person.query.filter_by(name=e[0], vorname=e[1], ort=e[2]).first()
-            if not match:
+            if not Person.query.filter_by(name=e[0], vorname=e[1], ort=e[2]).first():
                 self.dbs.add(Person(name=e[0], forename=e[1], place=e[2], verified='Nein', user=ADMIN, time=self.t))
                 self.dbs.commit()
             ref = Person.query.filter_by(name=e[0], vorname=e[1], ort=e[2]).first().id
@@ -113,8 +120,7 @@ class BullingerDB:
         else:
             self.dbs.add(Empfaenger(id_brief=card_nr, id_person=id_bullinger, user=ADMIN, time=self.t))
             a = BullingerData.analyze_address(data["Absender"])
-            match = Person.query.filter_by(name=a[0], vorname=a[1], ort=a[2]).first()
-            if not match:
+            if not Person.query.filter_by(name=a[0], vorname=a[1], ort=a[2]).first():
                 self.dbs.add(Person(name=a[0], forename=a[1], place=a[2], verified='Nein', user=ADMIN, time=self.t))
                 self.dbs.commit()
             ref = Person.query.filter_by(name=a[0], vorname=a[1], ort=a[2]).first().id

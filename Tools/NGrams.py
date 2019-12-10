@@ -31,5 +31,5 @@ class NGrams:
         return sum([min(dict1[key], dict2[key]) for key in dict1 if key in dict2])
 
     @staticmethod
-    def get_dicts_bullinger(limit):
-        return [NGrams.create_n_gram_dict(i, "Bullinger") for i in range(1, limit)]
+    def get_ngram_dicts_dicts(string, limit):
+        return [NGrams.create_n_gram_dict(i, string) for i in range(1, limit)]
