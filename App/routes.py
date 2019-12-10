@@ -13,7 +13,10 @@ from flask import render_template, flash, redirect, url_for, session
 from flask_login import current_user, login_user, login_required, logout_user
 from datetime import datetime
 from Tools.BullingerDB import BullingerDB
+from Tools.Dictionaries import CountDict
+from Tools.Plots import BarChart
 
+import time
 
 APP_NAME = "KoKoS-Bullinger"
 database = BullingerDB(db.session)
@@ -81,24 +84,22 @@ def register():
 @app.route('/overview', methods=['POST', 'GET'])
 @login_required
 def overview():
-    [view_count, open_count, unclear_count, closed_count, invalid_count] = BullingerDB.get_status_counts(0)
+    [view_count, open_count, unclear_count, closed_count, invalid_count], id_, s = BullingerDB.get_status_counts(None)
     data = {}
     for key in view_count:
         data[key] = [view_count[key], open_count[key], unclear_count[key], closed_count[key], invalid_count[key]]
-    
-    return render_template('overview.html', title="Übersicht", data=data)
+    return render_template('overview.html', title="Übersicht", data=data, img_id=id_, count=s[0], stats=s[1])
 
 
 # - months
 @app.route('/overview_year/<year>', methods=['POST', 'GET'])
 @login_required
 def overview_year(year):
-    [view_count, open_count, unclear_count, closed_count, invalid_count] = BullingerDB.get_status_counts(1)
+    [view_count, open_count, unclear_count, closed_count, invalid_count], id_, s = BullingerDB.get_status_counts(year)
     data = {}
     for key in view_count:
         data[key] = [view_count[key], open_count[key], unclear_count[key], closed_count[key], invalid_count[key]]
-        print(data[key])
-    return render_template("overview_year.html", title="Übersicht", year=year, data=data)
+    return render_template("overview_year.html", title="Übersicht", year=year, data=data, img_id=id_, count=s[0], stats=s[1])
 
 
 # -days
@@ -112,14 +113,21 @@ def overview_month(year, month):
         dot_or_not = '.' if d.tag_a != "s.d." else ''
         date = str(d.tag_a) + dot_or_not + ' ' + d.monat_a + ' ' + str(d.jahr_a)
         x[d.id_brief] = [d.id_brief, date, r, s]
-    return render_template("overview_month.html", title="Übersicht", year=year, month=month, data=x)
+    cd = CountDict()
+    for i in x: cd.add(x[i][3])
+    s = BullingerDB.get_status_evaluation(cd["offen"], cd["abgeschlossen"], cd["unklar"], cd["ungültig"])
+    file_name = year+'_'+month+'_'+str(int(time.time()))
+    BarChart.create_plot_overview(file_name, cd["offen"], cd["abgeschlossen"], cd["unklar"], cd["ungültig"])
+    return render_template("overview_month.html", title="Übersicht", year=year, month=month, data=x,
+                           count=s[0], stats=s[1], file_name_stats=file_name)
 
 
 @app.route('/stats', methods=['POST', 'GET'])
 def stats():
     data_stats = BullingerDB.get_user_stats(current_user.username)
-    BullingerDB.create_plot_overview()
-    return render_template("stats.html", title="Statistiken", data=data_stats)
+    file_name = str(int(time.time()))
+    BullingerDB.create_plot_user_stats(current_user.username, file_name)
+    return render_template("stats.html", title="Statistiken", data=data_stats, file_name=file_name)
 
 
 @app.route('/quick_start', methods=['POST', 'GET'])

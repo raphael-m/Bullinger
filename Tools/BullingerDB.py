@@ -4,17 +4,12 @@
 # Bernard Schroffenegger
 # 30th of November, 2019
 
-import os
-from Tools.BullingerData import *
-from Tools.NGrams import NGrams
+import os, time
 from Tools.Dictionaries import CountDict
+from Tools.Plots import *
 from App.models import *
 from sqlalchemy import asc, desc, func, and_, or_
 from flask import request
-
-import matplotlib
-import matplotlib.pyplot as plt
-
 
 ADMIN = 'Admin'
 
@@ -466,21 +461,26 @@ class BullingerDB:
         return query
 
     @staticmethod
-    def get_status_counts(mode):
+    def get_status_counts(year):
         """ 0^="year", 1^="month" """
         recent_dates = BullingerDB.get_most_recent_only(db.session, Datum)
         view_count = CountDict()  # year or month --> letter count
         unclear_count, closed_count, invalid_count, open_count = CountDict(), CountDict(), CountDict(), CountDict()
         for d in recent_dates:
-            view_count.add(d.jahr_a if not mode else d.monat_a)
+            if not year: view_count.add(d.jahr_a)
+            elif str(d.jahr_a) == year: view_count.add(d.monat_a)
         recent_dates = recent_dates.subquery()
         join_file_date = db.session.query(
             Kartei.id_brief,
             Kartei.status,
-            recent_dates.c.jahr_a if not mode else recent_dates.c.monat_a
+            recent_dates.c.jahr_a,
+            recent_dates.c.monat_a
         ).join(recent_dates, recent_dates.c.id_brief == Kartei.id_brief)
         for r in join_file_date:
-            i = r.jahr_a if not mode else r.monat_a
+            if not year: i = r.jahr_a
+            else:
+                if str(r.jahr_a) != year: continue
+                i = r.monat_a
             if r.status == 'abgeschlossen':
                 closed_count.add(i)
             if r.status == 'unklar':
@@ -489,7 +489,24 @@ class BullingerDB:
                 invalid_count.add(i)
             if r.status == 'offen':
                 open_count.add(i)
-        return [view_count, open_count, unclear_count, closed_count, invalid_count]
+        o = sum([open_count[c] for c in open_count])
+        a = sum([closed_count[c] for c in closed_count])
+        u = sum([unclear_count[c] for c in unclear_count])
+        i = sum([invalid_count[c] for c in invalid_count])
+        file_name = year if year else "all"
+        id_ = str(int(time.time()))
+        BarChart.create_plot_overview(file_name+'_'+id_, o, a, u, i)
+        data_stats = BullingerDB.get_status_evaluation(o, a, u, i)
+        return [view_count, open_count, unclear_count, closed_count, invalid_count], id_, data_stats
+
+    @staticmethod
+    def get_status_evaluation(o, a, u, i):
+        d, t = dict(), sum([o, a, u, i])
+        d["offen"] = [o, round(100*o/t, 3)]
+        d["abgeschlossen"] = [a, round(100*a/t, 3)]
+        d["unklar"] = [u, round(100*u/t, 3)]
+        d["ungültig"] = [i, round(100*i/t, 3)]
+        return [t, d]
 
     @staticmethod
     def quick_start():  # ">>"
@@ -501,11 +518,11 @@ class BullingerDB:
         return None  # redirect to another page...
 
     @staticmethod
-    def get_next_card_number(i):
+    def get_next_card_number(i):  # ">"
         return i+1 if i+1 <= Kartei.query.count() else 1
 
     @staticmethod
-    def get_prev_card_number(i):
+    def get_prev_card_number(i):  # "<"
         return i-1 if i-1 > 0 else Kartei.query.count()
 
     @staticmethod
@@ -517,7 +534,7 @@ class BullingerDB:
         return i if BullingerDB.is_assignable(i) else None
 
     @staticmethod
-    def get_next_assignment(i):
+    def get_next_assignment(i):  # ">>"
         i, j = BullingerDB.get_next_card_number(i), Kartei.query.count()
         while not BullingerDB.is_assignable(i) and j > 0:
             i = BullingerDB.get_next_card_number(i)
@@ -535,20 +552,40 @@ class BullingerDB:
         return [[row.id if user_name != row.username else user_name, row.changes, row.finished] for row in table]
 
     @staticmethod
-    def create_plot_overview():
+    def create_plot_overview_stats():
         a = Kartei.query.filter(Kartei.status == "abgeschlossen").count()
-        u = Kartei.query.filter(Kartei.status == "unklar").count()
         i = Kartei.query.filter(Kartei.status == "ungültig").count()
         o = Kartei.query.filter(Kartei.status == "offen").count()
+        u = Kartei.query.filter(Kartei.status == "unklar").count()
+        id_ = str(int(time.time()))
+        BarChart.create_plot_overview("all_"+id_, o, a, u, i)
+        return id_
 
-        labels = 'abgeschlossen', 'offen', 'unklar', 'ungültig'
-        sizes = [a, o, u, i]
-        colors = ['green', 'blue', 'yellow', 'red']
-        explode = (0.1, 0, 0, 0)  # explode 1st slice
-
-        # Plot
+    @staticmethod
+    def create_plot_user_stats(user_name, file_name):
         fig = plt.figure()
-        plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=140)
-        plt.axis('equal')
-        fig.savefig('plot.png')
+        dc = [(u.changes, 1 if u.username == user_name else 0) for u in User.query.order_by(asc(User.changes)).all()]
+        co = ["darkgreen" if u.username == user_name else "dodgerblue" for u in User.query.order_by(asc(User.changes)).all()]
+
+        # changes
+        x = ('' if not c[1] else user_name for c in dc)
+        x_pos = np.arange(len(dc))
+        y = [c[0] for c in dc]
+        plt.barh(x_pos, y, align='center', alpha=0.5, color=co)
+        plt.yticks(x_pos, x)
+        plt.xlabel('Änderungen')
+        fig.savefig('App/static/images/plots/user_stats_changes_'+file_name+'.png')
+        plt.close()
+
+        # finished
+        fig = plt.figure()
+        dc = [(u.finished, 1 if u.username == user_name else 0) for u in User.query.order_by(asc(User.finished)).all()]
+        co = ["darkgreen" if u.username == user_name else "dodgerblue" for u in User.query.order_by(asc(User.finished)).all()]
+        x = ('' if not c[1] else user_name for c in dc)
+        x_pos = np.arange(len(dc))
+        y = [c[0] for c in dc]
+        plt.barh(x_pos, y, align='center', alpha=0.5, color=co)
+        plt.yticks(x_pos, x)
+        plt.xlabel('abgeschlossen')
+        fig.savefig('App/static/images/plots/user_stats_finished_'+file_name+'.png')
         plt.close()

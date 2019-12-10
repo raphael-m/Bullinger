@@ -5,6 +5,7 @@
 # 29th of September, 2019
 
 import os
+import shutil
 
 
 class FileSystem:
@@ -45,3 +46,7 @@ class FileSystem:
     @staticmethod
     def get_number_of_files(dir_path, recursively=True):
         return len(FileSystem.get_file_paths(dir_path, recursively=recursively))
+
+    @staticmethod
+    def delete_all_recursively(path):
+        shutil.rmtree(path)

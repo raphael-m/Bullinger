@@ -3,10 +3,13 @@
 # Plots.py
 # Bernard Schroffenegger
 # 6th of October, 2019
-
 import statistics
-import matplotlib.pyplot as plt
+
 from Tools.BullingerData import *
+import matplotlib.pyplot as plt
+import numpy as np
+plt.rcdefaults()
+
 
 # colors ('black'/'b', 'white'/'w')
 cb0, cb1, cb2, cb3 = 'royalblue', 'cornflowerblue', 'dodgerblue', 'navy'  # 'b'
@@ -30,15 +33,16 @@ class ScatterPlot:
     @staticmethod
     def create(x, y, alpha=1, color='b', size=10,
                title='', xlabel='', ylabel='',
-               x_min=None, x_max=None,y_min=None, y_max=None,
+               x_min=None, x_max=None, y_min=None, y_max=None,
                x_ticks=None, y_ticks=None,
                output_path=None, show=True,
                reverse_x=False, reverse_y=False,
                function=None):
         if isinstance(alpha, list) and isinstance(size, list):
             for i, a in enumerate(alpha):
-                plt.scatter(x[i], y[i], alpha=a, s=len(x[i])*[size[i]], color=color[i])
-        else: plt.scatter(x, y, alpha=alpha, s=len(x)*[size], color=color)
+                plt.scatter(x[i], y[i], alpha=a, s=len(x[i]) * [size[i]], color=color[i])
+        else:
+            plt.scatter(x, y, alpha=alpha, s=len(x) * [size], color=color)
         if function: function(plt)
         plt.title(title)
         plt.xlabel(xlabel)
@@ -94,3 +98,22 @@ def draw_grid(plt):
     plt.plot((x0, x1), (y6, y6), 'black', alpha=alpha, linewidth=linewidth)
     plt.plot((x1, x3), (y7, y7), 'black', alpha=alpha, linewidth=linewidth)
     plt.plot((x0, x3), (y8, y8), 'black', alpha=alpha, linewidth=linewidth)
+
+
+class BarChart:
+
+    @staticmethod
+    def create_plot_overview(file_name, offen, abgeschlossen, unklar, ungueltig):
+        fig = plt.figure()
+        bars = ('offen', 'abgeschlossen', 'unklar', 'ungültig')
+        y_pos = np.arange(len(bars))
+        performance = [offen, abgeschlossen, unklar, ungueltig]
+        plt.bar(y_pos, performance, align='center', alpha=0.5)
+        plt.xticks(y_pos, bars)
+        plt.ylabel('Anzahl Karteikarten')
+        fig.savefig('App/static/images/plots/overview_'+file_name+'.png')
+        plt.close()
+
+        # clean up
+        c = FileSystem.get_number_of_files('App/static/images/plots/')
+        if c > 200: FileSystem.delete_all_recursively('App/static/images/plots/')
