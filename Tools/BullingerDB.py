@@ -70,6 +70,7 @@ class BullingerDB:
         self.dbs.query(Literatur).delete()
         self.dbs.query(Gedruckt).delete()
         self.dbs.query(Bemerkung).delete()
+        self.dbs.query(Notiz).delete()
         self.dbs.commit()
 
     def update_file_status(self, id_brief, state):
@@ -589,3 +590,9 @@ class BullingerDB:
         plt.xlabel('abgeschlossen')
         fig.savefig('App/static/images/plots/user_stats_finished_'+file_name+'.png')
         plt.close()
+
+    @staticmethod
+    def get_stats_sent_received(limit_s, limit_r):
+        ds = [[p.name, p.vorname, p.empfangen] for p in Person.query.order_by(desc(Person.empfangen)).all()]
+        dr = [[p.name, p.vorname, p.empfangen] for p in Person.query.order_by(desc(Person.gesendet)).all()]
+        return ds[0:limit_s+1], dr[0:limit_r+1]

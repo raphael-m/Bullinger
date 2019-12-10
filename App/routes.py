@@ -127,7 +127,9 @@ def stats():
     data_stats = BullingerDB.get_user_stats(current_user.username)
     file_name = str(int(time.time()))
     BullingerDB.create_plot_user_stats(current_user.username, file_name)
-    return render_template("stats.html", title="Statistiken", data=data_stats, file_name=file_name)
+    sent, received = BullingerDB.get_stats_sent_received(150, 50)
+    return render_template("stats.html", title="Statistiken", data=data_stats, file_name=file_name,
+                           sent=sent, received=received)
 
 
 @app.route('/quick_start', methods=['POST', 'GET'])
