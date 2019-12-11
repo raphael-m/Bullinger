@@ -1,0 +1,84 @@
+@import url('https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css');
+
+html, body {
+    min-height: 100%;
+    font-size: 12pt;
+    background: WhiteSmoke;
+    font-family: "Computer Modern Sans", sans-serif;
+}
+
+#head {
+    height: 60px;
+    color: white;
+    background: #123;
+    border-bottom: 1px solid white;
+}
+
+#main {
+    padding-bottom: 25px;
+    min-height: 100%;
+    min-width: 21cm;
+}
+
+#foot {
+    height: 23px;
+    line-height: 23px;
+    font-size: 8pt;
+    text-align: center;
+    color: white;
+    background: #123;
+}
+
+/* HEADER, MENU */
+
+.hlcell {
+    float: left;
+    height: 50px;
+    line-height: 50px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.hlcell_clicked {
+    float: left;
+    height: 50px;
+    line-height: 50px;
+    padding: 5px 10px;
+    cursor: pointer;
+    text-decoration: underline;
+    background-color: red;
+}
+
+.hlcell:hover {
+    background-color: black;
+    text-decoration: underline;
+}
+
+.hrcell {
+    float: right;
+    height: 50px;
+    line-height: 50px;
+    padding: 5px 10px;
+}
+
+#uzh_logo {
+    margin: 0px;
+    padding: 5px 0px;
+    height: 40px;
+    width: 120px;
+}
+
+.hlsep {
+    float: left;
+    margin: 10px 0px;
+    height: 40px;
+    width: 1px;
+    background: white;
+}
+
+#menu {
+    float: left;
+    height: 40px;
+    line-height: 40px;
+    background-color: red;
+}

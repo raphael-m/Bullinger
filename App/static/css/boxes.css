@@ -1,0 +1,17 @@
+.main_box {
+    margin: 23px 20% 0px 20%;
+    height: 100%;
+    min-height: 100%;
+    background: white;
+    border: 2px solid LightGray;
+}
+
+.h2_section {
+    margin-bottom: 15px;
+}
+
+.plot_stats {
+    float: left;
+    width: 50%;
+}
+

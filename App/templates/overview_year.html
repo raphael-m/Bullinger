@@ -4,61 +4,62 @@
 
 <h1><a href="{{url_for('overview')}}">Übersicht</a> / {{ year }}</h1>
 
-<div class="page_content">
+<div class="main_box">
 
-	<h1>Jahresübersicht</h1>
-
-	<p>Wählen Sie einen Monat (&#8594; <a href="{{url_for('quick_start')}}">Schnellstart</a>):</p>
-
-	<table class="js-sort-table paleBlueRows">
-		<thead class="my_table_head">
-			<tr class="my_table_head_row">
-				<th class="js-sort-number my_table_head_cell">Monat</th>
-				<th class="js-sort-number my_table_head_cell">Anzahl Briefe</th>
-				<th class="js-sort-number my_table_head_cell">offen</th>
-				<th class="js-sort-number my_table_head_cell">unklar</th>
-				<th class="js-sort-number my_table_head_cell">abgeschlossen</th>
-				<th class="js-sort-number my_table_head_cell">ungültig</th>
-			</tr>
-		</thead>
-		<tbody>
-		{% for key, item in data.items() %}
-			<tr class="my_table_row">
-				<td class="my_table_cell"><a href="{{url_for('overview_month', year=year, month=key)}}">{{ key }}</a></td>
-				<td class="my_table_cell">{{ item[0] }}</td>
-				<td class="my_table_cell">{{ item[1] }}</td>
-				<td class="my_table_cell">{{ item[2] }}</td>
-				<td class="my_table_cell">{{ item[3] }}</td>
-				<td class="my_table_cell">{{ item[4] }}</td>
-			</tr>
-		{% endfor %}
-		</tbody>
-	</table>
+	<h2>Jahresübersicht</h2>
+	<div class="h2_section">
+		<p>Wählen Sie einen Monat (&#8594; <a href="{{url_for('quick_start')}}">Schnellstart</a>):</p>
+		<table class="js-sort-table paleBlueRows">
+			<thead class="my_table_head">
+				<tr class="my_table_head_row">
+					<th class="js-sort-number my_table_head_cell">Monat</th>
+					<th class="js-sort-number my_table_head_cell">Anzahl Briefe</th>
+					<th class="js-sort-number my_table_head_cell">offen</th>
+					<th class="js-sort-number my_table_head_cell">unklar</th>
+					<th class="js-sort-number my_table_head_cell">abgeschlossen</th>
+					<th class="js-sort-number my_table_head_cell">ungültig</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for key, item in data.items() %}
+				<tr class="my_table_row">
+					<td class="my_table_cell">
+						<a href="{{url_for('overview_month', year=year, month=key)}}">{{ key }}</a>
+					</td>
+					<td class="my_table_cell">{{ item[0] }}</td>
+					<td class="my_table_cell">{{ item[1] }}</td>
+					<td class="my_table_cell">{{ item[2] }}</td>
+					<td class="my_table_cell">{{ item[3] }}</td>
+					<td class="my_table_cell">{{ item[4] }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
 
 	<h2>Fortschritt</h2>
-
-	<p>Statusübersicht der {{ count }} Karteikarten vom Jahr {{ year }}:</p>
-
-	<table class="js-sort-table paleBlueRows">
-		<thead class="my_table_head">
-			<tr class="my_table_head_row">
-				<th class="js-sort-number my_table_head_cell">Status</th>
-				<th class="js-sort-number my_table_head_cell">Anzahl</th>
-				<th class="js-sort-number my_table_head_cell">[%]</th>
-			</tr>
-		</thead>
-		<tbody>
-		{% for key in stats %}
-			<tr class="my_table_row">
-				<td class="my_table_cell">{{ key }}</td>
-				<td class="my_table_cell">{{ stats[key][0] }}</td>
-				<td class="my_table_cell">{{ stats[key][1] }}</td>
-			</tr>
-		{% endfor %}
-		</tbody>
-	</table>
-
-	<img src="{{url_for('static', filename='images/plots/overview_'+year+'_'+img_id+'.png')}}"/>
+	<div class="h2_section">
+		<p>Statusübersicht der {{ count }} Karteikarten vom Jahr {{ year }}:</p>
+		<table class="js-sort-table paleBlueRows">
+			<thead class="my_table_head">
+				<tr class="my_table_head_row">
+					<th class="js-sort-number my_table_head_cell">Status</th>
+					<th class="js-sort-number my_table_head_cell">Anzahl</th>
+					<th class="js-sort-number my_table_head_cell">[%]</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for key in stats %}
+				<tr class="my_table_row">
+					<td class="my_table_cell">{{ key }}</td>
+					<td class="my_table_cell">{{ stats[key][0] }}</td>
+					<td class="my_table_cell">{{ stats[key][1] }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+		<img src="{{url_for('static', filename='images/plots/overview_'+year+'_'+img_id+'.png')}}"/>
+	</div>
 
 </div>
 

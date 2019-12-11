@@ -1,0 +1,23 @@
+
+a {
+    color: white;
+}
+
+a:link {
+  color: LightBlue;
+}
+
+/* visited link */
+a:visited {
+  color: Limegreen;
+}
+
+/* mouse over link */
+a:hover {
+  color: Limegreen;
+}
+
+/* selected link */
+a:active {
+  font-weight: bold;
+}

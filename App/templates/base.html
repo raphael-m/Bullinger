@@ -1,43 +1,40 @@
 <!DOCTYPE html>
 <html>
-<head>
+    <head>
+        {% block head %}
+        <meta charset="UTF-8">
 
-    {% block head %}
-    <meta charset="UTF-8">
+        {% if title %}
+            <title>{{ title }}</title>
+        {% else %}
+            <title>Bullingerkartei</title>
+        {% endif %}
 
-    {% if title %}
-        <title>{{ title }}</title>
-    {% else %}
-        <title>Bullingerkartei</title>
-    {% endif %}
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/reset.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/std.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/boxes.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/links.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/form.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/table.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/card.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/menu_account.css') }}">
 
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/reset.css') }}">
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/home.css') }}">
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/account.css') }}">
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/form.css') }}">
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/admin.css') }}">
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/table.css') }}">
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/menu_items.css') }}">
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/menu_account.css') }}">
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/card.css') }}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-    <script type="text/javascript" src = "{{ url_for('static', filename='js/account.js') }}"></script>
-    <script type="text/javascript" src = "{{ url_for('static', filename='js/load.js') }}"></script>
-    <script type="text/javascript" src = "{{ url_for('static', filename='js/image.js') }}"></script>
-    <script type="text/javascript" src = "{{ url_for('static', filename='js/form_card.js') }}"></script>
-    <script type="text/javascript" src = "{{ url_for('static', filename='js/sort-table.js') }}"></script>
-    <script type="text/javascript" src = "{{ url_for('static', filename='js/sort-table.min.js') }}"></script>
-    {% endblock %}
-
-</head>
-<body>
-    <div id="content">
+        <script type="text/javascript" src = "{{ url_for('static', filename='js/account.js') }}"></script>
+        <script type="text/javascript" src = "{{ url_for('static', filename='js/load.js') }}"></script>
+        <script type="text/javascript" src = "{{ url_for('static', filename='js/image.js') }}"></script>
+        <script type="text/javascript" src = "{{ url_for('static', filename='js/form_card.js') }}"></script>
+        <script type="text/javascript" src = "{{ url_for('static', filename='js/sort-table.js') }}"></script>
+        <script type="text/javascript" src = "{{ url_for('static', filename='js/sort-table.min.js') }}"></script>
+        {% endblock %}
+    </head>
+    <body>
         <div id="head">
             <div class="hlcell">
                 <a href="https://www.uzh.ch/de.html">
-                    <img class="img" src="{{url_for('static', filename='images/logo.png')}}"/>
+                    <img id="uzh_logo" src="{{url_for('static', filename='images/logo.png')}}"/>
                 </a>
             </div>
             <div class="hlsep"></div>
@@ -54,8 +51,9 @@
             </div>
         </div>
         <div id="main">
-            <!-- Actual Content -->
-            {% block content %}{% endblock %}
+            {% block content %}
+                <!-- Actual Content -->
+            {% endblock %}
             <!-- Flash messages -->
             <div class="error_msg">
                 {% with messages = get_flashed_messages() %}
@@ -69,14 +67,11 @@
                 {% endwith %}
             </div>
         </div>
-        <!--
         <div id="foot">
             Institut für Schweizerische Reformationsgeschichte,
             Institut für Computerlinguistik,
             Universität Zürich,
             2020
         </div>
-        -->
-    </div>
-</body>
+    </body>
 </html>

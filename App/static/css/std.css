@@ -1,0 +1,36 @@
+/* TITLES */
+
+h1, h2, h3, h4, h5 {
+    color: White;
+    background-color: #123;
+    font-variant: small-caps;
+    box-shadow: 0px 5px 8px 0px rgba(60, 80, 180, 0.4);
+}
+
+h1 {
+    height: 21px;
+    line-height: 21px;
+    padding: 3px 5px;
+    font-size: 0.8em;
+}
+
+h2 {
+    margin-bottom: 10px;
+    height: 21px;
+    line-height: 21px;
+    padding: 8px 13px;
+    font-size: 1.2em;
+}
+
+h3 {
+    height: 13px;
+    line-height: 13px;
+    padding: 3px 5px;
+    font-size: 1.0em;
+}
+
+/* TEXT */
+
+p {
+    padding: 5px 8px;
+}
