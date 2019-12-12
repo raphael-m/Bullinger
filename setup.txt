@@ -44,7 +44,6 @@ $ ssh ubuntu@130.60.24.72
 $ gunicorn -w 33 App:app
 
 # Starting the supervisor:
-$ sudo supervisorctl stop supervisor
 $ sudo systemctl stop nginx
 
 # Restart server
@@ -59,3 +58,48 @@ Tutorials
 ---------
 - introduction too git concepts (3 parts, ca. 90min)
 - Python flask tutorial: deploying your application (option 1) - deploy to a linux server
+
+
+
+
+DEPLOYMENT (Linux-Ubuntu)
+-------------------------
+$ ssh ubuntu@130.60.24.72
+
+What modules do we need?
+(local) $ pip freeze > requirements.txt
+(local) $ scp -r local/dir/to/project ubuntu@130.60.24.72       (or git clone)
+
+$ sudo apt install python3-pip
+$ sudo apt install python3-venv
+
+Virtual Environment in Flask Project
+$ python3 -m venv Project/venv
+$ source venv/bin/activate
+
+Install Project Packages
+$ pip install -r requirements.txt
+
+nginx/gunicorn for scalability
+$ sudo apt install nginx
+(venv) $ pip install gunicorn
+
+supervisor
+$ sudo apt install supervisor
+
+config file:
+$ sudo nano /etc/supervisor/conf.f/bullinger.conf
+    ...
+
+$ sudo supervisorctl reload
+$ sudo systemctl restart nginx
+
+
+
+
+RESTART
+
+$ sudo systemctl stop nginx
+$ sudo supervisorctl stop all
+$ sudo service supervisor restart
+$ sudo service nginx restart
