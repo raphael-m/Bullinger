@@ -1,7 +1,5 @@
 .main_box {
     margin: 23px 20% 0px 20%;
-    height: 100%;
-    min-height: 100%;
     background: white;
     border: 2px solid LightGray;
 }
@@ -10,7 +8,17 @@
     margin-bottom: 15px;
 }
 
-.plot_stats {
+.h2_separator {
+    clear: both;
+    height: 50px;
+    min-height: 50px;
+}
+
+.parallel_containers {
+    height: 300px;
+}
+
+.parallel {
     float: left;
     width: 50%;
 }

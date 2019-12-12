@@ -125,11 +125,13 @@ def overview_month(year, month):
 @app.route('/stats', methods=['POST', 'GET'])
 def stats():
     data_stats = BullingerDB.get_user_stats(current_user.username)
+    lang_stats = BullingerDB.get_language_stats()
     file_name = str(int(time.time()))
     BullingerDB.create_plot_user_stats(current_user.username, file_name)
-    sent, received = BullingerDB.get_stats_sent_received(150, 50)
-    return render_template("stats.html", title="Statistiken", data=data_stats, file_name=file_name,
-                           sent=sent, received=received)
+    BullingerDB.create_plot_lang(lang_stats, file_name)
+    sent, received = BullingerDB.get_stats_sent_received(42, 42)
+    return render_template("stats.html", title="Statistiken", data=data_stats, lang_data=lang_stats,
+                           file_name=file_name, sent=sent, received=received)
 
 
 @app.route('/quick_start', methods=['POST', 'GET'])

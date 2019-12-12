@@ -559,6 +559,15 @@ class BullingerDB:
         return [[row.id if user_name != row.username else user_name, row.changes, row.finished] for row in table]
 
     @staticmethod
+    def get_language_stats():
+        cd, data = CountDict(), []
+        for s in Sprache.query.all():
+            cd.add(s.sprache)
+        n = Kartei.query.count()
+        for s in cd: data.append([s, cd[s], round(cd[s]/n*100, 3)])
+        return data
+
+    @staticmethod
     def create_plot_overview_stats():
         a = Kartei.query.filter(Kartei.status == "abgeschlossen").count()
         i = Kartei.query.filter(Kartei.status == "ungültig").count()
@@ -569,11 +578,23 @@ class BullingerDB:
         return id_
 
     @staticmethod
+    def create_plot_lang(data, file_name):
+        fig = plt.figure()
+        labels = [d[0] for d in data]
+        sizes = [d[1] for d in data]
+        colors = ['yellowgreen', 'gold', 'lightskyblue', 'lightcoral', 'midnightblue']
+        patches, texts = plt.pie(sizes, colors=colors, shadow=True, startangle=90)
+        plt.legend(patches, labels, loc="best")
+        plt.axis('equal')
+        plt.tight_layout()
+        fig.savefig('App/static/images/plots/lang_stats_'+file_name+'.png')
+        plt.close()
+
+    @staticmethod
     def create_plot_user_stats(user_name, file_name):
         fig = plt.figure()
         dc = [(u.changes, 1 if u.username == user_name else 0) for u in User.query.order_by(asc(User.changes)).all()]
         co = ["darkgreen" if u.username == user_name else "dodgerblue" for u in User.query.order_by(asc(User.changes)).all()]
-
         # changes
         x = ('' if not c[1] else user_name for c in dc)
         x_pos = np.arange(len(dc))
@@ -599,6 +620,6 @@ class BullingerDB:
 
     @staticmethod
     def get_stats_sent_received(limit_s, limit_r):
-        ds = [[p.name, p.vorname, p.empfangen] for p in Person.query.order_by(desc(Person.empfangen)).all()]
-        dr = [[p.name, p.vorname, p.empfangen] for p in Person.query.order_by(desc(Person.gesendet)).all()]
+        ds = [[p.name, p.vorname, p.gesendet] for p in Person.query.order_by(desc(Person.gesendet)).all()]
+        dr = [[p.name, p.vorname, p.empfangen] for p in Person.query.order_by(desc(Person.empfangen)).all()]
         return ds[0:limit_s+1], dr[0:limit_r+1]

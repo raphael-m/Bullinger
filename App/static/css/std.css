@@ -23,14 +23,16 @@ h2 {
 }
 
 h3 {
-    height: 13px;
-    line-height: 13px;
-    padding: 3px 5px;
+    height: 15px;
+    line-height: 15px;
+    margin: 8px 0px 8px 30px;
+    padding: 5px 8px;
     font-size: 1.0em;
+    background: black;
 }
 
 /* TEXT */
 
 p {
-    padding: 5px 8px;
+    padding: 8px 13px;
 }

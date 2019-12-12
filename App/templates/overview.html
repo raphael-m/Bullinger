@@ -40,32 +40,33 @@
 		</table>
 	</div>
 
-
+	<div class="h2_separator"></div>
 	<h2>Allgemeine Statusübersicht</h2>
 	<div class="h2_section">
 		<p>Fortschritt bei der Erfassung der {{ count }} Karteikarten:</p>
-
-		<table class="js-sort-table paleBlueRows">
-			<thead class="my_table_head">
-				<tr class="my_table_head_row">
-					<th class="js-sort-number my_table_head_cell">Status</th>
-					<th class="js-sort-number my_table_head_cell">Anzahl</th>
-					<th class="js-sort-number my_table_head_cell">[%]</th>
-				</tr>
-			</thead>
-			<tbody>
-			{% for key in stats %}
-				<tr class="my_table_row">
-					<td class="my_table_cell">{{ key }}</td>
-					<td class="my_table_cell">{{ stats[key][0] }}</td>
-					<td class="my_table_cell">{{ stats[key][1] }}</td>
-				</tr>
-			{% endfor %}
-			</tbody>
-		</table>
-
-		<img src="{{url_for('static', filename='images/plots/overview_all_'+img_id+'.png')}}"/>
+		<img class="parallel" src="{{url_for('static', filename='images/plots/overview_all_'+img_id+'.png')}}"/>
+		<div class="parallel">
+			<table class="js-sort-table paleBlueRows">
+				<thead class="my_table_head">
+					<tr class="my_table_head_row">
+						<th class="js-sort-number my_table_head_cell">Status</th>
+						<th class="js-sort-number my_table_head_cell">Anzahl</th>
+						<th class="js-sort-number my_table_head_cell">[%]</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for key in stats %}
+					<tr class="my_table_row">
+						<td class="my_table_cell">{{ key }}</td>
+						<td class="my_table_cell">{{ stats[key][0] }}</td>
+						<td class="my_table_cell">{{ stats[key][1] }}</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
 	</div>
+	<div class="h2_separator"></div>
 
 </div>
 

@@ -4,83 +4,121 @@
 
 <h1>Statistiken</h1>
 
-<div class="page_content">
+<div class="main_box">
 
-	<h2>Mitarbeiter</h2>
+	<h2>Helfer</h2>
+	<div class="h2_section">
 
-	<p>Wir haben die Benutzernamen aus Datenschutzgründen anonymisiert.</p>
+		<p>Wir haben die Benutzernamen aus Datenschutzgründen anonymisiert. Ihr Name ist daher nur für Sie sichtbar.</p>
 
-	<table class="js-sort-table paleBlueRows">
-		<thead class="my_table_head">
-			<tr class="my_table_head_row">
-				<th class="js-sort-number my_table_head_cell">Helfer ID</th>
-				<th class="js-sort-number my_table_head_cell">Änderungen</th>
-				<th class="js-sort-number my_table_head_cell">abgeschlossen</th>
-			</tr>
-		</thead>
-		<tbody>
-		{% for r in data %}
-			<tr class="my_table_row">
-				<td class="my_table_cell">{{ r[0] }}</td>
-				<td class="my_table_cell">{{ r[1] }}</td>
-				<td class="my_table_cell">{{ r[2] }}</td>
-			</tr>
-		{% endfor %}
-		</tbody>
-	</table>
+		<table class="js-sort-table paleBlueRows">
+			<thead class="my_table_head">
+				<tr class="my_table_head_row">
+					<th class="js-sort-number my_table_head_cell">ID</th>
+					<th class="js-sort-number my_table_head_cell">Änderungen</th>
+					<th class="js-sort-number my_table_head_cell">abgeschlossen</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for r in data %}
+				<tr class="my_table_row">
+					<td class="my_table_cell">{{ r[0] }}</td>
+					<td class="my_table_cell">{{ r[1] }}</td>
+					<td class="my_table_cell">{{ r[2] }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
 
-	<div>
-		<img class="plot_stats"
+		<img class="parallel"
 			 src="{{url_for('static', filename='images/plots/user_stats_changes_'+file_name+'.png')}}"/>
-		<img class="plot_stats"
+		<img class="parallel"
 			 src="{{url_for('static', filename='images/plots/user_stats_finished_'+file_name+'.png')}}"/>
+
 	</div>
 
-	<div class="h2_div">
-		<h2>Briefwechsel</h2>
+	<div class="h2_separator"></div>
+	<h2>Sprachen</h2>
+	<div class="h2_section">
 
-		<h3>Empfangen (Top 50)</h3>
+		<p>Achtung: Einige der Briefe sind mehrsprachig ...</p>
 
+		<img class="parallel"
+			 src="{{url_for('static', filename='images/plots/lang_stats_'+file_name+'.png')}}"/>
+
+		<div class="parallel">
 		<table class="js-sort-table paleBlueRows">
 			<thead class="my_table_head">
 				<tr class="my_table_head_row">
-					<th class="js-sort-number my_table_head_cell">Name</th>
-					<th class="js-sort-number my_table_head_cell">Vorname</th>
-					<th class="js-sort-number my_table_head_cell">empfangen</th>
+					<th class="js-sort-number my_table_head_cell">Sprache</th>
+					<th class="js-sort-number my_table_head_cell">Frequenz</th>
+					<th class="js-sort-number my_table_head_cell">[%]</th>
 				</tr>
 			</thead>
 			<tbody>
-			{% for r in received %}
+			{% for l in lang_data %}
 				<tr class="my_table_row">
-					<td class="my_table_cell">{{ r[0] }}</td>
-					<td class="my_table_cell">{{ r[1] }}</td>
-					<td class="my_table_cell">{{ r[2] }}</td>
+					<td class="my_table_cell">{{ l[0] }}</td>
+					<td class="my_table_cell">{{ l[1] }}</td>
+					<td class="my_table_cell">{{ l[2] }}</td>
 				</tr>
 			{% endfor %}
 			</tbody>
 		</table>
+		</div>
 
-		<h3>Gesendet (Top 150)</h3>
-
-		<table class="js-sort-table paleBlueRows">
-			<thead class="my_table_head">
-				<tr class="my_table_head_row">
-					<th class="js-sort-number my_table_head_cell">Name</th>
-					<th class="js-sort-number my_table_head_cell">Vorname</th>
-					<th class="js-sort-number my_table_head_cell">gesendet</th>
-				</tr>
-			</thead>
-			<tbody>
-			{% for r in sent %}
-				<tr class="my_table_row">
-					<td class="my_table_cell">{{ r[0] }}</td>
-					<td class="my_table_cell">{{ r[1] }}</td>
-					<td class="my_table_cell">{{ r[2] }}</td>
-				</tr>
-			{% endfor %}
-			</tbody>
-		</table>
 	</div>
+
+	<div class="h2_separator"></div>
+	<h2>Briefwechsel</h2>
+	<div class="h2_section">
+
+		<p>Wer war in den Briefwechseln am häufigsten involviert?</p>
+
+		<h3>Empfangen/Verschickt (je die top 42)</h3>
+		<div class="parallel">
+			<table class="js-sort-table paleBlueRows">
+				<thead class="my_table_head">
+					<tr class="my_table_head_row">
+						<th class="js-sort-number my_table_head_cell">Name</th>
+						<th class="js-sort-number my_table_head_cell">Vorname</th>
+						<th class="js-sort-number my_table_head_cell">empfangen</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for e in received %}
+					<tr class="my_table_row">
+						<td class="my_table_cell">{{ e[0] }}</td>
+						<td class="my_table_cell">{{ e[1] }}</td>
+						<td class="my_table_cell">{{ e[2] }}</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+
+		<div class="parallel">
+			<table class="js-sort-table paleBlueRows">
+				<thead class="my_table_head">
+					<tr class="my_table_head_row">
+						<th class="js-sort-number my_table_head_cell">Name</th>
+						<th class="js-sort-number my_table_head_cell">Vorname</th>
+						<th class="js-sort-number my_table_head_cell">gesendet</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for s in sent %}
+					<tr class="my_table_row">
+						<td class="my_table_cell">{{ s[0] }}</td>
+						<td class="my_table_cell">{{ s[1] }}</td>
+						<td class="my_table_cell">{{ s[2] }}</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="h2_separator"></div>
 
 </div>
 

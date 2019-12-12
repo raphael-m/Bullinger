@@ -115,5 +115,5 @@ class BarChart:
         plt.close()
 
         # clean up
-        c = FileSystem.get_number_of_files('App/static/images/plots/')
-        if c > 200: FileSystem.delete_all_recursively('App/static/images/plots/')
+        # c = FileSystem.get_number_of_files('App/static/images/plots/')
+        # if c > 200: FileSystem.delete_all_recursively('App/static/images/plots/')

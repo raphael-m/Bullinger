@@ -1,7 +1,6 @@
 @import url('https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css');
 
 html, body {
-    min-height: 100%;
     font-size: 12pt;
     background: WhiteSmoke;
     font-family: "Computer Modern Sans", sans-serif;
@@ -16,7 +15,6 @@ html, body {
 
 #main {
     padding-bottom: 25px;
-    min-height: 100%;
     min-width: 21cm;
 }
 
