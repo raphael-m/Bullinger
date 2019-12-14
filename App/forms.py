@@ -57,19 +57,19 @@ class FormFileCard(FlaskForm):
 
     def update_date(self, datum_old):
         new_datum, number_of_changes = Datum(), 0
-        if str(datum_old.jahr_a) != self.year_a.data: number_of_changes += 1  # year/month/day (A)
+        if str(datum_old.jahr_a) != self.year_a.data.strip(): number_of_changes += 1  # year/month/day (A)
         new_datum.jahr_a = 's.d.' if not self.year_a.data else self.year_a.data
         if datum_old.monat_a != request.form['card_month_a']: number_of_changes += 1
         new_datum.monat_a = request.form['card_month_a']
-        if str(datum_old.tag_a) != self.day_a.data: number_of_changes += 1
+        if str(datum_old.tag_a) != self.day_a.data.strip(): number_of_changes += 1
         new_datum.tag_a = 's.d.' if not self.day_a.data else self.day_a.data
-        if str(datum_old.jahr_b) != self.year_b.data: number_of_changes += 1  # year/month/day (B)
+        if str(datum_old.jahr_b) != self.year_b.data.strip(): number_of_changes += 1  # year/month/day (B)
         new_datum.jahr_b = self.year_b.data
         if datum_old.monat_b != request.form['card_month_b']: number_of_changes += 1
         new_datum.monat_b = request.form['card_month_b']
-        if str(datum_old.tag_b) != self.day_b.data: number_of_changes += 1
+        if str(datum_old.tag_b) != self.day_b.data.strip(): number_of_changes += 1
         new_datum.tag_b = self.day_b.data
-        if datum_old.bemerkung != self.remark_date.data: number_of_changes += 1  # remark
+        if datum_old.bemerkung != self.remark_date.data.strip(): number_of_changes += 1  # remark
         new_datum.bemerkung = self.remark_date.data
         return (new_datum, number_of_changes) if number_of_changes > 0 else (None, 0)
 
@@ -90,7 +90,7 @@ class FormFileCard(FlaskForm):
         return n
 
     def has_changed__sender_comment(self, receiver):
-        return True if receiver.bemerkung != self.remark_receiver else False
+        return True if receiver.bemerkung != self.remark_receiver.data.strip() else False
 
     def set_sender_as_default(self, person, remark):
         if person:
@@ -117,7 +117,7 @@ class FormFileCard(FlaskForm):
         return differences
 
     def has_changed__receiver_comment(self, receiver):
-        return True if receiver.bemerkung != self.remark_receiver else False
+        return True if receiver.bemerkung != self.remark_receiver.data.strip() else False
 
     def set_receiver_as_default(self, person, remark):
         if person:
@@ -140,11 +140,11 @@ class FormFileCard(FlaskForm):
 
     def update_autograph(self, autograph_old):
         new_autograph, number_of_changes = Autograph(), 0
-        if autograph_old.standort != self.place_autograph.data: number_of_changes += 1
+        if autograph_old.standort != self.place_autograph.data.strip(): number_of_changes += 1
         new_autograph.standort = self.place_autograph.data
-        if autograph_old.signatur != self.signature_autograph.data: number_of_changes += 1
+        if autograph_old.signatur != self.signature_autograph.data.strip(): number_of_changes += 1
         new_autograph.signatur = self.signature_autograph.data
-        if autograph_old.bemerkung != self.scope_autograph.data: number_of_changes += 1
+        if autograph_old.bemerkung != self.scope_autograph.data.strip(): number_of_changes += 1
         new_autograph.bemerkung = self.scope_autograph.data
         return (new_autograph, number_of_changes) if number_of_changes > 0 else (None, 0)
 
@@ -161,11 +161,17 @@ class FormFileCard(FlaskForm):
 
     def update_copy(self, copy_old):
         new_copy, number_of_changes = Kopie(), 0
-        if copy_old.standort != self.place_copy.data: number_of_changes += 1
+        if copy_old.standort != self.place_copy.data.strip():
+            number_of_changes += 1
+            print(111)
         new_copy.standort = self.place_copy.data
-        if copy_old.signatur != self.signature_copy.data: number_of_changes += 1
+        if copy_old.signatur != self.signature_copy.data.strip():
+            number_of_changes += 1
+            print(222)
         new_copy.signatur = self.signature_copy.data
-        if copy_old.bemerkung != self.scope_copy.data: number_of_changes += 1
+        if copy_old.bemerkung != self.scope_copy.data.strip():
+            number_of_changes += 1
+            print(333)
         new_copy.bemerkung = self.scope_copy.data
         return (new_copy, number_of_changes) if number_of_changes > 0 else (None, 0)
 
@@ -184,13 +190,15 @@ class FormFileCard(FlaskForm):
         else: self.language.default = ''
 
     def split_lang(self, form_entry):
-        if ";" in form_entry: return form_entry.split(";")
-        elif "," in form_entry: return form_entry.split(",")
-        else: return form_entry.split("/")
+        if form_entry:
+            if ";" in form_entry: return form_entry.split(";")
+            elif "," in form_entry: return form_entry.split(",")
+            else: return form_entry.split("/")
+        else: return []
 
     def update_language(self, sprache_old):
         s_old = [s.sprache for s in sprache_old if s.sprache]
-        s_new = self.split_lang(self.language.data)
+        s_new = self.split_lang(self.language.data.strip())
         new_languages = []
         if not set(s_old) == set(s_new):
             for s in s_new: new_languages.append(Sprache(language=s))
@@ -202,8 +210,8 @@ class FormFileCard(FlaskForm):
 
     def update_literature(self, literatur_old):
         new_literatur, c = Literatur(), 0
-        new_literatur.literatur = self.literature.data
-        if literatur_old.literatur != self.literature.data: c += 1
+        new_literatur.literatur = self.literature.data.strip()
+        if literatur_old.literatur != self.literature.data.strip(): c += 1
         return (new_literatur, c) if c < 0 else (False, 0)
 
     def set_printed_as_default(self, gedruckt):
@@ -211,8 +219,8 @@ class FormFileCard(FlaskForm):
 
     def update_printed(self, gedruckt_old):
         new_printed, c = Gedruckt(), 0
-        new_printed.gedruckt = self.printed.data
-        if gedruckt_old.gedruckt != self.printed.data: c += 1
+        new_printed.gedruckt = self.printed.data.strip()
+        if gedruckt_old.gedruckt != self.printed.data.strip(): c += 1
         return (new_printed, c) if c > 0 else (False, 0)
 
     def set_sentence_as_default(self, sentence):
@@ -220,8 +228,8 @@ class FormFileCard(FlaskForm):
 
     def update_sentence(self, sentence_old):
         new_sentence, c = Bemerkung(), 0
-        new_sentence.bemerkung = self.sentence.data
-        if sentence_old.bemerkung != self.sentence.data: c += 1
+        new_sentence.bemerkung = self.sentence.data.strip()
+        if sentence_old.bemerkung != self.sentence.data.strip(): c += 1
         return (new_sentence, c) if c > 0 else (None, 0)
 
     note = TextAreaField("Benutzerkommentar", id=IDC + "note")
@@ -267,12 +275,12 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Register')
 
     def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
+        user = User.query.filter_by(username=username.data.strip()).first()
         if user is not None:
             raise ValidationError('existiert bereits')
 
     def validate_email(self, e_mail):
-        user = User.query.filter_by(e_mail=e_mail.data).first()
+        user = User.query.filter_by(e_mail=e_mail.data.strip()).first()
         if user is not None:
             raise ValidationError('existiert bereits')
 

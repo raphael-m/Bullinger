@@ -88,7 +88,7 @@ class BullingerData:
         elif len(standort_str) or len(signatur_str) or len(umfang_str):
             standort = "Zürich"
 
-        return standort, signatur, umfang
+        return standort.strip(), signatur.strip(), umfang.strip()
 
     @staticmethod
     def get_literature(data):
@@ -134,7 +134,7 @@ class BullingerData:
                             rem += bl[1:]
             rem = BullingerData.remove_leading_junk(' '.join(rem))
             if rem:
-                return rem.replace(' ,', ',').replace(' .', '.')
+                return rem.replace(' ,', ',').replace(' .', '.').strip()
         return None
 
     @staticmethod
