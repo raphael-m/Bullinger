@@ -33,7 +33,7 @@ GitHub
 ------
 (git status)
 git add -A
-git commit -m "whatever"
+git commit -m "description of the changes"
 git push origin master
 
 Server
@@ -54,38 +54,38 @@ $ cd /etc/supervisor
 $ sudo service supervisor start
 $ sudo supervisorctl reload
 
-Tutorials
----------
-- introduction too git concepts (3 parts, ca. 90min)
+
+Tutorials (YouTube)
+-------------------
+- introduction to git concepts (3 parts, ca. 90min)
 - Python flask tutorial: deploying your application (option 1) - deploy to a linux server
 
 
-
-
 DEPLOYMENT (Linux-Ubuntu)
--------------------------
+=========================
+
+Server
 $ ssh ubuntu@130.60.24.72
 
-What modules do we need?
-(local) $ pip freeze > requirements.txt
-(local) $ scp -r local/dir/to/project ubuntu@130.60.24.72       (or git clone)
-
+Modules (check locally)
+$ pip freeze > requirements.txt
+$ scp -r local/dir/to/project ubuntu@130.60.24.72
 $ sudo apt install python3-pip
 $ sudo apt install python3-venv
 
-Virtual Environment in Flask Project
+Virtual Environment (Flask Project)
 $ python3 -m venv Project/venv
 $ source venv/bin/activate
 
-Install Project Packages
-$ pip install -r requirements.txt
+Project Packages
+(venv) $ pip install -r requirements.txt
 
-nginx/gunicorn for scalability
-$ sudo apt install nginx
+nginx/gunicorn (scalability)
+(venv) $ sudo apt install nginx
 (venv) $ pip install gunicorn
 
 supervisor
-$ sudo apt install supervisor
+(venv) $ sudo apt install supervisor
 
 config file:
 $ sudo nano /etc/supervisor/conf.f/bullinger.conf
@@ -98,6 +98,9 @@ $ sudo systemctl restart nginx
 
 
 RESTART
+
+nginx
+    - sudo systemctl restart nginx      OR          sudo service nginx restart
 
 $ sudo systemctl stop nginx
 $ sudo supervisorctl stop all

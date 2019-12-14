@@ -22,12 +22,19 @@ APP_NAME = "KoKoS-Bullinger"
 database = BullingerDB(db.session)
 
 
-@app.route('/')
-@app.route('/home')
-@app.route('/index')
+@app.route('/', methods=['POST', 'GET'])
+@app.route('/home', methods=['POST', 'GET'])
+@app.route('/index', methods=['POST', 'GET'])
 def index():
     """ welcome """
-    return render_template("index.html", title=APP_NAME)
+    comment_form = FormComments()
+    print("INDEX")
+    if comment_form.validate_on_submit() and comment_form.save.data:
+        print("Clicked")
+        BullingerDB.save_comment(comment_form.comment.data, current_user.username, datetime.now())
+    comments = BullingerDB.get_comments(current_user.username)
+    comment_form.process()
+    return render_template("index.html", title=APP_NAME, form=comment_form, comments=comments)
 
 
 @app.route('/admin', methods=['POST', 'GET'])
@@ -187,23 +194,32 @@ def assignment(id_brief):
     user, number_of_changes, t = current_user.username, 0, datetime.now()
     if card_form.validate_on_submit():
         number_of_changes += database.save_date(i, card_form, user, t)
+        print("Date changes:", number_of_changes)
         number_of_changes += database.save_autograph(i, card_form, user, t)
+        print("Autograph:", number_of_changes)
         number_of_changes += database.save_receiver(i, card_form, user, t)
+        print("Empfänger:", number_of_changes)
         number_of_changes += database.save_sender(i, card_form, user, t)
+        print("Sender:", number_of_changes)
         number_of_changes += database.save_copy(i, card_form, user, t)
+        print("Kopie:", number_of_changes)
         number_of_changes += database.save_literature(i, card_form, user, t)
+        print("Literatur:", number_of_changes)
         number_of_changes += database.save_language(i, card_form, user, t)
+        print("Language:", number_of_changes)
         number_of_changes += database.save_printed(i, card_form, user, t)
+        print("Gedruckt:", number_of_changes)
         number_of_changes += database.save_remark(i, card_form, user, t)
-        database.save_comment(i, card_form, user, t)
-        database.update_user(user, number_of_changes, card_form.state.data)
+        print("Bemerkung:", number_of_changes)
+        database.save_comment_card(i, card_form, user, t)
         database.update_file_status(i, card_form.state.data)
+        database.update_user(user, number_of_changes, card_form.state.data)
 
     kartei = Kartei.query.filter_by(id_brief=i).first()
     client_variables["reviews"], client_variables["state"] = kartei.rezensionen, kartei.status
     client_variables["path_ocr"], client_variables["path_pdf"] = kartei.pfad_OCR, kartei.pfad_PDF
     client_variables["month"] = database.set_defaults(i, card_form)[1]
-    client_variables["comments"] = BullingerDB.get_comments(i, current_user.username)
+    client_variables["comments"] = BullingerDB.get_comments_card(i, current_user.username)
 
     # radio buttons
     card_form.state.default = kartei.status

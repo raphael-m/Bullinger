@@ -19,6 +19,45 @@
 
     </div>
 
+    <div class="h2_separator"></div>
+    <h2>Kommentare</h2>
+    <div class="h2_section">
+        <p>Bemerkungen und Anregungen ...</p>
+        <table>
+            <!--
+            <thead>
+                <tr>
+                    <th>Benutzer</th>
+                    <th>Kommentar</th>
+                </tr>
+            </thead>
+            -->
+            <tbody>
+            {% for c in comments %}
+                <tr>
+                    <td class="comment_user">{{ c[0] }}</td>
+                    <td class="comment_text" rowspan = "3">{{ c[3] }}</td>
+                </tr>
+                <tr>
+                    <td class="comment_date">{{ c[1] }}</td>
+                </tr>
+                <tr>
+                    <td class="comment_time">{{ c[2] }}</td>
+                </tr>
+                <tr class="comment_break"></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <!-- new comments -->
+        <form action="" method="post" novalidate>
+            {{ form.csrf_token }}
+            {{ form.hidden_tag() }}
+            <div>{{ form.comment(class="note", placeholder="Ihr Kommentar") }}</div>
+            <div>{{ form.save(class="buttonX button_frills") }}</div>
+        </form>
+    </div>
+    <div class="h2_separator"></div>
+
 </div>
 
 {% endblock %}

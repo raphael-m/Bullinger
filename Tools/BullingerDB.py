@@ -173,7 +173,8 @@ class BullingerDB:
         form.set_copy_as_default(Kopie.query.filter_by(id_brief=id_).order_by(desc(Kopie.zeit)).first())
         form.set_literature_as_default(Literatur.query.filter_by(id_brief=id_).order_by(desc(Literatur.zeit)).first())
         sprache = Sprache.query.filter_by(id_brief=id_).order_by(desc(Sprache.zeit))
-        form.set_language_as_default([s for s in sprache if s.zeit == sprache.first().zeit])
+        if sprache:
+            form.set_language_as_default([s for s in sprache if s.zeit == sprache.first().zeit])
         form.set_printed_as_default(Gedruckt.query.filter_by(id_brief=id_).order_by(desc(Gedruckt.zeit)).first())
         form.set_sentence_as_default(Bemerkung.query.filter_by(id_brief=id_).order_by(desc(Bemerkung.zeit)).first())
         return [datum.jahr_a, datum.monat_a, datum.tag_a]
@@ -187,41 +188,6 @@ class BullingerDB:
             p.gesendet = p.gesendet+1 if p.gesendet else 1
         self.dbs.commit()
 
-    @staticmethod
-    def print_correspondence_count():
-        df = pd.read_sql(db.session.query(Person).statement, db.session.bind)
-        df = df.loc[:, "name":"gesendet"]
-        df = df.fillna(0)
-        df.gesendet, df.empfangen = df.gesendet.astype(int), df.empfangen.astype(int)
-        df_e = df.sort_values(by=['empfangen'], ascending=False)
-        df_a = df.sort_values(by=['gesendet'], ascending=False)
-        e, a = df_e.to_latex(index=False), df_a.to_latex(index=False)
-        print(a, "\n", e)
-
-    '''
-    def query_wrongly_identified_bullingers():
-        results = []
-        for e in Empfaenger.query.all():
-            p = Person.query.get(e.id_person)
-            if p.name == "Bullinger" and p.vorname == "Heinrich" and p.titel == "":
-                results.append(e.id_brief)
-        for a in Absender.query.all():
-            p = Person.query.get(a.id_person)
-            if p.name == "Bullinger" and p.vorname == "Heinrich" and p.titel == "":
-                results.append(a.id_brief)
-        print(results, len(results))
-        
-        """
-        89 Karten
-        ---------
-        [864, 3483, 2066, 2783, 4254, 5788, 6079, 6159, 6429, 6698, 6742, 6846, 6969, 7008, 7013, 7070, 7093, 7112,
-        7126, 7144, 7244, 7285, 7296, 7403, 7460, 7479, 7505, 7603, 7632, 7634, 7684, 7706, 7734, 7744, 7800, 7841,
-        7848, 8268, 8279, 8384, 8437, 8438, 8567, 8712, 8724, 8749, 8756, 8801, 8814, 8845, 8857, 8871, 8928, 9000,
-        9003, 9018, 9019, 9022, 9034, 9039, 9059, 9083, 9085, 9110, 9113, 9121, 9122, 9132, 9199, 9249, 9285, 9286,
-        9290, 9328, 9354, 9521, 9571, 9580, 9608, 9609, 9661, 9665, 9716, 9815, 9848, 9863, 9928, 9934, 9944]
-        """
-    '''
-
     def save_date(self, i, card_form, user, t):
         datum_old = Datum.query.filter_by(id_brief=i).order_by(desc(Datum.zeit)).first()
         if datum_old:
@@ -232,7 +198,6 @@ class BullingerDB:
                 year_a=card_form.year_a.data, month_a=request.form['card_month_a'], day_a=card_form.day_a.data,
                 year_b=card_form.year_b.data, month_b=request.form['card_month_b'], day_b=card_form.day_b.data,
                 remark=card_form.remark.data, user=user, time=t)
-            card_form.set_date_as_default(new_date)
             db.session.add(new_date)
             n = 7
         self.dbs.commit()
@@ -247,7 +212,6 @@ class BullingerDB:
             a = Autograph(id_brief=i, standort=card_form.place_autograph.data,
                           signatur=card_form.signature_autograph.data, umfang=card_form.scope_autograph.data,
                           user=user, time=t)
-            card_form.set_autograph_as_default(a)
             self.dbs.add(a)
             n = 3
         self.dbs.commit()
@@ -268,7 +232,7 @@ class BullingerDB:
                             user=user, time=t)
         if emp_old:
             if pers_old:
-                n = card_form.differs_from_receiver(pers_old)
+                n = card_form.get_number_of_differences_from_receiver(pers_old)
                 if n:
                     if p_new_query:  # p_new well known ==> (r_new -> p)
                         self.dbs.add(Empfaenger(id_brief=i, id_person=p_new_query.id,
@@ -303,8 +267,6 @@ class BullingerDB:
                 self.dbs.add(Empfaenger(id_brief=i, id_person=new_person.id, remark=card_form.remark_receiver.data,
                                         user=user, time=t))
         self.dbs.commit()
-        if n:
-            card_form.set_receiver_as_default(new_person, card_form.remark_receiver.data)
         return n
 
     def save_receiver(self, i, card_form, user, t):
@@ -322,7 +284,7 @@ class BullingerDB:
                             user=user, time=t)
         if abs_old:
             if pers_old:
-                n = card_form.differs_from_sender(pers_old)
+                n = card_form.get_number_of_differences_from_sender(pers_old)
                 if n:
                     if p_new_query:  # p_new well known ==> (r_new -> p)
                         self.dbs.add(Absender(id_brief=i, id_person=p_new_query.id, remark=card_form.remark_sender.data,
@@ -354,8 +316,6 @@ class BullingerDB:
                 self.dbs.add(Absender(id_brief=i, id_person=new_person.id, remark=card_form.remark_sender.data,
                                       user=user, time=t))
         self.dbs.commit()
-        if n:
-            card_form.set_sender_as_default(new_person, card_form.remark_sender.data)
         return n
 
     def save_copy(self, i, card_form, user, t):
@@ -364,10 +324,8 @@ class BullingerDB:
             new_copy, n = card_form.update_copy(copy_old)
             self.push2db(new_copy, i, user, t)
         else:
-            c = Kopie(id_brief=i, standort=card_form.place_copy.data, signatur=card_form.signature_copy.data,
-                      umfang=card_form.scope_copy.data, user=user, time=t)
-            card_form.set_copy_as_default(c)
-            self.dbs.add(c)
+            self.dbs.add(Kopie(id_brief=i, standort=card_form.place_copy.data, signatur=card_form.signature_copy.data,
+                               umfang=card_form.scope_copy.data, user=user, time=t))
             n = 3
         self.dbs.commit()
         return n
@@ -378,9 +336,7 @@ class BullingerDB:
             new_literatur, n = card_form.update_literature(literatur_old)
             self.push2db(new_literatur, i, user, t)
         else:
-            literatur = Literatur(id_brief=i, literature=card_form.literature.data, user=user, time=t)
-            card_form.set_literature_as_default(literatur)
-            self.dbs.add(literatur)
+            self.dbs.add(Literatur(id_brief=i, literature=card_form.literature.data, user=user, time=t))
             n = 1
         self.dbs.commit()
         return n
@@ -388,7 +344,8 @@ class BullingerDB:
     def save_language(self, i, card_form, user, t):
         sprache_old = Sprache.query.filter_by(id_brief=i).order_by(desc(Sprache.zeit)).first()
         if sprache_old:
-            sprache_old = Sprache.query.filter_by(id_brief=i).filter_by(zeit=sprache_old.zeit).order_by(desc(Sprache.zeit))
+            sprache_old = Sprache.query.filter_by(id_brief=i)\
+                .filter_by(zeit=sprache_old.zeit).order_by(desc(Sprache.zeit)).all()
             new_sprachen, n = card_form.update_language(sprache_old)
             if not new_sprachen:
                 self.dbs.add(Sprache(id_brief=i, language='', user=user, time=t))
@@ -400,10 +357,7 @@ class BullingerDB:
             for s in card_form.split_lang(card_form.language.data):
                 self.dbs.add(Sprache(id_brief=i, language=s, user=user, time=t))
                 n += 1
-                card_form.language.default = card_form.language.data
         self.dbs.commit()
-        sprache = Sprache.query.filter_by(id_brief=i).order_by(desc(Sprache.zeit))
-        card_form.set_language_as_default([s for s in sprache if s.zeit == sprache.first().zeit])
         return n
 
     def save_printed(self, i, card_form, user, t):
@@ -412,9 +366,7 @@ class BullingerDB:
             new_gedruckt, n = card_form.update_printed(gedruckt_old)
             self.push2db(new_gedruckt, i, user, t)
         else:
-            gedruckt = Gedruckt(id_brief=i, printed=card_form.printed.data, user=user, time=t)
-            card_form.set_printed_as_default(gedruckt)
-            self.dbs.add(gedruckt)
+            self.dbs.add(Gedruckt(id_brief=i, printed=card_form.printed.data, user=user, time=t))
             n = 1
         self.dbs.commit()
         return n
@@ -425,26 +377,40 @@ class BullingerDB:
             new_bemerkung, n = card_form.update_sentence(sentence_old)
             self.push2db(new_bemerkung, i, user, t)
         else:
-            b = Bemerkung(id_brief=i, remark=card_form.sentence.data, user=user, time=t)
-            card_form.set_sentence_as_default(b)
-            self.dbs.add(b)
+            self.dbs.add(Bemerkung(id_brief=i, remark=card_form.sentence.data, user=user, time=t))
             n = 1
         self.dbs.commit()
         return n
 
-    def save_comment(self, i, card_form, user, t):
+    def save_comment_card(self, i, card_form, user, t):
         if card_form.note.data:
             self.dbs.add(Notiz(id_brief=i, notiz=card_form.note.data, user=user, time=t))
             self.dbs.commit()
 
     @staticmethod
-    def get_comments(i, user):
+    def get_comments_card(i, user):
         comments = []
         for c in Notiz.query.filter(Notiz.id_brief == i).order_by(asc(Notiz.zeit)).all():
             datum, zeit = re.sub(r'\.\d*', '', c.zeit).split(' ')
             u = "Sie" if c.anwender == user else User.query.filter(anwender=user).id
             comments += [[u, datum, zeit, c.notiz]]
         return comments
+
+    @staticmethod
+    def get_comments(user_name):
+        comments = []
+        for r in Notiz.query.filter(Notiz.id_brief == 0).order_by(asc(Notiz.zeit)).all():
+            datum, zeit = re.sub(r'\.\d*', '', r.zeit).split(' ')
+            u_ = User.query.filter_by(username=user_name).first()
+            u = "Sie" if r.anwender == user_name or r.anwender == ADMIN else "Helfer "+str(u_.id) if u_ else "Gast"
+            comments += [[u, datum, zeit, r.notiz]]
+        return comments
+
+    @staticmethod
+    def save_comment(comment, user_name, t):
+        if comment:
+            db.session.add(Notiz(id_brief=0, notiz=comment, user=user_name, time=t))
+            db.session.commit()
 
     def push2db(self, db_record, id_brief, user, time_stamp):
         if db_record:

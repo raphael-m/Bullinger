@@ -71,10 +71,7 @@ class FormFileCard(FlaskForm):
         new_datum.tag_b = self.day_b.data
         if datum_old.bemerkung != self.remark_date.data: number_of_changes += 1  # remark
         new_datum.bemerkung = self.remark_date.data
-        if number_of_changes > 0:
-            self.set_date_as_default(new_datum)
-            return new_datum, number_of_changes
-        return None, 0
+        return (new_datum, number_of_changes) if number_of_changes > 0 else (None, 0)
 
     _NSS = "sender_"
     name_sender = StringField("Name", id=IDC + _NSS + "name")
@@ -84,7 +81,7 @@ class FormFileCard(FlaskForm):
     sender_verified = RadioField('Absender verifiziert', default='Ja',
                        choices=[('Ja', 'Ja'), ('Nein', 'Nein')])
 
-    def differs_from_sender(self, person):
+    def get_number_of_differences_from_sender(self, person):
         n = 0
         if person.name != self.name_sender.data.strip(): n += 1
         if person.vorname != self.forename_sender.data.strip(): n += 1
@@ -111,7 +108,7 @@ class FormFileCard(FlaskForm):
     receiver_verified = RadioField('Empfänger verifiziert', default='Ja',
                        choices=[('Ja', 'Ja'), ('Nein', 'Nein')])
 
-    def differs_from_receiver(self, person):
+    def get_number_of_differences_from_receiver(self, person):
         differences = 0
         if person.name != self.name_receiver.data.strip(): differences += 1
         if person.vorname != self.forename_receiver.data.strip(): differences += 1
@@ -149,10 +146,7 @@ class FormFileCard(FlaskForm):
         new_autograph.signatur = self.signature_autograph.data
         if autograph_old.bemerkung != self.scope_autograph.data: number_of_changes += 1
         new_autograph.bemerkung = self.scope_autograph.data
-        if number_of_changes > 0:
-            self.set_autograph_as_default(new_autograph)
-            return new_autograph, number_of_changes
-        return None, 0
+        return (new_autograph, number_of_changes) if number_of_changes > 0 else (None, 0)
 
     _NSC = "copy_"
     place_copy = StringField("Ort", id=IDC + _NSC + "standort")
@@ -173,10 +167,7 @@ class FormFileCard(FlaskForm):
         new_copy.signatur = self.signature_copy.data
         if copy_old.bemerkung != self.scope_copy.data: number_of_changes += 1
         new_copy.bemerkung = self.scope_copy.data
-        if number_of_changes > 0:
-            self.set_copy_as_default(new_copy)
-            return new_copy, number_of_changes
-        return None, 0
+        return (new_copy, number_of_changes) if number_of_changes > 0 else (None, 0)
 
     language = StringField("Sprache", id=IDC + "language_")
     literature = StringField("Literatur", id=IDC + "literature_")
@@ -184,82 +175,54 @@ class FormFileCard(FlaskForm):
     sentence = StringField("Erster Satz", id=IDC + "sentence_")
     remark = StringField("Bemerkung", id=IDC + "remark_")
 
-    def set_language_as_default(self, sprache):
-        if sprache:
-            sprachen = [s.sprache for s in sprache if s.sprache]
+    def set_language_as_default(self, records):
+        if records:
+            sprachen = [s.sprache for s in records if s.sprache]
             if len(sprachen) > 0:
                 s = "; ".join(sprachen)
                 self.language.default = s
-        else:
-            self.language.default = ''
+        else: self.language.default = ''
 
     def split_lang(self, form_entry):
-        if ";" in form_entry:
-            return form_entry.split(";")
-        elif "," in form_entry:
-            return form_entry.split(",")
-        else:
-            return form_entry.split("/")
+        if ";" in form_entry: return form_entry.split(";")
+        elif "," in form_entry: return form_entry.split(",")
+        else: return form_entry.split("/")
 
     def update_language(self, sprache_old):
-        number_of_changes = 0
         s_old = [s.sprache for s in sprache_old if s.sprache]
         s_new = self.split_lang(self.language.data)
         new_languages = []
         if not set(s_old) == set(s_new):
-            number_of_changes += (len(s_new) - len(s_old)) if len(s_old) < len(s_new) else (len(s_old) - len(s_new))
-            for s in s_new:
-                new_languages.append(Sprache(language=s))
-            self.set_language_as_default(new_languages)
-            return new_languages, number_of_changes
+            for s in s_new: new_languages.append(Sprache(language=s))
+            return new_languages, len(s_new) - len(set(s_old).intersection(set(s_new)))
         return None, 0
 
     def set_literature_as_default(self, literatur):
-        if literatur:
-            self.literature.default = literatur.literatur if literatur.literatur else ''
-            print("setted")
+        if literatur: self.literature.default = literatur.literatur if literatur.literatur else ''
 
     def update_literature(self, literatur_old):
-        print("OLD", literatur_old, "NEW", self.literature.data)
-        new_literatur, number_of_changes = Literatur(), 0
-        if literatur_old.literatur != self.literature.data: number_of_changes += 1
+        new_literatur, c = Literatur(), 0
         new_literatur.literatur = self.literature.data
-        if number_of_changes > 0:
-            print("change")
-            self.set_literature_as_default(new_literatur)
-            return new_literatur, number_of_changes
-        return False, 0
+        if literatur_old.literatur != self.literature.data: c += 1
+        return (new_literatur, c) if c < 0 else (False, 0)
 
     def set_printed_as_default(self, gedruckt):
-        if gedruckt:
-            self.printed.default = gedruckt.gedruckt if gedruckt.gedruckt else ''
+        if gedruckt: self.printed.default = gedruckt.gedruckt if gedruckt.gedruckt else ''
 
     def update_printed(self, gedruckt_old):
-        number_of_changes = 0
-        new_printed = Gedruckt()
-        if gedruckt_old.gedruckt != self.printed.data: number_of_changes += 1
+        new_printed, c = Gedruckt(), 0
         new_printed.gedruckt = self.printed.data
-        if number_of_changes > 0:
-            self.set_printed_as_default(new_printed)
-            return new_printed, number_of_changes
-        return False, 0
+        if gedruckt_old.gedruckt != self.printed.data: c += 1
+        return (new_printed, c) if c > 0 else (False, 0)
 
     def set_sentence_as_default(self, sentence):
-        if sentence:
-            self.sentence.default = sentence.bemerkung if sentence.bemerkung else ''
+        if sentence: self.sentence.default = sentence.bemerkung if sentence.bemerkung else ''
 
     def update_sentence(self, sentence_old):
-        number_of_changes = 0
-        new_sentence = Bemerkung()
-        if sentence_old.bemerkung != self.sentence.data: number_of_changes += 1
+        new_sentence, c = Bemerkung(), 0
         new_sentence.bemerkung = self.sentence.data
-        if number_of_changes > 0:
-            self.set_sentence_as_default(new_sentence)
-            return new_sentence, number_of_changes
-        return False, 0
-
-    def set_remark_as_default(self, remark):
-        pass
+        if sentence_old.bemerkung != self.sentence.data: c += 1
+        return (new_sentence, c) if c > 0 else (None, 0)
 
     note = TextAreaField("Benutzerkommentar", id=IDC + "note")
 
@@ -312,3 +275,8 @@ class RegistrationForm(FlaskForm):
         user = User.query.filter_by(e_mail=e_mail.data).first()
         if user is not None:
             raise ValidationError('existiert bereits')
+
+
+class FormComments(FlaskForm):
+    comment = StringField("Kommentar")
+    save = SubmitField('Speichern')
