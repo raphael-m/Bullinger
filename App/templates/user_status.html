@@ -1,0 +1,14 @@
+
+{% block status %}
+
+<div id="status_info">
+    {% if username == "Gast" %}
+        nicht angemeldet
+    {% else %}
+        {{ username }} -
+    {% endif %}
+    Änderungen: {{ user_stats[0] }},
+    abgeschlossen: {{ user_stats[1] }}
+</div>
+
+{% endblock %}

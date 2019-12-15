@@ -44,6 +44,7 @@ class BullingerData:
 
     @staticmethod
     def get_ssu(data, index):
+        """ applies to 'Autograph' and 'Kopie' """
         standort_baselines, baselines_signatur, is_typewriter = None, None, False
         standort_str, standort, signatur_str, signatur = '', '', '', ''
         umfang_baselines, umfang_str, umfang = '', '', ''
@@ -252,7 +253,7 @@ class BullingerData:
                         lang.append("Deutsch")
                 elif t in "lateinisch":
                     if "Lateinisch" not in lang:
-                        lang.append("Lateinisch")
+                        lang.append("Latein")
                 elif t in "griechisch":
                     if "Griechisch" not in lang:
                         lang.append("Griechisch")
@@ -267,8 +268,7 @@ class BullingerData:
         """ Analyzes data from 'Absender' or 'Empfänger'
             :param baselines: list of lists
             :return: <name>, <forename>, <location>, <remarks> """
-        # default values
-        nn, vn, ort, bemerkung = 's.n.', 's.n.', 's.l.', None
+        nn, vn, ort, bemerkung = SN, SN, SL, ''
         baselines = BullingerData.clean_up_baselines_sender_receiver(baselines)
         if len(baselines) > 0:
             # Rule 1 - 1st line 1st word == name
@@ -277,13 +277,13 @@ class BullingerData:
                 vn = ' '.join(baselines[0][1:])
                 if nn != 'Geistliche':
                     # Title
-                    if re.match(r'.*von.*', vn):
+                    if re.match(r'.*(?:^|\s+)von(?:\s+|$).*', vn):
                         vn = vn.replace('von', '').strip()
                         nn = 'von ' + nn
-                    if re.match(r'.*de.*', vn):
+                    if re.match(r'.*(?:^|\s+)de(?:\s+|$).*', vn):
                         vn = vn.replace('de', '').strip()
                         nn = 'de ' + nn
-                    if re.match(r'.*du.*', vn):
+                    if re.match(r'.*(?:^|\s+)du(?:\s+|$).*', vn):
                         vn = vn.replace('du', '').strip()
                         nn = 'du ' + nn
                 else:  # Geistliche
@@ -412,7 +412,7 @@ class BullingerData:
             return Datum(
                 id_brief=id_brief, year_a=BullingerData.year_predicted,
                 month_a=BullingerData.month_predicted[BullingerData.index_predicted][0], day_a=day,
-                year_b='', month_b='', day_b=''
+                year_b='', month_b='', day_b='', remark=''
             )
         return None
 

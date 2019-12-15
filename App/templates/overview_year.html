@@ -2,7 +2,9 @@
 
 {% block content %}
 
-<h1><a href="{{url_for('overview')}}">Übersicht</a> / {{ year }}</h1>
+<h1><a href="{{url_for('overview')}}">Übersicht</a> / {{ year }}
+	{% include "user_status.html" %}
+</h1>
 
 <div class="main_box">
 

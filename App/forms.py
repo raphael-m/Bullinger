@@ -19,6 +19,7 @@ class FormFileCard(FlaskForm):
 
     # Buttons
     submit = SubmitField('Speichern', id="save_changes")
+    submit_and_next = SubmitField('Speichern & Weiter')
     next_card = SubmitField('>')  # one card forward
     prev_card = SubmitField('<')  # one card back
     qs_next_card = SubmitField('>>')  # next card (offen/unklar)
@@ -65,7 +66,8 @@ class FormFileCard(FlaskForm):
         new_datum.tag_a = 's.d.' if not self.day_a.data else self.day_a.data
         if str(datum_old.jahr_b) != self.year_b.data.strip(): number_of_changes += 1  # year/month/day (B)
         new_datum.jahr_b = self.year_b.data
-        if datum_old.monat_b != request.form['card_month_b']: number_of_changes += 1
+        if datum_old.monat_b != request.form['card_month_b'] and request.form['card_month_b'] != 's.d.':
+            number_of_changes += 1
         new_datum.monat_b = request.form['card_month_b']
         if str(datum_old.tag_b) != self.day_b.data.strip(): number_of_changes += 1
         new_datum.tag_b = self.day_b.data
@@ -89,8 +91,8 @@ class FormFileCard(FlaskForm):
         if person.verifiziert != self.sender_verified.data: n += 1
         return n
 
-    def has_changed__sender_comment(self, receiver):
-        return True if receiver.bemerkung != self.remark_receiver.data.strip() else False
+    def has_changed__sender_comment(self, sender):
+        return True if sender.bemerkung != self.remark_sender.data.strip() else False
 
     def set_sender_as_default(self, person, remark):
         if person:
@@ -161,17 +163,11 @@ class FormFileCard(FlaskForm):
 
     def update_copy(self, copy_old):
         new_copy, number_of_changes = Kopie(), 0
-        if copy_old.standort != self.place_copy.data.strip():
-            number_of_changes += 1
-            print(111)
+        if copy_old.standort != self.place_copy.data.strip(): number_of_changes += 1
         new_copy.standort = self.place_copy.data
-        if copy_old.signatur != self.signature_copy.data.strip():
-            number_of_changes += 1
-            print(222)
+        if copy_old.signatur != self.signature_copy.data.strip(): number_of_changes += 1
         new_copy.signatur = self.signature_copy.data
-        if copy_old.bemerkung != self.scope_copy.data.strip():
-            number_of_changes += 1
-            print(333)
+        if copy_old.bemerkung != self.scope_copy.data.strip(): number_of_changes += 1
         new_copy.bemerkung = self.scope_copy.data
         return (new_copy, number_of_changes) if number_of_changes > 0 else (None, 0)
 
@@ -191,17 +187,19 @@ class FormFileCard(FlaskForm):
 
     def split_lang(self, form_entry):
         if form_entry:
-            if ";" in form_entry: return form_entry.split(";")
-            elif "," in form_entry: return form_entry.split(",")
-            else: return form_entry.split("/")
-        else: return []
+            if ";" in form_entry: langs = form_entry.split(";")
+            elif "," in form_entry: langs = form_entry.split(",")
+            else: langs = form_entry.split("/")
+        else: langs = []
+        return [l.strip() for l in langs]
 
-    def update_language(self, sprache_old):
-        s_old = [s.sprache for s in sprache_old if s.sprache]
-        s_new = self.split_lang(self.language.data.strip())
+    def update_language(self, lang_records):
+        s_old = [s.sprache for s in lang_records if s.sprache]
+        s_new = self.split_lang(self.language.data)
         new_languages = []
         if not set(s_old) == set(s_new):
-            for s in s_new: new_languages.append(Sprache(language=s))
+            for s in s_new: new_languages.append(Sprache(language=s.strip()))
+            if len(s_new) is 0: new_languages.append(Sprache(language=''))
             return new_languages, len(s_new) - len(set(s_old).intersection(set(s_new)))
         return None, 0
 
@@ -212,7 +210,7 @@ class FormFileCard(FlaskForm):
         new_literatur, c = Literatur(), 0
         new_literatur.literatur = self.literature.data.strip()
         if literatur_old.literatur != self.literature.data.strip(): c += 1
-        return (new_literatur, c) if c < 0 else (False, 0)
+        return (new_literatur, c) if c > 0 else (False, 0)
 
     def set_printed_as_default(self, gedruckt):
         if gedruckt: self.printed.default = gedruckt.gedruckt if gedruckt.gedruckt else ''

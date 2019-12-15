@@ -28,13 +28,13 @@ database = BullingerDB(db.session)
 def index():
     """ welcome """
     comment_form = FormComments()
-    print("INDEX")
     if comment_form.validate_on_submit() and comment_form.save.data:
-        print("Clicked")
         BullingerDB.save_comment(comment_form.comment.data, current_user.username, datetime.now())
     comments = BullingerDB.get_comments(current_user.username)
     comment_form.process()
-    return render_template("index.html", title=APP_NAME, form=comment_form, comments=comments)
+    return render_template("index.html", title=APP_NAME, form=comment_form, comments=comments,
+        username=current_user.username,
+        user_stats=BullingerDB.get_user_stats(current_user.username))
 
 
 @app.route('/admin', methods=['POST', 'GET'])
@@ -61,7 +61,7 @@ def login():
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for('index'))
-    return render_template('account_login.html', title='Anmelden', form=form)
+    return render_template('account_login.html', title='Anmelden', form=form, username=current_user.username)
 
 
 @app.route('/logout')
@@ -83,7 +83,7 @@ def register():
         u = User.query.filter_by(username=form.username.data).first()
         login_user(u, remember=True)
         return redirect(url_for('index'))
-    return render_template('account_register.html', title='Registrieren', form=form)
+    return render_template('account_register.html', title='Registrieren', form=form, username=current_user.username)
 
 
 # Overviews
@@ -95,7 +95,8 @@ def overview():
     data = {}
     for key in view_count:
         data[key] = [view_count[key], open_count[key], unclear_count[key], closed_count[key], invalid_count[key]]
-    return render_template('overview.html', title="Übersicht", data=data, img_id=id_, count=s[0], stats=s[1])
+    return render_template('overview.html', title="Übersicht", data=data, img_id=id_, count=s[0], stats=s[1],
+                           username=current_user.username, user_stats=BullingerDB.get_user_stats(current_user.username))
 
 
 # - months
@@ -106,7 +107,8 @@ def overview_year(year):
     data = {}
     for key in view_count:
         data[key] = [view_count[key], open_count[key], unclear_count[key], closed_count[key], invalid_count[key]]
-    return render_template("overview_year.html", title="Übersicht", year=year, data=data, img_id=id_, count=s[0], stats=s[1])
+    return render_template("overview_year.html", title="Übersicht", year=year, data=data, img_id=id_, count=s[0], stats=s[1],
+                           username=current_user.username, user_stats=BullingerDB.get_user_stats(current_user.username))
 
 
 # -days
@@ -126,19 +128,21 @@ def overview_month(year, month):
     file_name = year+'_'+month+'_'+str(int(time.time()))
     BarChart.create_plot_overview(file_name, cd["offen"], cd["abgeschlossen"], cd["unklar"], cd["ungültig"])
     return render_template("overview_month.html", title="Übersicht", year=year, month=month, data=x,
-                           count=s[0], stats=s[1], file_name_stats=file_name)
+                           count=s[0], stats=s[1], file_name_stats=file_name, username=current_user.username,
+                           user_stats=BullingerDB.get_user_stats(current_user.username))
 
 
 @app.route('/stats', methods=['POST', 'GET'])
 def stats():
-    data_stats = BullingerDB.get_user_stats(current_user.username)
+    data_stats = BullingerDB.get_user_stats_all(current_user.username)
     lang_stats = BullingerDB.get_language_stats()
     file_name = str(int(time.time()))
     BullingerDB.create_plot_user_stats(current_user.username, file_name)
     BullingerDB.create_plot_lang(lang_stats, file_name)
     sent, received = BullingerDB.get_stats_sent_received(42, 42)
     return render_template("stats.html", title="Statistiken", data=data_stats, lang_data=lang_stats,
-                           file_name=file_name, sent=sent, received=received)
+                           file_name=file_name, sent=sent, received=received, username=current_user.username,
+                           user_stats=BullingerDB.get_user_stats(current_user.username))
 
 
 @app.route('/quick_start', methods=['POST', 'GET'])
@@ -194,26 +198,19 @@ def assignment(id_brief):
     user, number_of_changes, t = current_user.username, 0, datetime.now()
     if card_form.validate_on_submit():
         number_of_changes += database.save_date(i, card_form, user, t)
-        print("Date changes:", number_of_changes)
         number_of_changes += database.save_autograph(i, card_form, user, t)
-        print("Autograph:", number_of_changes)
-        number_of_changes += database.save_receiver(i, card_form, user, t)
-        print("Empfänger:", number_of_changes)
-        number_of_changes += database.save_sender(i, card_form, user, t)
-        print("Sender:", number_of_changes)
+        number_of_changes += database.save_the_sender(i, card_form, user, t)
+        number_of_changes += database.save_the_receiver(i, card_form, user, t)
         number_of_changes += database.save_copy(i, card_form, user, t)
-        print("Kopie:", number_of_changes)
         number_of_changes += database.save_literature(i, card_form, user, t)
-        print("Literatur:", number_of_changes)
         number_of_changes += database.save_language(i, card_form, user, t)
-        print("Language:", number_of_changes)
         number_of_changes += database.save_printed(i, card_form, user, t)
-        print("Gedruckt:", number_of_changes)
         number_of_changes += database.save_remark(i, card_form, user, t)
-        print("Bemerkung:", number_of_changes)
         database.save_comment_card(i, card_form, user, t)
         database.update_file_status(i, card_form.state.data)
         database.update_user(user, number_of_changes, card_form.state.data)
+        if card_form.submit_and_next.data:
+            return redirect(url_for('quick_start'))
 
     kartei = Kartei.query.filter_by(id_brief=i).first()
     client_variables["reviews"], client_variables["state"] = kartei.rezensionen, kartei.status
@@ -232,4 +229,6 @@ def assignment(id_brief):
                            title="Nr. "+str(i),
                            card_path=card_path,
                            form=card_form,
-                           variable=client_variables)
+                           variable=client_variables,
+                           username=current_user.username,
+                           user_stats=BullingerDB.get_user_stats(current_user.username))

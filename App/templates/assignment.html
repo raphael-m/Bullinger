@@ -8,19 +8,19 @@
     <a href="{{url_for('overview_year', year=form.year_a.default)}}">{{ form.year_a.default }}</a> /
     <a href="{{url_for('overview_month', year=form.year_a.default, month=variable['month'])}}">{{ variable["month"] }}</a> /
     {{ form.day_a.default }}{% if form.day_a.default != 's.d.'%}.{% endif %}
-    <!-- Status -->
+    (Status:
+    {% if variable["state"] == "offen" %}
+        <span class="status_open"> {{ variable["state"] }}</span>
+    {% elif variable["state"] == "unklar" %}
+        <span class="status_unclear"> {{ variable["state"] }}</span>
+    {% elif variable["state"] == "ungültig" %}
+        <span class="status_invalid"> {{ variable["state"] }}</span>
+    {% else %}
+        <span class="status_closed"> {{ variable["state"] }}</span>
+    {% endif %}
+    ; {{ variable["reviews"] }} Rezensionen)
     <div id="status_info">
-        Rezensionen: {{ variable["reviews"] }};
-        Status:
-        {% if variable["state"] == "offen" %}
-            <span class="status_open"> {{ variable["state"] }}</span>
-        {% elif variable["state"] == "unklar" %}
-            <span class="status_unclear"> {{ variable["state"] }}</span>
-        {% elif variable["state"] == "ungültig" %}
-            <span class="status_invalid"> {{ variable["state"] }}</span>
-        {% else %}
-            <span class="status_closed"> {{ variable["state"] }}</span>
-        {% endif %}
+        {% include "user_status.html" %}
     </div>
 </h1>
 
@@ -75,6 +75,7 @@
                 {{ form.qs_prev_card(class="buttonX button_frills") }}
                 {{ form.prev_card(class="buttonX button_frills") }}
                 {{ form.submit(class="buttonX button_frills") }}
+                {{ form.submit_and_next(class="buttonX button_frills") }}
                 {{ form.next_card (class="buttonX button_frills") }}
                 {{ form.qs_next_card (class="buttonX button_frills") }}
             </div>

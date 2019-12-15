@@ -45,7 +45,8 @@ class BullingerDB:
                 d.add_lang(card_nr, data, remark)
             else:
                 print("*** WARNING, file ignored:", path)
-                d.dbs.add(Datum(id_brief=card_nr, year_a=SD, month_a=SD, day_a=SD, user=ADMIN, time=d.t))
+                d.dbs.add(Datum(id_brief=card_nr, year_a=SD, month_a=SD, day_a=SD,
+                                year_b='', month_b=SD, day_b='', remark='', user=ADMIN, time=d.t))
                 ignored += 1
                 errors.append(card_nr)
             card_nr += 1
@@ -103,14 +104,14 @@ class BullingerDB:
     def add_date(self, card_nr, data):
         date = BullingerData.extract_date(card_nr, data)
         if not date:
-            date = Datum(id_brief=card_nr, year_a=SD, month_a=SD, day_a=SD)
+            date = Datum(id_brief=card_nr, year_a=SD, month_a=SD, day_a=SD, year_b='', month_b=SD, day_b='', remark='')
         date.user, data.time = ADMIN, self.t
         self.dbs.add(date)
 
     def add_correspondents(self, card_nr, data, n_grams, id_bullinger):
         """ one has to be bullinger """
         if BullingerData.is_bullinger_sender(data, n_grams[0], n_grams[1]):
-            self.dbs.add(Absender(id_brief=card_nr, id_person=id_bullinger, user=ADMIN, time=self.t))
+            self.dbs.add(Absender(id_brief=card_nr, id_person=id_bullinger, remark='', user=ADMIN, time=self.t))
             e = BullingerData.analyze_address(data["Empfänger"])
             if not Person.query.filter_by(name=e[0], vorname=e[1], ort=e[2]).first():
                 self.dbs.add(Person(name=e[0], forename=e[1], place=e[2], verified='Nein', user=ADMIN, time=self.t))
@@ -118,7 +119,7 @@ class BullingerDB:
             ref = Person.query.filter_by(name=e[0], vorname=e[1], ort=e[2]).first().id
             self.dbs.add(Empfaenger(id_brief=card_nr, id_person=ref, remark=e[3], user=ADMIN, time=self.t))
         else:
-            self.dbs.add(Empfaenger(id_brief=card_nr, id_person=id_bullinger, user=ADMIN, time=self.t))
+            self.dbs.add(Empfaenger(id_brief=card_nr, id_person=id_bullinger, remark='', user=ADMIN, time=self.t))
             a = BullingerData.analyze_address(data["Absender"])
             if not Person.query.filter_by(name=a[0], vorname=a[1], ort=a[2]).first():
                 self.dbs.add(Person(name=a[0], forename=a[1], place=a[2], verified='Nein', user=ADMIN, time=self.t))
@@ -195,11 +196,11 @@ class BullingerDB:
             self.push2db(new_date, i, user, t)
         # date doesn't exist yet (this should never be the case)
         elif card_form.year_a.data or request.form['card_month_a'] != SD or card_form.day_a.data \
-                or card_form.year_b.data or request.form['card_month_b'] or card_form.day_b.data:
+                or card_form.year_b.data or request.form['card_month_b'] != SD or card_form.day_b.data:
                 new_date = Datum(id_brief=i,
                     year_a=card_form.year_a.data, month_a=request.form['card_month_a'], day_a=card_form.day_a.data,
                     year_b=card_form.year_b.data, month_b=request.form['card_month_b'], day_b=card_form.day_b.data,
-                    remark=card_form.remark.data, user=user, time=t)
+                    remark=card_form.remark_date.data, user=user, time=t)
                 db.session.add(new_date)
                 n = 7
         self.dbs.commit()
@@ -218,18 +219,19 @@ class BullingerDB:
         self.dbs.commit()
         return n
 
-    def save_sender(self, i, card_form, user, t):
-        emp_old = Empfaenger.query.filter_by(id_brief=i).order_by(desc(Empfaenger.zeit)).first()
-        pers_old = Person.query.filter_by(id=emp_old.id_person).order_by(desc(Person.zeit)).first()
+    def save_the_receiver(self, i, card_form, user, t):
+        emp_old, pers_old = Empfaenger.query.filter_by(id_brief=i).order_by(desc(Empfaenger.zeit)).first(), None
+        if emp_old:
+            pers_old = Person.query.filter_by(id=emp_old.id_person).order_by(desc(Person.zeit)).first()
         p_new_query = Person.query.filter_by(name=card_form.name_receiver.data,
                                              vorname=card_form.forename_receiver.data,
                                              ort=card_form.place_receiver.data,
-                                             verifiziert=card_form.sender_verified.data
-        ).order_by(desc(Person.zeit)).first()
+                                             verifiziert=card_form.receiver_verified.data)\
+            .order_by(desc(Person.zeit)).first()
         new_person = Person(name=card_form.name_receiver.data,
                             forename=card_form.forename_receiver.data,
                             place=card_form.place_receiver.data,
-                            verified=card_form.sender_verified.data,
+                            verified=card_form.receiver_verified.data,
                             user=user, time=t)
         if emp_old:
             if pers_old:
@@ -245,6 +247,7 @@ class BullingerDB:
                         self.dbs.add(Empfaenger(id_brief=i, id_person=new_person.id,
                                                 remark=card_form.remark_receiver.data,
                                                 user=user, time=t))
+                    if card_form.has_changed__receiver_comment(emp_old): n += 1
                 else:  # comment changes only
                     if card_form.has_changed__receiver_comment(emp_old):
                         self.dbs.add(Empfaenger(id_brief=i, id_person=pers_old.id,
@@ -270,9 +273,9 @@ class BullingerDB:
         self.dbs.commit()
         return n
 
-    def save_receiver(self, i, card_form, user, t):
-        abs_old = Absender.query.filter_by(id_brief=i).order_by(desc(Absender.zeit)).first()
-        pers_old = Person.query.filter_by(id=abs_old.id_person).order_by(desc(Person.zeit)).first()
+    def save_the_sender(self, i, card_form, user, t):
+        abs_old, pers_old = Absender.query.filter_by(id_brief=i).order_by(desc(Absender.zeit)).first(), None
+        if abs_old: pers_old = Person.query.filter_by(id=abs_old.id_person).order_by(desc(Person.zeit)).first()
         p_new_query = Person.query.filter_by(name=card_form.name_sender.data,
                                              vorname=card_form.forename_sender.data,
                                              ort=card_form.place_sender.data,
@@ -281,7 +284,7 @@ class BullingerDB:
         new_person = Person(name=card_form.name_sender.data,
                             forename=card_form.forename_sender.data,
                             place=card_form.place_sender.data,
-                            verified=card_form.receiver_verified.data,
+                            verified=card_form.sender_verified.data,
                             user=user, time=t)
         if abs_old:
             if pers_old:
@@ -295,11 +298,13 @@ class BullingerDB:
                         self.dbs.commit()  # id
                         self.dbs.add(Absender(id_brief=i, id_person=new_person.id, remark=card_form.remark_sender.data,
                                               user=user, time=t))
+                    if card_form.has_changed__sender_comment(abs_old): n += 1
+
                 else:  # comment changes only
                     if card_form.has_changed__sender_comment(abs_old):
                         self.dbs.add(Absender(id_brief=i, id_person=pers_old.id, remark=card_form.remark_sender.data,
                                               user=user, time=t))
-                        n = 1
+                        n += 1
             else:
                 n = 4
                 self.dbs.add(new_person)
@@ -343,14 +348,12 @@ class BullingerDB:
         return n
 
     def save_language(self, i, card_form, user, t):
-        sprache_old, n = Sprache.query.filter_by(id_brief=i).order_by(desc(Sprache.zeit)).first(), 0
-        if sprache_old:
-            sprache_old = Sprache.query.filter_by(id_brief=i)\
-                .filter_by(zeit=sprache_old.zeit).order_by(desc(Sprache.zeit)).all()
-            new_sprachen, n = card_form.update_language(sprache_old)
-            if not new_sprachen:
-                self.dbs.add(Sprache(id_brief=i, language='', user=user, time=t))
-            else:
+        lang_entry, n = Sprache.query.filter_by(id_brief=i).order_by(desc(Sprache.zeit)).first(), 0
+        if lang_entry:
+            language_records = Sprache.query.filter_by(id_brief=i)\
+                .filter_by(zeit=lang_entry.zeit).order_by(desc(Sprache.zeit)).all()
+            new_sprachen, n = card_form.update_language(language_records)
+            if new_sprachen:
                 for s in new_sprachen:
                     self.push2db(s, i, user, t)
         elif card_form.language.data:
@@ -401,8 +404,10 @@ class BullingerDB:
         comments = []
         for r in Notiz.query.filter(Notiz.id_brief == 0).order_by(asc(Notiz.zeit)).all():
             datum, zeit = re.sub(r'\.\d*', '', r.zeit).split(' ')
-            u_ = User.query.filter_by(username=user_name).first()
-            u = "Sie" if r.anwender == user_name or r.anwender == ADMIN else "Helfer "+str(u_.id) if u_ else "Gast"
+            if r.anwender == "Gast": u = "Gast"
+            elif r.anwender == ADMIN: u = "Admin"
+            elif r.anwender == user_name: u = user_name
+            else: u = "Mitarbeiter " + str(User.query.filter_by(username=r.anwender).first().id)
             comments += [[u, datum, zeit, r.notiz]]
         return comments
 
@@ -520,9 +525,14 @@ class BullingerDB:
         return True if c else False
 
     @staticmethod
-    def get_user_stats(user_name):
+    def get_user_stats_all(user_name):
         table = User.query.order_by(desc(User.changes)).all()
         return [[row.id if user_name != row.username else user_name, row.changes, row.finished] for row in table]
+
+    @staticmethod
+    def get_user_stats(user_name):
+        u = User.query.filter_by(username=user_name).first()
+        return u.changes, u.finished
 
     @staticmethod
     def get_language_stats():
