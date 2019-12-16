@@ -537,7 +537,8 @@ class BullingerDB:
     @staticmethod
     def get_user_stats(user_name):
         u = User.query.filter_by(username=user_name).first()
-        return u.changes, u.finished
+        if u: return u.changes, u.finished
+        else: return 0, 0
 
     @staticmethod
     def get_language_stats():
