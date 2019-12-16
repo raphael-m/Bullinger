@@ -252,7 +252,7 @@ class BullingerData:
                     if "Deutsch" not in lang:
                         lang.append("Deutsch")
                 elif t in "lateinisch":
-                    if "Lateinisch" not in lang:
+                    if "Latein" not in lang:
                         lang.append("Latein")
                 elif t in "griechisch":
                     if "Griechisch" not in lang:

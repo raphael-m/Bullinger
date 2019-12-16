@@ -4,13 +4,15 @@
 
 <h1>
     <a href="{{url_for('overview')}}">Übersicht</a> /
-    <a href="{{url_for('overview_year', year=year)}}">{{ year }}</a> / {{ month }}
+    <a href="{{url_for('overview_year', year=vars['year'])}}">{{ vars["year"] }}</a> / {{ vars["month"] }}
 	{% include "user_status.html" %}
 </h1>
 
 <div class="main_box">
 
-	<p>Wählen Sie eine Karteikarte, resp. Brief Nr. (&#8594; <a href="{{url_for('quick_start')}}">Schnellstart</a>):</p>
+	<h2>Monatsübersicht {{ vars["month"]+' '+vars["year"]}}</h2>
+
+	<p>Wählen Sie eine Karteikarte</p>
 
 	<table class="js-sort-table paleBlueRows">
 		<thead class="my_table_head">
@@ -22,43 +24,24 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% for key in data %}
+			{% for r in vars["data"] %}
 			<tr class="my_table_row">
-				<td class="my_table_cell"><a href="{{url_for('assignment', id_brief=key)}}">{{ data[key][0] }}</a></td>
-				<td class="my_table_cell"> {{ data[key][1] }} </td>
-				<td class="my_table_cell"> {{ data[key][2] }} </td>
-				<td class="my_table_cell"> {{ data[key][3] }} </td>
+				<td class="my_table_cell"><a href="{{url_for('assignment', id_brief=r[0])}}">{{ r[0] }}</a></td>
+				<td class="my_table_cell"> {{ r[1] }} </td>
+				<td class="my_table_cell"> {{ r[2] }} </td>
+				<td class="my_table_cell"> {{ r[3] }} </td>
 			</tr>
 			{% endfor %}
 		</tbody>
 	</table>
 
-	<div class="h2_separator"></div>
+	<p>&#8594; <a href="{{url_for('quick_start')}}">Schnellstart</a></p>
+
 	<h2>Fortschritt</h2>
 
-	<p>Statusübersicht (alle {{ count }} Karteikarten vom Monat {{ month }} {{ year }}):</p>
-	<img class="parallel" src="{{url_for('static', filename='images/plots/overview_'+file_name_stats+'.png')}}"/>
-	<div class="parallel">
-		<table class="js-sort-table paleBlueRows">
-			<thead class="my_table_head">
-				<tr class="my_table_head_row">
-					<th class="js-sort-number my_table_head_cell">Status</th>
-					<th class="js-sort-number my_table_head_cell">Anzahl</th>
-					<th class="js-sort-number my_table_head_cell">[%]</th>
-				</tr>
-			</thead>
-			<tbody>
-			{% for key in stats %}
-				<tr class="my_table_row">
-					<td class="my_table_cell">{{ key }}</td>
-					<td class="my_table_cell">{{ stats[key][0] }}</td>
-					<td class="my_table_cell">{{ stats[key][1] }}</td>
-				</tr>
-			{% endfor %}
-			</tbody>
-		</table>
-	</div>
-	<div class="h2_separator"></div>
+	<p>Statusübersicht aller {{ vars["count"] }} Karteikarten vom {{ vars["month"] }} {{ vars["year"] }}:</p>
+
+	{% include "overview__status.html" %}
 
 </div>
 

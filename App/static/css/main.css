@@ -14,7 +14,6 @@ html, body {
 }
 
 #main {
-    padding-bottom: 25px;
     min-width: 21cm;
 }
 
@@ -72,11 +71,4 @@ html, body {
     height: 40px;
     width: 1px;
     background: white;
-}
-
-#menu {
-    float: left;
-    height: 40px;
-    line-height: 40px;
-    background-color: red;
 }

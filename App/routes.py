@@ -13,8 +13,6 @@ from flask import render_template, flash, redirect, url_for, session
 from flask_login import current_user, login_user, login_required, logout_user
 from datetime import datetime
 from Tools.BullingerDB import BullingerDB
-from Tools.Dictionaries import CountDict
-from Tools.Plots import BarChart
 
 import time
 
@@ -26,15 +24,20 @@ database = BullingerDB(db.session)
 @app.route('/home', methods=['POST', 'GET'])
 @app.route('/index', methods=['POST', 'GET'])
 def index():
-    """ welcome """
+    """ start page """
     comment_form = FormComments()
     if comment_form.validate_on_submit() and comment_form.save.data:
         BullingerDB.save_comment(comment_form.comment.data, current_user.username, datetime.now())
-    comments = BullingerDB.get_comments(current_user.username)
+    c_vars = get_base_client_variables()
+    c_vars["comments"] = BullingerDB.get_comments(current_user.username)  # validation/save first
     comment_form.process()
-    return render_template("index.html", title=APP_NAME, form=comment_form, comments=comments,
-        username=current_user.username,
-        user_stats=BullingerDB.get_user_stats(current_user.username))
+    return render_template("index.html", title=APP_NAME, form=comment_form, vars=c_vars)
+
+
+def get_base_client_variables():
+    c_vars = dict()
+    c_vars["username"], c_vars["user_stats"] = current_user.username, BullingerDB.get_user_stats(current_user.username)
+    return c_vars
 
 
 @app.route('/admin', methods=['POST', 'GET'])
@@ -44,7 +47,8 @@ def admin():
 
 @app.route('/admin/setup', methods=['POST', 'GET'])
 def setup():
-    # PASSWORD PROTECTION NEEDED
+    # PASSWORD PROTECTION NEEDED                                                                                    !
+    """ delete and setup db (runtime ~1h) """
     BullingerDB.setup(db.session, "Karteikarten/OCR")
     return redirect(url_for('admin'))
 
@@ -91,58 +95,47 @@ def register():
 @app.route('/overview', methods=['POST', 'GET'])
 @login_required
 def overview():
-    [view_count, open_count, unclear_count, closed_count, invalid_count], id_, s = BullingerDB.get_status_counts(None)
-    data = {}
-    for key in view_count:
-        data[key] = [view_count[key], open_count[key], unclear_count[key], closed_count[key], invalid_count[key]]
-    return render_template('overview.html', title="Übersicht", data=data, img_id=id_, count=s[0], stats=s[1],
-                           username=current_user.username, user_stats=BullingerDB.get_user_stats(current_user.username))
+    c_vars = get_base_client_variables()
+    c_vars["data"], c_vars["file_id"], c_vars["count"], c_vars["stats"] = BullingerDB.get_data_overview(None)
+    return render_template('overview.html', title="Übersicht", vars=c_vars)
 
 
 # - months
 @app.route('/overview_year/<year>', methods=['POST', 'GET'])
 @login_required
 def overview_year(year):
-    [view_count, open_count, unclear_count, closed_count, invalid_count], id_, s = BullingerDB.get_status_counts(year)
-    data = {}
-    for key in view_count:
-        data[key] = [view_count[key], open_count[key], unclear_count[key], closed_count[key], invalid_count[key]]
-    return render_template("overview_year.html", title="Übersicht", year=year, data=data, img_id=id_, count=s[0], stats=s[1],
-                           username=current_user.username, user_stats=BullingerDB.get_user_stats(current_user.username))
+    c_vars = get_base_client_variables()
+    c_vars["year"] = year
+    c_vars["data"], c_vars["file_id"], c_vars["count"], c_vars["stats"] = BullingerDB.get_data_overview(year)
+    return render_template("overview_year.html", title="Übersicht", vars=c_vars)
 
 
 # -days
 @app.route('/overview_month/<year>/<month>', methods=['POST', 'GET'])
 @login_required
 def overview_month(year, month):
-    x = dict()
-    for d in Datum.query.filter_by(jahr_a=year, monat_a=month):
-        r = Kartei.query.filter_by(id_brief=d.id_brief).first().rezensionen
-        s = Kartei.query.filter_by(id_brief=d.id_brief).first().status
-        dot_or_not = '.' if d.tag_a != "s.d." else ''
-        date = str(d.tag_a) + dot_or_not + ' ' + d.monat_a + ' ' + str(d.jahr_a)
-        x[d.id_brief] = [d.id_brief, date, r, s]
-    cd = CountDict()
-    for i in x: cd.add(x[i][3])
-    s = BullingerDB.get_status_evaluation(cd["offen"], cd["abgeschlossen"], cd["unklar"], cd["ungültig"])
-    file_name = year+'_'+month+'_'+str(int(time.time()))
-    BarChart.create_plot_overview(file_name, cd["offen"], cd["abgeschlossen"], cd["unklar"], cd["ungültig"])
-    return render_template("overview_month.html", title="Übersicht", year=year, month=month, data=x,
-                           count=s[0], stats=s[1], file_name_stats=file_name, username=current_user.username,
-                           user_stats=BullingerDB.get_user_stats(current_user.username))
+    c_vars = get_base_client_variables()
+    c_vars["year"], c_vars["month"] = year, month
+    c_vars["data"], c_vars["file_id"], c_vars["count"], c_vars["stats"] = BullingerDB.get_data_overview_month(year, month)
+    return render_template("overview_month.html", title="Übersicht", vars=c_vars)
 
 
 @app.route('/stats', methods=['POST', 'GET'])
 def stats():
-    data_stats = BullingerDB.get_user_stats_all(current_user.username)
-    lang_stats = BullingerDB.get_language_stats()
-    file_name = str(int(time.time()))
-    BullingerDB.create_plot_user_stats(current_user.username, file_name)
-    BullingerDB.create_plot_lang(lang_stats, file_name)
-    sent, received = BullingerDB.get_stats_sent_received(42, 42)
-    return render_template("stats.html", title="Statistiken", data=data_stats, lang_data=lang_stats,
-                           file_name=file_name, sent=sent, received=received, username=current_user.username,
-                           user_stats=BullingerDB.get_user_stats(current_user.username))
+    c_vars, c_vars["n_top"] = get_base_client_variables(), 42  # n top Empfänger/Absender
+    c_vars["user_stats_all"] = BullingerDB.get_user_stats_all(current_user.username)
+    c_vars["lang_stats"] = BullingerDB.get_language_stats()
+    c_vars["file_id"] = str(int(time.time()))
+    c_vars["top_s"], c_vars["top_r"] = BullingerDB.get_stats_sent_received(c_vars["n_top"], c_vars["n_top"])
+    BullingerDB.create_plot_user_stats(current_user.username, c_vars["file_id"])
+    BullingerDB.create_plot_lang(c_vars["lang_stats"], c_vars["file_id"])
+    return render_template("stats.html", title="Statistiken", vars=c_vars)
+
+
+@app.route('/faq', methods=['POST', 'GET'])
+def faq():
+    c_vars = get_base_client_variables()
+    return render_template('faq.html', title="FAQ", vars=c_vars)
 
 
 @app.route('/quick_start', methods=['POST', 'GET'])
@@ -150,14 +143,14 @@ def quick_start():
     i = BullingerDB.quick_start()
     if i:  # next card with status 'offen' or 'unklar'
         return redirect(url_for('assignment', id_brief=str(i)))
-    return redirect(url_for('overview'))
+    return redirect(url_for('overview'))  # we are done !
 
 
 @app.route('/assignment/<id_brief>', methods=['POST', 'GET'])
 @login_required
 def assignment(id_brief):
 
-    card_form, client_variables, i = FormFileCard(), dict(), int(id_brief)
+    card_form, i = FormFileCard(), int(id_brief)
 
     # client properties
     h = card_form.image_height.data
@@ -195,6 +188,7 @@ def assignment(id_brief):
     card_form.img_width.default = session.get('img_width')
 
     # save
+    kartei = Kartei.query.filter_by(id_brief=i).first()
     user, number_of_changes, t = current_user.username, 0, datetime.now()
     if card_form.validate_on_submit():
         number_of_changes += database.save_date(i, card_form, user, t)
@@ -212,23 +206,21 @@ def assignment(id_brief):
         if card_form.submit_and_next.data:
             return redirect(url_for('quick_start'))
 
-    kartei = Kartei.query.filter_by(id_brief=i).first()
-    client_variables["reviews"], client_variables["state"] = kartei.rezensionen, kartei.status
-    client_variables["path_ocr"], client_variables["path_pdf"] = kartei.pfad_OCR, kartei.pfad_PDF
-    client_variables["month"] = database.set_defaults(i, card_form)[1]
-    client_variables["comments"] = BullingerDB.get_comments_card(i, current_user.username)
+    # client variables
+    c_vars = get_base_client_variables()
+    c_vars["reviews"], c_vars["state"] = kartei.rezensionen, kartei.status
+    c_vars["path_ocr"], c_vars["path_pdf"] = kartei.pfad_OCR, kartei.pfad_PDF
+    c_vars["month"] = database.set_defaults(i, card_form)[1]
+    c_vars["comments"] = BullingerDB.get_comments_card(i, current_user.username)
+    c_vars["user_stats"] = BullingerDB.get_user_stats(current_user.username)
+    c_vars["card_path"] = 'cards/HBBW_Karteikarte_' + (5-len(str(i)))*'0'+str(i) + '.png'
 
     # radio buttons
     card_form.state.default = kartei.status
 
-    card_path = 'cards/HBBW_Karteikarte_' + (5 - len(str(i))) * '0' + str(i) + '.png'
     card_form.process()
-
     return render_template('assignment.html',
                            card_index=i,
                            title="Nr. "+str(i),
-                           card_path=card_path,
                            form=card_form,
-                           variable=client_variables,
-                           username=current_user.username,
-                           user_stats=BullingerDB.get_user_stats(current_user.username))
+                           vars=c_vars)

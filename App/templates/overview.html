@@ -9,66 +9,42 @@
 <div class="main_box">
 
 	<h2>Allgemeine Jahresübersicht</h2>
-	<div class="h2_section">
 
-		<p> Wählen Sie in der untenstehenden Tabelle ein Jahr aus oder klicken Sie
-			<a href="{{url_for('quick_start')}}">hier</a>,
-			um mit der erstbesten unbearbeiteten Karte zu beginnen.
-		</p>
+	<p>Wählen Sie ein Jahr:</p>
 
-		<table class="js-sort-table paleBlueRows">
-			<thead class="my_table_head">
-				<tr class="my_table_head_row">
-					<th class="js-sort-number my_table_head_cell">Jahr</th>
-					<th class="js-sort-number my_table_head_cell">Anzahl Briefe</th>
-					<th class="js-sort-number my_table_head_cell">offen</th>
-					<th class="js-sort-number my_table_head_cell">unklar</th>
-					<th class="js-sort-number my_table_head_cell">abgeschlossen</th>
-					<th class="js-sort-number my_table_head_cell">ungültig</th>
-				</tr>
-			</thead>
-			<tbody>
-			{% for key, item in data.items() %}
-				<tr class="my_table_row">
-					<td class="my_table_cell"><a href="{{url_for('overview_year', year=key)}}">{{ key }}</a></td>
-					<td class="my_table_cell">{{ item[0] }}</td>
-					<td class="my_table_cell">{{ item[1] }}</td>
-					<td class="my_table_cell">{{ item[2] }}</td>
-					<td class="my_table_cell">{{ item[3] }}</td>
-					<td class="my_table_cell">{{ item[4] }}</td>
-				</tr>
-			{% endfor %}
-			</tbody>
-		</table>
-	</div>
+	<table class="js-sort-table paleBlueRows">
+		<thead class="my_table_head">
+			<tr class="my_table_head_row">
+				<th class="js-sort-number my_table_head_cell">Jahr</th>
+				<th class="js-sort-number my_table_head_cell">Anzahl Briefe</th>
+				<th class="js-sort-number my_table_head_cell">offen</th>
+				<th class="js-sort-number my_table_head_cell">unklar</th>
+				<th class="js-sort-number my_table_head_cell">abgeschlossen</th>
+				<th class="js-sort-number my_table_head_cell">ungültig</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for d in vars["data"] %}
+			<tr class="my_table_row">
+				<td class="my_table_cell"><a href="{{url_for('overview_year', year=d[0])}}">{{ d[0] }}</a></td>
+				<td class="my_table_cell">{{ d[1] }}</td>
+				<td class="my_table_cell">{{ d[2] }}</td>
+				<td class="my_table_cell">{{ d[3] }}</td>
+				<td class="my_table_cell">{{ d[4] }}</td>
+				<td class="my_table_cell">{{ d[5] }}</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
 
-	<div class="h2_separator"></div>
+	<p>&#8594; <a href="{{url_for('quick_start')}}">Schnellstart</a></p>
+
+
 	<h2>Allgemeine Statusübersicht</h2>
-	<div class="h2_section">
-		<p>Fortschritt bei der Erfassung der {{ count }} Karteikarten:</p>
-		<img class="parallel" src="{{url_for('static', filename='images/plots/overview_all_'+img_id+'.png')}}"/>
-		<div class="parallel">
-			<table class="js-sort-table paleBlueRows">
-				<thead class="my_table_head">
-					<tr class="my_table_head_row">
-						<th class="js-sort-number my_table_head_cell">Status</th>
-						<th class="js-sort-number my_table_head_cell">Anzahl</th>
-						<th class="js-sort-number my_table_head_cell">[%]</th>
-					</tr>
-				</thead>
-				<tbody>
-				{% for key in stats %}
-					<tr class="my_table_row">
-						<td class="my_table_cell">{{ key }}</td>
-						<td class="my_table_cell">{{ stats[key][0] }}</td>
-						<td class="my_table_cell">{{ stats[key][1] }}</td>
-					</tr>
-				{% endfor %}
-				</tbody>
-			</table>
-		</div>
-	</div>
-	<div class="h2_separator"></div>
+
+	<p>Allgemeiner Fortschritt bei der Erfassung aller {{ vars["count"] }} Karteikarten:</p>
+
+	{% include "overview__status.html" %}
 
 </div>
 

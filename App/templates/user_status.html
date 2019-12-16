@@ -5,10 +5,10 @@
     {% if username == "Gast" %}
         nicht angemeldet
     {% else %}
-        {{ username }} -
+        {{ vars["username"] }} -
+        Änderungen: {{ vars["user_stats"][0] }},
+        abgeschlossen: {{ vars["user_stats"][1] }}
     {% endif %}
-    Änderungen: {{ user_stats[0] }},
-    abgeschlossen: {{ user_stats[1] }}
 </div>
 
 {% endblock %}

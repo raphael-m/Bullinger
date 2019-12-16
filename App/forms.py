@@ -43,6 +43,9 @@ class FormFileCard(FlaskForm):
     day_b = StringField("Tag B", id=IDC + _NSD + "day_b")
     remark_date = StringField("Bemerkung zum Datum", id=IDC + _NSD + "remark")
 
+    def set_default_state(self, state):
+        self.state.default = state.status if state else ''
+
     def set_date_as_default(self, date):
         """ :param date: database entry """
         self.year_a.default = 's.d.'  # overwrite regular defaults

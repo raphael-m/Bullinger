@@ -1,21 +1,12 @@
 .main_box {
-    margin: 23px 20% 0px 20%;
+    margin: 0px 20% 0px 20%;
     background: white;
-    border: 2px solid LightGray;
+    border-left: 3px solid Silver;
+    border-right: 3px solid Silver;
 }
 
 .h2_section {
-    margin-bottom: 15px;
-}
 
-.h2_separator {
-    clear: both;
-    height: 50px;
-    min-height: 50px;
-}
-
-.parallel_containers {
-    height: 300px;
 }
 
 .parallel {

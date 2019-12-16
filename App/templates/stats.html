@@ -11,7 +11,7 @@
 	<h2>Helfer</h2>
 	<div class="h2_section">
 
-		<p>Wir haben die Benutzernamen aus Datenschutzgründen anonymisiert. Ihr Name ist daher nur für Sie sichtbar.</p>
+		<p>Aus Datenschutzgründen sind Benutzernamen nicht allgemein sichtbar.</p>
 
 		<table class="js-sort-table paleBlueRows">
 			<thead class="my_table_head">
@@ -22,7 +22,7 @@
 				</tr>
 			</thead>
 			<tbody>
-			{% for r in data %}
+			{% for r in vars["user_stats_all"] %}
 				<tr class="my_table_row">
 					<td class="my_table_cell">{{ r[0] }}</td>
 					<td class="my_table_cell">{{ r[1] }}</td>
@@ -32,21 +32,22 @@
 			</tbody>
 		</table>
 
-		<img class="parallel"
-			 src="{{url_for('static', filename='images/plots/user_stats_changes_'+file_name+'.png')}}"/>
-		<img class="parallel"
-			 src="{{url_for('static', filename='images/plots/user_stats_finished_'+file_name+'.png')}}"/>
+		<p>Ihr Anteil an allen bis dato vorgenommenen Änderungen:</p>
 
+		<img class="parallel"
+			 src="{{url_for('static', filename='images/plots/user_stats_changes_'+vars['file_id']+'.png')}}"/>
+		<img class="parallel"
+			 src="{{url_for('static', filename='images/plots/user_stats_finished_'+vars['file_id']+'.png')}}"/>
 	</div>
+	<div class="clearing"></div>
 
-	<div class="h2_separator"></div>
 	<h2>Sprachen</h2>
 	<div class="h2_section">
 
-		<p>Achtung: Einige der Briefe sind mehrsprachig ...</p>
+		<p>Einige der Briefe sind mehrsprachig ...</p>
 
 		<img class="parallel"
-			 src="{{url_for('static', filename='images/plots/lang_stats_'+file_name+'.png')}}"/>
+			 src="{{url_for('static', filename='images/plots/lang_stats_'+vars['file_id']+'.png')}}"/>
 
 		<div class="parallel">
 		<table class="js-sort-table paleBlueRows">
@@ -58,7 +59,7 @@
 				</tr>
 			</thead>
 			<tbody>
-			{% for l in lang_data %}
+			{% for l in vars["lang_stats"] %}
 				<tr class="my_table_row">
 					<td class="my_table_cell">{{ l[0] }}</td>
 					<td class="my_table_cell">{{ l[1] }}</td>
@@ -70,14 +71,14 @@
 		</div>
 
 	</div>
+	<div class="clearing"></div>
 
-	<div class="h2_separator"></div>
 	<h2>Briefwechsel</h2>
 	<div class="h2_section">
 
-		<p>Wer war in den Briefwechseln am häufigsten involviert?</p>
+		<p>Die "prominentesten" Korrespondenten ...</p>
 
-		<h3>Empfangen/Verschickt (je die top 42)</h3>
+		<h3>Empfangen/Verschickt (je die top {{ vars["n_top"] }})</h3>
 		<div class="parallel">
 			<table class="js-sort-table paleBlueRows">
 				<thead class="my_table_head">
@@ -88,7 +89,8 @@
 					</tr>
 				</thead>
 				<tbody>
-				{% for e in received %}
+				<!-- n top Empfänger -->
+				{% for e in vars["top_r"] %}
 					<tr class="my_table_row">
 						<td class="my_table_cell">{{ e[0] }}</td>
 						<td class="my_table_cell">{{ e[1] }}</td>
@@ -109,7 +111,8 @@
 					</tr>
 				</thead>
 				<tbody>
-				{% for s in sent %}
+				<!-- n top Absender -->
+				{% for s in vars["top_s"] %}
 					<tr class="my_table_row">
 						<td class="my_table_cell">{{ s[0] }}</td>
 						<td class="my_table_cell">{{ s[1] }}</td>
@@ -120,7 +123,7 @@
 			</table>
 		</div>
 	</div>
-	<div class="h2_separator"></div>
+	<div class="clearing"></div>
 
 </div>
 

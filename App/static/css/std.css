@@ -15,7 +15,7 @@ h1 {
 }
 
 h2 {
-    margin-bottom: 10px;
+    margin: 30px 0px 15px 0px;
     height: 21px;
     line-height: 21px;
     padding: 8px 13px;
@@ -36,3 +36,5 @@ h3 {
 p {
     padding: 8px 13px;
 }
+
+.clearing { clear: both; }

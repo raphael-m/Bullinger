@@ -20,6 +20,12 @@ $(document).ready( function() {
 });
 
 $(document).ready( function() {
+    $('#menu_faq').click( function() {
+        window.location.replace("/faq");
+    });
+});
+
+$(document).ready( function() {
     $('#menu_gateway').click( function() {
         window.location.replace("/quick_start");
     });

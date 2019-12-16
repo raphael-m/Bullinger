@@ -1,0 +1,35 @@
+<!-- extends
+        "overview.html",
+        "overview_year.html"
+        "overview_month.html"
+-->
+
+{% block progress %}
+
+<img class="parallel" src="{{url_for('static', filename='images/plots/overview_'+vars['file_id']+'.png')}}"/>
+<div class="parallel">
+    <table class="js-sort-table paleBlueRows">
+        <thead class="my_table_head">
+            <tr class="my_table_head_row">
+                <th class="js-sort-number my_table_head_cell">Status</th>
+                <th class="js-sort-number my_table_head_cell">Anzahl</th>
+                <th class="js-sort-number my_table_head_cell">[%]</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for key in vars["stats"] %}
+            <tr class="my_table_row">
+                <td class="my_table_cell">{{ key }}</td>
+                <td class="my_table_cell">{{ vars["stats"][key][0] }}</td>
+                <td class="my_table_cell">{{ vars["stats"][key][1] }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="clearing"></div>
+
+<p>&#8594; <a href="{{url_for('stats')}}">Statistiken</a></p>
+
+{% endblock %}

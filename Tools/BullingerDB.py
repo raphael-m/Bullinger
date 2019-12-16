@@ -10,8 +10,16 @@ from Tools.Plots import *
 from App.models import *
 from sqlalchemy import asc, desc, func, and_, or_
 from flask import request
+from operator import itemgetter
+from random import sample
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.colors as pltc
+all_colors = [k for k,v in pltc.cnames.items()]
 
-ADMIN = 'Admin'
+ADMIN = 'Admin'  # username (setup)
+L_PROGRESS = ["offen", "abgeschlossen", "unklar", "ungültig"]  # labels (plots)
+C_PROGRESS = ["navy", "forestgreen", "orange", "red"]
 
 
 class BullingerDB:
@@ -26,6 +34,7 @@ class BullingerDB:
         d, card_nr, ignored, errors = BullingerDB(db_session), 1, 0, []
         d.delete_all()
         d.add_bullinger()
+        d.add_guest()
         n_grams_bullinger = NGrams.get_ngram_dicts_dicts("Bullinger", 4)
         n_grams_heinrich = NGrams.get_ngram_dicts_dicts("Heinrich", 4)
         id_bullinger = BullingerDB.get_id_bullinger()
@@ -45,15 +54,14 @@ class BullingerDB:
                 d.add_lang(card_nr, data, remark)
             else:
                 print("*** WARNING, file ignored:", path)
-                d.dbs.add(Datum(id_brief=card_nr, year_a=SD, month_a=SD, day_a=SD,
-                                year_b='', month_b=SD, day_b='', remark='', user=ADMIN, time=d.t))
+                d.push2db(Datum(year_a=SD, month_a=SD, day_a=SD, year_b='', month_b=SD, day_b='', remark=''), card_nr, ADMIN, d.t)
                 ignored += 1
                 errors.append(card_nr)
             card_nr += 1
             d.dbs.commit()
         if ignored: print("*** WARNING,", ignored, "files ignored:", errors)
         # Postprocessing
-        d.count_correspondence()
+        BullingerDB.count_correspondence()
 
     def update_timestamp(self):
         self.t = datetime.now()
@@ -97,6 +105,9 @@ class BullingerDB:
         self.dbs.add(bullinger)
         self.dbs.commit()
 
+    def add_guest(self):
+        self.dbs.add(User(username='Gast', changes=0, finished=0, time=self.t))
+
     @staticmethod
     def get_id_bullinger():
         return Person.query.filter_by(name="Bullinger", vorname="Heinrich", ort="Zürich").first().id
@@ -104,59 +115,54 @@ class BullingerDB:
     def add_date(self, card_nr, data):
         date = BullingerData.extract_date(card_nr, data)
         if not date:
-            date = Datum(id_brief=card_nr, year_a=SD, month_a=SD, day_a=SD, year_b='', month_b=SD, day_b='', remark='')
-        date.user, data.time = ADMIN, self.t
-        self.dbs.add(date)
+            date = Datum(year_a=SD, month_a=SD, day_a=SD, year_b='', month_b=SD, day_b='', remark='')
+        self.push2db(date, card_nr, ADMIN, self.t)
 
     def add_correspondents(self, card_nr, data, n_grams, id_bullinger):
         """ one has to be bullinger """
         if BullingerData.is_bullinger_sender(data, n_grams[0], n_grams[1]):
-            self.dbs.add(Absender(id_brief=card_nr, id_person=id_bullinger, remark='', user=ADMIN, time=self.t))
+            self.push2db(Absender(id_person=id_bullinger, remark=''), card_nr, ADMIN, self.t)
             e = BullingerData.analyze_address(data["Empfänger"])
             if not Person.query.filter_by(name=e[0], vorname=e[1], ort=e[2]).first():
-                self.dbs.add(Person(name=e[0], forename=e[1], place=e[2], verified='Nein', user=ADMIN, time=self.t))
-                self.dbs.commit()
+                self.push2db(Person(name=e[0], forename=e[1], place=e[2], verified='Nein'), card_nr, ADMIN, self.t)
             ref = Person.query.filter_by(name=e[0], vorname=e[1], ort=e[2]).first().id
-            self.dbs.add(Empfaenger(id_brief=card_nr, id_person=ref, remark=e[3], user=ADMIN, time=self.t))
+            self.push2db(Empfaenger(id_brief=card_nr, id_person=ref, remark=e[3]), card_nr, ADMIN, self.t)
         else:
-            self.dbs.add(Empfaenger(id_brief=card_nr, id_person=id_bullinger, remark='', user=ADMIN, time=self.t))
+            self.push2db(Empfaenger(id_brief=card_nr, id_person=id_bullinger, remark=''), card_nr, ADMIN, self.t)
             a = BullingerData.analyze_address(data["Absender"])
             if not Person.query.filter_by(name=a[0], vorname=a[1], ort=a[2]).first():
-                self.dbs.add(Person(name=a[0], forename=a[1], place=a[2], verified='Nein', user=ADMIN, time=self.t))
-                self.dbs.commit()
+                self.push2db(Person(name=a[0], forename=a[1], place=a[2], verified='Nein'), card_nr, ADMIN, self.t)
             ref = Person.query.filter_by(name=a[0], vorname=a[1], ort=a[2]).first().id
-            self.dbs.add(Absender(id_brief=card_nr, id_person=ref, remark=a[3], user=ADMIN, time=self.t))
+            self.push2db(Absender(id_brief=card_nr, id_person=ref, remark=a[3]), card_nr, ADMIN, self.t)
 
     def add_autograph(self, card_nr, data):
         place, signature, scope = BullingerData.get_ssu(data, "A")
         if place or signature:
-            a = Autograph(id_brief=card_nr, standort=place, signatur=signature, umfang=scope, user=ADMIN, time=self.t)
-            self.dbs.add(a)
+            self.push2db(Autograph(standort=place, signatur=signature, umfang=scope), card_nr, ADMIN, self.t)
 
     def add_copy(self, card_nr, data):
         place, signature, scope = BullingerData.get_ssu(data, "B")
         if place or signature:
-            k = Kopie(id_brief=card_nr, standort=place, signatur=signature, umfang=scope, user=ADMIN, time=self.t)
-            self.dbs.add(k)
+            self.push2db(Kopie(standort=place, signatur=signature, umfang=scope), card_nr, ADMIN, self.t)
 
     def add_literature(self, card_nr, data):
         literature = BullingerData.get_literature(data)
         if literature:
-            self.dbs.add(Literatur(id_brief=card_nr, literature=literature, user=ADMIN, time=self.t))
+            self.push2db(Literatur(literature=literature), card_nr, ADMIN, self.t)
 
     def add_printed(self, card_nr, data):
         printed = BullingerData.get_printed(data)
         if printed:
-            self.dbs.add(Gedruckt(id_brief=card_nr, printed=printed, user=ADMIN, time=self.t))
+            self.push2db(Gedruckt(printed=printed), card_nr, ADMIN, self.t)
 
     def add_lang(self, card_nr, data, remark):
         for lang in BullingerData.get_lang(data, remark):
-            self.dbs.add(Sprache(id_brief=card_nr, language=lang, user=ADMIN, time=self.t))
+            self.push2db(Sprache(language=lang), card_nr, ADMIN, self.t)
 
     def add_remark(self, card_nr, data):
         remark = BullingerData.get_remark(data)
         if remark:
-            self.dbs.add(Bemerkung(id_brief=card_nr, remark=remark, user=ADMIN, time=self.t))
+            self.push2db(Bemerkung(remark=remark), card_nr, ADMIN, self.t)
             return remark
         return ''
 
@@ -178,16 +184,18 @@ class BullingerDB:
             form.set_language_as_default([s for s in sprache if s.zeit == sprache.first().zeit])
         form.set_printed_as_default(Gedruckt.query.filter_by(id_brief=id_).order_by(desc(Gedruckt.zeit)).first())
         form.set_sentence_as_default(Bemerkung.query.filter_by(id_brief=id_).order_by(desc(Bemerkung.zeit)).first())
+        form.set_default_state(Kartei.query.filter_by(id_brief=id_).first())
         return [datum.jahr_a, datum.monat_a, datum.tag_a]
 
-    def count_correspondence(self):
+    @staticmethod
+    def count_correspondence():
         for e in Empfaenger.query.all():
             p = Person.query.get(e.id_person)
             p.empfangen = p.empfangen+1 if p.empfangen else 1
         for a in Absender.query.all():
             p = Person.query.get(a.id_person)
             p.gesendet = p.gesendet+1 if p.gesendet else 1
-        self.dbs.commit()
+        db.session.commit()
 
     def save_date(self, i, card_form, user, t):
         datum_old, n = Datum.query.filter_by(id_brief=i).order_by(desc(Datum.zeit)).first(), 0
@@ -197,13 +205,11 @@ class BullingerDB:
         # date doesn't exist yet (this should never be the case)
         elif card_form.year_a.data or request.form['card_month_a'] != SD or card_form.day_a.data \
                 or card_form.year_b.data or request.form['card_month_b'] != SD or card_form.day_b.data:
-                new_date = Datum(id_brief=i,
+                self.push2db(Datum(
                     year_a=card_form.year_a.data, month_a=request.form['card_month_a'], day_a=card_form.day_a.data,
                     year_b=card_form.year_b.data, month_b=request.form['card_month_b'], day_b=card_form.day_b.data,
-                    remark=card_form.remark_date.data, user=user, time=t)
-                db.session.add(new_date)
+                    remark=card_form.remark_date.data), i, user, t)
                 n = 7
-        self.dbs.commit()
         return n
 
     def save_autograph(self, i, card_form, user, t):
@@ -212,116 +218,96 @@ class BullingerDB:
             new_autograph, n = card_form.update_autograph(autograph_old)
             self.push2db(new_autograph, i, user, t)
         elif card_form.place_autograph.data:
-            self.dbs.add(Autograph(id_brief=i, standort=card_form.place_autograph.data,
-                                   signatur=card_form.signature_autograph.data, umfang=card_form.scope_autograph.data,
-                                   user=user, time=t))
+            self.push2db(Autograph(standort=card_form.place_autograph.data,
+                                   signatur=card_form.signature_autograph.data, umfang=card_form.scope_autograph.data),
+                         i, user, t)
             n = 3
         self.dbs.commit()
         return n
 
     def save_the_receiver(self, i, card_form, user, t):
-        emp_old, pers_old = Empfaenger.query.filter_by(id_brief=i).order_by(desc(Empfaenger.zeit)).first(), None
-        if emp_old:
-            pers_old = Person.query.filter_by(id=emp_old.id_person).order_by(desc(Person.zeit)).first()
-        p_new_query = Person.query.filter_by(name=card_form.name_receiver.data,
-                                             vorname=card_form.forename_receiver.data,
-                                             ort=card_form.place_receiver.data,
-                                             verifiziert=card_form.receiver_verified.data)\
-            .order_by(desc(Person.zeit)).first()
-        new_person = Person(name=card_form.name_receiver.data,
-                            forename=card_form.forename_receiver.data,
-                            place=card_form.place_receiver.data,
-                            verified=card_form.receiver_verified.data,
-                            user=user, time=t)
+        emp_old = Empfaenger.query.filter_by(id_brief=i).order_by(desc(Empfaenger.zeit)).first()
+        pers_old = Person.query.filter_by(id=emp_old.id_person).order_by(desc(Person.zeit)).first() if emp_old else None
+
+        p_new_query = Person.query.filter_by(
+            name=card_form.name_receiver.data,
+            vorname=card_form.forename_receiver.data,
+            ort=card_form.place_receiver.data,
+            verifiziert=card_form.receiver_verified.data).order_by(desc(Person.zeit)).first()
+
+        new_person = Person(
+            name=card_form.name_receiver.data,
+            forename=card_form.forename_receiver.data,
+            place=card_form.place_receiver.data,
+            verified=card_form.receiver_verified.data
+        )
         if emp_old:
             if pers_old:
                 n = card_form.get_number_of_differences_from_receiver(pers_old)
                 if n:
                     if p_new_query:  # p_new well known ==> (r_new -> p)
-                        self.dbs.add(Empfaenger(id_brief=i, id_person=p_new_query.id,
-                                                remark=card_form.remark_receiver.data,
-                                                user=user, time=t))
+                        self.push2db(Empfaenger(id_person=p_new_query.id, remark=card_form.remark_receiver.data), i, user, t)
                     else:  # new p, new e->p
-                        self.dbs.add(new_person)
-                        self.dbs.commit()  # id
-                        self.dbs.add(Empfaenger(id_brief=i, id_person=new_person.id,
-                                                remark=card_form.remark_receiver.data,
-                                                user=user, time=t))
+                        self.push2db(new_person, i, user, t)  # id
+                        self.push2db(Empfaenger(id_person=new_person.id, remark=card_form.remark_receiver.data), i, user, t)
                     if card_form.has_changed__receiver_comment(emp_old): n += 1
-                else:  # comment changes only
-                    if card_form.has_changed__receiver_comment(emp_old):
-                        self.dbs.add(Empfaenger(id_brief=i, id_person=pers_old.id,
-                                                remark=card_form.remark_receiver.data,
-                                                user=user, time=t))
-                        n = 1
+                elif card_form.has_changed__receiver_comment(emp_old):  # comment change only
+                    self.push2db(Empfaenger(id_person=pers_old.id, remark=card_form.remark_receiver.data), i, user, t)
+                    n = 1
             else:
                 n = 4
-                self.dbs.add(new_person)
-                self.dbs.commit()  # id
-                self.dbs.add(Empfaenger(id_brief=i, id_person=new_person.id, remark=card_form.remark_receiver.data,
-                                        user=user, time=t))
+                self.push2db(new_person, i, user, t)  # id
+                self.push2db(Empfaenger(id_person=new_person.id, remark=card_form.remark_receiver.data), i, user, t)
         else:
             n = 4
             if p_new_query:
-                self.dbs.add(Empfaenger(id_brief=i, id_person=p_new_query.id, remark=card_form.remark_receiver.data,
-                                        user=user, time=t))
+                self.push2db(Empfaenger(id_person=p_new_query.id, remark=card_form.remark_receiver.data), i, user, t)
             else:
-                self.dbs.add(new_person)
-                self.dbs.commit()  # id
-                self.dbs.add(Empfaenger(id_brief=i, id_person=new_person.id, remark=card_form.remark_receiver.data,
-                                        user=user, time=t))
+                self.push2db(new_person, i, user, t)  # id
+                self.push2db(Empfaenger(id_person=new_person.id, remark=card_form.remark_receiver.data), i, user, t)
         self.dbs.commit()
         return n
 
     def save_the_sender(self, i, card_form, user, t):
-        abs_old, pers_old = Absender.query.filter_by(id_brief=i).order_by(desc(Absender.zeit)).first(), None
-        if abs_old: pers_old = Person.query.filter_by(id=abs_old.id_person).order_by(desc(Person.zeit)).first()
-        p_new_query = Person.query.filter_by(name=card_form.name_sender.data,
-                                             vorname=card_form.forename_sender.data,
-                                             ort=card_form.place_sender.data,
-                                             verifiziert=card_form.sender_verified.data
-        ).order_by(desc(Person.zeit)).first()
-        new_person = Person(name=card_form.name_sender.data,
-                            forename=card_form.forename_sender.data,
-                            place=card_form.place_sender.data,
-                            verified=card_form.sender_verified.data,
-                            user=user, time=t)
+        abs_old = Absender.query.filter_by(id_brief=i).order_by(desc(Absender.zeit)).first()
+        pers_old = Person.query.filter_by(id=abs_old.id_person).order_by(desc(Person.zeit)).first() if abs_old else None
+
+        p_new_query = Person.query.filter_by(
+            name=card_form.name_sender.data,
+            vorname=card_form.forename_sender.data,
+            ort=card_form.place_sender.data,
+            verifiziert=card_form.sender_verified.data).order_by(desc(Person.zeit)).first()
+
+        new_person = Person(
+            name=card_form.name_sender.data,
+            forename=card_form.forename_sender.data,
+            place=card_form.place_sender.data,
+            verified=card_form.sender_verified.data
+        )
         if abs_old:
             if pers_old:
                 n = card_form.get_number_of_differences_from_sender(pers_old)
                 if n:
                     if p_new_query:  # p_new well known ==> (r_new -> p)
-                        self.dbs.add(Absender(id_brief=i, id_person=p_new_query.id, remark=card_form.remark_sender.data,
-                                              user=user, time=t))
+                        self.push2db(Absender(id_person=p_new_query.id, remark=card_form.remark_sender.data), i, user, t)
                     else:  # new p, new e->p
-                        self.dbs.add(new_person)
-                        self.dbs.commit()  # id
-                        self.dbs.add(Absender(id_brief=i, id_person=new_person.id, remark=card_form.remark_sender.data,
-                                              user=user, time=t))
+                        self.push2db(new_person, i, user, t)  # id
+                        self.push2db(Absender(id_person=new_person.id, remark=card_form.remark_sender.data), i, user, t)
                     if card_form.has_changed__sender_comment(abs_old): n += 1
-
-                else:  # comment changes only
-                    if card_form.has_changed__sender_comment(abs_old):
-                        self.dbs.add(Absender(id_brief=i, id_person=pers_old.id, remark=card_form.remark_sender.data,
-                                              user=user, time=t))
-                        n += 1
+                elif card_form.has_changed__sender_comment(abs_old):  # comment changes only
+                    self.push2db(Absender(id_person=pers_old.id, remark=card_form.remark_sender.data), i, user, t)
+                    n += 1
             else:
                 n = 4
-                self.dbs.add(new_person)
-                self.dbs.commit()  # id
-                self.dbs.add(Absender(id_brief=i, id_person=new_person.id, remark=card_form.remark_sender.data,
-                                      user=user, time=t))
+                self.push2db(new_person, i, user, t)  # id
+                self.push2db(Absender(id_person=new_person.id, remark=card_form.remark_sender.data), i, user, t)
         else:
             n = 4
             if p_new_query:
-                self.dbs.add(Absender(id_brief=i, id_person=p_new_query.id, remark=card_form.remark_sender.data,
-                                      user=user, time=t))
+                self.push2db(Absender(id_person=p_new_query.id, remark=card_form.remark_sender.data), i, user, t)
             else:
-                self.dbs.add(new_person)
-                self.dbs.commit()  # id
-                self.dbs.add(Absender(id_brief=i, id_person=new_person.id, remark=card_form.remark_sender.data,
-                                      user=user, time=t))
-        self.dbs.commit()
+                self.push2db(new_person, i, user, t)  # id
+                self.push2db(Absender(id_person=new_person.id, remark=card_form.remark_sender.data), i, user, t)
         return n
 
     def save_copy(self, i, card_form, user, t):
@@ -330,10 +316,9 @@ class BullingerDB:
             new_copy, n = card_form.update_copy(copy_old)
             self.push2db(new_copy, i, user, t)
         elif card_form.place_copy.data or card_form.signature_copy.data or card_form.scope_copy.data:
-            self.dbs.add(Kopie(id_brief=i, standort=card_form.place_copy.data, signatur=card_form.signature_copy.data,
-                               umfang=card_form.scope_copy.data, user=user, time=t))
+            self.push2db(Kopie(standort=card_form.place_copy.data, signatur=card_form.signature_copy.data,
+                               umfang=card_form.scope_copy.data), i, user, t)
             n = 3
-        self.dbs.commit()
         return n
 
     def save_literature(self, i, card_form, user, t):
@@ -342,25 +327,20 @@ class BullingerDB:
             new_literatur, n = card_form.update_literature(literatur_old)
             self.push2db(new_literatur, i, user, t)
         elif card_form.literature.data:
-            self.dbs.add(Literatur(id_brief=i, literature=card_form.literature.data, user=user, time=t))
+            self.push2db(Literatur(literature=card_form.literature.data), i, user, t)
             n = 1
-        self.dbs.commit()
         return n
 
     def save_language(self, i, card_form, user, t):
         lang_entry, n = Sprache.query.filter_by(id_brief=i).order_by(desc(Sprache.zeit)).first(), 0
         if lang_entry:
-            language_records = Sprache.query.filter_by(id_brief=i)\
-                .filter_by(zeit=lang_entry.zeit).order_by(desc(Sprache.zeit)).all()
+            language_records = Sprache.query.filter_by(id_brief=i).filter_by(zeit=lang_entry.zeit).order_by(desc(Sprache.zeit)).all()
             new_sprachen, n = card_form.update_language(language_records)
             if new_sprachen:
-                for s in new_sprachen:
-                    self.push2db(s, i, user, t)
+                for s in new_sprachen: self.push2db(s, i, user, t)
         elif card_form.language.data:
-            for s in card_form.split_lang(card_form.language.data):
-                self.dbs.add(Sprache(id_brief=i, language=s, user=user, time=t))
-                n += 1
-        self.dbs.commit()
+            for s in card_form.split_lang(card_form.language.data): self.push2db(Sprache(language=s), i, user, t)
+            n += 1
         return n
 
     def save_printed(self, i, card_form, user, t):
@@ -369,9 +349,8 @@ class BullingerDB:
             new_gedruckt, n = card_form.update_printed(gedruckt_old)
             self.push2db(new_gedruckt, i, user, t)
         elif card_form.printed.data:
-            self.dbs.add(Gedruckt(id_brief=i, printed=card_form.printed.data, user=user, time=t))
+            self.push2db(Gedruckt(printed=card_form.printed.data), i, user, t)
             n = 1
-        self.dbs.commit()
         return n
 
     def save_remark(self, i, card_form, user, t):
@@ -380,15 +359,12 @@ class BullingerDB:
             new_bemerkung, n = card_form.update_sentence(sentence_old)
             self.push2db(new_bemerkung, i, user, t)
         elif card_form.sentence.data:
-            self.dbs.add(Bemerkung(id_brief=i, remark=card_form.sentence.data, user=user, time=t))
+            self.push2db(Bemerkung(remark=card_form.sentence.data), i, user, t)
             n = 1
-        self.dbs.commit()
         return n
 
     def save_comment_card(self, i, card_form, user, t):
-        if card_form.note.data:
-            self.dbs.add(Notiz(id_brief=i, notiz=card_form.note.data, user=user, time=t))
-            self.dbs.commit()
+        if card_form.note.data: self.push2db(Notiz(notiz=card_form.note.data), i, user, t)
 
     @staticmethod
     def get_comments_card(i, user):
@@ -423,6 +399,7 @@ class BullingerDB:
             db_record.anwender = user
             db_record.zeit = time_stamp
             self.dbs.add(db_record)
+            self.dbs.commit()
 
     # other queries
     @staticmethod
@@ -438,9 +415,21 @@ class BullingerDB:
         )
         return query
 
+    # Overviews
+    @staticmethod
+    def get_data_overview(year):
+        """ yearly: number of letters and their state """
+        [n_letters, n_open, n_unclear, n_closed, n_invalid], file_id, c, p = BullingerDB.get_status_counts(year)
+        data, sd = [], []
+        for key in n_letters:
+            if isinstance(key, int):
+                data.append([key, n_letters[key], n_open[key], n_unclear[key], n_closed[key], n_invalid[key]])
+            else: sd.append([key, n_letters[key], n_open[key], n_unclear[key], n_closed[key], n_invalid[key]])
+        return sd+sorted(data, key=itemgetter(0)), file_id, c, p
+
     @staticmethod
     def get_status_counts(year):
-        """ 0^="year", 1^="month" """
+        """ yearly overview """
         recent_dates = BullingerDB.get_most_recent_only(db.session, Datum)
         view_count = CountDict()  # year or month --> letter count
         unclear_count, closed_count, invalid_count, open_count = CountDict(), CountDict(), CountDict(), CountDict()
@@ -459,32 +448,44 @@ class BullingerDB:
             else:
                 if str(r.jahr_a) != year: continue
                 i = r.monat_a
-            if r.status == 'abgeschlossen':
-                closed_count.add(i)
-            if r.status == 'unklar':
-                unclear_count.add(i)
-            if r.status == 'ungültig':
-                invalid_count.add(i)
-            if r.status == 'offen':
-                open_count.add(i)
+            if r.status == 'abgeschlossen': closed_count.add(i)
+            if r.status == 'unklar': unclear_count.add(i)
+            if r.status == 'ungültig': invalid_count.add(i)
+            if r.status == 'offen': open_count.add(i)
         o = sum([open_count[c] for c in open_count])
         a = sum([closed_count[c] for c in closed_count])
         u = sum([unclear_count[c] for c in unclear_count])
         i = sum([invalid_count[c] for c in invalid_count])
-        file_name = year if year else "all"
-        id_ = str(int(time.time()))
-        BarChart.create_plot_overview(file_name+'_'+id_, o, a, u, i)
+        file_id = str(int(time.time()))
+        PieChart.create_plot_overview_stats(file_id, [o, a, u, i], L_PROGRESS, C_PROGRESS)
         data_stats = BullingerDB.get_status_evaluation(o, a, u, i)
-        return [view_count, open_count, unclear_count, closed_count, invalid_count], id_, data_stats
+        return [view_count, open_count, unclear_count, closed_count, invalid_count], file_id, data_stats[0], data_stats[1]
+
+    @staticmethod
+    def get_data_overview_month(year, month):
+        data = []
+        for d in Datum.query.filter_by(jahr_a=year, monat_a=month):
+            r = Kartei.query.filter_by(id_brief=d.id_brief).first().rezensionen
+            s = Kartei.query.filter_by(id_brief=d.id_brief).first().status
+            dot_or_not = '.' if d.tag_a != SD else ''
+            date = str(d.tag_a) + dot_or_not + ' ' + d.monat_a + ' ' + str(d.jahr_a)
+            data.append([d.id_brief, date, r, s])
+        cd = CountDict()
+        for row in data: cd.add(row[3])
+        file_id = year + '_' + month + '_' + str(int(time.time()))
+        c, p = BullingerDB.get_status_evaluation(cd["offen"], cd["abgeschlossen"], cd["unklar"], cd["ungültig"])
+        PieChart.create_plot_overview_stats(file_id, [cd["offen"], cd["abgeschlossen"], cd["unklar"], cd["ungültig"]], L_PROGRESS, C_PROGRESS)
+        return data, file_id, c, p
 
     @staticmethod
     def get_status_evaluation(o, a, u, i):
-        d, t = dict(), sum([o, a, u, i])
-        d["offen"] = [o, round(100*o/t, 3)]
-        d["abgeschlossen"] = [a, round(100*a/t, 3)]
-        d["unklar"] = [u, round(100*u/t, 3)]
-        d["ungültig"] = [i, round(100*i/t, 3)]
-        return [t, d]
+        """ :return: [<int>: total number of cards; <dict>: state <str> -> [count <int>, percentage <float>] """
+        data, number_of_cards = dict(), sum([o, a, u, i])
+        data["offen"] = [o, round(100*o/number_of_cards, 3)]
+        data["abgeschlossen"] = [a, round(100*a/number_of_cards, 3)]
+        data["unklar"] = [u, round(100*u/number_of_cards, 3)]
+        data["ungültig"] = [i, round(100*i/number_of_cards, 3)]
+        return [number_of_cards, data]
 
     @staticmethod
     def quick_start():  # ">>"
@@ -495,8 +496,10 @@ class BullingerDB:
         if e: return e.id_brief
         return None  # redirect to another page...
 
+    # Navigation between assignments
     @staticmethod
     def get_next_card_number(i):  # ">"
+        """ next card in order """
         return i+1 if i+1 <= Kartei.query.count() else 1
 
     @staticmethod
@@ -505,6 +508,7 @@ class BullingerDB:
 
     @staticmethod
     def get_prev_assignment(i):  # "<<"
+        """ prev open (/unclear, if #open is 0) """
         i, j = BullingerDB.get_prev_card_number(i), Kartei.query.count()
         while not BullingerDB.is_assignable(i) and j > 0:
             i = BullingerDB.get_prev_card_number(i)
@@ -524,6 +528,7 @@ class BullingerDB:
         c = Kartei.query.filter_by(id_brief=i).filter(or_(Kartei.status == 'offen', Kartei.status == 'unklar')).first()
         return True if c else False
 
+    # Stats/Plots
     @staticmethod
     def get_user_stats_all(user_name):
         table = User.query.order_by(desc(User.changes)).all()
@@ -536,29 +541,22 @@ class BullingerDB:
 
     @staticmethod
     def get_language_stats():
-        cd, data = CountDict(), []
+        cd, data, no_lang = CountDict(), [], 0
         for s in Sprache.query.all():
             cd.add(s.sprache)
         n = Kartei.query.count()
         for s in cd: data.append([s, cd[s], round(cd[s]/n*100, 3)])
-        return data
-
-    @staticmethod
-    def create_plot_overview_stats():
-        a = Kartei.query.filter(Kartei.status == "abgeschlossen").count()
-        i = Kartei.query.filter(Kartei.status == "ungültig").count()
-        o = Kartei.query.filter(Kartei.status == "offen").count()
-        u = Kartei.query.filter(Kartei.status == "unklar").count()
-        id_ = str(int(time.time()))
-        BarChart.create_plot_overview("all_"+id_, o, a, u, i)
-        return id_
+        # for i in range(n+1):  # too expensive ...
+        #    if not Sprache.query.filter_by(id_brief=i).first(): no_lang += 1
+        # data.append(['-', no_lang, no_lang/n*100, 3])
+        return sorted(data, key=itemgetter(1))
 
     @staticmethod
     def create_plot_lang(data, file_name):
         fig = plt.figure()
         labels = [d[0] for d in data]
         sizes = [d[1] for d in data]
-        colors = ['yellowgreen', 'gold', 'lightskyblue', 'lightcoral', 'midnightblue']
+        colors = sample(all_colors, len(sizes))
         patches, texts = plt.pie(sizes, colors=colors, shadow=True, startangle=90)
         plt.legend(patches, labels, loc="best")
         plt.axis('equal')

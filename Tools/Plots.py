@@ -103,7 +103,7 @@ def draw_grid(plt):
 class BarChart:
 
     @staticmethod
-    def create_plot_overview(file_name, offen, abgeschlossen, unklar, ungueltig):
+    def create_plot_overview(file_id, offen, abgeschlossen, unklar, ungueltig):
         fig = plt.figure()
         bars = ('offen', 'abgeschlossen', 'unklar', 'ungültig')
         y_pos = np.arange(len(bars))
@@ -111,9 +111,18 @@ class BarChart:
         plt.bar(y_pos, performance, align='center', alpha=0.5)
         plt.xticks(y_pos, bars)
         plt.ylabel('Anzahl Karteikarten')
-        fig.savefig('App/static/images/plots/overview_'+file_name+'.png')
+        fig.savefig('App/static/images/plots/overview_' + file_id + '.png')
         plt.close()
 
-        # clean up
-        # c = FileSystem.get_number_of_files('App/static/images/plots/')
-        # if c > 200: FileSystem.delete_all_recursively('App/static/images/plots/')
+
+class PieChart:
+
+    @staticmethod
+    def create_plot_overview_stats(file_id, sizes, labels, colors):
+        fig = plt.figure()
+        patches, texts = plt.pie(sizes, colors=colors, shadow=True, startangle=90)
+        plt.legend(patches, labels, loc="best")
+        plt.axis('equal')
+        plt.tight_layout()
+        fig.savefig('App/static/images/plots/overview_'+file_id+'.png')
+        plt.close()
