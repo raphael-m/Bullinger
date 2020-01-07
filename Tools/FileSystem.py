@@ -49,4 +49,5 @@ class FileSystem:
 
     @staticmethod
     def delete_all_recursively(path):
+        """ delete directory regardlessly """
         shutil.rmtree(path)

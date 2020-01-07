@@ -5,8 +5,10 @@
 # 30th of November, 2019
 
 import os, time
+import psutil
 from Tools.Dictionaries import CountDict
 from Tools.Plots import *
+from Tools.Octopus import *
 from App.models import *
 from sqlalchemy import asc, desc, func, and_, or_
 from flask import request
@@ -30,7 +32,7 @@ class BullingerDB:
 
     @staticmethod
     def setup(db_session, dir_path):
-        """ creates the entire date base (ocr data) """
+        """ creates the entire date base basing on ocr data """
         d, card_nr, ignored, errors = BullingerDB(db_session), 1, 0, []
         d.delete_all()
         d.add_bullinger()
@@ -62,6 +64,34 @@ class BullingerDB:
         if ignored: print("*** WARNING,", ignored, "files ignored:", errors)
         # Postprocessing
         BullingerDB.count_correspondence()
+
+    @staticmethod
+    def employ_octopus():
+        """
+        in_out_pairs = []
+        file_ids = [d.id_brief for d in Datum.query.filter_by(jahr_a=SD, monat_a=SD, tag_a=SD).all()]
+        for i in file_ids:
+            file_out = 'Karteikarten/OCR_Kraken/HBBW_Karteikarte_' + (5 - len(str(i))) * '0' + str(i) + '.ocr'
+            if not os.path.exists(file_out):
+                file_in = 'App/static/cards/HBBW_Karteikarte_' + (5 - len(str(i))) * '0' + str(i) + '.png'
+                in_out_pairs.append([file_in, file_out])
+        """
+        in_out_pairs = []
+        file_ids = [k.id_brief for k in Kartei.query.all()]
+        for i in file_ids:
+            file_out = 'Karteikarten/OCR_Kraken/HBBW_Karteikarte_' + (5 - len(str(i))) * '0' + str(i) + '.ocr'
+            if not os.path.exists(file_out):
+                file_in = 'App/static/cards/HBBW_Karteikarte_' + (5 - len(str(i))) * '0' + str(i) + '.png'
+                in_out_pairs.append([file_in, file_out])
+
+        for pair in in_out_pairs:
+            print(pair[1])
+            subp = Octopus.run(pair[0], pair[1])
+            p = psutil.Process(subp.pid)
+            try: p.wait(timeout=60 * 1.5)
+            except psutil.TimeoutExpired:
+                p.kill()
+                continue
 
     def update_timestamp(self):
         self.t = datetime.now()
@@ -114,8 +144,11 @@ class BullingerDB:
 
     def add_date(self, card_nr, data):
         date = BullingerData.extract_date(card_nr, data)
-        if not date:
-            date = Datum(year_a=SD, month_a=SD, day_a=SD, year_b='', month_b=SD, day_b='', remark='')
+        if not date:  # Octopus
+            path = 'Karteikarten/OCR_Kraken/HBBW_Karteikarte_' + (5-len(str(card_nr)))*'0'+str(card_nr) + '.ocr'
+            data = BullingerData.get_data_as_dict(path)
+            if data: date = BullingerData.extract_date(card_nr, data)
+            if not date: date = Datum(year_a=SD, month_a=SD, day_a=SD, year_b='', month_b=SD, day_b='', remark='')
         self.push2db(date, card_nr, ADMIN, self.t)
 
     def add_correspondents(self, card_nr, data, n_grams, id_bullinger):

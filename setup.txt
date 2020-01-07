@@ -29,6 +29,12 @@ Execution (locally)
 ((source venv/bin/activate))
 (venv) $ flask run
 
+Kraken (http://kraken.re/)
+--------------------------
+$ pip3 install kraken
+$ kraken get 10.5281/zenodo.2577813  # language model EN, "en_best.mlmodel"
+    --> doesn't work (has been migrated)
+
 GitHub
 ------
 (git status)
@@ -98,9 +104,6 @@ $ sudo nano /etc/supervisor/conf.f/bullinger.conf
 $ sudo supervisorctl reload
 $ sudo systemctl restart nginx
 
-
-
-
 RESTART
 
 nginx
@@ -110,3 +113,13 @@ $ sudo systemctl stop nginx
 $ sudo supervisorctl stop all
 $ sudo service supervisor restart
 $ sudo service nginx restart
+
+
+$ sudo systemctl stop nginx
+$ sudo supervisorctl stop all
+$ sudo service nginx restart
+$ sudo service supervisor reload
+$ sudo supervisorctl reload
+$ gunicorn -w 33 App:app
+
+pkill gunicorn

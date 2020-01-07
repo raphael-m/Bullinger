@@ -1,0 +1,4214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alto xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.loc.gov/standards/alto/ns-v4#"
+	xsi:schemaLocation="http://www.loc.gov/standards/alto/ns-v4# http://www.loc.gov/standards/alto/v4/alto-4-0.xsd">
+	<Description>
+		<MeasurementUnit>pixel</MeasurementUnit>
+		<sourceImageInformation>
+			<fileName>/var/folders/rg/b9n_00t151zd086p_fbb3kcr0000gn/T/tmpsppq5t0u</fileName>
+		</sourceImageInformation>
+		<OCRProcessing ID="OCR_0">
+			<ocrProcessingStep>
+				<processingSoftware>
+					<softwareName>kraken</softwareName>
+				</processingSoftware>
+			</ocrProcessingStep>
+		</OCRProcessing>
+	</Description>
+
+	<Layout>
+		<Page WIDTH="4928" HEIGHT="3474" PHYSICAL_IMG_NR="0" ID="page_0">
+			<PrintSpace HPOS="0" VPOS="0" WIDTH="4928" HEIGHT="3474">
+				<TextBlock HPOS="0" VPOS="0" ID="textblock_0" WIDTH="4928" HEIGHT="3474">
+					<TextLine ID="line_0"
+						  HPOS="101"
+						  VPOS="64" 
+						  WIDTH="186" 
+						  HEIGHT="100">
+							<String ID="segment_0"
+								CONTENT="Datum" 
+								HPOS="101" 
+								VPOS="64"
+								WIDTH="186" 
+								HEIGHT="100" 
+								WC="1.0">
+								<Glyph ID="char_0" 
+								       CONTENT="D"
+								       HPOS="101"
+								       VPOS="64"
+								       WIDTH="10"
+								       HEIGHT="100"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_1" 
+								       CONTENT="a"
+								       HPOS="160"
+								       VPOS="64"
+								       WIDTH="9"
+								       HEIGHT="100"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_2" 
+								       CONTENT="t"
+								       HPOS="199"
+								       VPOS="64"
+								       WIDTH="0"
+								       HEIGHT="100"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_3" 
+								       CONTENT="u"
+								       HPOS="228"
+								       VPOS="64"
+								       WIDTH="10"
+								       HEIGHT="100"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_4" 
+								       CONTENT="m"
+								       HPOS="277"
+								       VPOS="64"
+								       WIDTH="10"
+								       HEIGHT="100"
+								       GC="1.0">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_1"
+						  HPOS="196"
+						  VPOS="247" 
+						  WIDTH="670" 
+						  HEIGHT="87">
+							<String ID="segment_1"
+								CONTENT="155A" 
+								HPOS="196" 
+								VPOS="247"
+								WIDTH="174" 
+								HEIGHT="87" 
+								WC="0.9984">
+								<Glyph ID="char_5" 
+								       CONTENT="1"
+								       HPOS="196"
+								       VPOS="247"
+								       WIDTH="0"
+								       HEIGHT="87"
+								       GC="0.9998">
+								</Glyph>
+								<Glyph ID="char_6" 
+								       CONTENT="5"
+								       HPOS="250"
+								       VPOS="247"
+								       WIDTH="13"
+								       HEIGHT="87"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_7" 
+								       CONTENT="5"
+								       HPOS="317"
+								       VPOS="247"
+								       WIDTH="0"
+								       HEIGHT="87"
+								       GC="0.9937">
+								</Glyph>
+								<Glyph ID="char_8" 
+								       CONTENT="A"
+								       HPOS="370"
+								       VPOS="247"
+								       WIDTH="0"
+								       HEIGHT="87"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_2"
+							    HPOS="424" 
+							    VPOS="247"
+							    WIDTH="27" 
+							    HEIGHT="87"/>
+							<String ID="segment_3"
+								CONTENT="Juli" 
+								HPOS="504" 
+								VPOS="247"
+								WIDTH="175" 
+								HEIGHT="87" 
+								WC="0.9998">
+								<Glyph ID="char_10" 
+								       CONTENT="J"
+								       HPOS="504"
+								       VPOS="247"
+								       WIDTH="0"
+								       HEIGHT="87"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_11" 
+								       CONTENT="u"
+								       HPOS="545"
+								       VPOS="247"
+								       WIDTH="13"
+								       HEIGHT="87"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_12" 
+								       CONTENT="l"
+								       HPOS="625"
+								       VPOS="247"
+								       WIDTH="0"
+								       HEIGHT="87"
+								       GC="0.9998">
+								</Glyph>
+								<Glyph ID="char_13" 
+								       CONTENT="i"
+								       HPOS="679"
+								       VPOS="247"
+								       WIDTH="0"
+								       HEIGHT="87"
+								       GC="0.9993">
+								</Glyph>
+							</String>
+							<SP ID="segment_4"
+							    HPOS="719" 
+							    VPOS="247"
+							    WIDTH="40" 
+							    HEIGHT="87"/>
+							<String ID="segment_5"
+								CONTENT="9." 
+								HPOS="799" 
+								VPOS="247"
+								WIDTH="67" 
+								HEIGHT="87" 
+								WC="0.9867">
+								<Glyph ID="char_15" 
+								       CONTENT="9"
+								       HPOS="799"
+								       VPOS="247"
+								       WIDTH="14"
+								       HEIGHT="87"
+								       GC="0.9994">
+								</Glyph>
+								<Glyph ID="char_16" 
+								       CONTENT="."
+								       HPOS="866"
+								       VPOS="247"
+								       WIDTH="0"
+								       HEIGHT="87"
+								       GC="0.9741">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_2"
+						  HPOS="104"
+						  VPOS="879" 
+						  WIDTH="361" 
+						  HEIGHT="79">
+							<String ID="segment_6"
+								CONTENT="Autograph" 
+								HPOS="104" 
+								VPOS="879"
+								WIDTH="361" 
+								HEIGHT="79" 
+								WC="1.0">
+								<Glyph ID="char_17" 
+								       CONTENT="A"
+								       HPOS="104"
+								       VPOS="879"
+								       WIDTH="9"
+								       HEIGHT="79"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_18" 
+								       CONTENT="u"
+								       HPOS="160"
+								       VPOS="879"
+								       WIDTH="9"
+								       HEIGHT="79"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_19" 
+								       CONTENT="t"
+								       HPOS="206"
+								       VPOS="879"
+								       WIDTH="0"
+								       HEIGHT="79"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_20" 
+								       CONTENT="o"
+								       HPOS="243"
+								       VPOS="879"
+								       WIDTH="9"
+								       HEIGHT="79"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_21" 
+								       CONTENT="g"
+								       HPOS="299"
+								       VPOS="879"
+								       WIDTH="0"
+								       HEIGHT="79"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_22" 
+								       CONTENT="r"
+								       HPOS="336"
+								       VPOS="879"
+								       WIDTH="9"
+								       HEIGHT="79"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_23" 
+								       CONTENT="a"
+								       HPOS="373"
+								       VPOS="879"
+								       WIDTH="0"
+								       HEIGHT="79"
+								       GC="0.9999">
+								</Glyph>
+								<Glyph ID="char_24" 
+								       CONTENT="p"
+								       HPOS="410"
+								       VPOS="879"
+								       WIDTH="0"
+								       HEIGHT="79"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_25" 
+								       CONTENT="h"
+								       HPOS="456"
+								       VPOS="879"
+								       WIDTH="9"
+								       HEIGHT="79"
+								       GC="1.0">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_3"
+						  HPOS="97"
+						  VPOS="1071" 
+						  WIDTH="993" 
+						  HEIGHT="128">
+							<String ID="segment_7"
+								CONTENT="Standort" 
+								HPOS="97" 
+								VPOS="1071"
+								WIDTH="299" 
+								HEIGHT="128" 
+								WC="1.0">
+								<Glyph ID="char_26" 
+								       CONTENT="S"
+								       HPOS="97"
+								       VPOS="1071"
+								       WIDTH="11"
+								       HEIGHT="128"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_27" 
+								       CONTENT="t"
+								       HPOS="140"
+								       VPOS="1071"
+								       WIDTH="11"
+								       HEIGHT="128"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_28" 
+								       CONTENT="a"
+								       HPOS="172"
+								       VPOS="1071"
+								       WIDTH="11"
+								       HEIGHT="128"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_29" 
+								       CONTENT="n"
+								       HPOS="215"
+								       VPOS="1071"
+								       WIDTH="10"
+								       HEIGHT="128"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_30" 
+								       CONTENT="d"
+								       HPOS="279"
+								       VPOS="1071"
+								       WIDTH="11"
+								       HEIGHT="128"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_31" 
+								       CONTENT="o"
+								       HPOS="322"
+								       VPOS="1071"
+								       WIDTH="0"
+								       HEIGHT="128"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_32" 
+								       CONTENT="r"
+								       HPOS="364"
+								       VPOS="1071"
+								       WIDTH="0"
+								       HEIGHT="128"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_33" 
+								       CONTENT="t"
+								       HPOS="386"
+								       VPOS="1071"
+								       WIDTH="10"
+								       HEIGHT="128"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_8"
+							    HPOS="418" 
+							    VPOS="1071"
+							    WIDTH="138" 
+							    HEIGHT="128"/>
+							<String ID="segment_9"
+								CONTENT="vet." 
+								HPOS="578" 
+								VPOS="1071"
+								WIDTH="235" 
+								HEIGHT="128" 
+								WC="0.9993">
+								<Glyph ID="char_36" 
+								       CONTENT="v"
+								       HPOS="578"
+								       VPOS="1071"
+								       WIDTH="0"
+								       HEIGHT="128"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_37" 
+								       CONTENT="e"
+								       HPOS="727"
+								       VPOS="1071"
+								       WIDTH="0"
+								       HEIGHT="128"
+								       GC="0.9989">
+								</Glyph>
+								<Glyph ID="char_38" 
+								       CONTENT="t"
+								       HPOS="770"
+								       VPOS="1071"
+								       WIDTH="0"
+								       HEIGHT="128"
+								       GC="0.9985">
+								</Glyph>
+								<Glyph ID="char_39" 
+								       CONTENT="."
+								       HPOS="802"
+								       VPOS="1071"
+								       WIDTH="11"
+								       HEIGHT="128"
+								       GC="0.9996">
+								</Glyph>
+							</String>
+							<SP ID="segment_10"
+							    HPOS="834" 
+							    VPOS="1071"
+							    WIDTH="21" 
+							    HEIGHT="128"/>
+							<String ID="segment_11"
+								CONTENT="w," 
+								HPOS="877" 
+								VPOS="1071"
+								WIDTH="96" 
+								HEIGHT="128" 
+								WC="0.958">
+								<Glyph ID="char_41" 
+								       CONTENT="w"
+								       HPOS="877"
+								       VPOS="1071"
+								       WIDTH="0"
+								       HEIGHT="128"
+								       GC="0.9164">
+								</Glyph>
+								<Glyph ID="char_42" 
+								       CONTENT=","
+								       HPOS="973"
+								       VPOS="1071"
+								       WIDTH="0"
+								       HEIGHT="128"
+								       GC="0.9996">
+								</Glyph>
+							</String>
+							<SP ID="segment_12"
+							    HPOS="984" 
+							    VPOS="1071"
+							    WIDTH="10" 
+							    HEIGHT="128"/>
+							<String ID="segment_13"
+								CONTENT="4." 
+								HPOS="1037" 
+								VPOS="1071"
+								WIDTH="53" 
+								HEIGHT="128" 
+								WC="0.7906">
+								<Glyph ID="char_44" 
+								       CONTENT="4"
+								       HPOS="1037"
+								       VPOS="1071"
+								       WIDTH="11"
+								       HEIGHT="128"
+								       GC="0.9999">
+								</Glyph>
+								<Glyph ID="char_45" 
+								       CONTENT="."
+								       HPOS="1090"
+								       VPOS="1071"
+								       WIDTH="0"
+								       HEIGHT="128"
+								       GC="0.5812">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_4"
+						  HPOS="102"
+						  VPOS="1377" 
+						  WIDTH="998" 
+						  HEIGHT="141">
+							<String ID="segment_14"
+								CONTENT="slon." 
+								HPOS="102" 
+								VPOS="1377"
+								WIDTH="162" 
+								HEIGHT="141" 
+								WC="0.9952">
+								<Glyph ID="char_46" 
+								       CONTENT="s"
+								       HPOS="102"
+								       VPOS="1377"
+								       WIDTH="0"
+								       HEIGHT="141"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_47" 
+								       CONTENT="l"
+								       HPOS="142"
+								       VPOS="1377"
+								       WIDTH="0"
+								       HEIGHT="141"
+								       GC="0.9759">
+								</Glyph>
+								<Glyph ID="char_48" 
+								       CONTENT="o"
+								       HPOS="183"
+								       VPOS="1377"
+								       WIDTH="0"
+								       HEIGHT="141"
+								       GC="0.9999">
+								</Glyph>
+								<Glyph ID="char_49" 
+								       CONTENT="n"
+								       HPOS="223"
+								       VPOS="1377"
+								       WIDTH="0"
+								       HEIGHT="141"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_50" 
+								       CONTENT="."
+								       HPOS="264"
+								       VPOS="1377"
+								       WIDTH="0"
+								       HEIGHT="141"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_15"
+							    HPOS="277" 
+							    VPOS="1377"
+							    WIDTH="149" 
+							    HEIGHT="141"/>
+							<String ID="segment_16"
+								CONTENT="E&#39;" 
+								HPOS="493" 
+								VPOS="1377"
+								WIDTH="148" 
+								HEIGHT="141" 
+								WC="1.0">
+								<Glyph ID="char_52" 
+								       CONTENT="E"
+								       HPOS="493"
+								       VPOS="1377"
+								       WIDTH="27"
+								       HEIGHT="141"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_53" 
+								       CONTENT="&#39;"
+								       HPOS="641"
+								       VPOS="1377"
+								       WIDTH="0"
+								       HEIGHT="141"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_17"
+							    HPOS="655" 
+							    VPOS="1377"
+							    WIDTH="13" 
+							    HEIGHT="141"/>
+							<String ID="segment_18"
+								CONTENT="4s," 
+								HPOS="776" 
+								VPOS="1377"
+								WIDTH="95" 
+								HEIGHT="141" 
+								WC="0.9876">
+								<Glyph ID="char_55" 
+								       CONTENT="4"
+								       HPOS="776"
+								       VPOS="1377"
+								       WIDTH="0"
+								       HEIGHT="141"
+								       GC="0.9871">
+								</Glyph>
+								<Glyph ID="char_56" 
+								       CONTENT="s"
+								       HPOS="830"
+								       VPOS="1377"
+								       WIDTH="0"
+								       HEIGHT="141"
+								       GC="0.9804">
+								</Glyph>
+								<Glyph ID="char_57" 
+								       CONTENT=","
+								       HPOS="871"
+								       VPOS="1377"
+								       WIDTH="0"
+								       HEIGHT="141"
+								       GC="0.9954">
+								</Glyph>
+							</String>
+							<SP ID="segment_19"
+							    HPOS="898" 
+							    VPOS="1377"
+							    WIDTH="27" 
+							    HEIGHT="141"/>
+							<String ID="segment_20"
+								CONTENT="443" 
+								HPOS="992" 
+								VPOS="1377"
+								WIDTH="108" 
+								HEIGHT="141" 
+								WC="0.8104">
+								<Glyph ID="char_59" 
+								       CONTENT="4"
+								       HPOS="992"
+								       VPOS="1377"
+								       WIDTH="14"
+								       HEIGHT="141"
+								       GC="0.9915">
+								</Glyph>
+								<Glyph ID="char_60" 
+								       CONTENT="4"
+								       HPOS="1046"
+								       VPOS="1377"
+								       WIDTH="0"
+								       HEIGHT="141"
+								       GC="0.9341">
+								</Glyph>
+								<Glyph ID="char_61" 
+								       CONTENT="3"
+								       HPOS="1100"
+								       VPOS="1377"
+								       WIDTH="0"
+								       HEIGHT="141"
+								       GC="0.5057">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_5"
+						  HPOS="97"
+						  VPOS="1554" 
+						  WIDTH="261" 
+						  HEIGHT="100">
+							<String ID="segment_21"
+								CONTENT="Umfang" 
+								HPOS="97" 
+								VPOS="1554"
+								WIDTH="261" 
+								HEIGHT="100" 
+								WC="1.0">
+								<Glyph ID="char_62" 
+								       CONTENT="U"
+								       HPOS="97"
+								       VPOS="1554"
+								       WIDTH="10"
+								       HEIGHT="100"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_63" 
+								       CONTENT="m"
+								       HPOS="155"
+								       VPOS="1554"
+								       WIDTH="0"
+								       HEIGHT="100"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_64" 
+								       CONTENT="f"
+								       HPOS="223"
+								       VPOS="1554"
+								       WIDTH="0"
+								       HEIGHT="100"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_65" 
+								       CONTENT="a"
+								       HPOS="251"
+								       VPOS="1554"
+								       WIDTH="10"
+								       HEIGHT="100"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_66" 
+								       CONTENT="n"
+								       HPOS="290"
+								       VPOS="1554"
+								       WIDTH="10"
+								       HEIGHT="100"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_67" 
+								       CONTENT="g"
+								       HPOS="358"
+								       VPOS="1554"
+								       WIDTH="0"
+								       HEIGHT="100"
+								       GC="1.0">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_6"
+						  HPOS="103"
+						  VPOS="1885" 
+						  WIDTH="276" 
+						  HEIGHT="80">
+							<String ID="segment_22"
+								CONTENT="Sprache" 
+								HPOS="103" 
+								VPOS="1885"
+								WIDTH="276" 
+								HEIGHT="80" 
+								WC="0.9322">
+								<Glyph ID="char_68" 
+								       CONTENT="S"
+								       HPOS="103"
+								       VPOS="1885"
+								       WIDTH="0"
+								       HEIGHT="80"
+								       GC="0.6629">
+								</Glyph>
+								<Glyph ID="char_69" 
+								       CONTENT="p"
+								       HPOS="141"
+								       VPOS="1885"
+								       WIDTH="10"
+								       HEIGHT="80"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_70" 
+								       CONTENT="r"
+								       HPOS="198"
+								       VPOS="1885"
+								       WIDTH="0"
+								       HEIGHT="80"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_71" 
+								       CONTENT="a"
+								       HPOS="227"
+								       VPOS="1885"
+								       WIDTH="9"
+								       HEIGHT="80"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_72" 
+								       CONTENT="c"
+								       HPOS="284"
+								       VPOS="1885"
+								       WIDTH="0"
+								       HEIGHT="80"
+								       GC="0.8628">
+								</Glyph>
+								<Glyph ID="char_73" 
+								       CONTENT="h"
+								       HPOS="312"
+								       VPOS="1885"
+								       WIDTH="10"
+								       HEIGHT="80"
+								       GC="0.9999">
+								</Glyph>
+								<Glyph ID="char_74" 
+								       CONTENT="e"
+								       HPOS="379"
+								       VPOS="1885"
+								       WIDTH="0"
+								       HEIGHT="80"
+								       GC="1.0">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_7"
+						  HPOS="104"
+						  VPOS="2231" 
+						  WIDTH="306" 
+						  HEIGHT="67">
+							<String ID="segment_23"
+								CONTENT="Gedruckt" 
+								HPOS="104" 
+								VPOS="2231"
+								WIDTH="306" 
+								HEIGHT="67" 
+								WC="0.9552">
+								<Glyph ID="char_75" 
+								       CONTENT="G"
+								       HPOS="104"
+								       VPOS="2231"
+								       WIDTH="9"
+								       HEIGHT="67"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_76" 
+								       CONTENT="e"
+								       HPOS="160"
+								       VPOS="2231"
+								       WIDTH="9"
+								       HEIGHT="67"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_77" 
+								       CONTENT="d"
+								       HPOS="215"
+								       VPOS="2231"
+								       WIDTH="9"
+								       HEIGHT="67"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_78" 
+								       CONTENT="r"
+								       HPOS="243"
+								       VPOS="2231"
+								       WIDTH="9"
+								       HEIGHT="67"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_79" 
+								       CONTENT="u"
+								       HPOS="280"
+								       VPOS="2231"
+								       WIDTH="9"
+								       HEIGHT="67"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_80" 
+								       CONTENT="c"
+								       HPOS="335"
+								       VPOS="2231"
+								       WIDTH="10"
+								       HEIGHT="67"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_81" 
+								       CONTENT="k"
+								       HPOS="363"
+								       VPOS="2231"
+								       WIDTH="9"
+								       HEIGHT="67"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_82" 
+								       CONTENT="t"
+								       HPOS="410"
+								       VPOS="2231"
+								       WIDTH="0"
+								       HEIGHT="67"
+								       GC="0.6419">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_8"
+						  HPOS="115"
+						  VPOS="2362" 
+						  WIDTH="847" 
+						  HEIGHT="174">
+							<String ID="segment_24"
+								CONTENT="5" 
+								HPOS="115" 
+								VPOS="2362"
+								WIDTH="0" 
+								HEIGHT="174" 
+								WC="0.9978">
+								<Glyph ID="char_83" 
+								       CONTENT="5"
+								       HPOS="115"
+								       VPOS="2362"
+								       WIDTH="0"
+								       HEIGHT="174"
+								       GC="0.9978">
+								</Glyph>
+							</String>
+							<SP ID="segment_25"
+							    HPOS="214" 
+							    VPOS="2362"
+							    WIDTH="19" 
+							    HEIGHT="174"/>
+							<String ID="segment_26"
+								CONTENT="7y." 
+								HPOS="292" 
+								VPOS="2362"
+								WIDTH="138" 
+								HEIGHT="174" 
+								WC="0.9579">
+								<Glyph ID="char_85" 
+								       CONTENT="7"
+								       HPOS="292"
+								       VPOS="2362"
+								       WIDTH="20"
+								       HEIGHT="174"
+								       GC="0.9929">
+								</Glyph>
+								<Glyph ID="char_86" 
+								       CONTENT="y"
+								       HPOS="352"
+								       VPOS="2362"
+								       WIDTH="0"
+								       HEIGHT="174"
+								       GC="0.9997">
+								</Glyph>
+								<Glyph ID="char_87" 
+								       CONTENT="."
+								       HPOS="430"
+								       VPOS="2362"
+								       WIDTH="0"
+								       HEIGHT="174"
+								       GC="0.8812">
+								</Glyph>
+							</String>
+							<SP ID="segment_27"
+							    HPOS="450" 
+							    VPOS="2362"
+							    WIDTH="0" 
+							    HEIGHT="174"/>
+							<String ID="segment_28"
+								CONTENT="E," 
+								HPOS="529" 
+								VPOS="2362"
+								WIDTH="79" 
+								HEIGHT="174" 
+								WC="0.9898">
+								<Glyph ID="char_89" 
+								       CONTENT="E"
+								       HPOS="529"
+								       VPOS="2362"
+								       WIDTH="19"
+								       HEIGHT="174"
+								       GC="0.9797">
+								</Glyph>
+								<Glyph ID="char_90" 
+								       CONTENT=","
+								       HPOS="608"
+								       VPOS="2362"
+								       WIDTH="0"
+								       HEIGHT="174"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_29"
+							    HPOS="627" 
+							    VPOS="2362"
+							    WIDTH="20" 
+							    HEIGHT="174"/>
+							<String ID="segment_30"
+								CONTENT=".ee" 
+								HPOS="765" 
+								VPOS="2362"
+								WIDTH="197" 
+								HEIGHT="174" 
+								WC="0.9233">
+								<Glyph ID="char_92" 
+								       CONTENT="."
+								       HPOS="765"
+								       VPOS="2362"
+								       WIDTH="0"
+								       HEIGHT="174"
+								       GC="0.8203">
+								</Glyph>
+								<Glyph ID="char_93" 
+								       CONTENT="e"
+								       HPOS="903"
+								       VPOS="2362"
+								       WIDTH="0"
+								       HEIGHT="174"
+								       GC="0.9931">
+								</Glyph>
+								<Glyph ID="char_94" 
+								       CONTENT="e"
+								       HPOS="962"
+								       VPOS="2362"
+								       WIDTH="0"
+								       HEIGHT="174"
+								       GC="0.9565">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_9"
+						  HPOS="359"
+						  VPOS="2466" 
+						  WIDTH="183" 
+						  HEIGHT="68">
+							<String ID="segment_31"
+								CONTENT="g&#39;-" 
+								HPOS="359" 
+								VPOS="2466"
+								WIDTH="183" 
+								HEIGHT="68" 
+								WC="0.93">
+								<Glyph ID="char_95" 
+								       CONTENT="g"
+								       HPOS="359"
+								       VPOS="2466"
+								       WIDTH="0"
+								       HEIGHT="68"
+								       GC="0.9972">
+								</Glyph>
+								<Glyph ID="char_96" 
+								       CONTENT="&#39;"
+								       HPOS="434"
+								       VPOS="2466"
+								       WIDTH="0"
+								       HEIGHT="68"
+								       GC="0.7929">
+								</Glyph>
+								<Glyph ID="char_97" 
+								       CONTENT="-"
+								       HPOS="509"
+								       VPOS="2466"
+								       WIDTH="33"
+								       HEIGHT="68"
+								       GC="1.0">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_10"
+						  HPOS="123"
+						  VPOS="2515" 
+						  WIDTH="1048" 
+						  HEIGHT="183">
+							<String ID="segment_32"
+								CONTENT="e." 
+								HPOS="123" 
+								VPOS="2515"
+								WIDTH="163" 
+								HEIGHT="183" 
+								WC="1.0">
+								<Glyph ID="char_98" 
+								       CONTENT="e"
+								       HPOS="123"
+								       VPOS="2515"
+								       WIDTH="0"
+								       HEIGHT="183"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_99" 
+								       CONTENT="."
+								       HPOS="268"
+								       VPOS="2515"
+								       WIDTH="18"
+								       HEIGHT="183"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_33"
+							    HPOS="304" 
+							    VPOS="2515"
+							    WIDTH="18" 
+							    HEIGHT="183"/>
+							<String ID="segment_34"
+								CONTENT="." 
+								HPOS="503" 
+								VPOS="2515"
+								WIDTH="0" 
+								HEIGHT="183" 
+								WC="0.4339">
+								<Glyph ID="char_101" 
+								       CONTENT="."
+								       HPOS="503"
+								       VPOS="2515"
+								       WIDTH="0"
+								       HEIGHT="183"
+								       GC="0.4339">
+								</Glyph>
+							</String>
+							<SP ID="segment_35"
+							    HPOS="521" 
+							    VPOS="2515"
+							    WIDTH="234" 
+							    HEIGHT="183"/>
+							<String ID="segment_36"
+								CONTENT="," 
+								HPOS="828" 
+								VPOS="2515"
+								WIDTH="0" 
+								HEIGHT="183" 
+								WC="1.0">
+								<Glyph ID="char_104" 
+								       CONTENT=","
+								       HPOS="828"
+								       VPOS="2515"
+								       WIDTH="0"
+								       HEIGHT="183"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_37"
+							    HPOS="846" 
+							    VPOS="2515"
+							    WIDTH="36" 
+							    HEIGHT="183"/>
+							<String ID="segment_38"
+								CONTENT="z/" 
+								HPOS="936" 
+								VPOS="2515"
+								WIDTH="235" 
+								HEIGHT="183" 
+								WC="0.9393">
+								<Glyph ID="char_106" 
+								       CONTENT="z"
+								       HPOS="936"
+								       VPOS="2515"
+								       WIDTH="0"
+								       HEIGHT="183"
+								       GC="0.9979">
+								</Glyph>
+								<Glyph ID="char_107" 
+								       CONTENT="/"
+								       HPOS="1171"
+								       VPOS="2515"
+								       WIDTH="0"
+								       HEIGHT="183"
+								       GC="0.8806">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_11"
+						  HPOS="1678"
+						  VPOS="104" 
+						  WIDTH="343" 
+						  HEIGHT="69">
+							<String ID="segment_39"
+								CONTENT="Absender" 
+								HPOS="1678" 
+								VPOS="104"
+								WIDTH="343" 
+								HEIGHT="69" 
+								WC="0.9976">
+								<Glyph ID="char_108" 
+								       CONTENT="A"
+								       HPOS="1678"
+								       VPOS="104"
+								       WIDTH="9"
+								       HEIGHT="69"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_109" 
+								       CONTENT="b"
+								       HPOS="1730"
+								       VPOS="104"
+								       WIDTH="0"
+								       HEIGHT="69"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_110" 
+								       CONTENT="s"
+								       HPOS="1790"
+								       VPOS="104"
+								       WIDTH="0"
+								       HEIGHT="69"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_111" 
+								       CONTENT="e"
+								       HPOS="1833"
+								       VPOS="104"
+								       WIDTH="8"
+								       HEIGHT="69"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_112" 
+								       CONTENT="n"
+								       HPOS="1867"
+								       VPOS="104"
+								       WIDTH="8"
+								       HEIGHT="69"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_113" 
+								       CONTENT="d"
+								       HPOS="1936"
+								       VPOS="104"
+								       WIDTH="8"
+								       HEIGHT="69"
+								       GC="0.9949">
+								</Glyph>
+								<Glyph ID="char_114" 
+								       CONTENT="e"
+								       HPOS="1978"
+								       VPOS="104"
+								       WIDTH="0"
+								       HEIGHT="69"
+								       GC="0.9942">
+								</Glyph>
+								<Glyph ID="char_115" 
+								       CONTENT="r"
+								       HPOS="2013"
+								       VPOS="104"
+								       WIDTH="8"
+								       HEIGHT="69"
+								       GC="0.9918">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_12"
+						  HPOS="1647"
+						  VPOS="255" 
+						  WIDTH="705" 
+						  HEIGHT="99">
+							<String ID="segment_40"
+								CONTENT="Haddon" 
+								HPOS="1647" 
+								VPOS="255"
+								WIDTH="320" 
+								HEIGHT="99" 
+								WC="1.0">
+								<Glyph ID="char_116" 
+								       CONTENT="H"
+								       HPOS="1647"
+								       VPOS="255"
+								       WIDTH="10"
+								       HEIGHT="99"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_117" 
+								       CONTENT="a"
+								       HPOS="1722"
+								       VPOS="255"
+								       WIDTH="0"
+								       HEIGHT="99"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_118" 
+								       CONTENT="d"
+								       HPOS="1786"
+								       VPOS="255"
+								       WIDTH="10"
+								       HEIGHT="99"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_119" 
+								       CONTENT="d"
+								       HPOS="1850"
+								       VPOS="255"
+								       WIDTH="11"
+								       HEIGHT="99"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_120" 
+								       CONTENT="o"
+								       HPOS="1903"
+								       VPOS="255"
+								       WIDTH="11"
+								       HEIGHT="99"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_121" 
+								       CONTENT="n"
+								       HPOS="1957"
+								       VPOS="255"
+								       WIDTH="10"
+								       HEIGHT="99"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_41"
+							    HPOS="2010" 
+							    VPOS="255"
+							    WIDTH="32" 
+							    HEIGHT="99"/>
+							<String ID="segment_42"
+								CONTENT="James" 
+								HPOS="2106" 
+								VPOS="255"
+								WIDTH="246" 
+								HEIGHT="99" 
+								WC="0.9995">
+								<Glyph ID="char_123" 
+								       CONTENT="J"
+								       HPOS="2106"
+								       VPOS="255"
+								       WIDTH="0"
+								       HEIGHT="99"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_124" 
+								       CONTENT="a"
+								       HPOS="2149"
+								       VPOS="255"
+								       WIDTH="11"
+								       HEIGHT="99"
+								       GC="0.9999">
+								</Glyph>
+								<Glyph ID="char_125" 
+								       CONTENT="m"
+								       HPOS="2203"
+								       VPOS="255"
+								       WIDTH="0"
+								       HEIGHT="99"
+								       GC="0.9986">
+								</Glyph>
+								<Glyph ID="char_126" 
+								       CONTENT="e"
+								       HPOS="2277"
+								       VPOS="255"
+								       WIDTH="11"
+								       HEIGHT="99"
+								       GC="0.9993">
+								</Glyph>
+								<Glyph ID="char_127" 
+								       CONTENT="s"
+								       HPOS="2342"
+								       VPOS="255"
+								       WIDTH="10"
+								       HEIGHT="99"
+								       GC="0.9996">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_13"
+						  HPOS="1666"
+						  VPOS="466" 
+						  WIDTH="554" 
+						  HEIGHT="93">
+							<String ID="segment_43"
+								CONTENT="Strassburg" 
+								HPOS="1666" 
+								VPOS="466"
+								WIDTH="554" 
+								HEIGHT="93" 
+								WC="0.9991">
+								<Glyph ID="char_128" 
+								       CONTENT="S"
+								       HPOS="1666"
+								       VPOS="466"
+								       WIDTH="11"
+								       HEIGHT="93"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_129" 
+								       CONTENT="t"
+								       HPOS="1721"
+								       VPOS="466"
+								       WIDTH="0"
+								       HEIGHT="93"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_130" 
+								       CONTENT="r"
+								       HPOS="1788"
+								       VPOS="466"
+								       WIDTH="11"
+								       HEIGHT="93"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_131" 
+								       CONTENT="a"
+								       HPOS="1843"
+								       VPOS="466"
+								       WIDTH="0"
+								       HEIGHT="93"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_132" 
+								       CONTENT="s"
+								       HPOS="1910"
+								       VPOS="466"
+								       WIDTH="11"
+								       HEIGHT="93"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_133" 
+								       CONTENT="s"
+								       HPOS="1976"
+								       VPOS="466"
+								       WIDTH="0"
+								       HEIGHT="93"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_134" 
+								       CONTENT="b"
+								       HPOS="2010"
+								       VPOS="466"
+								       WIDTH="11"
+								       HEIGHT="93"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_135" 
+								       CONTENT="u"
+								       HPOS="2087"
+								       VPOS="466"
+								       WIDTH="0"
+								       HEIGHT="93"
+								       GC="0.9999">
+								</Glyph>
+								<Glyph ID="char_136" 
+								       CONTENT="r"
+								       HPOS="2154"
+								       VPOS="466"
+								       WIDTH="11"
+								       HEIGHT="93"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_137" 
+								       CONTENT="g"
+								       HPOS="2220"
+								       VPOS="466"
+								       WIDTH="0"
+								       HEIGHT="93"
+								       GC="0.9907">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_14"
+						  HPOS="1657"
+						  VPOS="883" 
+						  WIDTH="185" 
+						  HEIGHT="80">
+							<String ID="segment_44"
+								CONTENT="Hopie" 
+								HPOS="1657" 
+								VPOS="883"
+								WIDTH="185" 
+								HEIGHT="80" 
+								WC="0.8897">
+								<Glyph ID="char_138" 
+								       CONTENT="H"
+								       HPOS="1657"
+								       VPOS="883"
+								       WIDTH="0"
+								       HEIGHT="80"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_139" 
+								       CONTENT="o"
+								       HPOS="1722"
+								       VPOS="883"
+								       WIDTH="0"
+								       HEIGHT="80"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_140" 
+								       CONTENT="p"
+								       HPOS="1759"
+								       VPOS="883"
+								       WIDTH="9"
+								       HEIGHT="80"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_141" 
+								       CONTENT="i"
+								       HPOS="1805"
+								       VPOS="883"
+								       WIDTH="0"
+								       HEIGHT="80"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_142" 
+								       CONTENT="e"
+								       HPOS="1842"
+								       VPOS="883"
+								       WIDTH="0"
+								       HEIGHT="80"
+								       GC="0.4486">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_15"
+						  HPOS="1670"
+						  VPOS="1070" 
+						  WIDTH="1067" 
+						  HEIGHT="164">
+							<String ID="segment_45"
+								CONTENT="Standomt" 
+								HPOS="1670" 
+								VPOS="1070"
+								WIDTH="295" 
+								HEIGHT="164" 
+								WC="0.9945">
+								<Glyph ID="char_143" 
+								       CONTENT="S"
+								       HPOS="1670"
+								       VPOS="1070"
+								       WIDTH="11"
+								       HEIGHT="164"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_144" 
+								       CONTENT="t"
+								       HPOS="1715"
+								       VPOS="1070"
+								       WIDTH="0"
+								       HEIGHT="164"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_145" 
+								       CONTENT="a"
+								       HPOS="1749"
+								       VPOS="1070"
+								       WIDTH="0"
+								       HEIGHT="164"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_146" 
+								       CONTENT="n"
+								       HPOS="1783"
+								       VPOS="1070"
+								       WIDTH="12"
+								       HEIGHT="164"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_147" 
+								       CONTENT="d"
+								       HPOS="1851"
+								       VPOS="1070"
+								       WIDTH="0"
+								       HEIGHT="164"
+								       GC="0.9747">
+								</Glyph>
+								<Glyph ID="char_148" 
+								       CONTENT="o"
+								       HPOS="1897"
+								       VPOS="1070"
+								       WIDTH="0"
+								       HEIGHT="164"
+								       GC="0.9818">
+								</Glyph>
+								<Glyph ID="char_149" 
+								       CONTENT="m"
+								       HPOS="1931"
+								       VPOS="1070"
+								       WIDTH="0"
+								       HEIGHT="164"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_150" 
+								       CONTENT="t"
+								       HPOS="1953"
+								       VPOS="1070"
+								       WIDTH="12"
+								       HEIGHT="164"
+								       GC="0.9995">
+								</Glyph>
+							</String>
+							<SP ID="segment_46"
+							    HPOS="1987" 
+							    VPOS="1070"
+							    WIDTH="12" 
+							    HEIGHT="164"/>
+							<String ID="segment_47"
+								CONTENT=".ez7" 
+								HPOS="2192" 
+								VPOS="1070"
+								WIDTH="159" 
+								HEIGHT="164" 
+								WC="0.9982">
+								<Glyph ID="char_152" 
+								       CONTENT="."
+								       HPOS="2192"
+								       VPOS="1070"
+								       WIDTH="0"
+								       HEIGHT="164"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_153" 
+								       CONTENT="e"
+								       HPOS="2249"
+								       VPOS="1070"
+								       WIDTH="0"
+								       HEIGHT="164"
+								       GC="0.9927">
+								</Glyph>
+								<Glyph ID="char_154" 
+								       CONTENT="z"
+								       HPOS="2305"
+								       VPOS="1070"
+								       WIDTH="0"
+								       HEIGHT="164"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_155" 
+								       CONTENT="7"
+								       HPOS="2351"
+								       VPOS="1070"
+								       WIDTH="0"
+								       HEIGHT="164"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_48"
+							    HPOS="2373" 
+							    VPOS="1070"
+							    WIDTH="23" 
+							    HEIGHT="164"/>
+							<String ID="segment_49"
+								CONTENT="e" 
+								HPOS="2441" 
+								VPOS="1070"
+								WIDTH="0" 
+								HEIGHT="164" 
+								WC="1.0">
+								<Glyph ID="char_157" 
+								       CONTENT="e"
+								       HPOS="2441"
+								       VPOS="1070"
+								       WIDTH="0"
+								       HEIGHT="164"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_50"
+							    HPOS="2510" 
+							    VPOS="1070"
+							    WIDTH="22" 
+							    HEIGHT="164"/>
+							<String ID="segment_51"
+								CONTENT="5" 
+								HPOS="2566" 
+								VPOS="1070"
+								WIDTH="0" 
+								HEIGHT="164" 
+								WC="0.9996">
+								<Glyph ID="char_159" 
+								       CONTENT="5"
+								       HPOS="2566"
+								       VPOS="1070"
+								       WIDTH="0"
+								       HEIGHT="164"
+								       GC="0.9996">
+								</Glyph>
+							</String>
+							<SP ID="segment_52"
+							    HPOS="2589" 
+							    VPOS="1070"
+							    WIDTH="148" 
+							    HEIGHT="164"/>
+					</TextLine>
+					<TextLine ID="line_16"
+						  HPOS="1677"
+						  VPOS="1383" 
+						  WIDTH="147" 
+						  HEIGHT="80">
+							<String ID="segment_53"
+								CONTENT="Sion." 
+								HPOS="1677" 
+								VPOS="1383"
+								WIDTH="147" 
+								HEIGHT="80" 
+								WC="0.996">
+								<Glyph ID="char_162" 
+								       CONTENT="S"
+								       HPOS="1677"
+								       VPOS="1383"
+								       WIDTH="0"
+								       HEIGHT="80"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_163" 
+								       CONTENT="i"
+								       HPOS="1708"
+								       VPOS="1383"
+								       WIDTH="0"
+								       HEIGHT="80"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_164" 
+								       CONTENT="o"
+								       HPOS="1740"
+								       VPOS="1383"
+								       WIDTH="0"
+								       HEIGHT="80"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_165" 
+								       CONTENT="n"
+								       HPOS="1782"
+								       VPOS="1383"
+								       WIDTH="11"
+								       HEIGHT="80"
+								       GC="0.9959">
+								</Glyph>
+								<Glyph ID="char_166" 
+								       CONTENT="."
+								       HPOS="1824"
+								       VPOS="1383"
+								       WIDTH="0"
+								       HEIGHT="80"
+								       GC="0.9842">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_17"
+						  HPOS="1667"
+						  VPOS="1579" 
+						  WIDTH="248" 
+						  HEIGHT="80">
+							<String ID="segment_54"
+								CONTENT="Umfang" 
+								HPOS="1667" 
+								VPOS="1579"
+								WIDTH="248" 
+								HEIGHT="80" 
+								WC="1.0">
+								<Glyph ID="char_167" 
+								       CONTENT="U"
+								       HPOS="1667"
+								       VPOS="1579"
+								       WIDTH="10"
+								       HEIGHT="80"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_168" 
+								       CONTENT="m"
+								       HPOS="1715"
+								       VPOS="1579"
+								       WIDTH="9"
+								       HEIGHT="80"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_169" 
+								       CONTENT="f"
+								       HPOS="1781"
+								       VPOS="1579"
+								       WIDTH="10"
+								       HEIGHT="80"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_170" 
+								       CONTENT="a"
+								       HPOS="1820"
+								       VPOS="1579"
+								       WIDTH="0"
+								       HEIGHT="80"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_171" 
+								       CONTENT="n"
+								       HPOS="1858"
+								       VPOS="1579"
+								       WIDTH="9"
+								       HEIGHT="80"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_172" 
+								       CONTENT="g"
+								       HPOS="1915"
+								       VPOS="1579"
+								       WIDTH="0"
+								       HEIGHT="80"
+								       GC="1.0">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_18"
+						  HPOS="3409"
+						  VPOS="107" 
+						  WIDTH="379" 
+						  HEIGHT="82">
+							<String ID="segment_55"
+								CONTENT="Empfainger" 
+								HPOS="3409" 
+								VPOS="107"
+								WIDTH="379" 
+								HEIGHT="82" 
+								WC="0.9987">
+								<Glyph ID="char_173" 
+								       CONTENT="E"
+								       HPOS="3409"
+								       VPOS="107"
+								       WIDTH="9"
+								       HEIGHT="82"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_174" 
+								       CONTENT="m"
+								       HPOS="3448"
+								       VPOS="107"
+								       WIDTH="0"
+								       HEIGHT="82"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_175" 
+								       CONTENT="p"
+								       HPOS="3516"
+								       VPOS="107"
+								       WIDTH="0"
+								       HEIGHT="82"
+								       GC="0.9999">
+								</Glyph>
+								<Glyph ID="char_176" 
+								       CONTENT="f"
+								       HPOS="3564"
+								       VPOS="107"
+								       WIDTH="0"
+								       HEIGHT="82"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_177" 
+								       CONTENT="a"
+								       HPOS="3594"
+								       VPOS="107"
+								       WIDTH="0"
+								       HEIGHT="82"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_178" 
+								       CONTENT="i"
+								       HPOS="3603"
+								       VPOS="107"
+								       WIDTH="0"
+								       HEIGHT="82"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_179" 
+								       CONTENT="n"
+								       HPOS="3633"
+								       VPOS="107"
+								       WIDTH="9"
+								       HEIGHT="82"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_180" 
+								       CONTENT="g"
+								       HPOS="3691"
+								       VPOS="107"
+								       WIDTH="10"
+								       HEIGHT="82"
+								       GC="0.9953">
+								</Glyph>
+								<Glyph ID="char_181" 
+								       CONTENT="e"
+								       HPOS="3740"
+								       VPOS="107"
+								       WIDTH="0"
+								       HEIGHT="82"
+								       GC="0.9942">
+								</Glyph>
+								<Glyph ID="char_182" 
+								       CONTENT="r"
+								       HPOS="3779"
+								       VPOS="107"
+								       WIDTH="9"
+								       HEIGHT="82"
+								       GC="0.998">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_19"
+						  HPOS="3451"
+						  VPOS="269" 
+						  WIDTH="1011" 
+						  HEIGHT="95">
+							<String ID="segment_56"
+								CONTENT="Bullinger" 
+								HPOS="3451" 
+								VPOS="269"
+								WIDTH="481" 
+								HEIGHT="95" 
+								WC="0.9975">
+								<Glyph ID="char_183" 
+								       CONTENT="B"
+								       HPOS="3451"
+								       VPOS="269"
+								       WIDTH="0"
+								       HEIGHT="95"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_184" 
+								       CONTENT="u"
+								       HPOS="3487"
+								       VPOS="269"
+								       WIDTH="12"
+								       HEIGHT="95"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_185" 
+								       CONTENT="l"
+								       HPOS="3559"
+								       VPOS="269"
+								       WIDTH="0"
+								       HEIGHT="95"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_186" 
+								       CONTENT="l"
+								       HPOS="3620"
+								       VPOS="269"
+								       WIDTH="12"
+								       HEIGHT="95"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_187" 
+								       CONTENT="i"
+								       HPOS="3680"
+								       VPOS="269"
+								       WIDTH="0"
+								       HEIGHT="95"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_188" 
+								       CONTENT="n"
+								       HPOS="3740"
+								       VPOS="269"
+								       WIDTH="12"
+								       HEIGHT="95"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_189" 
+								       CONTENT="g"
+								       HPOS="3812"
+								       VPOS="269"
+								       WIDTH="0"
+								       HEIGHT="95"
+								       GC="0.9871">
+								</Glyph>
+								<Glyph ID="char_190" 
+								       CONTENT="e"
+								       HPOS="3872"
+								       VPOS="269"
+								       WIDTH="0"
+								       HEIGHT="95"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_191" 
+								       CONTENT="r"
+								       HPOS="3932"
+								       VPOS="269"
+								       WIDTH="0"
+								       HEIGHT="95"
+								       GC="0.9901">
+								</Glyph>
+							</String>
+							<SP ID="segment_57"
+							    HPOS="3969" 
+							    VPOS="269"
+							    WIDTH="36" 
+							    HEIGHT="95"/>
+							<String ID="segment_58"
+								CONTENT="Heinrich" 
+								HPOS="4041" 
+								VPOS="269"
+								WIDTH="421" 
+								HEIGHT="95" 
+								WC="0.9973">
+								<Glyph ID="char_193" 
+								       CONTENT="H"
+								       HPOS="4041"
+								       VPOS="269"
+								       WIDTH="0"
+								       HEIGHT="95"
+								       GC="0.9802">
+								</Glyph>
+								<Glyph ID="char_194" 
+								       CONTENT="e"
+								       HPOS="4113"
+								       VPOS="269"
+								       WIDTH="12"
+								       HEIGHT="95"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_195" 
+								       CONTENT="i"
+								       HPOS="4173"
+								       VPOS="269"
+								       WIDTH="0"
+								       HEIGHT="95"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_196" 
+								       CONTENT="n"
+								       HPOS="4233"
+								       VPOS="269"
+								       WIDTH="0"
+								       HEIGHT="95"
+								       GC="0.9988">
+								</Glyph>
+								<Glyph ID="char_197" 
+								       CONTENT="r"
+								       HPOS="4305"
+								       VPOS="269"
+								       WIDTH="12"
+								       HEIGHT="95"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_198" 
+								       CONTENT="i"
+								       HPOS="4353"
+								       VPOS="269"
+								       WIDTH="13"
+								       HEIGHT="95"
+								       GC="0.9999">
+								</Glyph>
+								<Glyph ID="char_199" 
+								       CONTENT="c"
+								       HPOS="4426"
+								       VPOS="269"
+								       WIDTH="0"
+								       HEIGHT="95"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_200" 
+								       CONTENT="h"
+								       HPOS="4462"
+								       VPOS="269"
+								       WIDTH="0"
+								       HEIGHT="95"
+								       GC="0.9995">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_20"
+						  HPOS="3440"
+						  VPOS="471" 
+						  WIDTH="297" 
+						  HEIGHT="79">
+							<String ID="segment_59"
+								CONTENT="Ziirich" 
+								HPOS="3440" 
+								VPOS="471"
+								WIDTH="297" 
+								HEIGHT="79" 
+								WC="0.914">
+								<Glyph ID="char_201" 
+								       CONTENT="Z"
+								       HPOS="3440"
+								       VPOS="471"
+								       WIDTH="0"
+								       HEIGHT="79"
+								       GC="0.8796">
+								</Glyph>
+								<Glyph ID="char_202" 
+								       CONTENT="i"
+								       HPOS="3490"
+								       VPOS="471"
+								       WIDTH="0"
+								       HEIGHT="79"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_203" 
+								       CONTENT="i"
+								       HPOS="3515"
+								       VPOS="471"
+								       WIDTH="0"
+								       HEIGHT="79"
+								       GC="0.5186">
+								</Glyph>
+								<Glyph ID="char_204" 
+								       CONTENT="r"
+								       HPOS="3564"
+								       VPOS="471"
+								       WIDTH="12"
+								       HEIGHT="79"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_205" 
+								       CONTENT="i"
+								       HPOS="3614"
+								       VPOS="471"
+								       WIDTH="12"
+								       HEIGHT="79"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_206" 
+								       CONTENT="c"
+								       HPOS="3688"
+								       VPOS="471"
+								       WIDTH="0"
+								       HEIGHT="79"
+								       GC="0.9998">
+								</Glyph>
+								<Glyph ID="char_207" 
+								       CONTENT="h"
+								       HPOS="3737"
+								       VPOS="471"
+								       WIDTH="0"
+								       HEIGHT="79"
+								       GC="1.0">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_21"
+						  HPOS="3417"
+						  VPOS="870" 
+						  WIDTH="520" 
+						  HEIGHT="96">
+							<String ID="segment_60"
+								CONTENT="Photokopie-" 
+								HPOS="3417" 
+								VPOS="870"
+								WIDTH="520" 
+								HEIGHT="96" 
+								WC="0.9988">
+								<Glyph ID="char_208" 
+								       CONTENT="P"
+								       HPOS="3417"
+								       VPOS="870"
+								       WIDTH="0"
+								       HEIGHT="96"
+								       GC="0.9999">
+								</Glyph>
+								<Glyph ID="char_209" 
+								       CONTENT="h"
+								       HPOS="3452"
+								       VPOS="870"
+								       WIDTH="8"
+								       HEIGHT="96"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_210" 
+								       CONTENT="o"
+								       HPOS="3512"
+								       VPOS="870"
+								       WIDTH="9"
+								       HEIGHT="96"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_211" 
+								       CONTENT="t"
+								       HPOS="3547"
+								       VPOS="870"
+								       WIDTH="9"
+								       HEIGHT="96"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_212" 
+								       CONTENT="o"
+								       HPOS="3590"
+								       VPOS="870"
+								       WIDTH="0"
+								       HEIGHT="96"
+								       GC="0.9945">
+								</Glyph>
+								<Glyph ID="char_213" 
+								       CONTENT="k"
+								       HPOS="3625"
+								       VPOS="870"
+								       WIDTH="0"
+								       HEIGHT="96"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_214" 
+								       CONTENT="o"
+								       HPOS="3677"
+								       VPOS="870"
+								       WIDTH="0"
+								       HEIGHT="96"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_215" 
+								       CONTENT="p"
+								       HPOS="3712"
+								       VPOS="870"
+								       WIDTH="9"
+								       HEIGHT="96"
+								       GC="0.9952">
+								</Glyph>
+								<Glyph ID="char_216" 
+								       CONTENT="i"
+								       HPOS="3755"
+								       VPOS="870"
+								       WIDTH="9"
+								       HEIGHT="96"
+								       GC="0.9987">
+								</Glyph>
+								<Glyph ID="char_217" 
+								       CONTENT="e"
+								       HPOS="3790"
+								       VPOS="870"
+								       WIDTH="9"
+								       HEIGHT="96"
+								       GC="0.9981">
+								</Glyph>
+								<Glyph ID="char_218" 
+								       CONTENT="-"
+								       HPOS="3911"
+								       VPOS="870"
+								       WIDTH="26"
+								       HEIGHT="96"
+								       GC="1.0">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_22"
+						  HPOS="3411"
+						  VPOS="1061" 
+						  WIDTH="345" 
+						  HEIGHT="87">
+							<String ID="segment_61"
+								CONTENT="Bull." 
+								HPOS="3411" 
+								VPOS="1061"
+								WIDTH="136" 
+								HEIGHT="87" 
+								WC="1.0">
+								<Glyph ID="char_219" 
+								       CONTENT="B"
+								       HPOS="3411"
+								       VPOS="1061"
+								       WIDTH="11"
+								       HEIGHT="87"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_220" 
+								       CONTENT="u"
+								       HPOS="3463"
+								       VPOS="1061"
+								       WIDTH="11"
+								       HEIGHT="87"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_221" 
+								       CONTENT="l"
+								       HPOS="3495"
+								       VPOS="1061"
+								       WIDTH="10"
+								       HEIGHT="87"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_222" 
+								       CONTENT="l"
+								       HPOS="3526"
+								       VPOS="1061"
+								       WIDTH="0"
+								       HEIGHT="87"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_223" 
+								       CONTENT="."
+								       HPOS="3547"
+								       VPOS="1061"
+								       WIDTH="0"
+								       HEIGHT="87"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_62"
+							    HPOS="3558" 
+							    VPOS="1061"
+							    WIDTH="10" 
+							    HEIGHT="87"/>
+							<String ID="segment_63"
+								CONTENT="Corr." 
+								HPOS="3610" 
+								VPOS="1061"
+								WIDTH="146" 
+								HEIGHT="87" 
+								WC="0.9996">
+								<Glyph ID="char_225" 
+								       CONTENT="C"
+								       HPOS="3610"
+								       VPOS="1061"
+								       WIDTH="10"
+								       HEIGHT="87"
+								       GC="0.9996">
+								</Glyph>
+								<Glyph ID="char_226" 
+								       CONTENT="o"
+								       HPOS="3662"
+								       VPOS="1061"
+								       WIDTH="0"
+								       HEIGHT="87"
+								       GC="0.9985">
+								</Glyph>
+								<Glyph ID="char_227" 
+								       CONTENT="r"
+								       HPOS="3704"
+								       VPOS="1061"
+								       WIDTH="0"
+								       HEIGHT="87"
+								       GC="0.9999">
+								</Glyph>
+								<Glyph ID="char_228" 
+								       CONTENT="r"
+								       HPOS="3735"
+								       VPOS="1061"
+								       WIDTH="11"
+								       HEIGHT="87"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_229" 
+								       CONTENT="."
+								       HPOS="3756"
+								       VPOS="1061"
+								       WIDTH="0"
+								       HEIGHT="87"
+								       GC="0.9998">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_23"
+						  HPOS="3407"
+						  VPOS="1378" 
+						  WIDTH="1072" 
+						  HEIGHT="97">
+							<String ID="segment_64"
+								CONTENT="Abschrift" 
+								HPOS="3407" 
+								VPOS="1378"
+								WIDTH="331" 
+								HEIGHT="97" 
+								WC="0.9998">
+								<Glyph ID="char_230" 
+								       CONTENT="A"
+								       HPOS="3407"
+								       VPOS="1378"
+								       WIDTH="11"
+								       HEIGHT="97"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_231" 
+								       CONTENT="b"
+								       HPOS="3464"
+								       VPOS="1378"
+								       WIDTH="0"
+								       HEIGHT="97"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_232" 
+								       CONTENT="s"
+								       HPOS="3521"
+								       VPOS="1378"
+								       WIDTH="0"
+								       HEIGHT="97"
+								       GC="0.9984">
+								</Glyph>
+								<Glyph ID="char_233" 
+								       CONTENT="c"
+								       HPOS="3567"
+								       VPOS="1378"
+								       WIDTH="0"
+								       HEIGHT="97"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_234" 
+								       CONTENT="h"
+								       HPOS="3601"
+								       VPOS="1378"
+								       WIDTH="0"
+								       HEIGHT="97"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_235" 
+								       CONTENT="r"
+								       HPOS="3658"
+								       VPOS="1378"
+								       WIDTH="0"
+								       HEIGHT="97"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_236" 
+								       CONTENT="i"
+								       HPOS="3681"
+								       VPOS="1378"
+								       WIDTH="0"
+								       HEIGHT="97"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_237" 
+								       CONTENT="f"
+								       HPOS="3704"
+								       VPOS="1378"
+								       WIDTH="0"
+								       HEIGHT="97"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_238" 
+								       CONTENT="t"
+								       HPOS="3726"
+								       VPOS="1378"
+								       WIDTH="12"
+								       HEIGHT="97"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_65"
+							    HPOS="3761" 
+							    VPOS="1378"
+							    WIDTH="114" 
+							    HEIGHT="97"/>
+							<String ID="segment_66"
+								CONTENT="ZB" 
+								HPOS="3932" 
+								VPOS="1378"
+								WIDTH="68" 
+								HEIGHT="97" 
+								WC="0.9811">
+								<Glyph ID="char_240" 
+								       CONTENT="Z"
+								       HPOS="3932"
+								       VPOS="1378"
+								       WIDTH="0"
+								       HEIGHT="97"
+								       GC="0.9622">
+								</Glyph>
+								<Glyph ID="char_241" 
+								       CONTENT="B"
+								       HPOS="3989"
+								       VPOS="1378"
+								       WIDTH="11"
+								       HEIGHT="97"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_67"
+							    HPOS="4034" 
+							    VPOS="1378"
+							    WIDTH="46" 
+							    HEIGHT="97"/>
+							<String ID="segment_68"
+								CONTENT="(Druck)" 
+								HPOS="4114" 
+								VPOS="1378"
+								WIDTH="365" 
+								HEIGHT="97" 
+								WC="0.9935">
+								<Glyph ID="char_243" 
+								       CONTENT="("
+								       HPOS="4114"
+								       VPOS="1378"
+								       WIDTH="0"
+								       HEIGHT="97"
+								       GC="0.9622">
+								</Glyph>
+								<Glyph ID="char_244" 
+								       CONTENT="D"
+								       HPOS="4171"
+								       VPOS="1378"
+								       WIDTH="12"
+								       HEIGHT="97"
+								       GC="0.9929">
+								</Glyph>
+								<Glyph ID="char_245" 
+								       CONTENT="r"
+								       HPOS="4240"
+								       VPOS="1378"
+								       WIDTH="11"
+								       HEIGHT="97"
+								       GC="0.9997">
+								</Glyph>
+								<Glyph ID="char_246" 
+								       CONTENT="u"
+								       HPOS="4285"
+								       VPOS="1378"
+								       WIDTH="12"
+								       HEIGHT="97"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_247" 
+								       CONTENT="c"
+								       HPOS="4365"
+								       VPOS="1378"
+								       WIDTH="0"
+								       HEIGHT="97"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_248" 
+								       CONTENT="k"
+								       HPOS="4400"
+								       VPOS="1378"
+								       WIDTH="11"
+								       HEIGHT="97"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_249" 
+								       CONTENT=")"
+								       HPOS="4468"
+								       VPOS="1378"
+								       WIDTH="11"
+								       HEIGHT="97"
+								       GC="0.9999">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_24"
+						  HPOS="3411"
+						  VPOS="1580" 
+						  WIDTH="1322" 
+						  HEIGHT="101">
+							<String ID="segment_69"
+								CONTENT="Bull.Cor." 
+								HPOS="3411" 
+								VPOS="1580"
+								WIDTH="342" 
+								HEIGHT="101" 
+								WC="0.9981">
+								<Glyph ID="char_250" 
+								       CONTENT="B"
+								       HPOS="3411"
+								       VPOS="1580"
+								       WIDTH="0"
+								       HEIGHT="101"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_251" 
+								       CONTENT="u"
+								       HPOS="3460"
+								       VPOS="1580"
+								       WIDTH="0"
+								       HEIGHT="101"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_252" 
+								       CONTENT="l"
+								       HPOS="3496"
+								       VPOS="1580"
+								       WIDTH="0"
+								       HEIGHT="101"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_253" 
+								       CONTENT="l"
+								       HPOS="3521"
+								       VPOS="1580"
+								       WIDTH="0"
+								       HEIGHT="101"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_254" 
+								       CONTENT="."
+								       HPOS="3533"
+								       VPOS="1580"
+								       WIDTH="12"
+								       HEIGHT="101"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_255" 
+								       CONTENT="C"
+								       HPOS="3607"
+								       VPOS="1580"
+								       WIDTH="0"
+								       HEIGHT="101"
+								       GC="0.9998">
+								</Glyph>
+								<Glyph ID="char_256" 
+								       CONTENT="o"
+								       HPOS="3655"
+								       VPOS="1580"
+								       WIDTH="0"
+								       HEIGHT="101"
+								       GC="0.9983">
+								</Glyph>
+								<Glyph ID="char_257" 
+								       CONTENT="r"
+								       HPOS="3704"
+								       VPOS="1580"
+								       WIDTH="0"
+								       HEIGHT="101"
+								       GC="0.9849">
+								</Glyph>
+								<Glyph ID="char_258" 
+								       CONTENT="."
+								       HPOS="3753"
+								       VPOS="1580"
+								       WIDTH="0"
+								       HEIGHT="101"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_70"
+							    HPOS="3778" 
+							    VPOS="1580"
+							    WIDTH="86" 
+							    HEIGHT="101"/>
+							<String ID="segment_71"
+								CONTENT="19" 
+								HPOS="3925" 
+								VPOS="1580"
+								WIDTH="61" 
+								HEIGHT="101" 
+								WC="1.0">
+								<Glyph ID="char_260" 
+								       CONTENT="1"
+								       HPOS="3925"
+								       VPOS="1580"
+								       WIDTH="0"
+								       HEIGHT="101"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_261" 
+								       CONTENT="9"
+								       HPOS="3986"
+								       VPOS="1580"
+								       WIDTH="0"
+								       HEIGHT="101"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_72"
+							    HPOS="4035" 
+							    VPOS="1580"
+							    WIDTH="147" 
+							    HEIGHT="101"/>
+							<String ID="segment_73"
+								CONTENT="Bl.l," 
+								HPOS="4243" 
+								VPOS="1580"
+								WIDTH="233" 
+								HEIGHT="101" 
+								WC="0.9542">
+								<Glyph ID="char_263" 
+								       CONTENT="B"
+								       HPOS="4243"
+								       VPOS="1580"
+								       WIDTH="0"
+								       HEIGHT="101"
+								       GC="0.974">
+								</Glyph>
+								<Glyph ID="char_264" 
+								       CONTENT="l"
+								       HPOS="4292"
+								       VPOS="1580"
+								       WIDTH="0"
+								       HEIGHT="101"
+								       GC="0.9753">
+								</Glyph>
+								<Glyph ID="char_265" 
+								       CONTENT="."
+								       HPOS="4353"
+								       VPOS="1580"
+								       WIDTH="0"
+								       HEIGHT="101"
+								       GC="0.9049">
+								</Glyph>
+								<Glyph ID="char_266" 
+								       CONTENT="l"
+								       HPOS="4414"
+								       VPOS="1580"
+								       WIDTH="0"
+								       HEIGHT="101"
+								       GC="0.9315">
+								</Glyph>
+								<Glyph ID="char_267" 
+								       CONTENT=","
+								       HPOS="4476"
+								       VPOS="1580"
+								       WIDTH="0"
+								       HEIGHT="101"
+								       GC="0.9854">
+								</Glyph>
+							</String>
+							<SP ID="segment_74"
+							    HPOS="4512" 
+							    VPOS="1580"
+							    WIDTH="37" 
+							    HEIGHT="101"/>
+							<String ID="segment_75"
+								CONTENT="S.l" 
+								HPOS="4610" 
+								VPOS="1580"
+								WIDTH="123" 
+								HEIGHT="101" 
+								WC="0.995">
+								<Glyph ID="char_269" 
+								       CONTENT="S"
+								       HPOS="4610"
+								       VPOS="1580"
+								       WIDTH="0"
+								       HEIGHT="101"
+								       GC="0.9969">
+								</Glyph>
+								<Glyph ID="char_270" 
+								       CONTENT="."
+								       HPOS="4659"
+								       VPOS="1580"
+								       WIDTH="0"
+								       HEIGHT="101"
+								       GC="0.9974">
+								</Glyph>
+								<Glyph ID="char_271" 
+								       CONTENT="l"
+								       HPOS="4720"
+								       VPOS="1580"
+								       WIDTH="13"
+								       HEIGHT="101"
+								       GC="0.9906">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_25"
+						  HPOS="1666"
+						  VPOS="1817" 
+						  WIDTH="2379" 
+						  HEIGHT="139">
+							<String ID="segment_76"
+								CONTENT="Literatur" 
+								HPOS="1666" 
+								VPOS="1817"
+								WIDTH="284" 
+								HEIGHT="139" 
+								WC="0.9776">
+								<Glyph ID="char_272" 
+								       CONTENT="L"
+								       HPOS="1666"
+								       VPOS="1817"
+								       WIDTH="0"
+								       HEIGHT="139"
+								       GC="0.9397">
+								</Glyph>
+								<Glyph ID="char_273" 
+								       CONTENT="i"
+								       HPOS="1698"
+								       VPOS="1817"
+								       WIDTH="0"
+								       HEIGHT="139"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_274" 
+								       CONTENT="t"
+								       HPOS="1719"
+								       VPOS="1817"
+								       WIDTH="10"
+								       HEIGHT="139"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_275" 
+								       CONTENT="e"
+								       HPOS="1761"
+								       VPOS="1817"
+								       WIDTH="0"
+								       HEIGHT="139"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_276" 
+								       CONTENT="r"
+								       HPOS="1792"
+								       VPOS="1817"
+								       WIDTH="11"
+								       HEIGHT="139"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_277" 
+								       CONTENT="a"
+								       HPOS="1824"
+								       VPOS="1817"
+								       WIDTH="11"
+								       HEIGHT="139"
+								       GC="0.9979">
+								</Glyph>
+								<Glyph ID="char_278" 
+								       CONTENT="t"
+								       HPOS="1866"
+								       VPOS="1817"
+								       WIDTH="0"
+								       HEIGHT="139"
+								       GC="0.8828">
+								</Glyph>
+								<Glyph ID="char_279" 
+								       CONTENT="u"
+								       HPOS="1898"
+								       VPOS="1817"
+								       WIDTH="10"
+								       HEIGHT="139"
+								       GC="0.9787">
+								</Glyph>
+								<Glyph ID="char_280" 
+								       CONTENT="r"
+								       HPOS="1950"
+								       VPOS="1817"
+								       WIDTH="0"
+								       HEIGHT="139"
+								       GC="0.9994">
+								</Glyph>
+							</String>
+							<SP ID="segment_77"
+							    HPOS="1971" 
+							    VPOS="1817"
+							    WIDTH="274" 
+							    HEIGHT="139"/>
+							<String ID="segment_78"
+								CONTENT="We," 
+								HPOS="2266" 
+								VPOS="1817"
+								WIDTH="284" 
+								HEIGHT="139" 
+								WC="0.9998">
+								<Glyph ID="char_284" 
+								       CONTENT="W"
+								       HPOS="2266"
+								       VPOS="1817"
+								       WIDTH="0"
+								       HEIGHT="139"
+								       GC="0.9999">
+								</Glyph>
+								<Glyph ID="char_285" 
+								       CONTENT="e"
+								       HPOS="2371"
+								       VPOS="1817"
+								       WIDTH="0"
+								       HEIGHT="139"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_286" 
+								       CONTENT=","
+								       HPOS="2550"
+								       VPOS="1817"
+								       WIDTH="0"
+								       HEIGHT="139"
+								       GC="0.9994">
+								</Glyph>
+							</String>
+							<SP ID="segment_79"
+							    HPOS="2561" 
+							    VPOS="1817"
+							    WIDTH="42" 
+							    HEIGHT="139"/>
+							<String ID="segment_80"
+								CONTENT="4" 
+								HPOS="2666" 
+								VPOS="1817"
+								WIDTH="0" 
+								HEIGHT="139" 
+								WC="1.0">
+								<Glyph ID="char_288" 
+								       CONTENT="4"
+								       HPOS="2666"
+								       VPOS="1817"
+								       WIDTH="0"
+								       HEIGHT="139"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_81"
+							    HPOS="2687" 
+							    VPOS="1817"
+							    WIDTH="11" 
+							    HEIGHT="139"/>
+							<String ID="segment_82"
+								CONTENT="-ee-" 
+								HPOS="2729" 
+								VPOS="1817"
+								WIDTH="295" 
+								HEIGHT="139" 
+								WC="0.8983">
+								<Glyph ID="char_290" 
+								       CONTENT="-"
+								       HPOS="2729"
+								       VPOS="1817"
+								       WIDTH="0"
+								       HEIGHT="139"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_291" 
+								       CONTENT="e"
+								       HPOS="2845"
+								       VPOS="1817"
+								       WIDTH="0"
+								       HEIGHT="139"
+								       GC="0.597">
+								</Glyph>
+								<Glyph ID="char_292" 
+								       CONTENT="e"
+								       HPOS="2919"
+								       VPOS="1817"
+								       WIDTH="0"
+								       HEIGHT="139"
+								       GC="0.9988">
+								</Glyph>
+								<Glyph ID="char_293" 
+								       CONTENT="-"
+								       HPOS="3024"
+								       VPOS="1817"
+								       WIDTH="0"
+								       HEIGHT="139"
+								       GC="0.9974">
+								</Glyph>
+							</String>
+							<SP ID="segment_83"
+							    HPOS="3056" 
+							    VPOS="1817"
+							    WIDTH="10" 
+							    HEIGHT="139"/>
+							<String ID="segment_84"
+								CONTENT="e" 
+								HPOS="3098" 
+								VPOS="1817"
+								WIDTH="0" 
+								HEIGHT="139" 
+								WC="1.0">
+								<Glyph ID="char_295" 
+								       CONTENT="e"
+								       HPOS="3098"
+								       VPOS="1817"
+								       WIDTH="0"
+								       HEIGHT="139"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_85"
+							    HPOS="3193" 
+							    VPOS="1817"
+							    WIDTH="0" 
+							    HEIGHT="139"/>
+							<String ID="segment_86"
+								CONTENT="kA-a-r" 
+								HPOS="3235" 
+								VPOS="1817"
+								WIDTH="231" 
+								HEIGHT="139" 
+								WC="0.9423">
+								<Glyph ID="char_297" 
+								       CONTENT="k"
+								       HPOS="3235"
+								       VPOS="1817"
+								       WIDTH="0"
+								       HEIGHT="139"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_298" 
+								       CONTENT="A"
+								       HPOS="3256"
+								       VPOS="1817"
+								       WIDTH="0"
+								       HEIGHT="139"
+								       GC="0.9778">
+								</Glyph>
+								<Glyph ID="char_299" 
+								       CONTENT="-"
+								       HPOS="3308"
+								       VPOS="1817"
+								       WIDTH="11"
+								       HEIGHT="139"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_300" 
+								       CONTENT="a"
+								       HPOS="3414"
+								       VPOS="1817"
+								       WIDTH="0"
+								       HEIGHT="139"
+								       GC="0.997">
+								</Glyph>
+								<Glyph ID="char_301" 
+								       CONTENT="-"
+								       HPOS="3435"
+								       VPOS="1817"
+								       WIDTH="0"
+								       HEIGHT="139"
+								       GC="0.6792">
+								</Glyph>
+								<Glyph ID="char_302" 
+								       CONTENT="r"
+								       HPOS="3466"
+								       VPOS="1817"
+								       WIDTH="0"
+								       HEIGHT="139"
+								       GC="0.9998">
+								</Glyph>
+							</String>
+							<SP ID="segment_87"
+							    HPOS="3624" 
+							    VPOS="1817"
+							    WIDTH="42" 
+							    HEIGHT="139"/>
+							<String ID="segment_88"
+								CONTENT="4" 
+								HPOS="3772" 
+								VPOS="1817"
+								WIDTH="0" 
+								HEIGHT="139" 
+								WC="0.4105">
+								<Glyph ID="char_304" 
+								       CONTENT="4"
+								       HPOS="3772"
+								       VPOS="1817"
+								       WIDTH="0"
+								       HEIGHT="139"
+								       GC="0.4105">
+								</Glyph>
+							</String>
+							<SP ID="segment_89"
+							    HPOS="3793" 
+							    VPOS="1817"
+							    WIDTH="10" 
+							    HEIGHT="139"/>
+							<String ID="segment_90"
+								CONTENT="ee)" 
+								HPOS="3856" 
+								VPOS="1817"
+								WIDTH="189" 
+								HEIGHT="139" 
+								WC="1.0">
+								<Glyph ID="char_306" 
+								       CONTENT="e"
+								       HPOS="3856"
+								       VPOS="1817"
+								       WIDTH="0"
+								       HEIGHT="139"
+								       GC="0.9999">
+								</Glyph>
+								<Glyph ID="char_307" 
+								       CONTENT="e"
+								       HPOS="3909"
+								       VPOS="1817"
+								       WIDTH="0"
+								       HEIGHT="139"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_308" 
+								       CONTENT=")"
+								       HPOS="4045"
+								       VPOS="1817"
+								       WIDTH="0"
+								       HEIGHT="139"
+								       GC="1.0">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_26"
+						  HPOS="2208"
+						  VPOS="1938" 
+						  WIDTH="986" 
+						  HEIGHT="126">
+							<String ID="segment_91"
+								CONTENT=" " 
+								HPOS="2208" 
+								VPOS="1938"
+								WIDTH="0" 
+								HEIGHT="126" 
+								WC="0.4692">
+								<Glyph ID="char_309" 
+								       CONTENT=" "
+								       HPOS="2208"
+								       VPOS="1938"
+								       WIDTH="0"
+								       HEIGHT="126"
+								       GC="0.4692">
+								</Glyph>
+							</String>
+							<String ID="segment_92"
+								CONTENT="&#39;c&#39;" 
+								HPOS="2294" 
+								VPOS="1938"
+								WIDTH="48" 
+								HEIGHT="126" 
+								WC="0.9832">
+								<Glyph ID="char_310" 
+								       CONTENT="&#39;"
+								       HPOS="2294"
+								       VPOS="1938"
+								       WIDTH="0"
+								       HEIGHT="126"
+								       GC="0.9999">
+								</Glyph>
+								<Glyph ID="char_311" 
+								       CONTENT="c"
+								       HPOS="2332"
+								       VPOS="1938"
+								       WIDTH="0"
+								       HEIGHT="126"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_312" 
+								       CONTENT="&#39;"
+								       HPOS="2342"
+								       VPOS="1938"
+								       WIDTH="0"
+								       HEIGHT="126"
+								       GC="0.9496">
+								</Glyph>
+							</String>
+							<SP ID="segment_93"
+							    HPOS="2390" 
+							    VPOS="1938"
+							    WIDTH="29" 
+							    HEIGHT="126"/>
+							<String ID="segment_94"
+								CONTENT="&#39;----t" 
+								HPOS="2495" 
+								VPOS="1938"
+								WIDTH="211" 
+								HEIGHT="126" 
+								WC="0.9361">
+								<Glyph ID="char_314" 
+								       CONTENT="&#39;"
+								       HPOS="2495"
+								       VPOS="1938"
+								       WIDTH="0"
+								       HEIGHT="126"
+								       GC="0.6877">
+								</Glyph>
+								<Glyph ID="char_315" 
+								       CONTENT="-"
+								       HPOS="2524"
+								       VPOS="1938"
+								       WIDTH="0"
+								       HEIGHT="126"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_316" 
+								       CONTENT="-"
+								       HPOS="2553"
+								       VPOS="1938"
+								       WIDTH="19"
+								       HEIGHT="126"
+								       GC="0.9409">
+								</Glyph>
+								<Glyph ID="char_317" 
+								       CONTENT="-"
+								       HPOS="2620"
+								       VPOS="1938"
+								       WIDTH="19"
+								       HEIGHT="126"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_318" 
+								       CONTENT="-"
+								       HPOS="2667"
+								       VPOS="1938"
+								       WIDTH="0"
+								       HEIGHT="126"
+								       GC="0.9901">
+								</Glyph>
+								<Glyph ID="char_319" 
+								       CONTENT="t"
+								       HPOS="2706"
+								       VPOS="1938"
+								       WIDTH="0"
+								       HEIGHT="126"
+								       GC="0.9981">
+								</Glyph>
+							</String>
+							<SP ID="segment_95"
+							    HPOS="2993" 
+							    VPOS="1938"
+							    WIDTH="9" 
+							    HEIGHT="126"/>
+							<String ID="segment_96"
+								CONTENT="ao4." 
+								HPOS="3088" 
+								VPOS="1938"
+								WIDTH="106" 
+								HEIGHT="126" 
+								WC="0.796">
+								<Glyph ID="char_321" 
+								       CONTENT="a"
+								       HPOS="3088"
+								       VPOS="1938"
+								       WIDTH="0"
+								       HEIGHT="126"
+								       GC="0.8066">
+								</Glyph>
+								<Glyph ID="char_322" 
+								       CONTENT="o"
+								       HPOS="3098"
+								       VPOS="1938"
+								       WIDTH="0"
+								       HEIGHT="126"
+								       GC="0.8549">
+								</Glyph>
+								<Glyph ID="char_323" 
+								       CONTENT="4"
+								       HPOS="3146"
+								       VPOS="1938"
+								       WIDTH="0"
+								       HEIGHT="126"
+								       GC="0.7938">
+								</Glyph>
+								<Glyph ID="char_324" 
+								       CONTENT="."
+								       HPOS="3194"
+								       VPOS="1938"
+								       WIDTH="0"
+								       HEIGHT="126"
+								       GC="0.7288">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_27"
+						  HPOS="2264"
+						  VPOS="2668" 
+						  WIDTH="2587" 
+						  HEIGHT="123">
+							<String ID="segment_97"
+								CONTENT="Statueram" 
+								HPOS="2264" 
+								VPOS="2668"
+								WIDTH="476" 
+								HEIGHT="123" 
+								WC="1.0">
+								<Glyph ID="char_325" 
+								       CONTENT="S"
+								       HPOS="2264"
+								       VPOS="2668"
+								       WIDTH="10"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_326" 
+								       CONTENT="t"
+								       HPOS="2316"
+								       VPOS="2668"
+								       WIDTH="10"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_327" 
+								       CONTENT="a"
+								       HPOS="2388"
+								       VPOS="2668"
+								       WIDTH="0"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_328" 
+								       CONTENT="t"
+								       HPOS="2440"
+								       VPOS="2668"
+								       WIDTH="10"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_329" 
+								       CONTENT="u"
+								       HPOS="2502"
+								       VPOS="2668"
+								       WIDTH="10"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_330" 
+								       CONTENT="e"
+								       HPOS="2574"
+								       VPOS="2668"
+								       WIDTH="11"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_331" 
+								       CONTENT="r"
+								       HPOS="2637"
+								       VPOS="2668"
+								       WIDTH="10"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_332" 
+								       CONTENT="a"
+								       HPOS="2688"
+								       VPOS="2668"
+								       WIDTH="11"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_333" 
+								       CONTENT="m"
+								       HPOS="2740"
+								       VPOS="2668"
+								       WIDTH="0"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_98"
+							    HPOS="2792" 
+							    VPOS="2668"
+							    WIDTH="41" 
+							    HEIGHT="123"/>
+							<String ID="segment_99"
+								CONTENT="tuam" 
+								HPOS="2875" 
+								VPOS="2668"
+								WIDTH="175" 
+								HEIGHT="123" 
+								WC="1.0">
+								<Glyph ID="char_335" 
+								       CONTENT="t"
+								       HPOS="2875"
+								       VPOS="2668"
+								       WIDTH="0"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_336" 
+								       CONTENT="u"
+								       HPOS="2926"
+								       VPOS="2668"
+								       WIDTH="11"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_337" 
+								       CONTENT="a"
+								       HPOS="2999"
+								       VPOS="2668"
+								       WIDTH="0"
+								       HEIGHT="123"
+								       GC="0.9999">
+								</Glyph>
+								<Glyph ID="char_338" 
+								       CONTENT="m"
+								       HPOS="3050"
+								       VPOS="2668"
+								       WIDTH="0"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_100"
+							    HPOS="3102" 
+							    VPOS="2668"
+							    WIDTH="31" 
+							    HEIGHT="123"/>
+							<String ID="segment_101"
+								CONTENT="humanitatem" 
+								HPOS="3164" 
+								VPOS="2668"
+								WIDTH="621" 
+								HEIGHT="123" 
+								WC="0.9999">
+								<Glyph ID="char_340" 
+								       CONTENT="h"
+								       HPOS="3164"
+								       VPOS="2668"
+								       WIDTH="11"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_341" 
+								       CONTENT="u"
+								       HPOS="3237"
+								       VPOS="2668"
+								       WIDTH="10"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_342" 
+								       CONTENT="m"
+								       HPOS="3288"
+								       VPOS="2668"
+								       WIDTH="11"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_343" 
+								       CONTENT="a"
+								       HPOS="3371"
+								       VPOS="2668"
+								       WIDTH="0"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_344" 
+								       CONTENT="n"
+								       HPOS="3423"
+								       VPOS="2668"
+								       WIDTH="0"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_345" 
+								       CONTENT="i"
+								       HPOS="3485"
+								       VPOS="2668"
+								       WIDTH="10"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_346" 
+								       CONTENT="t"
+								       HPOS="3547"
+								       VPOS="2668"
+								       WIDTH="0"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_347" 
+								       CONTENT="a"
+								       HPOS="3609"
+								       VPOS="2668"
+								       WIDTH="0"
+								       HEIGHT="123"
+								       GC="0.9999">
+								</Glyph>
+								<Glyph ID="char_348" 
+								       CONTENT="t"
+								       HPOS="3671"
+								       VPOS="2668"
+								       WIDTH="0"
+								       HEIGHT="123"
+								       GC="0.9987">
+								</Glyph>
+								<Glyph ID="char_349" 
+								       CONTENT="e"
+								       HPOS="3733"
+								       VPOS="2668"
+								       WIDTH="11"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_350" 
+								       CONTENT="m"
+								       HPOS="3785"
+								       VPOS="2668"
+								       WIDTH="0"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_102"
+							    HPOS="3837" 
+							    VPOS="2668"
+							    WIDTH="31" 
+							    HEIGHT="123"/>
+							<String ID="segment_103"
+								CONTENT="videre," 
+								HPOS="3909" 
+								VPOS="2668"
+								WIDTH="383" 
+								HEIGHT="123" 
+								WC="0.9994">
+								<Glyph ID="char_352" 
+								       CONTENT="v"
+								       HPOS="3909"
+								       VPOS="2668"
+								       WIDTH="0"
+								       HEIGHT="123"
+								       GC="0.9999">
+								</Glyph>
+								<Glyph ID="char_353" 
+								       CONTENT="i"
+								       HPOS="3971"
+								       VPOS="2668"
+								       WIDTH="11"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_354" 
+								       CONTENT="d"
+								       HPOS="4044"
+								       VPOS="2668"
+								       WIDTH="10"
+								       HEIGHT="123"
+								       GC="0.9999">
+								</Glyph>
+								<Glyph ID="char_355" 
+								       CONTENT="e"
+								       HPOS="4106"
+								       VPOS="2668"
+								       WIDTH="10"
+								       HEIGHT="123"
+								       GC="0.9994">
+								</Glyph>
+								<Glyph ID="char_356" 
+								       CONTENT="r"
+								       HPOS="4168"
+								       VPOS="2668"
+								       WIDTH="10"
+								       HEIGHT="123"
+								       GC="0.9969">
+								</Glyph>
+								<Glyph ID="char_357" 
+								       CONTENT="e"
+								       HPOS="4230"
+								       VPOS="2668"
+								       WIDTH="10"
+								       HEIGHT="123"
+								       GC="0.9999">
+								</Glyph>
+								<Glyph ID="char_358" 
+								       CONTENT=","
+								       HPOS="4292"
+								       VPOS="2668"
+								       WIDTH="0"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_104"
+							    HPOS="4313" 
+							    VPOS="2668"
+							    WIDTH="41" 
+							    HEIGHT="123"/>
+							<String ID="segment_105"
+								CONTENT="et" 
+								HPOS="4416" 
+								VPOS="2668"
+								WIDTH="52" 
+								HEIGHT="123" 
+								WC="0.9998">
+								<Glyph ID="char_360" 
+								       CONTENT="e"
+								       HPOS="4416"
+								       VPOS="2668"
+								       WIDTH="0"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_361" 
+								       CONTENT="t"
+								       HPOS="4468"
+								       VPOS="2668"
+								       WIDTH="0"
+								       HEIGHT="123"
+								       GC="0.9997">
+								</Glyph>
+							</String>
+							<SP ID="segment_106"
+							    HPOS="4509" 
+							    VPOS="2668"
+							    WIDTH="42" 
+							    HEIGHT="123"/>
+							<String ID="segment_107"
+								CONTENT="pree-" 
+								HPOS="4582" 
+								VPOS="2668"
+								WIDTH="269" 
+								HEIGHT="123" 
+								WC="0.9728">
+								<Glyph ID="char_363" 
+								       CONTENT="p"
+								       HPOS="4582"
+								       VPOS="2668"
+								       WIDTH="10"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_364" 
+								       CONTENT="r"
+								       HPOS="4664"
+								       VPOS="2668"
+								       WIDTH="11"
+								       HEIGHT="123"
+								       GC="0.9999">
+								</Glyph>
+								<Glyph ID="char_365" 
+								       CONTENT="e"
+								       HPOS="4716"
+								       VPOS="2668"
+								       WIDTH="0"
+								       HEIGHT="123"
+								       GC="0.8642">
+								</Glyph>
+								<Glyph ID="char_366" 
+								       CONTENT="e"
+								       HPOS="4778"
+								       VPOS="2668"
+								       WIDTH="11"
+								       HEIGHT="123"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_367" 
+								       CONTENT="-"
+								       HPOS="4820"
+								       VPOS="2668"
+								       WIDTH="31"
+								       HEIGHT="123"
+								       GC="0.9999">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_28"
+						  HPOS="1559"
+						  VPOS="2775" 
+						  WIDTH="3279" 
+						  HEIGHT="117">
+							<String ID="segment_108"
+								CONTENT="]Bemerkunae" 
+								HPOS="1559" 
+								VPOS="2775"
+								WIDTH="528" 
+								HEIGHT="117" 
+								WC="1.0">
+								<Glyph ID="char_368" 
+								       CONTENT="]"
+								       HPOS="1559"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_369" 
+								       CONTENT="B"
+								       HPOS="1663"
+								       VPOS="2775"
+								       WIDTH="10"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_370" 
+								       CONTENT="e"
+								       HPOS="1714"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_371" 
+								       CONTENT="m"
+								       HPOS="1756"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_372" 
+								       CONTENT="e"
+								       HPOS="1828"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="0.9995">
+								</Glyph>
+								<Glyph ID="char_373" 
+								       CONTENT="r"
+								       HPOS="1870"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_374" 
+								       CONTENT="k"
+								       HPOS="1890"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_375" 
+								       CONTENT="u"
+								       HPOS="1932"
+								       VPOS="2775"
+								       WIDTH="10"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_376" 
+								       CONTENT="n"
+								       HPOS="1983"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_377" 
+								       CONTENT="a"
+								       HPOS="2045"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_378" 
+								       CONTENT="e"
+								       HPOS="2087"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_109"
+							    HPOS="2159" 
+							    VPOS="2775"
+							    WIDTH="52" 
+							    HEIGHT="117"/>
+							<String ID="segment_110"
+								CONTENT="senti" 
+								HPOS="2263" 
+								VPOS="2775"
+								WIDTH="248" 
+								HEIGHT="117" 
+								WC="1.0">
+								<Glyph ID="char_380" 
+								       CONTENT="s"
+								       HPOS="2263"
+								       VPOS="2775"
+								       WIDTH="10"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_381" 
+								       CONTENT="e"
+								       HPOS="2325"
+								       VPOS="2775"
+								       WIDTH="10"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_382" 
+								       CONTENT="n"
+								       HPOS="2387"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_383" 
+								       CONTENT="t"
+								       HPOS="2438"
+								       VPOS="2775"
+								       WIDTH="11"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_384" 
+								       CONTENT="i"
+								       HPOS="2511"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_111"
+							    HPOS="2552" 
+							    VPOS="2775"
+							    WIDTH="31" 
+							    HEIGHT="117"/>
+							<String ID="segment_112"
+								CONTENT="praesens" 
+								HPOS="2625" 
+								VPOS="2775"
+								WIDTH="444" 
+								HEIGHT="117" 
+								WC="1.0">
+								<Glyph ID="char_386" 
+								       CONTENT="p"
+								       HPOS="2625"
+								       VPOS="2775"
+								       WIDTH="10"
+								       HEIGHT="117"
+								       GC="0.9999">
+								</Glyph>
+								<Glyph ID="char_387" 
+								       CONTENT="r"
+								       HPOS="2697"
+								       VPOS="2775"
+								       WIDTH="10"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_388" 
+								       CONTENT="a"
+								       HPOS="2749"
+								       VPOS="2775"
+								       WIDTH="10"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_389" 
+								       CONTENT="e"
+								       HPOS="2821"
+								       VPOS="2775"
+								       WIDTH="11"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_390" 
+								       CONTENT="s"
+								       HPOS="2883"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_391" 
+								       CONTENT="e"
+								       HPOS="2945"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_392" 
+								       CONTENT="n"
+								       HPOS="2997"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_393" 
+								       CONTENT="s"
+								       HPOS="3069"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_113"
+							    HPOS="3100" 
+							    VPOS="2775"
+							    WIDTH="31" 
+							    HEIGHT="117"/>
+							<String ID="segment_114"
+								CONTENT="has" 
+								HPOS="3163" 
+								VPOS="2775"
+								WIDTH="155" 
+								HEIGHT="117" 
+								WC="1.0">
+								<Glyph ID="char_395" 
+								       CONTENT="h"
+								       HPOS="3163"
+								       VPOS="2775"
+								       WIDTH="10"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_396" 
+								       CONTENT="a"
+								       HPOS="3245"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_397" 
+								       CONTENT="s"
+								       HPOS="3318"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_115"
+							    HPOS="3349" 
+							    VPOS="2775"
+							    WIDTH="41" 
+							    HEIGHT="117"/>
+							<String ID="segment_116"
+								CONTENT="reddere," 
+								HPOS="3431" 
+								VPOS="2775"
+								WIDTH="435" 
+								HEIGHT="117" 
+								WC="0.9986">
+								<Glyph ID="char_399" 
+								       CONTENT="r"
+								       HPOS="3431"
+								       VPOS="2775"
+								       WIDTH="11"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_400" 
+								       CONTENT="e"
+								       HPOS="3494"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="0.9944">
+								</Glyph>
+								<Glyph ID="char_401" 
+								       CONTENT="d"
+								       HPOS="3556"
+								       VPOS="2775"
+								       WIDTH="10"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_402" 
+								       CONTENT="d"
+								       HPOS="3618"
+								       VPOS="2775"
+								       WIDTH="10"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_403" 
+								       CONTENT="e"
+								       HPOS="3680"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_404" 
+								       CONTENT="r"
+								       HPOS="3731"
+								       VPOS="2775"
+								       WIDTH="21"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_405" 
+								       CONTENT="e"
+								       HPOS="3793"
+								       VPOS="2775"
+								       WIDTH="11"
+								       HEIGHT="117"
+								       GC="0.9975">
+								</Glyph>
+								<Glyph ID="char_406" 
+								       CONTENT=","
+								       HPOS="3856"
+								       VPOS="2775"
+								       WIDTH="10"
+								       HEIGHT="117"
+								       GC="0.9967">
+								</Glyph>
+							</String>
+							<SP ID="segment_117"
+							    HPOS="3897" 
+							    VPOS="2775"
+							    WIDTH="41" 
+							    HEIGHT="117"/>
+							<String ID="segment_118"
+								CONTENT="quae" 
+								HPOS="3990" 
+								VPOS="2775"
+								WIDTH="186" 
+								HEIGHT="117" 
+								WC="0.9308">
+								<Glyph ID="char_408" 
+								       CONTENT="q"
+								       HPOS="3990"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="0.997">
+								</Glyph>
+								<Glyph ID="char_409" 
+								       CONTENT="u"
+								       HPOS="4031"
+								       VPOS="2775"
+								       WIDTH="11"
+								       HEIGHT="117"
+								       GC="0.7275">
+								</Glyph>
+								<Glyph ID="char_410" 
+								       CONTENT="a"
+								       HPOS="4104"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="0.9987">
+								</Glyph>
+								<Glyph ID="char_411" 
+								       CONTENT="e"
+								       HPOS="4166"
+								       VPOS="2775"
+								       WIDTH="10"
+								       HEIGHT="117"
+								       GC="0.9999">
+								</Glyph>
+							</String>
+							<SP ID="segment_119"
+							    HPOS="4197" 
+							    VPOS="2775"
+							    WIDTH="41" 
+							    HEIGHT="117"/>
+							<String ID="segment_120"
+								CONTENT="ad" 
+								HPOS="4290" 
+								VPOS="2775"
+								WIDTH="72" 
+								HEIGHT="117" 
+								WC="0.7904">
+								<Glyph ID="char_413" 
+								       CONTENT="a"
+								       HPOS="4290"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="0.5808">
+								</Glyph>
+								<Glyph ID="char_414" 
+								       CONTENT="d"
+								       HPOS="4352"
+								       VPOS="2775"
+								       WIDTH="10"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_121"
+							    HPOS="4393" 
+							    VPOS="2775"
+							    WIDTH="31" 
+							    HEIGHT="117"/>
+							<String ID="segment_122"
+								CONTENT="te" 
+								HPOS="4466" 
+								VPOS="2775"
+								WIDTH="72" 
+								HEIGHT="117" 
+								WC="1.0">
+								<Glyph ID="char_416" 
+								       CONTENT="t"
+								       HPOS="4466"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_417" 
+								       CONTENT="e"
+								       HPOS="4538"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="0.9999">
+								</Glyph>
+							</String>
+							<SP ID="segment_123"
+							    HPOS="4569" 
+							    VPOS="2775"
+							    WIDTH="42" 
+							    HEIGHT="117"/>
+							<String ID="segment_124"
+								CONTENT="sunt" 
+								HPOS="4662" 
+								VPOS="2775"
+								WIDTH="176" 
+								HEIGHT="117" 
+								WC="0.9775">
+								<Glyph ID="char_419" 
+								       CONTENT="s"
+								       HPOS="4662"
+								       VPOS="2775"
+								       WIDTH="0"
+								       HEIGHT="117"
+								       GC="0.91">
+								</Glyph>
+								<Glyph ID="char_420" 
+								       CONTENT="u"
+								       HPOS="4704"
+								       VPOS="2775"
+								       WIDTH="10"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_421" 
+								       CONTENT="n"
+								       HPOS="4766"
+								       VPOS="2775"
+								       WIDTH="10"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_422" 
+								       CONTENT="t"
+								       HPOS="4828"
+								       VPOS="2775"
+								       WIDTH="10"
+								       HEIGHT="117"
+								       GC="1.0">
+								</Glyph>
+							</String>
+					</TextLine>
+					<TextLine ID="line_29"
+						  HPOS="2265"
+						  VPOS="2899" 
+						  WIDTH="1226" 
+						  HEIGHT="110">
+							<String ID="segment_125"
+								CONTENT="scriptee" 
+								HPOS="2265" 
+								VPOS="2899"
+								WIDTH="438" 
+								HEIGHT="110" 
+								WC="1.0">
+								<Glyph ID="char_423" 
+								       CONTENT="s"
+								       HPOS="2265"
+								       VPOS="2899"
+								       WIDTH="11"
+								       HEIGHT="110"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_424" 
+								       CONTENT="c"
+								       HPOS="2332"
+								       VPOS="2899"
+								       WIDTH="0"
+								       HEIGHT="110"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_425" 
+								       CONTENT="r"
+								       HPOS="2388"
+								       VPOS="2899"
+								       WIDTH="12"
+								       HEIGHT="110"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_426" 
+								       CONTENT="i"
+								       HPOS="2445"
+								       VPOS="2899"
+								       WIDTH="0"
+								       HEIGHT="110"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_427" 
+								       CONTENT="p"
+								       HPOS="2501"
+								       VPOS="2899"
+								       WIDTH="11"
+								       HEIGHT="110"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_428" 
+								       CONTENT="t"
+								       HPOS="2568"
+								       VPOS="2899"
+								       WIDTH="0"
+								       HEIGHT="110"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_429" 
+								       CONTENT="e"
+								       HPOS="2636"
+								       VPOS="2899"
+								       WIDTH="0"
+								       HEIGHT="110"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_430" 
+								       CONTENT="e"
+								       HPOS="2692"
+								       VPOS="2899"
+								       WIDTH="11"
+								       HEIGHT="110"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_126"
+							    HPOS="2737" 
+							    VPOS="2899"
+							    WIDTH="23" 
+							    HEIGHT="110"/>
+							<String ID="segment_127"
+								CONTENT="a" 
+								HPOS="2816" 
+								VPOS="2899"
+								WIDTH="0" 
+								HEIGHT="110" 
+								WC="1.0">
+								<Glyph ID="char_432" 
+								       CONTENT="a"
+								       HPOS="2816"
+								       VPOS="2899"
+								       WIDTH="0"
+								       HEIGHT="110"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_128"
+							    HPOS="2861" 
+							    VPOS="2899"
+							    WIDTH="33" 
+							    HEIGHT="110"/>
+							<String ID="segment_129"
+								CONTENT="D." 
+								HPOS="2951" 
+								VPOS="2899"
+								WIDTH="56" 
+								HEIGHT="110" 
+								WC="1.0">
+								<Glyph ID="char_434" 
+								       CONTENT="D"
+								       HPOS="2951"
+								       VPOS="2899"
+								       WIDTH="0"
+								       HEIGHT="110"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_435" 
+								       CONTENT="."
+								       HPOS="3007"
+								       VPOS="2899"
+								       WIDTH="0"
+								       HEIGHT="110"
+								       GC="1.0">
+								</Glyph>
+							</String>
+							<SP ID="segment_130"
+							    HPOS="3029" 
+							    VPOS="2899"
+							    WIDTH="57" 
+							    HEIGHT="110"/>
+							<String ID="segment_131"
+								CONTENT="Hopero." 
+								HPOS="3108" 
+								VPOS="2899"
+								WIDTH="383" 
+								HEIGHT="110" 
+								WC="0.9998">
+								<Glyph ID="char_437" 
+								       CONTENT="H"
+								       HPOS="3108"
+								       VPOS="2899"
+								       WIDTH="11"
+								       HEIGHT="110"
+								       GC="0.9998">
+								</Glyph>
+								<Glyph ID="char_438" 
+								       CONTENT="o"
+								       HPOS="3187"
+								       VPOS="2899"
+								       WIDTH="11"
+								       HEIGHT="110"
+								       GC="0.9995">
+								</Glyph>
+								<Glyph ID="char_439" 
+								       CONTENT="p"
+								       HPOS="3243"
+								       VPOS="2899"
+								       WIDTH="11"
+								       HEIGHT="110"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_440" 
+								       CONTENT="e"
+								       HPOS="3311"
+								       VPOS="2899"
+								       WIDTH="11"
+								       HEIGHT="110"
+								       GC="0.9993">
+								</Glyph>
+								<Glyph ID="char_441" 
+								       CONTENT="r"
+								       HPOS="3367"
+								       VPOS="2899"
+								       WIDTH="11"
+								       HEIGHT="110"
+								       GC="1.0">
+								</Glyph>
+								<Glyph ID="char_442" 
+								       CONTENT="o"
+								       HPOS="3434"
+								       VPOS="2899"
+								       WIDTH="12"
+								       HEIGHT="110"
+								       GC="0.9999">
+								</Glyph>
+								<Glyph ID="char_443" 
+								       CONTENT="."
+								       HPOS="3491"
+								       VPOS="2899"
+								       WIDTH="0"
+								       HEIGHT="110"
+								       GC="1.0">
+								</Glyph>
+							</String>
+					</TextLine>
+				</TextBlock>
+			</PrintSpace>
+		</Page>
+	</Layout>
+</alto>

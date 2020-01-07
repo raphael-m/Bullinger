@@ -8,16 +8,22 @@
 
 from App import app, db
 from App.forms import *
-from App.models import User, Kartei
-from flask import render_template, flash, redirect, url_for, session
+from flask import render_template, flash, redirect, url_for, session, make_response, jsonify
 from flask_login import current_user, login_user, login_required, logout_user
-from datetime import datetime
 from Tools.BullingerDB import BullingerDB
+from sqlalchemy import asc, desc, func, and_, or_
+from App.models import *
 
 import time
 
 APP_NAME = "KoKoS-Bullinger"
 database = BullingerDB(db.session)
+
+
+@app.errorhandler(404)
+def not_found(error):
+    print(error)
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -50,6 +56,12 @@ def setup():
     # PASSWORD PROTECTION NEEDED                                                                                    !
     """ delete and setup db (runtime ~1h) """
     BullingerDB.setup(db.session, "Karteikarten/OCR")
+    return redirect(url_for('admin'))
+
+
+@app.route('/admin/setup_plus', methods=['POST', 'GET'])
+def setup_plus():
+    BullingerDB.employ_octopus()
     return redirect(url_for('admin'))
 
 
@@ -224,3 +236,84 @@ def assignment(id_brief):
                            title="Nr. "+str(i),
                            form=card_form,
                            vars=c_vars)
+
+
+@app.route('/api/assignments/<id_brief>', methods=['GET'])
+@login_required
+def send_data(id_brief):
+    id_brief = int(id_brief)
+    kartei = Kartei.query.filter_by(id_brief=id_brief).first()
+    date = Datum.query.filter_by(id_brief=id_brief).order_by(desc(Datum.zeit)).first()
+    r = Empfaenger.query.filter_by(id_brief=id_brief).order_by(desc(Empfaenger.zeit)).first()
+    receiver = Person.query.get(r.id_person) if r else None
+    s = Absender.query.filter_by(id_brief=id_brief).order_by(desc(Absender.zeit)).first()
+    sender = Person.query.get(s.id_person) if s else None
+    autograph = Autograph.query.filter_by(id_brief=id_brief).order_by(desc(Autograph.zeit)).first()
+    copy = Kopie.query.filter_by(id_brief=id_brief).order_by(desc(Kopie.zeit)).first()
+    literatur = Literatur.query.filter_by(id_brief=id_brief).order_by(desc(Literatur.zeit)).first()
+    sprache = Sprache.query.filter_by(id_brief=id_brief).order_by(desc(Sprache.zeit))
+    sp = "; ".join([s.sprache for s in sprache if s.zeit == sprache.first().zeit]) if sprache else ''
+    gedruckt = Gedruckt.query.filter_by(id_brief=id_brief).order_by(desc(Gedruckt.zeit)).first()
+    satz = Bemerkung.query.filter_by(id_brief=id_brief).order_by(desc(Bemerkung.zeit)).first()
+    data = {
+        "id": id_brief,
+        "state": kartei.status,
+        "reviews": kartei.rezensionen,
+        "card_path": '/static/cards/HBBW_Karteikarte_' + (5-len(str(id_brief)))*'0'+str(id_brief) + '.png',
+        "card": {
+            "date": {
+                "year": (date.jahr_a if date.jahr_a else 's.d.') if date else 's.d.',
+                "month": (date.monat_a if date.monat_a else 's.d.') if date else 's.d.',
+                "day": (date.tag_a if date.tag_a else 's.d.') if date else 's.d.',
+                "year_b": (date.jahr_b if date.jahr_b else 's.d.') if date else '',
+                "month_b": (date.monat_b if date.monat_b else 's.d.') if date else 's.d.',
+                "day_b": (date.tag_b if date.tag_b else 's.d.') if date else '',
+                "remarks": date.bemerkung if date else ''
+            },
+            "sender": {
+                "firstname": sender.vorname if sender else '',
+                "lastname": sender.name if sender else '',
+                "location": sender.ort if sender else '',
+                "remarks": s.bemerkung if s else '',
+                "verified": sender.verifiziert if sender else ''
+            },
+            "receiver": {
+                "firstname": receiver.vorname if receiver else '',
+                "lastname": receiver.name if receiver else '',
+                "location": receiver.ort if receiver else '',
+                "remarks": r.bemerkung if r else '',
+                "verified": receiver.verifiziert if receiver else ''
+            },
+            "autograph": {
+                "location": autograph.standort if autograph else '',
+                "signature": autograph.signatur if autograph else '',
+                "remarks": autograph.bemerkung if autograph else ''
+            },
+            "copy": {
+                "location": copy.standort if copy else '',
+                "signature": copy.signatur if copy else '',
+                "remarks": copy.bemerkung if copy else ''
+            },
+            "language": sp,
+            "literature": literatur.literatur if literatur else '',
+            "printed": gedruckt.gedruckt if gedruckt else '',
+            "first_sentence": satz.bemerkung if satz else '',
+            "remarks": "TODO"
+        },
+        "navigation": {
+            "next": "/assignment/"+str(BullingerDB.get_next_card_number(id_brief)),
+            "next_unedited": "/assignment/"+str(BullingerDB.get_next_assignment(id_brief)),
+            "previous": "/assignment/"+str(BullingerDB.get_prev_card_number(id_brief)),
+            "previous_unedited": "/assignment/"+str(BullingerDB.get_prev_assignment(id_brief))
+        }
+    }
+    return jsonify(data)
+
+
+@app.route('/api/assignment/<id_brief>', methods=['POST'])
+@login_required
+def save_data(id_brief):
+    """ Über diese Schnittstelle speichert das Frontend Änderungen an einer Karteikarte. Über request.json kannst du auf
+    die mitgesendeten Daten zugreifen. Diese Daten kannst du verwenden, um die Änderungen wie bereits implementiert in
+    der Datenbank zu speichern. """
+    return 0

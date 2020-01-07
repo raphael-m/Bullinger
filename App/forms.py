@@ -253,11 +253,9 @@ def create_date_selection(selection):
         "Dezember": False
     }
     if selection and selection != "s.d.":
-        date["s.d."] = False
         if selection in date:
             date[selection] = True
-        else:
-            date["s.d."] = True
+            date["s.d."] = False
     return date
 
 
