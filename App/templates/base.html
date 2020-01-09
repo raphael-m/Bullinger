@@ -31,7 +31,7 @@
         {% endblock %}
     </head>
     <body>
-        <div id="head">
+        {#<div id="head">
             <!-- Logo -->
             <div class="hlcell">
                 <a href="https://www.uzh.ch/de.html">
@@ -53,7 +53,36 @@
                 {% include 'account_menu_offline.html' %}
             {% endif %}
             </div>
+        </div>#}
+
+        <div class="bu-header">
+            <div class="bu-header-logo">
+                <img src="{{url_for('static', filename='images/logo.svg')}}" width="266px" />
+            </div>
+            <ul class="bu-header-menu">
+                <li><a href="#">Allgemeines</a></li>
+                <li><a href="#">Übersicht</a></li>
+                <li><a href="#">Statistiken</a></li>
+                <li><a href="#">FAQ</a></li>
+                <li><a href="#">Los!</a></li>
+            </ul>
+            <div class="bu-header-account">
+                <div class="bu-header-account-initials"><a href=#>RM</a></div>
+            </div>
         </div>
+        {# Todo: outsource to external css file #}
+        <style>
+            .bu-header { background: #26244B; display:flex; flex-direction: row; }
+            .bu-header-logo { background: #FFF; }
+            .bu-header-menu { margin:0; padding:0; display:inline-flex;  }
+            .bu-header-menu li { margin:0; padding:0; display:inline-block; }
+            .bu-header-menu li a { display:inline-flex; align-items:center; height:100%; font-size:27px; padding-left:43px; color:#B5B5B5; }
+            .bu-header-menu li a:hover, .bu-header-menu li a.active { color:#FFFFFF; text-decoration:none; }
+            .bu-header-account { margin-left:auto; display:flex; align-items:center; padding-right:20px; }
+            .bu-header-account-initials { display:flex; align-items: center; width:60px; height:60px; border-radius:100%; background:#FFF; font-size:27px; }
+            .bu-header-account-initials a, .bu-header-account-initials a:hover { color:#000; text-decoration: none; display:block; text-align:center; width:100%; }
+        </style>
+
         <div id="main">
             {% block content %}
                 <!-- Actual Content -->

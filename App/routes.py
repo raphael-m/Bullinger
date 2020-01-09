@@ -14,6 +14,8 @@ from Tools.BullingerDB import BullingerDB
 from sqlalchemy import asc, desc, func, and_, or_
 from App.models import *
 
+import requests
+import re
 import time
 
 APP_NAME = "KoKoS-Bullinger"
@@ -157,8 +159,24 @@ def quick_start():
         return redirect(url_for('assignment', id_brief=str(i)))
     return redirect(url_for('overview'))  # we are done !
 
+@app.route('/assignment/<id>', methods=['GET'])
+@login_required
+def assignment_new(id):
+    # Load vue html from deployment and strip unneeded tags (html, body, doctype, title, icon etc.)
+    html_content = requests.get("http://bullinger.raphaelm.ch/").text
+    html_content = re.sub("<!DOCTYPE html>", "", html_content)
+    html_content = re.sub("</?html.*?>", "", html_content)
+    html_content = re.sub("</?meta.*?>", "", html_content)
+    html_content = re.sub("<link rel=\"icon\".*?>", "", html_content)
+    html_content = re.sub("<title>.*?</title>", "", html_content)
+    html_content = re.sub("</?head>", "", html_content)
+    html_content = re.sub("</?body>", "", html_content)
+    html_content = re.sub("(?P<ref> (src|href)=(\")?)/", r"\g<ref>http://bullinger.raphaelm.ch/", html_content)
+    return render_template('assignment_vue.html',
+        card_index=id,
+        html_content=html_content)
 
-@app.route('/assignment/<id_brief>', methods=['POST', 'GET'])
+@app.route('/assignment_old/<id_brief>', methods=['POST', 'GET'])
 @login_required
 def assignment(id_brief):
 
