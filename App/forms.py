@@ -6,11 +6,10 @@
 
 """ data exchange server/browser for file cards """
 
-from flask import request
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, HiddenField, RadioField, TextAreaField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
-from App.models import User, Datum, Autograph, Kopie, Literatur, Gedruckt, Bemerkung, Sprache
+from App.models import User
 
 IDC = "card__"  # prefix for form IDs
 
@@ -59,25 +58,6 @@ class FormFileCard(FlaskForm):
             self.day_b.default = date.tag_b if date.tag_b and date.tag_b != 's.d.' else ''
             self.remark_date.default = date.bemerkung if date.bemerkung else ''
 
-    def update_date(self, datum_old):
-        new_datum, number_of_changes = Datum(), 0
-        if str(datum_old.jahr_a) != self.year_a.data.strip(): number_of_changes += 1  # year/month/day (A)
-        new_datum.jahr_a = 's.d.' if not self.year_a.data else self.year_a.data
-        if datum_old.monat_a != request.form['card_month_a']: number_of_changes += 1
-        new_datum.monat_a = request.form['card_month_a']
-        if str(datum_old.tag_a) != self.day_a.data.strip(): number_of_changes += 1
-        new_datum.tag_a = 's.d.' if not self.day_a.data else self.day_a.data
-        if str(datum_old.jahr_b) != self.year_b.data.strip(): number_of_changes += 1  # year/month/day (B)
-        new_datum.jahr_b = self.year_b.data
-        if datum_old.monat_b != request.form['card_month_b'] and request.form['card_month_b'] != 's.d.':
-            number_of_changes += 1
-        new_datum.monat_b = request.form['card_month_b']
-        if str(datum_old.tag_b) != self.day_b.data.strip(): number_of_changes += 1
-        new_datum.tag_b = self.day_b.data
-        if datum_old.bemerkung != self.remark_date.data.strip(): number_of_changes += 1  # remark
-        new_datum.bemerkung = self.remark_date.data
-        return (new_datum, number_of_changes) if number_of_changes > 0 else (None, 0)
-
     _NSS = "sender_"
     name_sender = StringField("Name", id=IDC + _NSS + "name")
     forename_sender = StringField("Vorname", id=IDC + _NSS + "forename")
@@ -85,17 +65,6 @@ class FormFileCard(FlaskForm):
     remark_sender = StringField("Bemerkung", id=IDC + _NSS + "remark")
     sender_verified = RadioField('Absender verifiziert', default='Ja',
                        choices=[('Ja', 'Ja'), ('Nein', 'Nein')])
-
-    def get_number_of_differences_from_sender(self, person):
-        n = 0
-        if person.name != self.name_sender.data.strip(): n += 1
-        if person.vorname != self.forename_sender.data.strip(): n += 1
-        if person.ort != self.place_sender.data.strip(): n += 1
-        if person.verifiziert != self.sender_verified.data: n += 1
-        return n
-
-    def has_changed__sender_comment(self, sender):
-        return True if sender.bemerkung != self.remark_sender.data.strip() else False
 
     def set_sender_as_default(self, person, remark):
         if person:
@@ -112,17 +81,6 @@ class FormFileCard(FlaskForm):
     remark_receiver = StringField("Bemerkung", id=IDC + _NSR + "remark")
     receiver_verified = RadioField('Empfänger verifiziert', default='Ja',
                        choices=[('Ja', 'Ja'), ('Nein', 'Nein')])
-
-    def get_number_of_differences_from_receiver(self, person):
-        differences = 0
-        if person.name != self.name_receiver.data.strip(): differences += 1
-        if person.vorname != self.forename_receiver.data.strip(): differences += 1
-        if person.ort != self.place_receiver.data.strip(): differences += 1
-        if person.verifiziert != self.receiver_verified.data: differences += 1
-        return differences
-
-    def has_changed__receiver_comment(self, receiver):
-        return True if receiver.bemerkung != self.remark_receiver.data.strip() else False
 
     def set_receiver_as_default(self, person, remark):
         if person:
@@ -143,16 +101,6 @@ class FormFileCard(FlaskForm):
             if autograph.signatur: self.signature_autograph.default = autograph.signatur
             if autograph.bemerkung: self.scope_autograph.default = autograph.bemerkung
 
-    def update_autograph(self, autograph_old):
-        new_autograph, number_of_changes = Autograph(), 0
-        if autograph_old.standort != self.place_autograph.data.strip(): number_of_changes += 1
-        new_autograph.standort = self.place_autograph.data
-        if autograph_old.signatur != self.signature_autograph.data.strip(): number_of_changes += 1
-        new_autograph.signatur = self.signature_autograph.data
-        if autograph_old.bemerkung != self.scope_autograph.data.strip(): number_of_changes += 1
-        new_autograph.bemerkung = self.scope_autograph.data
-        return (new_autograph, number_of_changes) if number_of_changes > 0 else (None, 0)
-
     _NSC = "copy_"
     place_copy = StringField("Ort", id=IDC + _NSC + "standort")
     signature_copy = StringField("Signatur", id=IDC + _NSC + "signatur")
@@ -163,16 +111,6 @@ class FormFileCard(FlaskForm):
             if copy.standort: self.place_copy.default = copy.standort
             if copy.signatur: self.signature_copy.default = copy.signatur
             if copy.bemerkung: self.scope_copy.default = copy.bemerkung
-
-    def update_copy(self, copy_old):
-        new_copy, number_of_changes = Kopie(), 0
-        if copy_old.standort != self.place_copy.data.strip(): number_of_changes += 1
-        new_copy.standort = self.place_copy.data
-        if copy_old.signatur != self.signature_copy.data.strip(): number_of_changes += 1
-        new_copy.signatur = self.signature_copy.data
-        if copy_old.bemerkung != self.scope_copy.data.strip(): number_of_changes += 1
-        new_copy.bemerkung = self.scope_copy.data
-        return (new_copy, number_of_changes) if number_of_changes > 0 else (None, 0)
 
     language = StringField("Sprache", id=IDC + "language_")
     literature = StringField("Literatur", id=IDC + "literature_")
@@ -188,50 +126,14 @@ class FormFileCard(FlaskForm):
                 self.language.default = s
         else: self.language.default = ''
 
-    def split_lang(self, form_entry):
-        if form_entry:
-            if ";" in form_entry: langs = form_entry.split(";")
-            elif "," in form_entry: langs = form_entry.split(",")
-            else: langs = form_entry.split("/")
-        else: langs = []
-        return [l.strip() for l in langs]
-
-    def update_language(self, lang_records):
-        s_old = [s.sprache for s in lang_records if s.sprache]
-        s_new = self.split_lang(self.language.data)
-        new_languages = []
-        if not set(s_old) == set(s_new):
-            for s in s_new: new_languages.append(Sprache(language=s.strip()))
-            if len(s_new) is 0: new_languages.append(Sprache(language=''))
-            return new_languages, len(s_new) - len(set(s_old).intersection(set(s_new)))
-        return None, 0
-
     def set_literature_as_default(self, literatur):
         if literatur: self.literature.default = literatur.literatur if literatur.literatur else ''
-
-    def update_literature(self, literatur_old):
-        new_literatur, c = Literatur(), 0
-        new_literatur.literatur = self.literature.data.strip()
-        if literatur_old.literatur != self.literature.data.strip(): c += 1
-        return (new_literatur, c) if c > 0 else (False, 0)
 
     def set_printed_as_default(self, gedruckt):
         if gedruckt: self.printed.default = gedruckt.gedruckt if gedruckt.gedruckt else ''
 
-    def update_printed(self, gedruckt_old):
-        new_printed, c = Gedruckt(), 0
-        new_printed.gedruckt = self.printed.data.strip()
-        if gedruckt_old.gedruckt != self.printed.data.strip(): c += 1
-        return (new_printed, c) if c > 0 else (False, 0)
-
     def set_sentence_as_default(self, sentence):
         if sentence: self.sentence.default = sentence.bemerkung if sentence.bemerkung else ''
-
-    def update_sentence(self, sentence_old):
-        new_sentence, c = Bemerkung(), 0
-        new_sentence.bemerkung = self.sentence.data.strip()
-        if sentence_old.bemerkung != self.sentence.data.strip(): c += 1
-        return (new_sentence, c) if c > 0 else (None, 0)
 
     note = TextAreaField("Benutzerkommentar", id=IDC + "note")
 
