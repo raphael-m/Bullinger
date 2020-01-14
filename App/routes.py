@@ -358,7 +358,7 @@ def send_data(id_brief):
     return jsonify(data)
 
 
-@app.route('/api/assignment/<id_brief>', methods=['POST'])
+@app.route('/api/assignments/<id_brief>', methods=['POST'])
 @login_required
 def save_data(id_brief):
     """ Über diese Schnittstelle speichert das Frontend Änderungen an einer Karteikarte. Über request.json kannst du auf
