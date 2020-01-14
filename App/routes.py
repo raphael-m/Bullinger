@@ -6,12 +6,12 @@
 
 """ Implementation of different URLs (view functions) """
 
-from App import app, db
+from App import app
 from App.forms import *
-from flask import render_template, flash, redirect, url_for, session, make_response, jsonify
+from flask import render_template, flash, redirect, url_for, session, make_response, jsonify, request
 from flask_login import current_user, login_user, login_required, logout_user
 from Tools.BullingerDB import BullingerDB
-from sqlalchemy import asc, desc, func, and_, or_
+from sqlalchemy import desc
 from App.models import *
 
 import requests
@@ -221,16 +221,44 @@ def assignment(id_brief):
     kartei = Kartei.query.filter_by(id_brief=i).first()
     user, number_of_changes, t = current_user.username, 0, datetime.now()
     if card_form.validate_on_submit():
-        number_of_changes += database.save_date(i, card_form, user, t)
-        number_of_changes += database.save_autograph(i, card_form, user, t)
-        number_of_changes += database.save_the_sender(i, card_form, user, t)
-        number_of_changes += database.save_the_receiver(i, card_form, user, t)
-        number_of_changes += database.save_copy(i, card_form, user, t)
-        number_of_changes += database.save_literature(i, card_form, user, t)
-        number_of_changes += database.save_language(i, card_form, user, t)
-        number_of_changes += database.save_printed(i, card_form, user, t)
-        number_of_changes += database.save_remark(i, card_form, user, t)
-        database.save_comment_card(i, card_form, user, t)
+        d = dict()
+        d["year"] = card_form.year_a.data
+        d["month"] = request.form['card_month_a']
+        d["day"] = card_form.day_a.data
+        d["year_b"] = card_form.year_b.data
+        d["month_b"] = request.form['card_month_a']
+        d["day_b"] = card_form.day_b.data
+        d["remarks"] = card_form.remark_date.data
+        number_of_changes += database.save_date(i, d, user, t)
+        d = dict()
+        d["location"] = card_form.place_autograph.data
+        d["signature"] = card_form.signature_autograph.data
+        d["remarks"] = card_form.scope_autograph.data
+        number_of_changes += database.save_autograph(i, d, user, t)
+        d = dict()
+        d["firstname"] = card_form.forename_sender.data
+        d["lastname"] = card_form.name_sender.data
+        d["location"] = card_form.place_sender.data
+        d["remarks"] = card_form.remark_sender.data
+        d["verified"] = card_form.sender_verified.data
+        number_of_changes += database.save_the_sender(i, d, user, t)
+        d = dict()
+        d["firstname"] = card_form.forename_receiver.data
+        d["lastname"] = card_form.name_receiver.data
+        d["location"] = card_form.place_receiver.data
+        d["remarks"] = card_form.remark_receiver.data
+        d["verified"] = card_form.receiver_verified.data
+        number_of_changes += database.save_the_receiver(i, d, user, t)
+        d = dict()
+        d["location"] = card_form.place_copy.data
+        d["signature"] = card_form.signature_copy.data
+        d["remarks"] = card_form.scope_copy.data
+        number_of_changes += database.save_copy(i, d, user, t)
+        number_of_changes += database.save_literature(i, card_form.literature.data, user, t)
+        number_of_changes += database.save_language(i, card_form.language.data, user, t)
+        number_of_changes += database.save_printed(i, card_form.printed.data, user, t)
+        number_of_changes += database.save_remark(i, card_form.sentence.data, user, t)
+        database.save_comment_card(i, card_form.note.data, user, t)
         database.update_file_status(i, card_form.state.data)
         database.update_user(user, number_of_changes, card_form.state.data)
         if card_form.submit_and_next.data:
@@ -334,4 +362,17 @@ def save_data(id_brief):
     """ Über diese Schnittstelle speichert das Frontend Änderungen an einer Karteikarte. Über request.json kannst du auf
     die mitgesendeten Daten zugreifen. Diese Daten kannst du verwenden, um die Änderungen wie bereits implementiert in
     der Datenbank zu speichern. """
-    return 0
+    data, user, number_of_changes, t = request.get_json(), current_user.username, 0, datetime.now()
+
+    number_of_changes += database.save_date(id_brief, data["card"]["date"], user, t)
+    number_of_changes += database.save_autograph(id_brief, data["card"]["autograph"], user, t)
+    number_of_changes += database.save_the_sender(id_brief, data["card"]["sender"], user, t)
+    number_of_changes += database.save_the_receiver(id_brief, data["card"]["receiver"], user, t)
+    number_of_changes += database.save_copy(id_brief, data["card"]["copy"], user, t)
+    number_of_changes += database.save_literature(id_brief, data["card"]["literature"], user, t)
+    number_of_changes += database.save_language(id_brief, data["card"]["language"], user, t)
+    number_of_changes += database.save_printed(id_brief, data["card"]["printed"], user, t)
+    number_of_changes += database.save_remark(id_brief, data["card"]["first_sentence"], user, t)
+    database.save_comment_card(id_brief, data["card"]["remarks"], user, t)
+    database.update_file_status(id_brief, data["state"])
+    database.update_user(user, number_of_changes, data["state"])
