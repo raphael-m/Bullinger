@@ -73,7 +73,18 @@
                 <li><a href="/quick_start">Los!</a></li>
             </ul>
             <div class="bu-header-account">
-                <div class="bu-header-account-initials"><a href=#>RM</a></div>
+                <div class="bu-header-account-initials">
+                    <a title="{{current_user.username}}" href=#>{{current_user.username[0].upper()}}</a>
+                    <div class="bu-header-dropdown">
+                        {% if current_user.is_authenticated %}
+                            <a href="/logout">Abmelden</a>
+                        {% else %}
+                            <a href="/login">Anmelden</a>
+                            <a href="/register">Registrieren</a>
+                        {% endif %}
+                        <a href="/admin">Admin</a>
+                    </div>
+                </div>
             </div>
         </div>
 
