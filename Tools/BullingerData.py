@@ -410,8 +410,7 @@ class BullingerData:
                             day = int(token)
                             break
             return Datum(
-                id_brief=id_brief, year_a=BullingerData.year_predicted,
-                month_a=BullingerData.month_predicted[BullingerData.index_predicted][0], day_a=day,
+                id_brief=id_brief, year_a=BullingerData.year_predicted, month_a=BullingerData.index_predicted+1, day_a=day,
                 year_b='', month_b='', day_b='', remark=''
             )
         return None

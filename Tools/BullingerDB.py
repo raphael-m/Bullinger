@@ -235,8 +235,8 @@ class BullingerDB:
             new_date, n = BullingerDB.update_date(data_date, datum_old)
             self.push2db(new_date, i, user, t)
         # date doesn't exist yet (should never be the case)
-        elif data_date["year"] or data_date["month"] != SD or data_date["day"] \
-                or data_date["year_b"] or data_date["month_b"] != SD or data_date["day_b"]:
+        elif data_date["year"] or data_date["month"] != 0 or data_date["day"] \
+                or data_date["year_b"] or data_date["month_b"] != 0 or data_date["day_b"]:
                 self.push2db(Datum(
                         year_a=data_date["year"], month_a=data_date["month"], day_a=data_date["day"],
                         year_b=data_date["year_b"], month_b=data_date["month_b"], day_b=data_date["day_b"],
@@ -248,19 +248,19 @@ class BullingerDB:
     @staticmethod
     def update_date(data_date, datum_old):
         new_datum, n = Datum(), 0  # number of changes
-        if str(datum_old.jahr_a) != data_date["year"].strip(): n += 1  # year/month/day (A)
-        new_datum.jahr_a = 's.d.' if not data_date["year"].strip() else data_date["year"].strip()
-        if datum_old.monat_a != data_date["month"].strip(): n += 1
-        new_datum.monat_a = data_date["month"].strip()
-        if str(datum_old.tag_a) != data_date["day"].strip(): n += 1
-        new_datum.tag_a = 's.d.' if not data_date["day"].strip() else data_date["day"].strip()
-        if str(datum_old.jahr_b) != data_date["year_b"].strip(): n += 1  # year/month/day (B)
-        new_datum.jahr_b = data_date["day"].strip()
-        if datum_old.monat_b != data_date["month_b"].strip() and data_date["month_b"].strip() != 's.d.': n += 1
-        new_datum.monat_b = data_date["month_b"].strip()
-        if str(datum_old.tag_b) != data_date["day_b"].strip(): n += 1
-        new_datum.tag_b = data_date["day_b"].strip()
-        if datum_old.bemerkung != data_date["remarks"].strip(): n += 1  # remark
+        if str(datum_old.jahr_a) != str(data_date["year"]): n += 1  # year/month/day (A)
+        new_datum.jahr_a = 's.d.' if not str(data_date["year"]) else str(data_date["year"])
+        if datum_old.monat_a != data_date["month"]: n += 1
+        new_datum.monat_a = data_date["month"]
+        if str(datum_old.tag_a) != str(data_date["day"]): n += 1
+        new_datum.tag_a = 's.d.' if not str(data_date["day"]) else str(data_date["day"])
+        if str(datum_old.jahr_b) != str(data_date["year_b"]): n += 1  # year/month/day (B)
+        new_datum.jahr_b = str(data_date["day"])
+        if datum_old.monat_b != data_date["month_b"] and data_date["month_b"]: n += 1
+        new_datum.monat_b = data_date["month_b"]
+        if str(datum_old.tag_b) != str(data_date["day_b"]): n += 1
+        new_datum.tag_b = str(data_date["day_b"])
+        if datum_old.bemerkung != str(data_date["remarks"]): n += 1  # remark
         new_datum.bemerkung = data_date["remarks"].strip()
         return (new_datum, n) if n > 0 else (None, 0)
 
