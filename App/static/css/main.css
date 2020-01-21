@@ -1,10 +1,19 @@
 @import url('https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css');
 
+
 html, body {
     font-size: 12pt;
     background: WhiteSmoke;
     font-family: 'Noto Serif', serif;
 }
+
+body {
+    min-height:100vh;
+    position:relative;
+    padding-bottom: 15px;
+    box-sizing:border-box;
+}
+
 
 #head {
     height: 60px;
@@ -24,6 +33,9 @@ html, body {
     text-align: center;
     color: white;
     background: #123;
+    position:absolute;
+    bottom:0;
+    width:100%;
 }
 
 /* HEADER, MENU */
