@@ -35,30 +35,6 @@
         {% endblock %}
     </head>
     <body>
-        {#<div id="head">
-            <!-- Logo -->
-            <div class="hlcell">
-                <a href="https://www.uzh.ch/de.html">
-                    <img id="uzh_logo" src="{{url_for('static', filename='images/logo.png')}}"/>
-                </a>
-            </div>
-            <!-- Menu Items -->
-            <div class="hlsep"></div>
-            <div id="menu_home" class="hlcell">Allgemeines</div>
-            <div id="menu_cards" class="hlcell">Übersicht</div>
-            <div id="menu_stats" class="hlcell">Statistiken</div>
-            <div id="menu_faq" class="hlcell">FAQ</div>
-            <div id="menu_gateway" class="hlcell">Los!</div>
-            <!-- Account -->
-            <div id="account" class="hrcell">
-            {% if current_user.is_authenticated %}
-                {% include 'account_menu_online.html' %}
-            {% else %}
-                {% include 'account_menu_offline.html' %}
-            {% endif %}
-            </div>
-        </div>#}
-
         <div class="bu-header">
             <div class="bu-header-logo">
                 <a href="/">
