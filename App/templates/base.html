@@ -42,10 +42,10 @@
                 </a>
             </div>
             <ul class="bu-header-menu">
-                <li><a href="/">Allgemeines</a></li>
-                <li><a href="/overview">Übersicht</a></li>
-                <li><a href="/stats">Statistiken</a></li>
-                <li><a href="/faq">FAQ</a></li>
+                <li><a {%- if request.path == "/"  %} class="active"{% endif %} href="/">Allgemeines</a></li>
+                <li><a {%- if request.path.startswith("/overview") or request.path.startswith("/assignment") %} class="active"{% endif %} href="/overview">Übersicht</a></li>
+                <li><a {%- if request.path == "/stats" %} class="active"{% endif %} href="/stats">Statistiken</a></li>
+                <li><a {%- if request.path == "/faq" %} class="active"{% endif %} href="/faq">FAQ</a></li>
                 <li><a href="/quick_start">Los!</a></li>
             </ul>
             <div class="bu-header-account">
