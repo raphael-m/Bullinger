@@ -159,6 +159,7 @@ def quick_start():
         return redirect(url_for('assignment', id_brief=str(i)))
     return redirect(url_for('overview'))  # we are done !
 
+
 @app.route('/assignment/<id_brief>', methods=['GET'])
 @login_required
 def assignment(id_brief):
@@ -173,10 +174,10 @@ def assignment(id_brief):
     html_content = re.sub("</?body>", "", html_content)
     html_content = re.sub("<link href=(\")?https://fonts.googleapis.com.*?>", "", html_content)
     html_content = re.sub("(?P<ref> (src|href)=(\")?)/", r"\g<ref>http://bullinger.raphaelm.ch/", html_content)
-    
     return render_template('assignment_vue.html',
         card_index=id_brief,
         html_content=html_content)
+
 
 @app.route('/assignment_old/<id_brief>', methods=['POST', 'GET'])
 @login_required
@@ -311,10 +312,10 @@ def send_data(id_brief):
         "card": {
             "date": {
                 "year": (date.jahr_a if date.jahr_a else 's.d.') if date else 's.d.',
-                "month": (date.monat_a if date.monat_a else 's.d.') if date else 's.d.',
+                "month": (date.monat_a if date.monat_a else 0) if date else 0,
                 "day": (date.tag_a if date.tag_a else 's.d.') if date else 's.d.',
                 "year_b": (date.jahr_b if date.jahr_b else 's.d.') if date else '',
-                "month_b": (date.monat_b if date.monat_b else 's.d.') if date else 's.d.',
+                "month_b": (date.monat_b if date.monat_b else 0) if date else 0,
                 "day_b": (date.tag_b if date.tag_b else 's.d.') if date else '',
                 "remarks": date.bemerkung if date else ''
             },
@@ -365,7 +366,6 @@ def save_data(id_brief):
     die mitgesendeten Daten zugreifen. Diese Daten kannst du verwenden, um die Änderungen wie bereits implementiert in
     der Datenbank zu speichern. """
     data, user, number_of_changes, t = request.get_json(), current_user.username, 0, datetime.now()
-
     number_of_changes += database.save_date(id_brief, data["card"]["date"], user, t)
     number_of_changes += database.save_autograph(id_brief, data["card"]["autograph"], user, t)
     number_of_changes += database.save_the_sender(id_brief, data["card"]["sender"], user, t)
@@ -378,3 +378,4 @@ def save_data(id_brief):
     database.save_comment_card(id_brief, data["card"]["remarks"], user, t)
     database.update_file_status(id_brief, data["state"])
     database.update_user(user, number_of_changes, data["state"])
+    return redirect(url_for('assignment', id_brief=id_brief))
