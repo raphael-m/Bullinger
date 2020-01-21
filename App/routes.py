@@ -13,6 +13,7 @@ from flask_login import current_user, login_user, login_required, logout_user
 from Tools.BullingerDB import BullingerDB
 from sqlalchemy import desc
 from App.models import *
+from config import Config
 
 import requests
 import re
@@ -20,7 +21,6 @@ import time
 
 APP_NAME = "KoKoS-Bullinger"
 database = BullingerDB(db.session)
-
 
 @app.errorhandler(404)
 def not_found(error):
@@ -163,8 +163,10 @@ def quick_start():
 @app.route('/assignment/<id_brief>', methods=['GET'])
 @login_required
 def assignment(id_brief):
+    ui_path = Config.BULLINGER_UI_PATH
+    ui_path = ui_path + ("" if ui_path.endswith("/") else "/")
     # Load vue html from deployment and strip unneeded tags (html, body, doctype, title, icon, fonts etc.)
-    html_content = requests.get("http://bullinger.raphaelm.ch/").text
+    html_content = requests.get(ui_path).text
     html_content = re.sub("<!DOCTYPE html>", "", html_content)
     html_content = re.sub("</?html.*?>", "", html_content)
     html_content = re.sub("</?meta.*?>", "", html_content)
@@ -173,7 +175,7 @@ def assignment(id_brief):
     html_content = re.sub("</?head>", "", html_content)
     html_content = re.sub("</?body>", "", html_content)
     html_content = re.sub("<link href=(\")?https://fonts.googleapis.com.*?>", "", html_content)
-    html_content = re.sub("(?P<ref> (src|href)=(\")?)/", r"\g<ref>http://bullinger.raphaelm.ch/", html_content)
+    html_content = re.sub("(?P<ref> (src|href)=(\")?)/", r"\g<ref>" + ui_path, html_content)
     return render_template('assignment_vue.html',
         card_index=id_brief,
         html_content=html_content)
