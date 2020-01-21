@@ -1,0 +1,17 @@
+.bu-header { background: #26244B; display:flex; flex-direction: row; }
+.bu-header-logo { background: #FFF; }
+.bu-header-menu { margin:0; padding:0; display:inline-flex;  }
+.bu-header-menu li { margin:0; padding:0; display:inline-block; }
+.bu-header-menu li a { display:inline-flex; align-items:center; height:100%; font-size:27px; padding-left:43px; color:#B5B5B5; text-decoration: none; }
+.bu-header-menu li a:hover, .bu-header-menu li a.active { color:#FFFFFF; text-decoration:none; }
+.bu-header-account { margin-left:auto; display:flex; align-items:center; padding-right:20px; }
+.bu-header-account-initials { display:flex; align-items: center; width:60px; height:60px; border-radius:100%; background:#FFF; font-size:27px; position:relative; }
+.bu-header-account-initials a, .bu-header-account-initials a:hover { color:#000; text-decoration: none; display:block; text-align:center; width:100%; z-index:1; }
+.bu-header-dropdown { display:none; width: 200px; background: #FFF; position:absolute; top:72px; right:0; box-shadow: #AAA 0 0 20px; }
+.bu-header-dropdown:after { position: absolute; content:' '; border: 10px solid; border-color:transparent transparent #FFF transparent;  width:0; height:0; top: -20px; right:20px;  }
+.bu-header-dropdown a, .bu-header-dropdown a:hover { display:block; width:auto; text-align:left; border-bottom:1px solid #DDD; font-size:17px; padding:10px 8px; }
+.bu-header-dropdown a:hover { background: #EAEAEA; }
+.bu-header-dropdown a:last-child { border:none; }
+.bu-header-account-initials:hover .bu-header-dropdown { display:block; }
+/* Make sure the menu stays visible when moving the cursor outside the initials */
+.bu-header-account-initials:hover:before { z-index:0; position: absolute; content:' '; width:0; height:0; top:0px; height:80px; width:200px; right: 0; }

@@ -19,6 +19,7 @@
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/table.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/card.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/menu_account.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/header.css') }}">
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script type="text/javascript" src = "{{ url_for('static', filename='js/account.js') }}"></script>
@@ -28,10 +29,13 @@
         <script type="text/javascript" src = "{{ url_for('static', filename='js/sort-table.js') }}"></script>
         <script type="text/javascript" src = "{{ url_for('static', filename='js/sort-table.min.js') }}"></script>
 
+        <!-- Import Google Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Noto+Serif&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
         {% endblock %}
     </head>
     <body>
-        <div id="head">
+        {#<div id="head">
             <!-- Logo -->
             <div class="hlcell">
                 <a href="https://www.uzh.ch/de.html">
@@ -53,7 +57,37 @@
                 {% include 'account_menu_offline.html' %}
             {% endif %}
             </div>
+        </div>#}
+
+        <div class="bu-header">
+            <div class="bu-header-logo">
+                <a href="/">
+                    <img src="{{url_for('static', filename='images/logo.svg')}}" width="266px" />
+                </a>
+            </div>
+            <ul class="bu-header-menu">
+                <li><a href="/">Allgemeines</a></li>
+                <li><a href="/overview">Übersicht</a></li>
+                <li><a href="/stats">Statistiken</a></li>
+                <li><a href="/faq">FAQ</a></li>
+                <li><a href="/quick_start">Los!</a></li>
+            </ul>
+            <div class="bu-header-account">
+                <div class="bu-header-account-initials">
+                    <a title="{{current_user.username}}" href=#>{{current_user.username[0].upper()}}</a>
+                    <div class="bu-header-dropdown">
+                        {% if current_user.is_authenticated %}
+                            <a href="/logout">Abmelden</a>
+                        {% else %}
+                            <a href="/login">Anmelden</a>
+                            <a href="/register">Registrieren</a>
+                        {% endif %}
+                        <a href="/admin">Admin</a>
+                    </div>
+                </div>
+            </div>
         </div>
+
         <div id="main">
             {% block content %}
                 <!-- Actual Content -->
