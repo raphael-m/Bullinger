@@ -382,11 +382,9 @@ def save_data(id_brief):
     database.update_user(user, number_of_changes, data["state"])
     return redirect(url_for('assignment', id_brief=id_brief))
 
+
 @app.route('/api/persons', methods=['GET'])
 @login_required
 def get_persons():
-    # ToDo: Replace example values with real data (e.g. all verified persons from database)
-    return jsonify([
-        { "lastname": "Bullinger", "firstname": "Heinrich", "location": "Zürich" },
-        { "lastname": "Vorschlag Nachname", "firstname": "Vorname", "location": "Ort" }
-    ])
+    return jsonify([{"lastname": p.name, "firstname": p.vorname, "location": p.ort}
+                    for p in Person.query.filter_by(verifiziert=1)])
