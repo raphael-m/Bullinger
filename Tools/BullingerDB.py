@@ -17,6 +17,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as pltc
 all_colors = [k for k, v in pltc.cnames.items()]
+import matplotlib
+matplotlib.use('agg')
 
 ADMIN = 'Admin'  # username (setup)
 L_PROGRESS = ["offen", "abgeschlossen", "unklar", "ungültig"]  # labels (plots)
