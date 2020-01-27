@@ -387,4 +387,4 @@ def save_data(id_brief):
 @login_required
 def get_persons():
     return jsonify([{"lastname": p.name, "firstname": p.vorname, "location": p.ort}
-                    for p in Person.query.filter_by(verifiziert=1)])
+                    for p in Person.query.filter_by(verifiziert=1).all()])
