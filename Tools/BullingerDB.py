@@ -4,8 +4,7 @@
 # Bernard Schroffenegger
 # 30th of November, 2019
 
-import os, time
-import psutil
+import os, time, psutil
 from Tools.Dictionaries import CountDict
 from Tools.Plots import *
 from Tools.Octopus import *
@@ -14,10 +13,10 @@ from sqlalchemy import asc, desc, func, and_, or_
 from operator import itemgetter
 from random import sample
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.colors as pltc
 all_colors = [k for k, v in pltc.cnames.items()]
-import matplotlib
 matplotlib.use('agg')
 
 ADMIN = 'Admin'  # username (setup)
@@ -104,7 +103,7 @@ class BullingerDB:
         self.dbs.add(Kartei(id_brief=i, pfad_pdf=pdf, pfad_ocr=ocr))
 
     def delete_all(self):
-        # self.dbs.query(User).delete()
+        self.dbs.query(User).delete()
         self.dbs.query(Kartei).delete()
         self.dbs.query(Datum).delete()
         self.dbs.query(Person).delete()
@@ -158,14 +157,14 @@ class BullingerDB:
             self.push2db(Absender(id_person=id_bullinger, remark=''), card_nr, ADMIN, self.t)
             e = BullingerData.analyze_address(data["Empfänger"])
             if not Person.query.filter_by(name=e[0], vorname=e[1], ort=e[2]).first():
-                self.push2db(Person(name=e[0], forename=e[1], place=e[2], verified='Nein'), card_nr, ADMIN, self.t)
+                self.push2db(Person(name=e[0], forename=e[1], place=e[2], verified=0), card_nr, ADMIN, self.t)
             ref = Person.query.filter_by(name=e[0], vorname=e[1], ort=e[2]).first().id
             self.push2db(Empfaenger(id_brief=card_nr, id_person=ref, remark=e[3]), card_nr, ADMIN, self.t)
         else:
             self.push2db(Empfaenger(id_brief=card_nr, id_person=id_bullinger, remark=''), card_nr, ADMIN, self.t)
             a = BullingerData.analyze_address(data["Absender"])
             if not Person.query.filter_by(name=a[0], vorname=a[1], ort=a[2]).first():
-                self.push2db(Person(name=a[0], forename=a[1], place=a[2], verified='Nein'), card_nr, ADMIN, self.t)
+                self.push2db(Person(name=a[0], forename=a[1], place=a[2], verified=0), card_nr, ADMIN, self.t)
             ref = Person.query.filter_by(name=a[0], vorname=a[1], ort=a[2]).first().id
             self.push2db(Absender(id_brief=card_nr, id_person=ref, remark=a[3]), card_nr, ADMIN, self.t)
 
@@ -199,27 +198,6 @@ class BullingerDB:
             self.push2db(Bemerkung(remark=remark), card_nr, ADMIN, self.t)
             return remark
         return ''
-
-    @staticmethod
-    def set_defaults(id_, form):
-        datum = Datum.query.filter_by(id_brief=id_).order_by(desc(Datum.zeit)).first()
-        form.set_date_as_default(datum)
-        receiver = Empfaenger.query.filter_by(id_brief=id_).order_by(desc(Empfaenger.zeit)).first()
-        if receiver:
-            form.set_receiver_as_default(Person.query.get(receiver.id_person), receiver.bemerkung)
-        sender = Absender.query.filter_by(id_brief=id_).order_by(desc(Absender.zeit)).first()
-        if sender:
-            form.set_sender_as_default(Person.query.get(sender.id_person), sender.bemerkung)
-        form.set_autograph_as_default(Autograph.query.filter_by(id_brief=id_).order_by(desc(Autograph.zeit)).first())
-        form.set_copy_as_default(Kopie.query.filter_by(id_brief=id_).order_by(desc(Kopie.zeit)).first())
-        form.set_literature_as_default(Literatur.query.filter_by(id_brief=id_).order_by(desc(Literatur.zeit)).first())
-        sprache = Sprache.query.filter_by(id_brief=id_).order_by(desc(Sprache.zeit))
-        if sprache:
-            form.set_language_as_default([s for s in sprache if s.zeit == sprache.first().zeit])
-        form.set_printed_as_default(Gedruckt.query.filter_by(id_brief=id_).order_by(desc(Gedruckt.zeit)).first())
-        form.set_sentence_as_default(Bemerkung.query.filter_by(id_brief=id_).order_by(desc(Bemerkung.zeit)).first())
-        form.set_default_state(Kartei.query.filter_by(id_brief=id_).first())
-        return [datum.jahr_a, datum.monat_a, datum.tag_a]
 
     @staticmethod
     def count_correspondence():
@@ -468,14 +446,6 @@ class BullingerDB:
     def save_comment_card(self, i, note, user, t):
         if note: self.push2db(Notiz(notiz=note), i, user, t)
 
-    @staticmethod
-    def get_comments_card(i, user):
-        comments = []
-        for c in Notiz.query.filter(Notiz.id_brief == i).order_by(asc(Notiz.zeit)).all():
-            datum, zeit = re.sub(r'\.\d*', '', c.zeit).split(' ')
-            u = "Sie" if c.anwender == user else User.query.filter(anwender=user).id
-            comments += [[u, datum, zeit, c.notiz]]
-        return comments
 
     @staticmethod
     def get_comments(user_name):
@@ -523,11 +493,29 @@ class BullingerDB:
         """ yearly: number of letters and their state """
         [n_letters, n_open, n_unclear, n_closed, n_invalid], file_id, c, p = BullingerDB.get_status_counts(year)
         data, sd = [], []
-        for key in n_letters:
+        for k in n_letters:
+            key = k
+            try: key = int(key)
+            except ValueError: pass
             if isinstance(key, int):
-                data.append([key, n_letters[key], n_open[key], n_unclear[key], n_closed[key], n_invalid[key]])
-            else: sd.append([key, n_letters[key], n_open[key], n_unclear[key], n_closed[key], n_invalid[key]])
-        return sd+sorted(data, key=itemgetter(0)), file_id, c, p
+                data.append([key, n_letters[k], n_open[k], n_unclear[k], n_closed[k], n_invalid[k]])
+            else: sd.append([key, n_letters[k], n_open[k], n_unclear[k], n_closed[k], n_invalid[k]])
+        td = sd+sorted(data, key=itemgetter(0))
+        if year:
+            for i, d in enumerate(td): td[i][0] = BullingerDB.convert_month(td[i][0])
+        return td, file_id, c, p
+
+    @staticmethod
+    def convert_month(number):
+        switch_dict = {1: 'Januar', 2: 'Februar', 3: 'März', 4: 'April', 5: 'Mai', 6: 'Juni', 7: 'Juli', 8: 'August',
+                       9: 'September', 10: 'Oktober', 11: 'November', 12: 'Dezember'}
+        return switch_dict[number] if number in switch_dict else 's.d.'
+
+    @staticmethod
+    def convert_month_str(month):
+        switch_dict = {'Januar': 1, 'Februar': 2, 'März': 3, 'April': 4, 'Mai': 5, 'Juni': 6, 'Juli': 7, 'August': 8,
+                       'September': 9, 'Oktober': 10, 'November': 11, 'Dezember': 12}
+        return switch_dict[month] if month in switch_dict else 's.d.'
 
     @staticmethod
     def get_status_counts(year):
@@ -566,6 +554,7 @@ class BullingerDB:
     @staticmethod
     def get_data_overview_month(year, month):
         data = []
+        month = str(BullingerDB.convert_month_str(month))
         for d in Datum.query.filter_by(jahr_a=year, monat_a=month):
             r = Kartei.query.filter_by(id_brief=d.id_brief).first().rezensionen
             s = Kartei.query.filter_by(id_brief=d.id_brief).first().status
@@ -583,10 +572,16 @@ class BullingerDB:
     def get_status_evaluation(o, a, u, i):
         """ :return: [<int>: total number of cards; <dict>: state <str> -> [count <int>, percentage <float>] """
         data, number_of_cards = dict(), sum([o, a, u, i])
-        data["offen"] = [o, round(100*o/number_of_cards, 3)]
-        data["abgeschlossen"] = [a, round(100*a/number_of_cards, 3)]
-        data["unklar"] = [u, round(100*u/number_of_cards, 3)]
-        data["ungültig"] = [i, round(100*i/number_of_cards, 3)]
+        if number_of_cards > 0:
+            data["offen"] = [o, round(100*o/number_of_cards, 3)]
+            data["abgeschlossen"] = [a, round(100*a/number_of_cards, 3)]
+            data["unklar"] = [u, round(100*u/number_of_cards, 3)]
+            data["ungültig"] = [i, round(100*i/number_of_cards, 3)]
+        else:
+            data["offen"] = [o, '-']
+            data["abgeschlossen"] = [a, '-']
+            data["unklar"] = [u, '-']
+            data["ungültig"] = [i, '-']
         return [number_of_cards, data]
 
     @staticmethod

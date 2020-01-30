@@ -112,7 +112,7 @@ class Person(db.Model):
     anwender = db.Column(db.String(50))
     zeit = db.Column(db.String(50))
 
-    def __init__(self, name=None, forename=None, place=None, remark=None, verified='Nein',
+    def __init__(self, name=None, forename=None, place=None, remark=None, verified=0,
                  empfangen=0, gesendet=0, user=None, time=datetime.now()):
         self.name = name
         self.vorname = forename

@@ -8,9 +8,10 @@
 
 from App import app
 from App.forms import *
-from flask import render_template, flash, redirect, url_for, session, make_response, jsonify, request
+from flask import render_template, flash, redirect, url_for, make_response, jsonify, request
 from flask_login import current_user, login_user, login_required, logout_user
 from Tools.BullingerDB import BullingerDB
+from collections import defaultdict
 from sqlalchemy import desc
 from App.models import *
 from config import Config
@@ -21,6 +22,7 @@ import time
 
 APP_NAME = "KoKoS-Bullinger"
 database = BullingerDB(db.session)
+
 
 @app.errorhandler(404)
 def not_found(error):
@@ -33,7 +35,7 @@ def not_found(error):
 @app.route('/index', methods=['POST', 'GET'])
 def index():
     """ start page """
-    comment_form = FormComments()
+    comment_form = GuestBookForm()
     if comment_form.validate_on_submit() and comment_form.save.data:
         BullingerDB.save_comment(comment_form.comment.data, current_user.username, datetime.now())
     c_vars = get_base_client_variables()
@@ -129,7 +131,7 @@ def overview_year(year):
 @login_required
 def overview_month(year, month):
     c_vars = get_base_client_variables()
-    c_vars["year"], c_vars["month"] = year, month
+    c_vars["year"], c_vars["month"] = year, BullingerDB.convert_month(month)
     c_vars["data"], c_vars["file_id"], c_vars["count"], c_vars["stats"] = BullingerDB.get_data_overview_month(year, month)
     return render_template("overview_month.html", title="Übersicht", vars=c_vars)
 
@@ -181,114 +183,6 @@ def assignment(id_brief):
         html_content=html_content)
 
 
-@app.route('/assignment_old/<id_brief>', methods=['POST', 'GET'])
-@login_required
-def assignment_old(id_brief):
-
-    card_form, i = FormFileCard(), int(id_brief)
-
-    # client properties
-    h = card_form.image_height.data
-    if 'image_height' in session:  # img window
-        if h: session['image_height'] = h
-    else: session['image_height'] = h if h else 345
-    height, width = card_form.img_height.data, card_form.img_width.data
-    if 'img_height' in session:
-        if height:
-            session["img_height"] = height
-            session["img_width"] = width
-    else:
-        if height:
-            session["img_height"] = height
-            session["img_width"] = width
-        else: session["img_width"] = '100%'
-
-    # next/previous card
-    if card_form.prev_card.data:  # <
-        return redirect(url_for('assignment', id_brief=BullingerDB.get_prev_card_number(i)))
-    elif card_form.next_card.data:  # >
-        return redirect(url_for('assignment', id_brief=BullingerDB.get_next_card_number(i)))
-    elif card_form.qs_prev_card.data:  # <<
-        i = BullingerDB.get_prev_assignment(i)
-        if i: return redirect(url_for('assignment', id_brief=i))
-        return redirect(url_for('index'))  # we are done !
-    elif card_form.qs_next_card.data:  # >>
-        i = BullingerDB.get_next_assignment(i)
-        if i: return redirect(url_for('assignment', id_brief=i))
-        return redirect(url_for('index'))  # we are done !
-
-    # restore client properties
-    card_form.image_height.default = session.get('image_height')
-    card_form.img_height.default = session.get('img_height')
-    card_form.img_width.default = session.get('img_width')
-
-    # save
-    kartei = Kartei.query.filter_by(id_brief=i).first()
-    user, number_of_changes, t = current_user.username, 0, datetime.now()
-    if card_form.validate_on_submit():
-        d = dict()
-        d["year"] = card_form.year_a.data
-        d["month"] = request.form['card_month_a']
-        d["day"] = card_form.day_a.data
-        d["year_b"] = card_form.year_b.data
-        d["month_b"] = request.form['card_month_a']
-        d["day_b"] = card_form.day_b.data
-        d["remarks"] = card_form.remark_date.data
-        number_of_changes += database.save_date(i, d, user, t)
-        d = dict()
-        d["location"] = card_form.place_autograph.data
-        d["signature"] = card_form.signature_autograph.data
-        d["remarks"] = card_form.scope_autograph.data
-        number_of_changes += database.save_autograph(i, d, user, t)
-        d = dict()
-        d["firstname"] = card_form.forename_sender.data
-        d["lastname"] = card_form.name_sender.data
-        d["location"] = card_form.place_sender.data
-        d["remarks"] = card_form.remark_sender.data
-        d["verified"] = card_form.sender_verified.data
-        number_of_changes += database.save_the_sender(i, d, user, t)
-        d = dict()
-        d["firstname"] = card_form.forename_receiver.data
-        d["lastname"] = card_form.name_receiver.data
-        d["location"] = card_form.place_receiver.data
-        d["remarks"] = card_form.remark_receiver.data
-        d["verified"] = card_form.receiver_verified.data
-        number_of_changes += database.save_the_receiver(i, d, user, t)
-        d = dict()
-        d["location"] = card_form.place_copy.data
-        d["signature"] = card_form.signature_copy.data
-        d["remarks"] = card_form.scope_copy.data
-        number_of_changes += database.save_copy(i, d, user, t)
-        number_of_changes += database.save_literature(i, card_form.literature.data, user, t)
-        number_of_changes += database.save_language(i, card_form.language.data, user, t)
-        number_of_changes += database.save_printed(i, card_form.printed.data, user, t)
-        number_of_changes += database.save_remark(i, card_form.sentence.data, user, t)
-        database.save_comment_card(i, card_form.note.data, user, t)
-        database.update_file_status(i, card_form.state.data)
-        database.update_user(user, number_of_changes, card_form.state.data)
-        if card_form.submit_and_next.data:
-            return redirect(url_for('quick_start'))
-
-    # client variables
-    c_vars = get_base_client_variables()
-    c_vars["reviews"], c_vars["state"] = kartei.rezensionen, kartei.status
-    c_vars["path_ocr"], c_vars["path_pdf"] = kartei.pfad_OCR, kartei.pfad_PDF
-    c_vars["month"] = database.set_defaults(i, card_form)[1]
-    c_vars["comments"] = BullingerDB.get_comments_card(i, current_user.username)
-    c_vars["user_stats"] = BullingerDB.get_user_stats(current_user.username)
-    c_vars["card_path"] = 'cards/HBBW_Karteikarte_' + (5-len(str(i)))*'0'+str(i) + '.png'
-
-    # radio buttons
-    card_form.state.default = kartei.status
-
-    card_form.process()
-    return render_template('assignment.html',
-                           card_index=i,
-                           title="Nr. "+str(i),
-                           form=card_form,
-                           vars=c_vars)
-
-
 @app.route('/api/assignments/<id_brief>', methods=['GET'])
 @login_required
 def send_data(id_brief):
@@ -306,6 +200,7 @@ def send_data(id_brief):
     sp = "; ".join([s.sprache for s in sprache if s.zeit == sprache.first().zeit]) if sprache else ''
     gedruckt = Gedruckt.query.filter_by(id_brief=id_brief).order_by(desc(Gedruckt.zeit)).first()
     satz = Bemerkung.query.filter_by(id_brief=id_brief).order_by(desc(Bemerkung.zeit)).first()
+    notiz = Notiz.query.filter_by(id_brief=id_brief).order_by(desc(Notiz.zeit)).first()
     data = {
         "id": id_brief,
         "state": kartei.status,
@@ -326,7 +221,7 @@ def send_data(id_brief):
                 "lastname": sender.name if sender else '',
                 "location": sender.ort if sender else '',
                 "remarks": s.bemerkung if s else '',
-                "verified": sender.verifiziert if sender else ''
+                "verified": sender.verifiziert if sender else 0
             },
             "receiver": {
                 "firstname": receiver.vorname if receiver else '',
@@ -349,7 +244,7 @@ def send_data(id_brief):
             "literature": literatur.literatur if literatur else '',
             "printed": gedruckt.gedruckt if gedruckt else '',
             "first_sentence": satz.bemerkung if satz else '',
-            "remarks": "TODO"
+            "remarks": notiz.notiz if notiz else ''
         },
         "navigation": {
             "next": "/assignment/"+str(BullingerDB.get_next_card_number(id_brief)),
@@ -364,9 +259,6 @@ def send_data(id_brief):
 @app.route('/api/assignments/<id_brief>', methods=['POST'])
 @login_required
 def save_data(id_brief):
-    """ Über diese Schnittstelle speichert das Frontend Änderungen an einer Karteikarte. Über request.json kannst du auf
-    die mitgesendeten Daten zugreifen. Diese Daten kannst du verwenden, um die Änderungen wie bereits implementiert in
-    der Datenbank zu speichern. """
     data, user, number_of_changes, t = request.get_json(), current_user.username, 0, datetime.now()
     number_of_changes += database.save_date(id_brief, data["card"]["date"], user, t)
     number_of_changes += database.save_autograph(id_brief, data["card"]["autograph"], user, t)
@@ -386,5 +278,14 @@ def save_data(id_brief):
 @app.route('/api/persons', methods=['GET'])
 @login_required
 def get_persons():
-    return jsonify([{"lastname": p.name, "firstname": p.vorname, "location": p.ort}
-                    for p in Person.query.filter_by(verifiziert=1).all()])
+    recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
+    recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
+    p1 = db.session.query(Person.id, recent_sender.c.id_person, Person.name, Person.vorname, Person.ort)\
+        .filter(Person.verifiziert == 1).join(recent_sender, recent_sender.c.id_person == Person.id)
+    p2 = db.session.query(Person.id, recent_receiver.c.id_person, Person.name, Person.vorname, Person.ort)\
+        .filter(Person.verifiziert == 1).join(recent_receiver, recent_receiver.c.id_person == Person.id)
+    d = defaultdict(lambda: False)
+    for p in p1: d[p.id_person] = True
+    a_ids = [{"lastname": p.name, "firstname": p.vorname, "location": p.ort} for p in p1]
+    e_ids = [{"lastname": p.name, "firstname": p.vorname, "location": p.ort} for p in p2 if not d[p.id_person]]
+    return jsonify(a_ids+e_ids)

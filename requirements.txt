@@ -1,3 +1,5 @@
+psutil
+requests
 alembic==1.2.1
 Click==7.0
 cycler==0.10.0

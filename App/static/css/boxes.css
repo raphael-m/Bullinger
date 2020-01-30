@@ -1,8 +1,8 @@
 .main_box {
-    margin: 0px 20% 0px 20%;
+    margin: 10px;
     background: white;
-    border-left: 3px solid Silver;
-    border-right: 3px solid Silver;
+    /*border-left: 3px solid Silver;
+    border-right: 3px solid Silver;*/
 }
 
 .h2_section {
@@ -14,3 +14,9 @@
     width: 50%;
 }
 
+.note {
+    margin: 0px;
+    padding: 0px;
+    width: 50%;
+    height: 30px;
+}
