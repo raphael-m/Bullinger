@@ -140,7 +140,8 @@ class BullingerData:
 
     @staticmethod
     def get_lang(data, bemerkung):
-        langs = [Langid.classify(bemerkung)]
+        l = Langid.classify(bemerkung)
+        langs = [] if not l else [l]
         if "Sprache" in data:
             for lang in BullingerData.analyze_language(data["Sprache"]):
                 if lang not in langs:
@@ -268,7 +269,7 @@ class BullingerData:
         """ Analyzes data from 'Absender' or 'Empfänger'
             :param baselines: list of lists
             :return: <name>, <forename>, <location>, <remarks> """
-        nn, vn, ort, bemerkung = SN, SN, SL, ''
+        nn, vn, ort, bemerkung = None, None, None, None
         baselines = BullingerData.clean_up_baselines_sender_receiver(baselines)
         if len(baselines) > 0:
             # Rule 1 - 1st line 1st word == name
@@ -380,7 +381,7 @@ class BullingerData:
                         if token in m and len(token) > 2:
                             data.remove(token)
                             BullingerData.index_predicted = i
-            day = SD
+            day = None
             for token in data:
                 if token.isdigit():
                     if 0 < int(token) < 32:
@@ -390,7 +391,7 @@ class BullingerData:
             # correction mechanisms
             if str(BullingerData.year_predicted-1) in data:
                 BullingerData.year_predicted -= 1
-            if day == SD and len(data) > 0:
+            if not day and len(data) > 0:
                 modified_tokens = []
                 for token in data:  # ocr-errors
                     token = token.replace('o', '0')
@@ -409,10 +410,8 @@ class BullingerData:
                         if 0 < int(token) < 32:
                             day = int(token)
                             break
-            return Datum(
-                id_brief=id_brief, year_a=BullingerData.year_predicted, month_a=BullingerData.index_predicted+1, day_a=day,
-                year_b='', month_b='', day_b='', remark=''
-            )
+            return Datum(id_brief=id_brief, year_a=BullingerData.year_predicted,
+                         month_a=BullingerData.index_predicted+1, day_a=day)
         return None
 
     @staticmethod

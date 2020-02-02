@@ -6,7 +6,7 @@
 
 """ Implementation of different URLs (view functions) """
 
-from App import app
+from App import app, login
 from App.forms import *
 from flask import render_template, flash, redirect, url_for, make_response, jsonify, request
 from flask_login import current_user, login_user, login_required, logout_user
@@ -25,9 +25,13 @@ database = BullingerDB(db.session)
 
 
 @app.errorhandler(404)
-def not_found(error):
-    print(error)
-    return make_response(jsonify({'error': 'Not found'}), 404)
+def not_found(error): return make_response(jsonify({'error': 'Not found'}), 404)
+
+@login.user_loader
+def load_user(id_user): return User.query.get(int(id_user))
+
+@app.route('/admin', methods=['POST', 'GET'])
+def admin(): return render_template('admin.html', title="Admin")
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -35,13 +39,18 @@ def not_found(error):
 @app.route('/index', methods=['POST', 'GET'])
 def index():
     """ start page """
-    comment_form = GuestBookForm()
-    if comment_form.validate_on_submit() and comment_form.save.data:
-        BullingerDB.save_comment(comment_form.comment.data, current_user.username, datetime.now())
-    c_vars = get_base_client_variables()
-    c_vars["comments"] = BullingerDB.get_comments(current_user.username)  # validation/save first
-    comment_form.process()
-    return render_template("index.html", title=APP_NAME, form=comment_form, vars=c_vars)
+    guest_book = GuestBookForm()
+    if guest_book.validate_on_submit() and guest_book.save.data:
+        BullingerDB.save_comment(guest_book.comment.data, current_user.username, datetime.now())
+    guest_book.process()
+    letters_sent, letters_received = BullingerDB.get_bullinger_number_of_letters()
+    return render_template("index.html", title=APP_NAME, form=guest_book, vars={
+        "username": current_user.username,
+        "user_stats": BullingerDB.get_user_stats(current_user.username),
+        "comments": BullingerDB.get_comments(current_user.username),
+        "num_sent": letters_sent,
+        "num_received": letters_received
+    })
 
 
 def get_base_client_variables():
@@ -50,22 +59,11 @@ def get_base_client_variables():
     return c_vars
 
 
-@app.route('/admin', methods=['POST', 'GET'])
-def admin():
-    return render_template('admin.html', title="Admin")
-
-
 @app.route('/admin/setup', methods=['POST', 'GET'])
 def setup():
     # PASSWORD PROTECTION NEEDED                                                                                    !
-    """ delete and setup db (runtime ~1h) """
-    BullingerDB.setup(db.session, "Karteikarten/OCR")
-    return redirect(url_for('admin'))
-
-
-@app.route('/admin/setup_plus', methods=['POST', 'GET'])
-def setup_plus():
-    BullingerDB.employ_octopus()
+    # BullingerDB.run_ocr_octopus()  # ~1-2 weeks
+    BullingerDB.setup(db.session, "Karteikarten/OCR")  # ~1h
     return redirect(url_for('admin'))
 
 
@@ -111,29 +109,49 @@ def register():
 @app.route('/overview', methods=['POST', 'GET'])
 @login_required
 def overview():
-    c_vars = get_base_client_variables()
-    c_vars["data"], c_vars["file_id"], c_vars["count"], c_vars["stats"] = BullingerDB.get_data_overview(None)
-    return render_template('overview.html', title="Übersicht", vars=c_vars)
+    data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(None)
+    print("adsfasdfasdfasdfasadfasdf", data_overview)
+    return render_template('overview.html', title="Übersicht", vars={
+        "username": current_user.username,
+        "user_stats": BullingerDB.get_user_stats(current_user.username),
+        "table": data_overview,
+        "url_plot": plot_url,
+        "num_of_cards": num_of_cards,
+        "stats": data_percentages
+    })
 
 
 # - months
 @app.route('/overview_year/<year>', methods=['POST', 'GET'])
 @login_required
 def overview_year(year):
-    c_vars = get_base_client_variables()
-    c_vars["year"] = year
-    c_vars["data"], c_vars["file_id"], c_vars["count"], c_vars["stats"] = BullingerDB.get_data_overview(year)
-    return render_template("overview_year.html", title="Übersicht", vars=c_vars)
+    data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(year)
+    return render_template('overview_year.html', title="Übersicht", vars={
+        "username": current_user.username,
+        "user_stats": BullingerDB.get_user_stats(current_user.username),
+        "year": year,
+        "table": data_overview,
+        "url_plot": plot_url,
+        "num_of_cards": num_of_cards,
+        "stats": data_percentages
+    })
 
 
 # -days
 @app.route('/overview_month/<year>/<month>', methods=['POST', 'GET'])
 @login_required
 def overview_month(year, month):
-    c_vars = get_base_client_variables()
-    c_vars["year"], c_vars["month"] = year, BullingerDB.convert_month(month)
-    c_vars["data"], c_vars["file_id"], c_vars["count"], c_vars["stats"] = BullingerDB.get_data_overview_month(year, month)
-    return render_template("overview_month.html", title="Übersicht", vars=c_vars)
+    data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview_month(year, month)
+    return render_template('overview_month.html', title="Monatsübersicht", vars={
+        "username": current_user.username,
+        "user_stats": BullingerDB.get_user_stats(current_user.username),
+        "year": year,
+        "month": BullingerDB.convert_month(int(month)),
+        "table": data_overview,
+        "url_plot": plot_url,
+        "num_of_cards": num_of_cards,
+        "stats": data_percentages
+    })
 
 
 @app.route('/stats', methods=['POST', 'GET'])
@@ -221,14 +239,14 @@ def send_data(id_brief):
                 "lastname": sender.name if sender else '',
                 "location": sender.ort if sender else '',
                 "remarks": s.bemerkung if s else '',
-                "verified": sender.verifiziert if sender else 0
+                "verified": s.verifiziert if s else 0
             },
             "receiver": {
                 "firstname": receiver.vorname if receiver else '',
                 "lastname": receiver.name if receiver else '',
                 "location": receiver.ort if receiver else '',
                 "remarks": r.bemerkung if r else '',
-                "verified": receiver.verifiziert if receiver else ''
+                "verified": r.verifiziert if r else ''
             },
             "autograph": {
                 "location": autograph.standort if autograph else '',
@@ -259,7 +277,7 @@ def send_data(id_brief):
 @app.route('/api/assignments/<id_brief>', methods=['POST'])
 @login_required
 def save_data(id_brief):
-    data, user, number_of_changes, t = request.get_json(), current_user.username, 0, datetime.now()
+    data, user, number_of_changes, t = cleanup_input(request.get_json()), current_user.username, 0, datetime.now()
     number_of_changes += database.save_date(id_brief, data["card"]["date"], user, t)
     number_of_changes += database.save_autograph(id_brief, data["card"]["autograph"], user, t)
     number_of_changes += database.save_the_sender(id_brief, data["card"]["sender"], user, t)
@@ -270,9 +288,41 @@ def save_data(id_brief):
     number_of_changes += database.save_printed(id_brief, data["card"]["printed"], user, t)
     number_of_changes += database.save_remark(id_brief, data["card"]["first_sentence"], user, t)
     database.save_comment_card(id_brief, data["card"]["remarks"], user, t)
-    database.update_file_status(id_brief, data["state"])
-    database.update_user(user, number_of_changes, data["state"])
+    Kartei.update_file_status(database.dbs, id_brief, data["state"])
+    User.update_user(database.dbs, user, number_of_changes, data["state"])
     return redirect(url_for('assignment', id_brief=id_brief))
+
+
+def cleanup_input(data):
+    data["card"]["date"]["year"] = None if not data["card"]["date"]["year"] or data["card"]["date"]["year"] == 's.d.' else int(data["card"]["date"]["year"])
+    data["card"]["date"]["month"] = None if not data["card"]["date"]["month"] or data["card"]["date"]["month"] == 's.d.' else int(data["card"]["date"]["month"])
+    data["card"]["date"]["day"] = None if not data["card"]["date"]["day"] or data["card"]["date"]["day"] == 's.d.' else int(data["card"]["date"]["day"])
+    data["card"]["date"]["year_b"] = None if not data["card"]["date"]["year_b"] or data["card"]["date"]["year_b"] == 's.d.' else int(data["card"]["date"]["year_b"])
+    data["card"]["date"]["month_b"] = None if not data["card"]["date"]["month_b"] or data["card"]["date"]["month_b"] == 's.d.' else int(data["card"]["date"]["month_b"])
+    data["card"]["date"]["day_b"] = None if not data["card"]["date"]["day_b"] or data["card"]["date"]["day_b"] == 's.d.' else int(data["card"]["date"]["day_b"])
+    data["card"]["date"]["remarks"] = '' if not data["card"]["date"]["remarks"] else data["card"]["date"]["remarks"].strip()
+    data["card"]["sender"]["firstname"] = '' if not data["card"]["sender"]["firstname"] else data["card"]["sender"]["firstname"].strip()
+    data["card"]["sender"]["lastname"] = '' if not data["card"]["sender"]["lastname"] else data["card"]["sender"]["lastname"].strip()
+    data["card"]["sender"]["location"] = '' if not data["card"]["sender"]["location"] else data["card"]["sender"]["location"].strip()
+    data["card"]["sender"]["remarks"] = '' if not data["card"]["sender"]["remarks"] else data["card"]["sender"]["remarks"].strip()
+    data["card"]["sender"]["verified"] = None if not data["card"]["sender"]["verified"] else True
+    data["card"]["receiver"]["firstname"] = '' if not data["card"]["receiver"]["firstname"] else data["card"]["receiver"]["firstname"].strip()
+    data["card"]["receiver"]["lastname"] = '' if not data["card"]["receiver"]["lastname"] else data["card"]["receiver"]["lastname"].strip()
+    data["card"]["receiver"]["location"] = '' if not data["card"]["receiver"]["location"] else data["card"]["receiver"]["location"].strip()
+    data["card"]["receiver"]["remarks"] = '' if not data["card"]["receiver"]["remarks"] else data["card"]["receiver"]["remarks"].strip()
+    data["card"]["receiver"]["verified"] = None if not data["card"]["receiver"]["verified"] else True
+    data["card"]["autograph"]["location"] = '' if not data["card"]["autograph"]["location"] else data["card"]["autograph"]["location"].strip()
+    data["card"]["autograph"]["signature"] = '' if not data["card"]["autograph"]["signature"] else data["card"]["autograph"]["signature"].strip()
+    data["card"]["autograph"]["remarks"] = '' if not data["card"]["autograph"]["remarks"] else data["card"]["autograph"]["remarks"].strip()
+    data["card"]["copy"]["location"] = '' if not data["card"]["copy"]["location"] else data["card"]["copy"]["location"].strip()
+    data["card"]["copy"]["signature"] = '' if not data["card"]["copy"]["signature"] else data["card"]["copy"]["signature"].strip()
+    data["card"]["copy"]["remarks"] = '' if not data["card"]["copy"]["remarks"] else data["card"]["copy"]["remarks"].strip()
+    data["card"]["language"] = '' if not data["card"]["language"] else data["card"]["language"].strip()
+    data["card"]["literature"] = '' if not data["card"]["literature"] else data["card"]["literature"].strip()
+    data["card"]["printed"] = '' if not data["card"]["printed"] else data["card"]["printed"].strip()
+    data["card"]["first_sentence"] = '' if not data["card"]["first_sentence"] else data["card"]["first_sentence"].strip()
+    data["card"]["remarks"] = '' if not data["card"]["remarks"] else data["card"]["remarks"].strip()
+    return data
 
 
 @app.route('/api/persons', methods=['GET'])
@@ -281,11 +331,12 @@ def get_persons():
     recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
     recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
     p1 = db.session.query(Person.id, recent_sender.c.id_person, Person.name, Person.vorname, Person.ort)\
-        .filter(Person.verifiziert == 1).join(recent_sender, recent_sender.c.id_person == Person.id)
+        .filter(recent_sender.c.verifiziert == 1).join(recent_sender, recent_sender.c.id_person == Person.id)
     p2 = db.session.query(Person.id, recent_receiver.c.id_person, Person.name, Person.vorname, Person.ort)\
-        .filter(Person.verifiziert == 1).join(recent_receiver, recent_receiver.c.id_person == Person.id)
+        .filter(recent_receiver.c.verifiziert == 1).join(recent_receiver, recent_receiver.c.id_person == Person.id)
     d = defaultdict(lambda: False)
     for p in p1: d[p.id_person] = True
     a_ids = [{"lastname": p.name, "firstname": p.vorname, "location": p.ort} for p in p1]
     e_ids = [{"lastname": p.name, "firstname": p.vorname, "location": p.ort} for p in p2 if not d[p.id_person]]
+    print(a_ids+e_ids)
     return jsonify(a_ids+e_ids)

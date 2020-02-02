@@ -1,12 +1,8 @@
-<!-- extends
-        "overview.html",
-        "overview_year.html"
-        "overview_month.html"
--->
+<!-- extends "overview.html", "overview_year.html", "overview_month.html" -->
 
 {% block progress %}
 
-<img class="parallel" src="{{url_for('static', filename='images/plots/overview_'+vars['file_id']+'.png')}}"/>
+<img class="parallel" src="{{url_for('static', filename=vars['url_plot'])}}"/>
 <div class="parallel">
     <table class="js-sort-table paleBlueRows">
         <thead class="my_table_head">

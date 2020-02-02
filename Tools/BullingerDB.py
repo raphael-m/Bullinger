@@ -4,7 +4,6 @@
 # Bernard Schroffenegger
 # 30th of November, 2019
 
-import os, time, psutil
 from Tools.Dictionaries import CountDict
 from Tools.Plots import *
 from Tools.Octopus import *
@@ -12,10 +11,13 @@ from App.models import *
 from sqlalchemy import asc, desc, func, and_, or_
 from operator import itemgetter
 from random import sample
+
+import os, time, psutil
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.colors as pltc
+
 all_colors = [k for k, v in pltc.cnames.items()]
 matplotlib.use('agg')
 
@@ -25,82 +27,14 @@ C_PROGRESS = ["navy", "forestgreen", "orange", "red"]
 
 
 class BullingerDB:
+    NG_MAX = 4  # n-grams (precision)
 
     def __init__(self, database_session):
         self.dbs = database_session
         self.t = datetime.now()
 
-    @staticmethod
-    def setup(db_session, dir_path):
-        """ creates the entire date base basing on ocr data """
-        d, card_nr, ignored, errors = BullingerDB(db_session), 1, 0, []
-        d.delete_all()
-        d.add_bullinger()
-        d.add_guest()
-        n_grams_bullinger = NGrams.get_ngram_dicts_dicts("Bullinger", 4)
-        n_grams_heinrich = NGrams.get_ngram_dicts_dicts("Heinrich", 4)
-        id_bullinger = BullingerDB.get_id_bullinger()
-        for path in FileSystem.get_file_paths(dir_path, recursively=False):
-            print(card_nr, path)
-            data = BullingerData.get_data_as_dict(path)
-            d.update_timestamp()
-            d.set_index(card_nr)
-            if data:
-                d.add_date(card_nr, data)
-                d.add_correspondents(card_nr, data, [n_grams_bullinger, n_grams_heinrich], id_bullinger)
-                d.add_autograph(card_nr, data)
-                d.add_copy(card_nr, data)
-                d.add_literature(card_nr, data)
-                d.add_printed(card_nr, data)
-                remark = d.add_remark(card_nr, data)
-                d.add_lang(card_nr, data, remark)
-            else:
-                print("*** WARNING, file ignored:", path)
-                d.push2db(Datum(year_a=SD, month_a=SD, day_a=SD, year_b='', month_b=SD, day_b='', remark=''), card_nr, ADMIN, d.t)
-                ignored += 1
-                errors.append(card_nr)
-            card_nr += 1
-            d.dbs.commit()
-        if ignored: print("*** WARNING,", ignored, "files ignored:", errors)
-        # Postprocessing
-        BullingerDB.count_correspondence()
-
-    @staticmethod
-    def employ_octopus():
-        """
-        in_out_pairs = []
-        file_ids = [d.id_brief for d in Datum.query.filter_by(jahr_a=SD, monat_a=SD, tag_a=SD).all()]
-        for i in file_ids:
-            file_out = 'Karteikarten/OCR_Kraken/HBBW_Karteikarte_' + (5 - len(str(i))) * '0' + str(i) + '.ocr'
-            if not os.path.exists(file_out):
-                file_in = 'App/static/cards/HBBW_Karteikarte_' + (5 - len(str(i))) * '0' + str(i) + '.png'
-                in_out_pairs.append([file_in, file_out])
-        """
-        in_out_pairs = []
-        file_ids = [k.id_brief for k in Kartei.query.all()]
-        for i in file_ids:
-            file_out = 'Karteikarten/OCR_Kraken/HBBW_Karteikarte_' + (5 - len(str(i))) * '0' + str(i) + '.ocr'
-            if not os.path.exists(file_out):
-                file_in = 'App/static/cards/HBBW_Karteikarte_' + (5 - len(str(i))) * '0' + str(i) + '.png'
-                in_out_pairs.append([file_in, file_out])
-
-        for pair in in_out_pairs:
-            print(pair[1])
-            subp = Octopus.run(pair[0], pair[1])
-            p = psutil.Process(subp.pid)
-            try: p.wait(timeout=60 * 1.5)
-            except psutil.TimeoutExpired:
-                p.kill()
-                continue
-
     def update_timestamp(self):
         self.t = datetime.now()
-
-    def set_index(self, i):
-        zeros = (5 - len(str(i))) * '0'
-        pdf = os.path.join("Karteikarten/PDF", "HBBW_Karteikarte_" + zeros + str(i) + ".pdf")
-        ocr = os.path.join("Karteikarten/OCR", "HBBW_Karteikarte_" + zeros + str(i) + ".ocr")
-        self.dbs.add(Kartei(id_brief=i, pfad_pdf=pdf, pfad_ocr=ocr))
 
     def delete_all(self):
         self.dbs.query(User).delete()
@@ -118,75 +52,121 @@ class BullingerDB:
         self.dbs.query(Notiz).delete()
         self.dbs.commit()
 
-    def update_file_status(self, id_brief, state):
-        file = Kartei.query.filter_by(id_brief=id_brief).first()
-        file.status = state
-        file.rezensionen += 1
-        self.dbs.commit()
+    @staticmethod
+    def setup(db_session, dir_path):
+        """ creates the entire date base basing on ocr data """
+        bdb, card_nr, ignored, errors = BullingerDB(db_session), 1, 0, []  # pre-processing
+        bdb.delete_all()
+        bdb.add_bullinger()
+        bdb.add_guest()
+        n_grams_bullinger = NGrams.get_ngram_dicts_dicts("Bullinger", BullingerDB.NG_MAX)
+        n_grams_heinrich = NGrams.get_ngram_dicts_dicts("Heinrich", BullingerDB.NG_MAX)
+        id_bullinger = BullingerDB.get_id_bullinger()
+        for path in FileSystem.get_file_paths(dir_path, recursively=False):  # db setup
+            print(card_nr, path)
+            data = BullingerData.get_data_as_dict(path)
+            bdb.update_timestamp()
+            Kartei.set_index(bdb.dbs, card_nr)
+            if data:
+                bdb.add_date(card_nr, data)
+                bdb.add_correspondents(card_nr, data, [n_grams_bullinger, n_grams_heinrich], id_bullinger)
+                bdb.add_autograph(card_nr, data)
+                bdb.add_copy(card_nr, data)
+                bdb.add_literature(card_nr, data)
+                bdb.add_printed(card_nr, data)
+                remark = bdb.add_remark(card_nr, data)
+                bdb.add_lang(card_nr, data, remark)
+            else:
+                print("*** WARNING, file ignored:", path)
+                bdb.push2db(Datum(), card_nr, ADMIN, bdb.t)
+                ignored += 1
+                errors.append(card_nr)
+            card_nr += 1
+            bdb.dbs.commit()
+        if ignored: print("*** WARNING,", ignored, "files ignored:", errors)
+        BullingerDB.count_correspondence()  # post-processing
 
-    def update_user(self, user, number_of_changes, state):
-        user = User.query.filter_by(username=user).first()
-        user.changes += number_of_changes
-        user.finished += 1 if state == 'abgeschlossen' else 0
-        self.dbs.commit()
+    @staticmethod
+    def run_ocr_octopus():
+        """ caution: takes 1-2 weeks for all 10'093 files """
+        in_out_pairs = []
+        file_ids = [k.id_brief for k in Kartei.query.all()]
+        for i in file_ids:
+            file_out = 'Karteikarten/OCR_Kraken/HBBW_Karteikarte_' + (5 - len(str(i))) * '0' + str(i) + '.ocr'
+            if not os.path.exists(file_out):
+                file_in = 'App/static/cards/HBBW_Karteikarte_' + (5 - len(str(i))) * '0' + str(i) + '.png'
+                in_out_pairs.append([file_in, file_out])
+        for pair in in_out_pairs:
+            print(pair[1])
+            sub_process = Octopus.run(pair[0], pair[1])
+            p = psutil.Process(sub_process.pid)
+            try:
+                p.wait(timeout=60 * 1.5)
+            except psutil.TimeoutExpired:
+                p.kill()
+                continue
 
     def add_bullinger(self):
-        bullinger = Person(name="Bullinger", forename="Heinrich", place="Zürich", user=ADMIN, time=self.t)
-        self.dbs.add(bullinger)
-        self.dbs.commit()
+        if not Person.query.filter_by(name="Bullinger", vorname="Heinrich", ort="Zürich").first():
+            b = Person(name="Bullinger", forename="Heinrich", place="Zürich", user=ADMIN, time=self.t)
+            self.dbs.add(b)
+            self.dbs.commit()
+            return True
+        return False
 
-    def add_guest(self):
-        self.dbs.add(User(username='Gast', changes=0, finished=0, time=self.t))
+    @staticmethod
+    def get_bullinger_number_of_letters():
+        b = Person.query.filter_by(name='Bullinger', vorname="Heinrich", ort='Zürich').first()
+        return (b.gesendet, b.empfangen) if b else (0, 0)
 
     @staticmethod
     def get_id_bullinger():
-        return Person.query.filter_by(name="Bullinger", vorname="Heinrich", ort="Zürich").first().id
+        b = Person.query.filter_by(name="Bullinger", vorname="Heinrich", ort="Zürich").first()
+        return b.id if b else None
+
+    def add_guest(self):
+        if not User.query.filter_by(username='Gast').first():
+            self.dbs.add(User(username='Gast', changes=0, finished=0, time=self.t))
 
     def add_date(self, card_nr, data):
         date = BullingerData.extract_date(card_nr, data)
         if not date:  # Octopus
-            path = 'Karteikarten/OCR_Kraken/HBBW_Karteikarte_' + (5-len(str(card_nr)))*'0'+str(card_nr) + '.ocr'
+            path = 'Karteikarten/OCR_Kraken/HBBW_Karteikarte_' + (5 - len(str(card_nr))) * '0' + str(card_nr) + '.ocr'
             data = BullingerData.get_data_as_dict(path)
             if data: date = BullingerData.extract_date(card_nr, data)
-            if not date: date = Datum(year_a=SD, month_a=SD, day_a=SD, year_b='', month_b=SD, day_b='', remark='')
+            if not date: date = Datum()
         self.push2db(date, card_nr, ADMIN, self.t)
 
     def add_correspondents(self, card_nr, data, n_grams, id_bullinger):
         """ one has to be bullinger """
         if BullingerData.is_bullinger_sender(data, n_grams[0], n_grams[1]):
-            self.push2db(Absender(id_person=id_bullinger, remark=''), card_nr, ADMIN, self.t)
+            self.push2db(Absender(id_person=id_bullinger), card_nr, ADMIN, self.t)
             e = BullingerData.analyze_address(data["Empfänger"])
             if not Person.query.filter_by(name=e[0], vorname=e[1], ort=e[2]).first():
-                self.push2db(Person(name=e[0], forename=e[1], place=e[2], verified=0), card_nr, ADMIN, self.t)
+                self.push2db(Person(name=e[0], forename=e[1], place=e[2]), card_nr, ADMIN, self.t)
             ref = Person.query.filter_by(name=e[0], vorname=e[1], ort=e[2]).first().id
             self.push2db(Empfaenger(id_brief=card_nr, id_person=ref, remark=e[3]), card_nr, ADMIN, self.t)
         else:
-            self.push2db(Empfaenger(id_brief=card_nr, id_person=id_bullinger, remark=''), card_nr, ADMIN, self.t)
+            self.push2db(Empfaenger(id_brief=card_nr, id_person=id_bullinger), card_nr, ADMIN, self.t)
             a = BullingerData.analyze_address(data["Absender"])
             if not Person.query.filter_by(name=a[0], vorname=a[1], ort=a[2]).first():
-                self.push2db(Person(name=a[0], forename=a[1], place=a[2], verified=0), card_nr, ADMIN, self.t)
+                self.push2db(Person(name=a[0], forename=a[1], place=a[2]), card_nr, ADMIN, self.t)
             ref = Person.query.filter_by(name=a[0], vorname=a[1], ort=a[2]).first().id
             self.push2db(Absender(id_brief=card_nr, id_person=ref, remark=a[3]), card_nr, ADMIN, self.t)
 
     def add_autograph(self, card_nr, data):
-        place, signature, scope = BullingerData.get_ssu(data, "A")
-        if place or signature:
-            self.push2db(Autograph(standort=place, signatur=signature, umfang=scope), card_nr, ADMIN, self.t)
+        place, signature, remark = BullingerData.get_ssu(data, "A")
+        self.push2db(Autograph(location=place, signature=signature, remark=remark), card_nr, ADMIN, self.t)
 
     def add_copy(self, card_nr, data):
-        place, signature, scope = BullingerData.get_ssu(data, "B")
-        if place or signature:
-            self.push2db(Kopie(standort=place, signatur=signature, umfang=scope), card_nr, ADMIN, self.t)
+        place, signature, remark = BullingerData.get_ssu(data, "B")
+        self.push2db(Kopie(location=place, signature=signature, remark=remark), card_nr, ADMIN, self.t)
 
     def add_literature(self, card_nr, data):
-        literature = BullingerData.get_literature(data)
-        if literature:
-            self.push2db(Literatur(literature=literature), card_nr, ADMIN, self.t)
+        self.push2db(Literatur(literature=BullingerData.get_literature(data)), card_nr, ADMIN, self.t)
 
     def add_printed(self, card_nr, data):
-        printed = BullingerData.get_printed(data)
-        if printed:
-            self.push2db(Gedruckt(printed=printed), card_nr, ADMIN, self.t)
+        self.push2db(Gedruckt(printed=BullingerData.get_printed(data)), card_nr, ADMIN, self.t)
 
     def add_lang(self, card_nr, data, remark):
         for lang in BullingerData.get_lang(data, remark):
@@ -194,19 +174,17 @@ class BullingerDB:
 
     def add_remark(self, card_nr, data):
         remark = BullingerData.get_remark(data)
-        if remark:
-            self.push2db(Bemerkung(remark=remark), card_nr, ADMIN, self.t)
-            return remark
-        return ''
+        self.push2db(Bemerkung(remark=remark), card_nr, ADMIN, self.t)
+        return remark
 
     @staticmethod
     def count_correspondence():
         for e in Empfaenger.query.all():
             p = Person.query.get(e.id_person)
-            p.empfangen = p.empfangen+1 if p.empfangen else 1
+            p.empfangen = p.empfangen + 1 if p.empfangen else 1
         for a in Absender.query.all():
             p = Person.query.get(a.id_person)
-            p.gesendet = p.gesendet+1 if p.gesendet else 1
+            p.gesendet = p.gesendet + 1 if p.gesendet else 1
         db.session.commit()
 
     def save_date(self, i, data_date, user, t):
@@ -214,34 +192,38 @@ class BullingerDB:
         if datum_old:
             new_date, n = BullingerDB.update_date(data_date, datum_old)
             self.push2db(new_date, i, user, t)
-        # date doesn't exist yet (should never be the case)
-        elif data_date["year"] or data_date["month"] != 0 or data_date["day"] \
-                or data_date["year_b"] or data_date["month_b"] != 0 or data_date["day_b"]:
-                self.push2db(Datum(
-                        year_a=data_date["year"], month_a=data_date["month"], day_a=data_date["day"],
-                        year_b=data_date["year_b"], month_b=data_date["month_b"], day_b=data_date["day_b"],
-                        remark=data_date["remarks"]),
-                    i, user, t)
-                n = 7
+        elif data_date["year"] or data_date["month"] or data_date["day"] \
+                or data_date["year_b"] or data_date["month_b"] or data_date["day_b"]:
+            self.push2db(Datum(
+                year_a=None if not data_date["year"] else data_date["year"],
+                month_a=None if not data_date["month"] else data_date["month"],
+                day_a=None if not data_date["day"] else data_date["day"],
+                year_b=None if not data_date["year_b"] else data_date["year_b"],
+                month_b=None if not data_date["month_b"] else data_date["month_b"],
+                day_b=None if not data_date["day_b"] else data_date["day_b"],
+                remark=None if not data_date["remarks"] else data_date["remarks"]
+            ), i, user, t)
+            n = 7
         return n
 
     @staticmethod
     def update_date(data_date, datum_old):
         new_datum, n = Datum(), 0  # number of changes
-        if str(datum_old.jahr_a) != str(data_date["year"]): n += 1  # year/month/day (A)
-        new_datum.jahr_a = 's.d.' if not str(data_date["year"]) else str(data_date["year"])
+        if datum_old.jahr_a != data_date["year"]: n += 1  # year/month/day (A)
+        new_datum.jahr_a = None if not data_date["year"] else data_date["year"]
         if datum_old.monat_a != data_date["month"]: n += 1
-        new_datum.monat_a = data_date["month"]
-        if str(datum_old.tag_a) != str(data_date["day"]): n += 1
-        new_datum.tag_a = 's.d.' if not str(data_date["day"]) else str(data_date["day"])
-        if str(datum_old.jahr_b) != str(data_date["year_b"]): n += 1  # year/month/day (B)
-        new_datum.jahr_b = str(data_date["day"])
-        if datum_old.monat_b != data_date["month_b"] and data_date["month_b"]: n += 1
-        new_datum.monat_b = data_date["month_b"]
-        if str(datum_old.tag_b) != str(data_date["day_b"]): n += 1
-        new_datum.tag_b = str(data_date["day_b"])
-        if datum_old.bemerkung != str(data_date["remarks"]): n += 1  # remark
-        new_datum.bemerkung = data_date["remarks"].strip()
+        new_datum.monat_a = None if not data_date["month"] else data_date["month"]
+        if datum_old.tag_a != data_date["day"]: n += 1
+        new_datum.tag_a = None if not data_date["day"] else data_date["day"]
+        if datum_old.jahr_b != data_date["year_b"]: n += 1  # year/month/day (B)
+        new_datum.jahr_b = None if not data_date["year_b"] else data_date["year_b"]
+        if datum_old.monat_b != data_date["month_b"]: n += 1
+        new_datum.monat_b = None if not data_date["month_b"] else data_date["month_b"]
+        if datum_old.tag_b != data_date["day_b"]: n += 1
+        new_datum.tag_b = None if not data_date["day_b"] else data_date["day_b"]
+        remark = data_date["remarks"].strip()
+        if datum_old.bemerkung != remark: n += 1  # remark
+        new_datum.bemerkung = None if not remark else remark
         return (new_datum, n) if n > 0 else (None, 0)
 
     def save_autograph(self, i, d, user, t):
@@ -249,22 +231,22 @@ class BullingerDB:
         if autograph_old:
             new_autograph, n = BullingerDB.update_autograph(d, autograph_old)
             self.push2db(new_autograph, i, user, t)
-        elif d["location"].strip() or d["signature"].strip() or d["remarks"].strip():
-            self.push2db(Autograph(standort=d["location"], signatur=d["signature"], umfang=d["remarks"]), i, user, t)
+        elif d["location"] or d["signature"] or d["remarks"]:
+            self.push2db(Autograph(location=d["location"], signature=d["signature"], remark=d["remarks"]), i, user, t)
             n = 3
         self.dbs.commit()
         return n
 
     @staticmethod
     def update_autograph(d, autograph_old):
-        new_autograph, number_of_changes = Autograph(), 0
-        if autograph_old.standort != d["location"].strip(): number_of_changes += 1
-        new_autograph.standort = d["location"].strip()
-        if autograph_old.signatur != d["signature"].strip(): number_of_changes += 1
-        new_autograph.signatur = d["signature"].strip()
-        if autograph_old.bemerkung != d["remarks"].strip(): number_of_changes += 1
-        new_autograph.bemerkung = d["remarks"].strip()
-        return (new_autograph, number_of_changes) if number_of_changes > 0 else (None, 0)
+        a_new, n = Autograph(), 0
+        if autograph_old.standort != d["location"]: n += 1
+        a_new.standort = d["location"]
+        if autograph_old.signatur != d["signature"]: n += 1
+        a_new.signatur = d["signature"]
+        if autograph_old.bemerkung != d["remarks"]: n += 1
+        a_new.bemerkung = d["remarks"]
+        return (a_new, n) if n > 0 else (None, 0)
 
     @staticmethod
     def get_number_of_differences_from_person(data, person):
@@ -272,72 +254,51 @@ class BullingerDB:
         if person.name != data["lastname"].strip(): n += 1
         if person.vorname != data["firstname"].strip(): n += 1
         if person.ort != data["location"].strip(): n += 1
-        if person.verifiziert != data["verified"]: n += 1
         return n
 
     def save_the_receiver(self, i, d, user, t):
-        emp_old = Empfaenger.query.filter_by(id_brief=i).order_by(desc(Empfaenger.zeit)).first()
-        pers_old = Person.query.filter_by(id=emp_old.id_person).order_by(desc(Person.zeit)).first() if emp_old else None
-        p_new_query = Person.query\
-            .filter_by(name=d["lastname"], vorname=d["firstname"], ort=d["location"], verifiziert=d["verified"])\
+        d["verified"], n = None if not d["verified"] else True, 5
+        e_old = Empfaenger.query.filter_by(id_brief=i).order_by(desc(Empfaenger.zeit)).first()
+        e_new = Empfaenger(verified=d["verified"], remark=d["remarks"])
+        p_old = Person.query.filter_by(id=e_old.id_person).order_by(desc(Person.zeit)).first() if e_old else None
+        p_new = Person.query.filter_by(name=d["lastname"], vorname=d["firstname"], ort=d["location"]) \
             .order_by(desc(Person.zeit)).first()
-        new_person = Person(name=d["lastname"], forename=d["firstname"], place=d["location"], verified=d["verified"])
-        if emp_old:
-            if pers_old:
-                n = BullingerDB.get_number_of_differences_from_person(d, pers_old)
-                if n:
-                    if p_new_query: self.push2db(Empfaenger(id_person=p_new_query.id, remark=d["remarks"]), i, user, t)
-                    else:  # new p, new e->p
-                        self.push2db(new_person, i, user, t)  # id
-                        self.push2db(Empfaenger(id_person=new_person.id, remark=d["remarks"]), i, user, t)
-                    if emp_old.bemerkung != d["remarks"].strip(): n += 1
-                elif emp_old.bemerkung != d["remarks"].strip():  # comment change only
-                    self.push2db(Empfaenger(id_person=pers_old.id, remark=d["remarks"].strip()), i, user, t)
-                    n = 1
-            else:
-                n = 4
-                self.push2db(new_person, i, user, t)  # id
-                self.push2db(Empfaenger(id_person=new_person.id, remark=d["remarks"].strip()), i, user, t)
+        if not p_new:
+            new_person = Person(name=d["lastname"], forename=d["firstname"], place=d["location"])
+            self.push2db(new_person, i, user, t)  # id
+            e_new.id_person = new_person.id
         else:
-            n = 4
-            if p_new_query:
-                self.push2db(Empfaenger(id_person=p_new_query.id, remark=d["remarks"].strip()), i, user, t)
-            else:
-                self.push2db(new_person, i, user, t)  # id
-                self.push2db(Empfaenger(id_person=new_person.id, remark=d["remarks"].strip()), i, user, t)
+            e_new.id_person = p_new.id
+        if e_old and p_old:
+            n = BullingerDB.get_number_of_differences_from_person(d, p_old)
+            if e_old.bemerkung != d["remarks"]: n += 1
+            if e_old.verifiziert != d["verified"]: n += 1
+            if n > 0: self.push2db(e_new, i, user, t)
+        else:
+            self.push2db(e_new, i, user, t)
         self.dbs.commit()
         return n
 
     def save_the_sender(self, i, d, user, t):
-        abs_old = Absender.query.filter_by(id_brief=i).order_by(desc(Absender.zeit)).first()
-        pers_old = Person.query.filter_by(id=abs_old.id_person).order_by(desc(Person.zeit)).first() if abs_old else None
-        p_new_query = Person.query\
-            .filter_by(name=d["lastname"], vorname=d["firstname"], ort=d["location"], verifiziert=d["verified"])\
+        d["verified"], n = None if not d["verified"] else True, 5
+        a_old = Absender.query.filter_by(id_brief=i).order_by(desc(Absender.zeit)).first()
+        a_new = Absender(verified=d["verified"], remark=d["remarks"])
+        p_old = Person.query.filter_by(id=a_old.id_person).order_by(desc(Person.zeit)).first() if a_old else None
+        p_new = Person.query.filter_by(name=d["lastname"], vorname=d["firstname"], ort=d["location"]) \
             .order_by(desc(Person.zeit)).first()
-        new_person = Person(name=d["lastname"], forename=d["firstname"], place=d["location"], verified=d["verified"])
-        if abs_old:
-            if pers_old:
-                n = BullingerDB.get_number_of_differences_from_person(d, pers_old)
-                if n:
-                    if p_new_query: self.push2db(Absender(id_person=p_new_query.id, remark=d["remarks"]), i, user, t)
-                    else:  # new p, new e->p
-                        self.push2db(new_person, i, user, t)  # id
-                        self.push2db(Absender(id_person=new_person.id, remark=d["remarks"]), i, user, t)
-                    if abs_old.bemerkung != d["remarks"]: n += 1
-                elif abs_old.bemerkung != d["remarks"]:  # comment changes only
-                    self.push2db(Absender(id_person=pers_old.id, remark=d["remarks"]), i, user, t)
-                    n += 1
-            else:
-                n = 4
-                self.push2db(new_person, i, user, t)  # id
-                self.push2db(Absender(id_person=new_person.id, remark=d["remarks"]), i, user, t)
+        if not p_new:
+            new_person = Person(name=d["lastname"], forename=d["firstname"], place=d["location"])
+            self.push2db(new_person, i, user, t)  # id
+            a_new.id_person = new_person.id
         else:
-            n = 4
-            if p_new_query:
-                self.push2db(Absender(id_person=p_new_query.id, remark=d["remarks"]), i, user, t)
-            else:
-                self.push2db(new_person, i, user, t)  # id
-                self.push2db(Absender(id_person=new_person.id, remark=d["remarks"]), i, user, t)
+            a_new.id_person = p_new.id
+        if a_old and p_old:
+            n = BullingerDB.get_number_of_differences_from_person(d, p_old)
+            if a_old.bemerkung != d["remarks"]: n += 1
+            if a_old.verifiziert != d["verified"]: n += 1
+            if n > 0: self.push2db(a_new, i, user, t)
+        else:
+            self.push2db(a_new, i, user, t)
         return n
 
     def save_copy(self, i, d, user, t):
@@ -346,7 +307,7 @@ class BullingerDB:
             new_copy, n = BullingerDB.update_copy(d, copy_old)
             self.push2db(new_copy, i, user, t)
         elif d["location"] or d["signature"] or d["remarks"]:
-            self.push2db(Kopie(standort=d["location"], signatur=d["signature"], umfang=d["remarks"]), i, user, t)
+            self.push2db(Kopie(location=d["location"], signature=d["signature"], remark=d["remarks"]), i, user, t)
             n = 3
         return n
 
@@ -381,7 +342,7 @@ class BullingerDB:
     def save_language(self, i, lang, user, t):
         lang_entry, n = Sprache.query.filter_by(id_brief=i).order_by(desc(Sprache.zeit)).first(), 0
         if lang_entry:
-            language_records = Sprache.query\
+            language_records = Sprache.query \
                 .filter_by(id_brief=i).filter_by(zeit=lang_entry.zeit).order_by(desc(Sprache.zeit)).all()
             new_sprachen, n = BullingerDB.update_language(lang, language_records)
             if new_sprachen:
@@ -405,10 +366,14 @@ class BullingerDB:
     @staticmethod
     def split_lang(form_entry):
         if form_entry:
-            if ";" in form_entry: langs = form_entry.split(";")
-            elif "," in form_entry: langs = form_entry.split(",")
-            else: langs = form_entry.split("/")
-        else: langs = []
+            if ";" in form_entry:
+                langs = form_entry.split(";")
+            elif "," in form_entry:
+                langs = form_entry.split(",")
+            else:
+                langs = form_entry.split("/")
+        else:
+            langs = []
         return [l.strip() for l in langs]
 
     def save_printed(self, i, printed, user, t):
@@ -444,25 +409,28 @@ class BullingerDB:
         return (new_sentence, c) if c > 0 else (None, 0)
 
     def save_comment_card(self, i, note, user, t):
-        if note: self.push2db(Notiz(notiz=note), i, user, t)
-
+        if note: self.push2db(Notiz(note=note), i, user, t)
 
     @staticmethod
     def get_comments(user_name):
         comments = []
         for r in Notiz.query.filter(Notiz.id_brief == 0).order_by(asc(Notiz.zeit)).all():
             datum, zeit = re.sub(r'\.\d*', '', r.zeit).split(' ')
-            if r.anwender == "Gast": u = "Gast"
-            elif r.anwender == ADMIN: u = "Admin"
-            elif r.anwender == user_name: u = user_name
-            else: u = "Mitarbeiter " + str(User.query.filter_by(username=r.anwender).first().id)
+            if r.anwender == "Gast":
+                u = "Gast"
+            elif r.anwender == ADMIN:
+                u = "Admin"
+            elif r.anwender == user_name:
+                u = user_name
+            else:
+                u = "Mitarbeiter " + str(User.query.filter_by(username=r.anwender).first().id)
             comments += [[u, datum, zeit, r.notiz]]
         return comments
 
     @staticmethod
     def save_comment(comment, user_name, t):
         if comment:
-            db.session.add(Notiz(id_brief=0, notiz=comment, user=user_name, time=t))
+            db.session.add(Notiz(id_brief=0, note=comment, user=user_name, time=t))
             db.session.commit()
 
     def push2db(self, db_record, id_brief, user, time_stamp):
@@ -480,103 +448,121 @@ class BullingerDB:
             relation.id_brief,
             func.max(relation.zeit).label('max_date')
         ).group_by(relation.id_brief).subquery('t2')
-        query = database.query(relation).join(
+        return database.query(relation).join(
             sub_query,
             and_(relation.id_brief == sub_query.c.id_brief,
                  relation.zeit == sub_query.c.max_date)
         )
-        return query
 
     # Overviews
     @staticmethod
-    def get_data_overview(year):
-        """ yearly: number of letters and their state """
-        [n_letters, n_open, n_unclear, n_closed, n_invalid], file_id, c, p = BullingerDB.get_status_counts(year)
-        data, sd = [], []
-        for k in n_letters:
-            key = k
-            try: key = int(key)
-            except ValueError: pass
-            if isinstance(key, int):
-                data.append([key, n_letters[k], n_open[k], n_unclear[k], n_closed[k], n_invalid[k]])
-            else: sd.append([key, n_letters[k], n_open[k], n_unclear[k], n_closed[k], n_invalid[k]])
-        td = sd+sorted(data, key=itemgetter(0))
-        if year:
-            for i, d in enumerate(td): td[i][0] = BullingerDB.convert_month(td[i][0])
-        return td, file_id, c, p
-
-    @staticmethod
-    def convert_month(number):
-        switch_dict = {1: 'Januar', 2: 'Februar', 3: 'März', 4: 'April', 5: 'Mai', 6: 'Juni', 7: 'Juli', 8: 'August',
-                       9: 'September', 10: 'Oktober', 11: 'November', 12: 'Dezember'}
-        return switch_dict[number] if number in switch_dict else 's.d.'
-
-    @staticmethod
-    def convert_month_str(month):
-        switch_dict = {'Januar': 1, 'Februar': 2, 'März': 3, 'April': 4, 'Mai': 5, 'Juni': 6, 'Juli': 7, 'August': 8,
-                       'September': 9, 'Oktober': 10, 'November': 11, 'Dezember': 12}
-        return switch_dict[month] if month in switch_dict else 's.d.'
-
-    @staticmethod
-    def get_status_counts(year):
-        """ yearly overview """
-        recent_dates = BullingerDB.get_most_recent_only(db.session, Datum)
-        view_count = CountDict()  # year or month --> letter count
-        unclear_count, closed_count, invalid_count, open_count = CountDict(), CountDict(), CountDict(), CountDict()
-        for d in recent_dates:
-            if not year: view_count.add(d.jahr_a)
-            elif str(d.jahr_a) == year: view_count.add(d.monat_a)
-        recent_dates = recent_dates.subquery()
-        join_file_date = db.session.query(
+    def _get_data_overview(year=None, state=None):
+        y = None if year == Config.SD else year
+        recent_dates = BullingerDB.get_most_recent_only(db.session, Datum).subquery()
+        base = db.session.query(
             Kartei.id_brief,
             Kartei.status,
             recent_dates.c.jahr_a,
             recent_dates.c.monat_a
         ).join(recent_dates, recent_dates.c.id_brief == Kartei.id_brief)
-        for r in join_file_date:
-            if not year: i = r.jahr_a
-            else:
-                if str(r.jahr_a) != year: continue
-                i = r.monat_a
-            if r.status == 'abgeschlossen': closed_count.add(i)
-            if r.status == 'unklar': unclear_count.add(i)
-            if r.status == 'ungültig': invalid_count.add(i)
-            if r.status == 'offen': open_count.add(i)
-        o = sum([open_count[c] for c in open_count])
-        a = sum([closed_count[c] for c in closed_count])
-        u = sum([unclear_count[c] for c in unclear_count])
-        i = sum([invalid_count[c] for c in invalid_count])
-        file_id = str(int(time.time()))
-        PieChart.create_plot_overview_stats(file_id, [o, a, u, i], L_PROGRESS, C_PROGRESS)
-        data_stats = BullingerDB.get_status_evaluation(o, a, u, i)
-        return [view_count, open_count, unclear_count, closed_count, invalid_count], file_id, data_stats[0], data_stats[1]
+        if state: base = base.filter(Kartei.status == state)
+        if year: base = base.filter(recent_dates.c.jahr_a == y)
+        col = recent_dates.c.jahr_a if not y else recent_dates.c.monat_a
+        null_count = len(base.filter(col.is_(None)).all())
+        base = base.subquery()
+        col = base.c.jahr_a if not y else base.c.monat_a
+        data = dict(db.session.query(col, func.count(col)).group_by(col).all())
+        if None in data: del data[None]
+        count = sum([data[k] for k in data if data[k]])
+        return data, null_count, count+null_count
+
+    @staticmethod
+    def get_data_overview(year):
+        ya, y0, cy = BullingerDB._get_data_overview(year=year)
+        do, do0, co = BullingerDB._get_data_overview(year=year, state='offen')
+        da, da0, ca = BullingerDB._get_data_overview(year=year, state='abgeschlossen')
+        du, du0, cu = BullingerDB._get_data_overview(year=year, state='unklar')
+        di, di0, ci = BullingerDB._get_data_overview(year=year, state='ungültig')
+        data_overview = [[[Config.SD, 0], do0, du0, da0, di0]] if y0 else []
+        for x in sorted(ya):
+            no = do[x] if x in do else 0
+            na = da[x] if x in da else 0
+            nu = du[x] if x in du else 0
+            ni = di[x] if x in di else 0
+            val = BullingerDB.convert_month(x) if year else x
+            data_overview.append([[val, x], no, nu, na, ni])
+        plot_url = PieChart.create_plot_overview_stats(str(int(time.time())), [co, ca, cu, ci], L_PROGRESS, C_PROGRESS)
+        num_of_cards, data_percentages = BullingerDB.get_status_evaluation(co, ca, cu, ci)
+        return data_overview, data_percentages, plot_url, num_of_cards
+
+    @staticmethod
+    def convert_month(number):
+        switch_dict = {
+            1: 'Januar',
+            2: 'Februar',
+            3: 'März',
+            4: 'April',
+            5: 'Mai',
+            6: 'Juni',
+            7: 'Juli',
+            8: 'August',
+            9: 'September',
+            10: 'Oktober',
+            11: 'November',
+            12: 'Dezember'
+        }
+        return switch_dict[number] if number in switch_dict else Config.SD
+
+    @staticmethod
+    def convert_month_str(month):
+        switch_dict = {
+            'Januar': 1,
+            'Februar': 2,
+            'März': 3,
+            'April': 4,
+            'Mai': 5,
+            'Juni': 6,
+            'Juli': 7,
+            'August': 8,
+            'September': 9,
+            'Oktober': 10,
+            'November': 11,
+            'Dezember': 12
+        }
+        return switch_dict[month] if month in switch_dict else 's.d.'
 
     @staticmethod
     def get_data_overview_month(year, month):
-        data = []
-        month = str(BullingerDB.convert_month_str(month))
-        for d in Datum.query.filter_by(jahr_a=year, monat_a=month):
+        year = None if year == Config.SD else int(year)
+        m_num = None if month == Config.SD else None if int(month) == 0 else int(month)
+        data, null = [], []
+        for d in Datum.query.filter_by(jahr_a=year, monat_a=m_num):
             r = Kartei.query.filter_by(id_brief=d.id_brief).first().rezensionen
             s = Kartei.query.filter_by(id_brief=d.id_brief).first().status
-            dot_or_not = '.' if d.tag_a != SD else ''
-            date = str(d.tag_a) + dot_or_not + ' ' + d.monat_a + ' ' + str(d.jahr_a)
-            data.append([d.id_brief, date, r, s])
+            if d.tag_a: data.append([d.id_brief, d.tag_a, d.monat_a, d.jahr_a, r, s])
+            else: null.append([d.id_brief, d.tag_a, d.monat_a, d.jahr_a, r, s])
+        data, new = null + sorted(data, key=itemgetter(1)), []
+        for d in data:
+            day = str(d[1])+'. ' if d[1] else Config.SD
+            mon = BullingerDB.convert_month(m_num)
+            y = str(d[3]) if d[3] else Config.SD
+            new.append([d[0], [' '.join([day, mon, y]), m_num], d[4], d[5]])
+        data = new
         cd = CountDict()
-        for row in data: cd.add(row[3])
-        file_id = year + '_' + month + '_' + str(int(time.time()))
-        c, p = BullingerDB.get_status_evaluation(cd["offen"], cd["abgeschlossen"], cd["unklar"], cd["ungültig"])
-        PieChart.create_plot_overview_stats(file_id, [cd["offen"], cd["abgeschlossen"], cd["unklar"], cd["ungültig"]], L_PROGRESS, C_PROGRESS)
-        return data, file_id, c, p
+        for row in data+null: cd.add(row[3])
+        num_of_cards, data_percentages = BullingerDB.get_status_evaluation(cd["offen"], cd["abgeschlossen"], cd["unklar"], cd["ungültig"])
+        plot_url = PieChart.create_plot_overview_stats(str(int(time.time())), [cd["offen"], cd["abgeschlossen"], cd["unklar"], cd["ungültig"]], L_PROGRESS, C_PROGRESS)
+        return data, data_percentages, plot_url, num_of_cards
 
     @staticmethod
     def get_status_evaluation(o, a, u, i):
         """ :return: [<int>: total number of cards; <dict>: state <str> -> [count <int>, percentage <float>] """
         data, number_of_cards = dict(), sum([o, a, u, i])
         if number_of_cards > 0:
-            data["offen"] = [o, round(100*o/number_of_cards, 3)]
-            data["abgeschlossen"] = [a, round(100*a/number_of_cards, 3)]
-            data["unklar"] = [u, round(100*u/number_of_cards, 3)]
-            data["ungültig"] = [i, round(100*i/number_of_cards, 3)]
+            data["offen"] = [o, round(100 * o / number_of_cards, 3)]
+            data["abgeschlossen"] = [a, round(100 * a / number_of_cards, 3)]
+            data["unklar"] = [u, round(100 * u / number_of_cards, 3)]
+            data["ungültig"] = [i, round(100 * i / number_of_cards, 3)]
         else:
             data["offen"] = [o, '-']
             data["abgeschlossen"] = [a, '-']
@@ -597,11 +583,11 @@ class BullingerDB:
     @staticmethod
     def get_next_card_number(i):  # ">"
         """ next card in order """
-        return i+1 if i+1 <= Kartei.query.count() else 1
+        return i + 1 if i + 1 <= Kartei.query.count() else 1
 
     @staticmethod
     def get_prev_card_number(i):  # "<"
-        return i-1 if i-1 > 0 else Kartei.query.count()
+        return i - 1 if i - 1 > 0 else Kartei.query.count()
 
     @staticmethod
     def get_prev_assignment(i):  # "<<"
@@ -634,8 +620,10 @@ class BullingerDB:
     @staticmethod
     def get_user_stats(user_name):
         u = User.query.filter_by(username=user_name).first()
-        if u: return u.changes, u.finished
-        else: return 0, 0
+        if u:
+            return u.changes, u.finished
+        else:
+            return 0, 0
 
     @staticmethod
     def get_language_stats():
@@ -643,7 +631,7 @@ class BullingerDB:
         for s in Sprache.query.all():
             cd.add(s.sprache)
         n = Kartei.query.count()
-        for s in cd: data.append([s, cd[s], round(cd[s]/n*100, 3)])
+        for s in cd: data.append([s, cd[s], round(cd[s] / n * 100, 3)])
         # for i in range(n+1):  # too expensive ...
         #    if not Sprache.query.filter_by(id_brief=i).first(): no_lang += 1
         # data.append(['-', no_lang, no_lang/n*100, 3])
@@ -659,14 +647,15 @@ class BullingerDB:
         plt.legend(patches, labels, loc="best")
         plt.axis('equal')
         plt.tight_layout()
-        fig.savefig('App/static/images/plots/lang_stats_'+file_name+'.png')
+        fig.savefig('App/static/images/plots/lang_stats_' + file_name + '.png')
         plt.close()
 
     @staticmethod
     def create_plot_user_stats(user_name, file_name):
         fig = plt.figure()
         dc = [(u.changes, 1 if u.username == user_name else 0) for u in User.query.order_by(asc(User.changes)).all()]
-        co = ["darkgreen" if u.username == user_name else "dodgerblue" for u in User.query.order_by(asc(User.changes)).all()]
+        co = ["darkgreen" if u.username == user_name else "dodgerblue" for u in
+              User.query.order_by(asc(User.changes)).all()]
         # changes
         x = ('' if not c[1] else user_name for c in dc)
         x_pos = np.arange(len(dc))
@@ -674,24 +663,25 @@ class BullingerDB:
         plt.barh(x_pos, y, align='center', alpha=0.5, color=co)
         plt.yticks(x_pos, x)
         plt.xlabel('Änderungen')
-        fig.savefig('App/static/images/plots/user_stats_changes_'+file_name+'.png')
+        fig.savefig('App/static/images/plots/user_stats_changes_' + file_name + '.png')
         plt.close()
 
         # finished
         fig = plt.figure()
         dc = [(u.finished, 1 if u.username == user_name else 0) for u in User.query.order_by(asc(User.finished)).all()]
-        co = ["darkgreen" if u.username == user_name else "dodgerblue" for u in User.query.order_by(asc(User.finished)).all()]
+        co = ["darkgreen" if u.username == user_name else "dodgerblue" for u in
+              User.query.order_by(asc(User.finished)).all()]
         x = ('' if not c[1] else user_name for c in dc)
         x_pos = np.arange(len(dc))
         y = [c[0] for c in dc]
         plt.barh(x_pos, y, align='center', alpha=0.5, color=co)
         plt.yticks(x_pos, x)
         plt.xlabel('abgeschlossen')
-        fig.savefig('App/static/images/plots/user_stats_finished_'+file_name+'.png')
+        fig.savefig('App/static/images/plots/user_stats_finished_' + file_name + '.png')
         plt.close()
 
     @staticmethod
     def get_stats_sent_received(limit_s, limit_r):
         ds = [[p.name, p.vorname, p.gesendet] for p in Person.query.order_by(desc(Person.gesendet)).all()]
         dr = [[p.name, p.vorname, p.empfangen] for p in Person.query.order_by(desc(Person.empfangen)).all()]
-        return ds[0:limit_s+1], dr[0:limit_r+1]
+        return ds[0:limit_s + 1], dr[0:limit_r + 1]

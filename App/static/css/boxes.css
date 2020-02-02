@@ -20,3 +20,13 @@
     width: 50%;
     height: 30px;
 }
+
+.error_msg {
+    color: blue;
+    height: 15px;
+    line-height: 15px;
+    font-size: 12pt;
+    font-style: italic;
+    font-weight: 400;
+    text-align: center;
+}

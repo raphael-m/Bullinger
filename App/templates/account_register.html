@@ -5,50 +5,60 @@
 
 <h1>Registrierung</h1>
 
-<p> &#8594; <a href="{{url_for('login')}}">Anmeldung</a></p>
+<div class="main_box">
 
-<div id="register_form">
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
+    <h2>Registrierung</h2>
+    <div class="h2_section">
 
-        <!-- username -->
-        <div class="prompt">{{ form.username.label }}</div>
-        <div class="prompt_input">{{ form.username(size=32, placeholder="Benutzername") }}</div>
-        <div class="error_msg">
-            {% for error in form.username.errors %}
-                <div class="error_notification">[{{ error }}]</div>
-            {% endfor %}
+        <p> Haben Sie sich bereits registriert? &#8594;
+            <a href="{{url_for('login')}}">Anmeldung</a>
+        </p>
+
+        <div id="register_form">
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+
+                <!-- username -->
+                <div class="prompt">{{ form.username.label }}</div>
+                <div class="prompt_input">{{ form.username(size=32, placeholder="Benutzername") }}</div>
+                <div class="error_msg">
+                    {% for error in form.username.errors %}
+                    <div class="error_notification"><span>[{{ error }}]</span></div>
+                    {% endfor %}
+                </div>
+
+                <!-- email -->
+                <div class="prompt">{{ form.email.label }}</div>
+                <div class="prompt_input">{{ form.email(size=64, placeholder="E-Mail Adresse") }}</div>
+                <div class="error_msg">
+                    {% for error in form.email.errors %}
+                    <div class="error_notification"><span>[{{ error }}]</span></div>
+                    {% endfor %}
+                </div>
+
+                <!-- password -->
+                <div class="prompt">{{ form.password.label }}</div>
+                <div class="prompt_input">{{ form.password(size=32, placeholder="Passwort") }}</div>
+                <div class="error_msg">
+                    {% for error in form.password.errors %}
+                    <div class="error_notification"><span>[{{ error }}]</span></div>
+                    {% endfor %}
+                </div>
+
+                <!-- password confirmation -->
+                <div class="prompt">{{ form.password2.label }}</div>
+                <div class="prompt_input">{{ form.password2(size=32, placeholder="Passwortbestätigung") }}</div>
+                <div class="error_msg">
+                    {% for error in form.password2.errors %}
+                    <div class="error_notification"><span>[{{ error }}]</span></div>
+                    {% endfor %}
+                </div>
+
+                <p>{{ form.submit() }}</p>
+            </form>
         </div>
-
-        <!-- email -->
-        <div class="prompt">{{ form.email.label }}</div>
-        <div class="prompt_input">{{ form.email(size=64, placeholder="E-Mail Adresse") }}</div>
-        <div class="error_msg">
-            {% for error in form.email.errors %}
-                <div class="error_notification">[{{ error }}]</div>
-            {% endfor %}
-        </div>
-
-        <!-- password -->
-        <div class="prompt">{{ form.password.label }}</div>
-        <div class="prompt_input">{{ form.password(size=32, placeholder="Passwort") }}</div>
-        <div class="error_msg">
-            {% for error in form.password.errors %}
-                <div class="error_notification">[{{ error }}]</div>
-            {% endfor %}
-        </div>
-
-        <!-- password confirmation -->
-        <div class="prompt">{{ form.password2.label }}</div>
-        <div class="prompt_input">{{ form.password2(size=32, placeholder="Passwortbestätigung") }}</div>
-        <div class="error_msg">
-            {% for error in form.password2.errors %}
-                <div class="error_notification"> [{{ error }}] </div>
-            {% endfor %}
-        </div>
-
-        <p>{{ form.submit() }}</p>
-    </form>
+    </div>
+    <div class="h2_separator"></div>
 </div>
 
 {% endblock %}
