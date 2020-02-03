@@ -2,16 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6d2cb28e-bb45-42c9-b203-59c8af68dfbb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/faq.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/faq.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/overview.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/overview.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/overview__status.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/overview__status.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/overview_month.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/overview_month.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/overview_year.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/overview_year.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Tools/BullingerDB.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tools/BullingerDB.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/app.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup.txt" beforeDir="false" afterPath="$PROJECT_DIR$/setup.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,8 +16,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="114" lean-forward="true" selection-start-line="114" selection-end-line="114" />
+            <state relative-caret-position="391">
+              <caret line="109" column="11" selection-start-line="109" selection-start-column="11" selection-end-line="109" selection-end-column="11" />
               <folding>
                 <element signature="e#119#159#0" expanded="true" />
               </folding>
@@ -34,13 +26,67 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="33">
+              <caret line="333" column="17" selection-start-line="333" selection-start-column="17" selection-end-line="333" selection-end-column="17" />
+              <folding>
+                <element signature="e#113#131#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/routes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="262">
-              <caret line="71" column="20" selection-start-line="71" selection-start-column="20" selection-end-line="71" selection-end-column="20" />
+            <state relative-caret-position="156">
+              <caret line="203" column="48" selection-start-line="203" selection-start-column="48" selection-end-line="203" selection-end-column="48" />
               <folding>
                 <element signature="e#172#191#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/user.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="150">
+              <caret line="10" selection-start-line="10" selection-end-line="10" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Tools/BullingerData.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="35">
+              <caret line="442" column="6" selection-start-line="442" selection-start-column="6" selection-end-line="442" selection-end-column="6" />
+              <folding>
+                <element signature="e#170#194#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/forms.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="152">
+              <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
+              <folding>
+                <element signature="e#165#196#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/setup.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="283">
+              <caret line="113" column="11" lean-forward="true" selection-start-line="113" selection-start-column="11" selection-end-line="113" selection-end-column="11" />
             </state>
           </provider>
         </entry>
@@ -57,8 +103,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>pers_old = Person.query.filter_by(id=abs_old.id_person).order_by(desc(Person.zeit)).first()</find>
-      <find>receiver</find>
       <find>Empfaenger</find>
       <find>save_lang</find>
       <find>von</find>
@@ -87,6 +131,8 @@
       <find>error</find>
       <find>subquery</find>
       <find>print(</find>
+      <find>psutil</find>
+      <find>ps</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -121,7 +167,6 @@
         <option value="$PROJECT_DIR$/Tools/FileSystem.py" />
         <option value="$PROJECT_DIR$/Tools/Octopus.py" />
         <option value="$PROJECT_DIR$/App/user.py" />
-        <option value="$PROJECT_DIR$/setup.txt" />
         <option value="$PROJECT_DIR$/App/__init__.py" />
         <option value="$PROJECT_DIR$/App/models.py" />
         <option value="$PROJECT_DIR$/Tools/Langid.py" />
@@ -144,14 +189,14 @@
         <option value="$PROJECT_DIR$/App/templates/overview_month.html" />
         <option value="$PROJECT_DIR$/App/templates/overview.html" />
         <option value="$PROJECT_DIR$/App/routes.py" />
+        <option value="$PROJECT_DIR$/setup.txt" />
         <option value="$PROJECT_DIR$/Tools/BullingerDB.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="265" />
     <option name="y" value="36" />
-    <option name="width" value="1175" />
+    <option name="width" value="1440" />
     <option name="height" value="807" />
   </component>
   <component name="ProjectLevelVcsManager">
@@ -177,14 +222,7 @@
             <path>
               <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
               <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
-              <item name="App" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
-              <item name="App" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="Tools" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -267,13 +305,13 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="265" y="36" width="1175" height="807" extended-state="0" />
+    <frame x="0" y="36" width="1440" height="807" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.84895104" visible="true" weight="0.23310225" />
-      <window_info id="Structure" order="2" sideWeight="0.15104896" side_tool="true" visible="true" weight="0.23310225" />
-      <window_info anchor="bottom" id="Terminal" order="0" weight="0.12727273" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.8495413" visible="true" weight="0.18957011" />
+      <window_info id="Structure" order="2" sideWeight="0.15045871" side_tool="true" visible="true" weight="0.18957011" />
+      <window_info anchor="bottom" id="Terminal" order="0" visible="true" weight="0.23776224" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="2" weight="0.32967034" />
       <window_info anchor="bottom" id="Message" order="3" />
@@ -290,9 +328,6 @@
     </layout>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Tools/OCR2.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/Tools/NGrams.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="495">
@@ -405,13 +440,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/user.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" selection-start-line="10" selection-end-line="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../Bullinger/venv/lib/python3.7/site-packages/wtforms/form.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
@@ -440,16 +468,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
           <caret line="16" selection-start-line="16" selection-end-line="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="52">
-          <caret line="333" column="17" selection-start-line="333" selection-start-column="17" selection-end-line="333" selection-end-column="17" />
-          <folding>
-            <element signature="e#113#131#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -484,13 +502,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/setup.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="27" column="22" selection-start-line="27" selection-start-column="2" selection-end-line="27" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/static/css/boxes.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="450">
@@ -502,16 +513,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
           <caret line="28" column="15" selection-start-line="28" selection-start-column="15" selection-end-line="28" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="251">
-          <caret line="28" column="27" selection-start-line="28" selection-start-column="27" selection-end-line="28" selection-end-column="27" />
-          <folding>
-            <element signature="e#165#196#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -605,9 +606,53 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/setup.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="283">
+          <caret line="113" column="11" lean-forward="true" selection-start-line="113" selection-start-column="11" selection-end-line="113" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
+          <folding>
+            <element signature="e#165#196#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="33">
+          <caret line="333" column="17" selection-start-line="333" selection-start-column="17" selection-end-line="333" selection-end-column="17" />
+          <folding>
+            <element signature="e#113#131#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/routes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="156">
+          <caret line="203" column="48" selection-start-line="203" selection-start-column="48" selection-end-line="203" selection-end-column="48" />
+          <folding>
+            <element signature="e#172#191#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/user.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Tools/BullingerData.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="63">
+        <state relative-caret-position="35">
           <caret line="442" column="6" selection-start-line="442" selection-start-column="6" selection-end-line="442" selection-end-column="6" />
           <folding>
             <element signature="e#170#194#0" expanded="true" />
@@ -615,20 +660,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/routes.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="262">
-          <caret line="71" column="20" selection-start-line="71" selection-start-column="20" selection-end-line="71" selection-end-column="20" />
-          <folding>
-            <element signature="e#172#191#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/../Bullinger/venv/lib/python3.7/site-packages/psutil/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="114" lean-forward="true" selection-start-line="114" selection-end-line="114" />
+        <state relative-caret-position="391">
+          <caret line="109" column="11" selection-start-line="109" selection-start-column="11" selection-end-line="109" selection-end-column="11" />
           <folding>
             <element signature="e#119#159#0" expanded="true" />
           </folding>

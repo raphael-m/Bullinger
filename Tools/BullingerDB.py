@@ -12,7 +12,7 @@ from sqlalchemy import asc, desc, func, and_, or_
 from operator import itemgetter
 from random import sample
 
-import os, time, psutil
+import os, time
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
@@ -89,6 +89,8 @@ class BullingerDB:
     @staticmethod
     def run_ocr_octopus():
         """ caution: takes 1-2 weeks for all 10'093 files """
+        pass
+        '''
         in_out_pairs = []
         file_ids = [k.id_brief for k in Kartei.query.all()]
         for i in file_ids:
@@ -105,6 +107,7 @@ class BullingerDB:
             except psutil.TimeoutExpired:
                 p.kill()
                 continue
+        '''
 
     def remove_user(self, username):
         """ delete a user and all his changes """
@@ -217,25 +220,18 @@ class BullingerDB:
     def update_date(data_date, datum_old):
         new_datum, n = Datum(), 0  # number of changes
         if datum_old.jahr_a != data_date["year"]: n += 1  # year/month/day (A)
-        print('a', n)
         new_datum.jahr_a = None if not data_date["year"] else data_date["year"]
         if datum_old.monat_a != data_date["month"]: n += 1
-        print('b', n)
         new_datum.monat_a = None if not data_date["month"] else data_date["month"]
         if datum_old.tag_a != data_date["day"]: n += 1
-        print('c', n)
         new_datum.tag_a = None if not data_date["day"] else data_date["day"]
         if datum_old.jahr_b != data_date["year_b"]: n += 1  # year/month/day (B)
-        print('d', n)
         new_datum.jahr_b = None if not data_date["year_b"] else data_date["year_b"]
         if datum_old.monat_b != data_date["month_b"]: n += 1
-        print('e', n)
         new_datum.monat_b = None if not data_date["month_b"] else data_date["month_b"]
         if datum_old.tag_b != data_date["day_b"]: n += 1
-        print('f', n)
         new_datum.tag_b = None if not data_date["day_b"] else data_date["day_b"]
         if datum_old.bemerkung != data_date["remarks"]: n += 1  # remark
-        print('g', n)
         new_datum.bemerkung = None if not data_date["remarks"] else data_date["remarks"]
         return (new_datum, n) if n > 0 else (None, 0)
 
