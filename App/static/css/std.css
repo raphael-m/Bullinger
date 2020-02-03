@@ -31,6 +31,26 @@ h3 {
     background: black;
 }
 
+/* LISTS */
+ol {
+  background: #ff9999;
+  padding: 20px;
+}
+
+ul {
+    list-style-type: circle;
+    padding: 20px;
+}
+
+ol li {
+    padding: 5px;
+    margin-left: 35px;
+}
+
+ul li {
+    margin: 5px;
+}
+
 /* TEXT */
 
 p {

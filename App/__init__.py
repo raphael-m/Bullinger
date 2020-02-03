@@ -3,6 +3,7 @@
 # __init__.py
 # Bernard Schroffenegger
 # 20th of October, 2019
+import datetime
 
 from flask import Flask
 from config import Config
@@ -22,9 +23,12 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 # Accounts
-login = LoginManager(app)
-login.anonymous_user = Anonymous
-login.login_view = 'login'
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.anonymous_user = Anonymous
+login_manager.login_view = 'login'
+# login_manager.session_protection = "strong"
+# REMEMBER_COOKIE_DURATION = datetime.timedelta(minutes=60)
 
 # Admin
 # app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'

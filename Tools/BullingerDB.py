@@ -722,7 +722,13 @@ class BullingerDB:
         plt.close()
 
     @staticmethod
-    def get_stats_sent_received(limit_s, limit_r):
-        ds = [[p.name, p.vorname, p.gesendet] for p in Person.query.order_by(desc(Person.gesendet)).all()]
-        dr = [[p.name, p.vorname, p.empfangen] for p in Person.query.order_by(desc(Person.empfangen)).all()]
-        return ds[0:limit_s + 1], dr[0:limit_r + 1]
+    def get_top_n_sender(n):
+        p = Person.query.order_by(desc(Person.gesendet)).all()
+        if n > len(p): n = len(p)
+        return [[x.name, x.vorname, x.ort, x.gesendet] for x in p][0:n]
+
+    @staticmethod
+    def get_top_n_receiver(n):
+        p = Person.query.order_by(desc(Person.empfangen)).all()
+        if n > len(p): n = len(p)
+        return [[x.name, x.vorname, x.ort, x.empfangen] for x in p][0:n]

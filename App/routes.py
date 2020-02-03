@@ -6,9 +6,9 @@
 
 """ Implementation of different URLs (view functions) """
 
-from App import app, login
+from App import app, login_manager
 from App.forms import *
-from flask import render_template, flash, redirect, url_for, make_response, jsonify, request
+from flask import render_template, flash, redirect, url_for, make_response, jsonify, request, session
 from flask_login import current_user, login_user, login_required, logout_user
 from Tools.BullingerDB import BullingerDB
 from collections import defaultdict
@@ -27,8 +27,9 @@ database = BullingerDB(db.session)
 @app.errorhandler(404)
 def not_found(error): return make_response(jsonify({'error': 'Not found'}), 404)
 
-@login.user_loader
-def load_user(id_user): return User.query.get(int(id_user))
+@login_manager.user_loader
+def load_user(id_user):
+    return User.query.get(int(id_user))
 
 @app.route('/admin', methods=['POST', 'GET'])
 def admin(): return render_template('admin.html', title="Admin")
@@ -60,6 +61,7 @@ def get_base_client_variables():
 
 
 @app.route('/admin/setup', methods=['POST', 'GET'])
+@login_required
 def setup():
     # PASSWORD PROTECTION NEEDED                                                                                    !
     # BullingerDB.run_ocr_octopus()  # ~1-2 weeks
@@ -68,6 +70,7 @@ def setup():
 
 
 @app.route('/admin/delete_user/<username>', methods=['POST', 'GET'])
+@login_required
 def delete_user(username):
     database.remove_user(username)
     return redirect(url_for('admin'))
@@ -89,6 +92,7 @@ def login():
 
 
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
@@ -163,15 +167,24 @@ def overview_month(year, month):
 
 @app.route('/stats', methods=['POST', 'GET'])
 def stats():
-    c_vars, c_vars["n_top"] = get_base_client_variables(), 42  # n top Empfänger/Absender
-    c_vars["user_stats_all"] = BullingerDB.get_user_stats_all(current_user.username)
-    c_vars["lang_stats"] = BullingerDB.get_language_stats()
-    c_vars["file_id"] = str(int(time.time()))
-    c_vars["top_s"], c_vars["top_r"] = BullingerDB.get_stats_sent_received(c_vars["n_top"], c_vars["n_top"])
-    BullingerDB.create_plot_user_stats(current_user.username, c_vars["file_id"])
-    BullingerDB.create_plot_lang(c_vars["lang_stats"], c_vars["file_id"])
-    return render_template("stats.html", title="Statistiken", vars=c_vars)
-
+    n_top, id_file = 50, str(int(time.time()))
+    stats_languages = BullingerDB.get_language_stats()
+    BullingerDB.create_plot_user_stats(current_user.username, id_file)
+    BullingerDB.create_plot_lang(stats_languages, id_file)
+    return render_template(
+        "stats.html",
+        title="Statistiken",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "user_stats_all": BullingerDB.get_user_stats_all(current_user.username),
+            "n_top": n_top,
+            "file_id": id_file,
+            "lang_stats": stats_languages,
+            "top_s": BullingerDB.get_top_n_sender(n_top),
+            "top_r": BullingerDB.get_top_n_receiver(n_top),
+        }
+    )
 
 @app.route('/faq', methods=['POST', 'GET'])
 def faq():
@@ -180,6 +193,7 @@ def faq():
 
 
 @app.route('/quick_start', methods=['POST', 'GET'])
+@login_required
 def quick_start():
     i = BullingerDB.quick_start()
     if i:  # next card with status 'offen' or 'unklar'

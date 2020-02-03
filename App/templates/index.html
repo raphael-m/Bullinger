@@ -2,41 +2,68 @@
 
 {% block content %}
 
-<h1>Allgemeines
+<h1>Bullinger Briefwechsel
     {% include "user_status.html" %}
 </h1>
 
 <div class="main_box">
 
-    <h2>Bullinger Briefwechsel</h2>
+    <h2>Allgemeines</h2>
     <div class="h2_section">
-
-        <p> Der Zürcher Reformator Heinrich Bullinger (1504-1575) hatte ein grosses Korrespondenz-Netzwerk.
-            Er hat laut unserer (leider noch fehlerbehafteten und unvollständigen) Datenbankrund
-            {{ vars["num_sent"] }} Briefe geschrieben und {{ vars["num_received"] }} Briefe erhalten. ... </p>
-
-        <p> Zu jedem Brief gibt es eine Karteikarte auf Papier.
-            Bitte helfen Sie uns, diese Karteikarte in unsere Datenbank zu überführen. </p>
-
-        <p> Vielen Dank.</p>
-
-        <p> &#8594; <a href="{{url_for('quick_start')}}">Start</a> </p>
+        <p> Der Zürcher Reformator <a href="https://de.wikipedia.org/wiki/Heinrich_Bullinger">Heinrich Bullinger</a>
+            (1504-1575) war Mitarbeiter und Nachfolger von Zwingli und ein wichtiger Multiplikator für die Ideen der
+            Reformation in der Schweiz und in Europa. Entsprechend gross war sein Korrespondenz-Netzwerk.</p>
+        <p> Er hat laut unserer - leider noch fehlerbehafteten und unvollständigen - Datenbank {{ vars["num_sent"] }}
+            Briefe geschrieben und {{ vars["num_received"] }} erhalten. Die Originale liegen mehrheitlich im
+            Staatsarchiv Zürich und in der Zentralbibliothek Zürich. Zu jedem Brief gibt es eine Karteikarte auf Papier.
+            Bitte helfen Sie uns, diese Karteikarte in unsere Datenbank zu überführen.</p>
+        <p> Vielen Dank (&#8594; <a href="{{url_for('quick_start')}}">Start</a>).
+        <p> <span style="color:red">ACHTUNG! Hierbei handelt es sich lediglich um eine TESTVERSION.
+            Jetzt erfasste Änderungen gehen möglicherweise wieder verloren. </span>
+        </p>
 
     </div>
+    <div class="h2_separator"></div>
 
-    <h2>Impressum</h2>
+    <h2>Projektziele</h2>
     <div class="h2_section">
-        <p> <a href="mailto:bodenmann.reinhard@theol.uzh.ch">Reinhard Bodenmann</a>,
-            Institut für Schweizerische Reformationsgeschichte
-        </p>
-        <p> <a href="mailto:volk@cl.uzh.ch">Martin Volk</a>, Institut für Computerlinguistik </p>
+        <ul>
+            <li>Aufbau eines Karteisystems zu den Bullinger-Briefwechseln
+                <a href="https://de.wikipedia.org/wiki/Citizen_Science">(Citizen Science)</a>
+            </li>
+            <li>Ausbau der Datenbank mit allen Dokumenten aus dem Bullinger-Briefwechsel</li>
+            <li>automatische Erschliessung der noch nicht editieren Briefe (Scannen, Handschriften-OCR)</li>
+            <li>Aufbau eines massgeschneiderten Systems zur maschinellen Übersetzung Latein &#8594; Deutsch</li>
+            <li>Modernisierung und Erweiterung des Suchsystems</li>
+        </ul>
+    </div>
+    <div class="h2_separator"></div>
+
+    <h2>Links</h2>
+    <div class="h2_section">
+        <p> Hintergrund-Informationen zum bisherigen Editions-Projekt finden sich
+            <a href="https://www.irg.uzh.ch/de/bullinger-edition/briefwechsel.html">hier</a>.</p>
+        <p> Rund 3000 Briefe sind schon transkribiert und editiert, und können online durchsucht werden.
+            Das Suchsystem für die bisher editieren Briefe findet sich
+            <a href="http://teoirgsed.uzh.ch/">hier</a>.</p>
+    </div>
+    <div class="h2_separator"></div>
+
+    <h2>Kontakt</h2>
+    <div class="h2_section">
+        <p> <a href="mailto:bodenmann.reinhard@theol.uzh.ch">Reinhard Bodenmann </a>
+            (Bullinger-Briefwechsel-Edition),
+            Institut für Schweizerische Reformationsgeschichte, Kirchgasse 9, Zürich </p>
+        <p> <a href="mailto:volk@cl.uzh.ch">Prof. Dr. Martin Volk</a>
+            (Projektleiter),
+            Institut für Computerlinguistik, Andreasstrasse 15, Zürich </p>
         <p> Universität Zürich, 2020</p>
     </div>
     <div class="h2_separator"></div>
 
-    <h2>Benutzerkommentare</h2>
+    <h2>Gästebuch</h2>
     <div class="h2_section">
-        <p>Für Bemerkungen/Anregungen ...</p>
+        <p>Hinterlassen Sie einen Kommentar:</p>
         <table>
             <!--
             <thead>
