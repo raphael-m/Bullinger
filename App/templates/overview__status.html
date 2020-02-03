@@ -1,6 +1,9 @@
 <!-- extends "overview.html", "overview_year.html", "overview_month.html" -->
 
 {% block progress %}
+<h2>Fortschritt</h2>
+
+<p>Statusübersicht der {{ vars["num_of_cards"] }} Karteikarten vom Jahr {{ vars["year"] }}:</p>
 
 <img class="parallel" src="{{url_for('static', filename=vars['url_plot'])}}"/>
 <div class="parallel">

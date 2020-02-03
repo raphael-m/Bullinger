@@ -106,6 +106,13 @@ class BullingerDB:
                 p.kill()
                 continue
 
+    def remove_user(self, username):
+        """ delete a user and all his changes """
+        self.dbs.query(User).filter_by(username=username).delete()
+        for t in [Datum, Person, Absender, Empfaenger, Autograph, Kopie, Sprache, Literatur, Gedruckt, Bemerkung, Notiz]:
+            self.dbs.query(t).filter_by(anwender=username).delete()
+        self.dbs.commit()
+
     def add_bullinger(self):
         if not Person.query.filter_by(name="Bullinger", vorname="Heinrich", ort="Zürich").first():
             b = Person(name="Bullinger", forename="Heinrich", place="Zürich", user=ADMIN, time=self.t)
@@ -210,20 +217,26 @@ class BullingerDB:
     def update_date(data_date, datum_old):
         new_datum, n = Datum(), 0  # number of changes
         if datum_old.jahr_a != data_date["year"]: n += 1  # year/month/day (A)
+        print('a', n)
         new_datum.jahr_a = None if not data_date["year"] else data_date["year"]
         if datum_old.monat_a != data_date["month"]: n += 1
+        print('b', n)
         new_datum.monat_a = None if not data_date["month"] else data_date["month"]
         if datum_old.tag_a != data_date["day"]: n += 1
+        print('c', n)
         new_datum.tag_a = None if not data_date["day"] else data_date["day"]
         if datum_old.jahr_b != data_date["year_b"]: n += 1  # year/month/day (B)
+        print('d', n)
         new_datum.jahr_b = None if not data_date["year_b"] else data_date["year_b"]
         if datum_old.monat_b != data_date["month_b"]: n += 1
+        print('e', n)
         new_datum.monat_b = None if not data_date["month_b"] else data_date["month_b"]
         if datum_old.tag_b != data_date["day_b"]: n += 1
+        print('f', n)
         new_datum.tag_b = None if not data_date["day_b"] else data_date["day_b"]
-        remark = data_date["remarks"].strip()
-        if datum_old.bemerkung != remark: n += 1  # remark
-        new_datum.bemerkung = None if not remark else remark
+        if datum_old.bemerkung != data_date["remarks"]: n += 1  # remark
+        print('g', n)
+        new_datum.bemerkung = None if not data_date["remarks"] else data_date["remarks"]
         return (new_datum, n) if n > 0 else (None, 0)
 
     def save_autograph(self, i, d, user, t):
@@ -251,9 +264,11 @@ class BullingerDB:
     @staticmethod
     def get_number_of_differences_from_person(data, person):
         n = 0  # differences
-        if person.name != data["lastname"].strip(): n += 1
-        if person.vorname != data["firstname"].strip(): n += 1
-        if person.ort != data["location"].strip(): n += 1
+        if person:
+            a, b, c = data["lastname"], data["firstname"], data["location"]
+            if person.name != (a.strip() if a else a): n += 1
+            if person.vorname != (b.strip() if b else b): n += 1
+            if person.ort != (c.strip() if c else c): n += 1
         return n
 
     def save_the_receiver(self, i, d, user, t):
@@ -359,21 +374,20 @@ class BullingerDB:
         new_languages = []
         if not set(s_old) == set(s_new):
             for s in s_new: new_languages.append(Sprache(language=s.strip()))
-            if len(s_new) is 0: new_languages.append(Sprache(language=''))
-            return new_languages, len(s_new) - len(set(s_old).intersection(set(s_new)))
+            if len(s_new) is 0:
+                new_languages.append(Sprache(language=None))
+            if len(s_new) > len(s_old): n = len(s_new) - len(set(s_old).intersection(set(s_new)))
+            if len(s_new) < len(s_old): n = len(s_old) - len(set(s_old).intersection(set(s_new)))
+            return new_languages, n
         return None, 0
 
     @staticmethod
     def split_lang(form_entry):
         if form_entry:
-            if ";" in form_entry:
-                langs = form_entry.split(";")
-            elif "," in form_entry:
-                langs = form_entry.split(",")
-            else:
-                langs = form_entry.split("/")
-        else:
-            langs = []
+            if ";" in form_entry: langs = form_entry.split(";")
+            elif "," in form_entry: langs = form_entry.split(",")
+            else: langs = form_entry.split("/")
+        else: langs = []
         return [l.strip() for l in langs]
 
     def save_printed(self, i, printed, user, t):
@@ -489,32 +503,62 @@ class BullingerDB:
             na = da[x] if x in da else 0
             nu = du[x] if x in du else 0
             ni = di[x] if x in di else 0
-            val = BullingerDB.convert_month(x) if year else x
+            val = BullingerDB.convert_month_to_str(x) if year else x
             data_overview.append([[val, x], no, nu, na, ni])
         plot_url = PieChart.create_plot_overview_stats(str(int(time.time())), [co, ca, cu, ci], L_PROGRESS, C_PROGRESS)
         num_of_cards, data_percentages = BullingerDB.get_status_evaluation(co, ca, cu, ci)
         return data_overview, data_percentages, plot_url, num_of_cards
 
     @staticmethod
-    def convert_month(number):
-        switch_dict = {
-            1: 'Januar',
-            2: 'Februar',
-            3: 'März',
-            4: 'April',
-            5: 'Mai',
-            6: 'Juni',
-            7: 'Juli',
-            8: 'August',
-            9: 'September',
-            10: 'Oktober',
-            11: 'November',
-            12: 'Dezember'
-        }
-        return switch_dict[number] if number in switch_dict else Config.SD
+    def normalize_str_input(value):
+        if not isinstance(value, str): return None
+        elif not value.strip(): return None
+        else: return value.strip()
 
     @staticmethod
-    def convert_month_str(month):
+    def normalize_int_input(value):
+        if isinstance(value, int): return value
+        elif isinstance(value, str):
+            try: return int(value)
+            except: return None
+        else: return None
+
+    @staticmethod
+    def convert_month_to_str(m):
+        try: return BullingerDB.convert_month_int2str(int(m))
+        except:
+            n = BullingerDB._convert_month_str2int(m)
+            return BullingerDB.convert_month_int2str(n)
+
+    @staticmethod
+    def convert_month_int2str(m):
+        try:
+            m = int(m)
+            switch_dict = {
+                1: 'Januar',
+                2: 'Februar',
+                3: 'März',
+                4: 'April',
+                5: 'Mai',
+                6: 'Juni',
+                7: 'Juli',
+                8: 'August',
+                9: 'September',
+                10: 'Oktober',
+                11: 'November',
+                12: 'Dezember'
+            }
+            return switch_dict[m] if m in switch_dict else None
+        except: return None
+
+    @staticmethod
+    def convert_month_to_int(m):
+        try: return int(m) if 0 < int(m) < 13 else None
+        except: return BullingerDB._convert_month_str2int(m)
+
+    @staticmethod
+    def _convert_month_str2int(m):
+        # m = str(m)
         switch_dict = {
             'Januar': 1,
             'Februar': 2,
@@ -529,12 +573,12 @@ class BullingerDB:
             'November': 11,
             'Dezember': 12
         }
-        return switch_dict[month] if month in switch_dict else 's.d.'
+        return switch_dict[m] if m in switch_dict else None
 
     @staticmethod
     def get_data_overview_month(year, month):
-        year = None if year == Config.SD else int(year)
-        m_num = None if month == Config.SD else None if int(month) == 0 else int(month)
+        year = BullingerDB.normalize_int_input(year)
+        m_num = BullingerDB.convert_month_to_int(month)
         data, null = [], []
         for d in Datum.query.filter_by(jahr_a=year, monat_a=m_num):
             r = Kartei.query.filter_by(id_brief=d.id_brief).first().rezensionen
@@ -544,7 +588,8 @@ class BullingerDB:
         data, new = null + sorted(data, key=itemgetter(1)), []
         for d in data:
             day = str(d[1])+'. ' if d[1] else Config.SD
-            mon = BullingerDB.convert_month(m_num)
+            mon = BullingerDB.convert_month_to_str(m_num)
+            mon = Config.SD if not mon else mon
             y = str(d[3]) if d[3] else Config.SD
             new.append([d[0], [' '.join([day, mon, y]), m_num], d[4], d[5]])
         data = new
