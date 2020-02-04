@@ -2,8 +2,7 @@
 
 {% block content %}
 
-<h1><a href="{{url_for('overview')}}">Übersicht</a> >
-	{{ vars["year"] }}
+<h1><a href="{{url_for('overview')}}">Übersicht</a> > {{ vars["year"] }}
 	{% include "user_status.html" %}
 </h1>
 

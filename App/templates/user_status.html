@@ -2,7 +2,7 @@
 {% block status %}
 
 <div id="status_info">
-    {% if vars["username"] == "Gast" %}
+    {% if vars["username"]|string() == "Gast" %}
         nicht angemeldet
     {% else %}
         {{ vars["username"] }} -
