@@ -208,13 +208,10 @@ class BullingerDB:
     def update_autograph(d, autograph_old):
         a_new, n = Autograph(), 0
         if autograph_old.standort != d["location"]: n += 1
-        print(autograph_old.standort, "-", d["location"], n)
         a_new.standort = d["location"]
         if autograph_old.signatur != d["signature"]: n += 1
-        print(autograph_old.signatur,  "-", d["signature"], n)
         a_new.signatur = d["signature"]
         if autograph_old.bemerkung != d["remarks"]: n += 1
-        print(autograph_old.bemerkung,  "-", d["remarks"], n)
         a_new.bemerkung = d["remarks"]
         return (a_new, n) if n > 0 else (None, 0)
 
