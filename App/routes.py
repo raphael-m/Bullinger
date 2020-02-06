@@ -21,7 +21,6 @@ import re
 import time
 
 APP_NAME = "KoKoS-Bullinger"
-database = BullingerDB(db.session)
 
 
 @app.errorhandler(404)
@@ -71,7 +70,7 @@ def setup():
 @app.route('/admin/delete_user/<username>', methods=['POST', 'GET'])
 @login_required
 def delete_user(username):
-    database.remove_user(username)
+    BullingerDB(db.session).remove_user(username)
     return redirect(url_for('admin'))
 
 
@@ -360,19 +359,20 @@ def _normalize_input(data):
 @app.route('/api/assignments/<id_brief>', methods=['POST'])
 # @login_required
 def save_data(id_brief):
+    bdb = BullingerDB(db.session)
     data, user, number_of_changes, t = _normalize_input(request.get_json()), current_user.username, 0, datetime.now()
-    number_of_changes += database.save_date(id_brief, data["card"]["date"], user, t)
-    number_of_changes += database.save_autograph(id_brief, data["card"]["autograph"], user, t)
-    number_of_changes += database.save_the_sender(id_brief, data["card"]["sender"], user, t)
-    number_of_changes += database.save_the_receiver(id_brief, data["card"]["receiver"], user, t)
-    number_of_changes += database.save_copy(id_brief, data["card"]["copy"], user, t)
-    number_of_changes += database.save_literature(id_brief, data["card"]["literature"], user, t)
-    number_of_changes += database.save_language(id_brief, data["card"]["language"], user, t)
-    number_of_changes += database.save_printed(id_brief, data["card"]["printed"], user, t)
-    number_of_changes += database.save_remark(id_brief, data["card"]["first_sentence"], user, t)
-    database.save_comment_card(id_brief, data["card"]["remarks"], user, t)
-    Kartei.update_file_status(database.dbs, id_brief, data["state"])
-    User.update_user(database.dbs, user, number_of_changes, data["state"])
+    number_of_changes += bdb.save_date(id_brief, data["card"]["date"], user, t)
+    number_of_changes += bdb.save_autograph(id_brief, data["card"]["autograph"], user, t)
+    number_of_changes += bdb.save_the_sender(id_brief, data["card"]["sender"], user, t)
+    number_of_changes += bdb.save_the_receiver(id_brief, data["card"]["receiver"], user, t)
+    number_of_changes += bdb.save_copy(id_brief, data["card"]["copy"], user, t)
+    number_of_changes += bdb.save_literature(id_brief, data["card"]["literature"], user, t)
+    number_of_changes += bdb.save_language(id_brief, data["card"]["language"], user, t)
+    number_of_changes += bdb.save_printed(id_brief, data["card"]["printed"], user, t)
+    number_of_changes += bdb.save_remark(id_brief, data["card"]["first_sentence"], user, t)
+    bdb.save_comment_card(id_brief, data["card"]["remarks"], user, t)
+    Kartei.update_file_status(db.session, id_brief, data["state"])
+    User.update_user(db.session, user, number_of_changes, data["state"])
     return redirect(url_for('assignment', id_brief=id_brief))
 
 

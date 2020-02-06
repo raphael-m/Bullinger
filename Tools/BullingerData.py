@@ -40,8 +40,9 @@ class BullingerData:
         self.path = path
         self.card_nr = card_nr
         self.second_try = False
-        self.input = self.get_data_as_dict(path)
-        self.output = self.extract_values()
+        if path:
+            self.input = self.get_data_as_dict(path)
+            self.output = self.extract_values()
 
     def get_data(self): return self.output
 
