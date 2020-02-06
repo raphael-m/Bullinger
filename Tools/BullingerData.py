@@ -380,7 +380,7 @@ class BullingerData:
                         if 0 < int(token) < 32:
                             day = int(token)
                             break
-            if year: return year, BullingerData.index_predicted, day
+            if year: return year, BullingerData.index_predicted+1, day
         # 2nd try (Kraken)
         if card_nr:
             path = BullingerData.PTH_OCR_KRAKEN+'/HBBW_Karteikarte_'+(5-len(str(card_nr)))*'0'+str(card_nr)+'.ocr'
