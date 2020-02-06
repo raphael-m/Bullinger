@@ -40,14 +40,6 @@ class Kartei(db.Model):
         self.pfad_PDF = path_pdf
 
     @staticmethod
-    def set_index(database, i):
-        zeros = (5 - len(str(i))) * '0'
-        pdf = os.path.join("Karteikarten/PDF", "HBBW_Karteikarte_" + zeros + str(i) + ".pdf")
-        ocr = os.path.join("Karteikarten/OCR", "HBBW_Karteikarte_" + zeros + str(i) + ".ocr")
-        database.add(Kartei(id_brief=i, path_pdf=pdf, path_ocr=ocr))
-        database.commit()
-
-    @staticmethod
     def update_file_status(database, id_brief, state):
         file = Kartei.query.filter_by(id_brief=id_brief).first()
         if file:

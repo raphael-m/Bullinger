@@ -22,4 +22,6 @@ class Config(object):
     S_INVALID = 'ungültig'
 
     # null values
-    SD = 's.d.'
+    SD = 's.d.'  # sine die
+    SN = 's.n.'  # sine nomine
+    SL = 's.l.'  # sine loco

@@ -6,7 +6,6 @@
 
 from Tools.Dictionaries import CountDict
 from Tools.Plots import *
-from Tools.Octopus import *
 from App.models import *
 from sqlalchemy import asc, desc, func, and_, or_
 from operator import itemgetter
@@ -27,10 +26,10 @@ C_PROGRESS = ["navy", "forestgreen", "orange", "red"]
 
 
 class BullingerDB:
-    NG_MAX = 4  # n-grams (precision)
 
     def __init__(self, database_session):
         self.dbs = database_session
+        self.bd = BullingerData(None)
         self.t = datetime.now()
 
     def update_timestamp(self):
@@ -52,140 +51,99 @@ class BullingerDB:
         self.dbs.query(Notiz).delete()
         self.dbs.commit()
 
-    @staticmethod
-    def setup(db_session, dir_path):
-        """ creates the entire date base basing on ocr data """
-        bdb, card_nr, ignored, errors = BullingerDB(db_session), 1, 0, []  # pre-processing
-        bdb.delete_all()
-        bdb.add_bullinger()
-        bdb.add_guest()
-        n_grams_bullinger = NGrams.get_ngram_dicts_dicts("Bullinger", BullingerDB.NG_MAX)
-        n_grams_heinrich = NGrams.get_ngram_dicts_dicts("Heinrich", BullingerDB.NG_MAX)
-        id_bullinger = BullingerDB.get_id_bullinger()
-        for path in FileSystem.get_file_paths(dir_path, recursively=False):  # db setup
+    def setup(self, dir_path):
+        self.delete_all()
+        card_nr, num_ignored_cards, ignored_card_ids = 1, 0, []
+        id_bullinger = self.add_bullinger()
+        for path in FileSystem.get_file_paths(dir_path, recursively=False):
             print(card_nr, path)
-            data = BullingerData.get_data_as_dict(path)
-            bdb.update_timestamp()
-            Kartei.set_index(bdb.dbs, card_nr)
-            if data:
-                bdb.add_date(card_nr, data)
-                bdb.add_correspondents(card_nr, data, [n_grams_bullinger, n_grams_heinrich], id_bullinger)
-                bdb.add_autograph(card_nr, data)
-                bdb.add_copy(card_nr, data)
-                bdb.add_literature(card_nr, data)
-                bdb.add_printed(card_nr, data)
-                remark = bdb.add_remark(card_nr, data)
-                bdb.add_lang(card_nr, data, remark)
+            self.update_timestamp()
+            self.set_index(card_nr)
+            self.bd = BullingerData(path)
+            if self.bd.get_data():
+                self.add_date(card_nr)
+                self.add_correspondents(card_nr, id_bullinger)
+                self.add_autograph(card_nr)
+                self.add_copy(card_nr)
+                self.add_literature(card_nr)
+                self.add_printed(card_nr)
+                self.add_remark(card_nr)
+                self.add_lang(card_nr)
             else:
                 print("*** WARNING, file ignored:", path)
-                bdb.push2db(Datum(), card_nr, ADMIN, bdb.t)
-                ignored += 1
-                errors.append(card_nr)
+                self.push2db(Datum(), card_nr, ADMIN, self.t)
+                num_ignored_cards += 1
+                ignored_card_ids.append(card_nr)
             card_nr += 1
-            bdb.dbs.commit()
-        if ignored: print("*** WARNING,", ignored, "files ignored:", errors)
+            self.dbs.commit()
+        if num_ignored_cards: print("*** WARNING,", num_ignored_cards, "files ignored:", ignored_card_ids)
         BullingerDB.count_correspondence()  # post-processing
 
-    @staticmethod
-    def run_ocr_octopus():
-        """ caution: takes 1-2 weeks for all 10'093 files """
-        pass
-        '''
-        in_out_pairs = []
-        file_ids = [k.id_brief for k in Kartei.query.all()]
-        for i in file_ids:
-            file_out = 'Karteikarten/OCR_Kraken/HBBW_Karteikarte_' + (5 - len(str(i))) * '0' + str(i) + '.ocr'
-            if not os.path.exists(file_out):
-                file_in = 'App/static/cards/HBBW_Karteikarte_' + (5 - len(str(i))) * '0' + str(i) + '.png'
-                in_out_pairs.append([file_in, file_out])
-        for pair in in_out_pairs:
-            print(pair[1])
-            sub_process = Octopus.run(pair[0], pair[1])
-            p = psutil.Process(sub_process.pid)
-            try:
-                p.wait(timeout=60 * 1.5)
-            except psutil.TimeoutExpired:
-                p.kill()
-                continue
-        '''
+    def add_bullinger(self):
+        self.dbs.add(Person(name="Bullinger", forename="Heinrich", place="Zürich", user=ADMIN, time=self.t))
+        self.dbs.commit()
+        return Person.query.filter_by(name="Bullinger", vorname="Heinrich", ort="Zürich").first().id
+
+    def set_index(self, i):
+        zeros = (5 - len(str(i))) * '0'
+        pdf = os.path.join("Karteikarten/PDF", "HBBW_Karteikarte_" + zeros + str(i) + ".pdf")
+        ocr = os.path.join("Karteikarten/OCR", "HBBW_Karteikarte_" + zeros + str(i) + ".ocr")
+        self.dbs.add(Kartei(id_brief=i, path_pdf=pdf, path_ocr=ocr))
+        self.dbs.commit()
 
     def remove_user(self, username):
-        """ delete a user and all his changes """
+        """ delete a user and all its changes """
         self.dbs.query(User).filter_by(username=username).delete()
         for t in [Datum, Person, Absender, Empfaenger, Autograph, Kopie, Sprache, Literatur, Gedruckt, Bemerkung, Notiz]:
             self.dbs.query(t).filter_by(anwender=username).delete()
         self.dbs.commit()
-
-    def add_bullinger(self):
-        if not Person.query.filter_by(name="Bullinger", vorname="Heinrich", ort="Zürich").first():
-            b = Person(name="Bullinger", forename="Heinrich", place="Zürich", user=ADMIN, time=self.t)
-            self.dbs.add(b)
-            self.dbs.commit()
-            return True
-        return False
 
     @staticmethod
     def get_bullinger_number_of_letters():
         b = Person.query.filter_by(name='Bullinger', vorname="Heinrich", ort='Zürich').first()
         return (b.gesendet, b.empfangen) if b else (0, 0)
 
-    @staticmethod
-    def get_id_bullinger():
-        b = Person.query.filter_by(name="Bullinger", vorname="Heinrich", ort="Zürich").first()
-        return b.id if b else None
-
-    def add_guest(self):
-        if not User.query.filter_by(username='Gast').first():
-            self.dbs.add(User(username='Gast', changes=0, finished=0, time=self.t))
-
-    def add_date(self, card_nr, data):
-        date = BullingerData.extract_date(card_nr, data)
-        if not date:  # Octopus
-            path = 'Karteikarten/OCR_Kraken/HBBW_Karteikarte_' + (5 - len(str(card_nr))) * '0' + str(card_nr) + '.ocr'
-            data = BullingerData.get_data_as_dict(path)
-            if data: date = BullingerData.extract_date(card_nr, data)
-            if not date: date = Datum()
+    def add_date(self, card_nr):
+        y, m, d = self.bd.get_date()
+        date = Datum(year_a=y, month_a=m, day_a=d)
         self.push2db(date, card_nr, ADMIN, self.t)
 
-    def add_correspondents(self, card_nr, data, n_grams, id_bullinger):
+    def add_correspondents(self, card_nr, id_bullinger):
         """ one has to be bullinger """
-        if BullingerData.is_bullinger_sender(data, n_grams[0], n_grams[1]):
-            self.push2db(Absender(id_person=id_bullinger), card_nr, ADMIN, self.t)
-            e = BullingerData.analyze_address(data["Empfänger"])
-            if not Person.query.filter_by(name=e[0], vorname=e[1], ort=e[2]).first():
-                self.push2db(Person(name=e[0], forename=e[1], place=e[2]), card_nr, ADMIN, self.t)
-            ref = Person.query.filter_by(name=e[0], vorname=e[1], ort=e[2]).first().id
-            self.push2db(Empfaenger(id_brief=card_nr, id_person=ref, remark=e[3]), card_nr, ADMIN, self.t)
+        if self.bd.is_bullinger_sender():
+            nn, vn, ort, bem = self.bd.get_receiver()
+            self.push2db(Absender(id_person=id_bullinger, remark=bem), card_nr, ADMIN, self.t)
+            p = Person.query.filter_by(name=nn, vorname=vn, ort=ort).first()
+            if not p: self.push2db(Person(name=nn, forename=vn, place=ort), card_nr, ADMIN, self.t)
+            p_id = Person.query.filter_by(name=nn, vorname=vn, ort=ort).first().id  # p.id is None (!)
+            self.push2db(Empfaenger(id_brief=card_nr, id_person=p_id, remark=bem), card_nr, ADMIN, self.t)
         else:
             self.push2db(Empfaenger(id_brief=card_nr, id_person=id_bullinger), card_nr, ADMIN, self.t)
-            a = BullingerData.analyze_address(data["Absender"])
-            if not Person.query.filter_by(name=a[0], vorname=a[1], ort=a[2]).first():
-                self.push2db(Person(name=a[0], forename=a[1], place=a[2]), card_nr, ADMIN, self.t)
-            ref = Person.query.filter_by(name=a[0], vorname=a[1], ort=a[2]).first().id
-            self.push2db(Absender(id_brief=card_nr, id_person=ref, remark=a[3]), card_nr, ADMIN, self.t)
+            nn, vn, ort, bem = self.bd.get_sender()
+            p = Person.query.filter_by(name=nn, vorname=vn, ort=ort).first()
+            if not p: self.push2db(Person(name=nn, forename=vn, place=ort), card_nr, ADMIN, self.t)
+            p_id = Person.query.filter_by(name=nn, vorname=vn, ort=ort).first().id
+            self.push2db(Absender(id_brief=card_nr, id_person=p_id, remark=bem), card_nr, ADMIN, self.t)
 
-    def add_autograph(self, card_nr, data):
-        place, signature, remark = BullingerData.get_ssu(data, "A")
+    def add_autograph(self, card_nr):
+        place, signature, remark = self.bd.get_autograph()
         self.push2db(Autograph(location=place, signature=signature, remark=remark), card_nr, ADMIN, self.t)
 
-    def add_copy(self, card_nr, data):
-        place, signature, remark = BullingerData.get_ssu(data, "B")
+    def add_copy(self, card_nr):
+        place, signature, remark = self.bd.get_copy()
         self.push2db(Kopie(location=place, signature=signature, remark=remark), card_nr, ADMIN, self.t)
 
-    def add_literature(self, card_nr, data):
-        self.push2db(Literatur(literature=BullingerData.get_literature(data)), card_nr, ADMIN, self.t)
+    def add_literature(self, card_nr):
+        self.push2db(Literatur(literature=self.bd.get_literature()), card_nr, ADMIN, self.t)
 
-    def add_printed(self, card_nr, data):
-        self.push2db(Gedruckt(printed=BullingerData.get_printed(data)), card_nr, ADMIN, self.t)
+    def add_printed(self, card_nr):
+        self.push2db(Gedruckt(printed=self.bd.get_printed()), card_nr, ADMIN, self.t)
 
-    def add_lang(self, card_nr, data, remark):
-        for lang in BullingerData.get_lang(data, remark):
-            self.push2db(Sprache(language=lang), card_nr, ADMIN, self.t)
+    def add_lang(self, card_nr):
+        for lang in self.bd.get_sprache(): self.push2db(Sprache(language=lang), card_nr, ADMIN, self.t)
 
-    def add_remark(self, card_nr, data):
-        remark = BullingerData.get_remark(data)
-        self.push2db(Bemerkung(remark=remark), card_nr, ADMIN, self.t)
-        return remark
+    def add_remark(self, card_nr):
+        self.push2db(Bemerkung(remark=self.bd.get_bemerkung()), card_nr, ADMIN, self.t)
 
     @staticmethod
     def count_correspondence():
@@ -250,10 +208,13 @@ class BullingerDB:
     def update_autograph(d, autograph_old):
         a_new, n = Autograph(), 0
         if autograph_old.standort != d["location"]: n += 1
+        print(autograph_old.standort, "-", d["location"], n)
         a_new.standort = d["location"]
         if autograph_old.signatur != d["signature"]: n += 1
+        print(autograph_old.signatur,  "-", d["signature"], n)
         a_new.signatur = d["signature"]
         if autograph_old.bemerkung != d["remarks"]: n += 1
+        print(autograph_old.bemerkung,  "-", d["remarks"], n)
         a_new.bemerkung = d["remarks"]
         return (a_new, n) if n > 0 else (None, 0)
 
@@ -661,10 +622,8 @@ class BullingerDB:
     @staticmethod
     def get_user_stats(user_name):
         u = User.query.filter_by(username=user_name).first()
-        if u:
-            return u.changes, u.finished
-        else:
-            return 0, 0
+        if u: return u.changes, u.finished
+        else: return 0, 0
 
     @staticmethod
     def get_language_stats():
@@ -725,10 +684,32 @@ class BullingerDB:
     def get_top_n_sender(n):
         p = Person.query.order_by(desc(Person.gesendet)).all()
         if n > len(p): n = len(p)
-        return [[x.name, x.vorname, x.ort, x.gesendet] for x in p][0:n]
+        return [[x.name if x.name else Config.SN,
+                 x.vorname if x.vorname else Config.SN,
+                 x.ort if x.ort else Config.SL, x.gesendet] for x in p][0:n]
 
     @staticmethod
     def get_top_n_receiver(n):
         p = Person.query.order_by(desc(Person.empfangen)).all()
         if n > len(p): n = len(p)
-        return [[x.name, x.vorname, x.ort, x.empfangen] for x in p][0:n]
+        return [[x.name if x.name else Config.SN,
+                 x.vorname if x.vorname else Config.SN,
+                 x.ort if x.ort else Config.SL, x.empfangen] for x in p][0:n]
+
+    @staticmethod
+    def get_top_n_sender_ignoring_place(n):
+        p = db.session.query(Person.name, Person.vorname, func.sum(Person.gesendet))\
+            .group_by(Person.name, Person.vorname)\
+            .order_by(desc(func.sum(Person.gesendet))).all()
+        if n > len(p): n = len(p)
+        return [[x[0] if x[0] else Config.SN,
+                 x[1] if x[1] else Config.SN, x[2]] for x in p][0:n]
+
+    @staticmethod
+    def get_top_n_receiver_ignoring_place(n):
+        p = db.session.query(Person.name, Person.vorname, func.sum(Person.empfangen))\
+            .group_by(Person.name, Person.vorname)\
+            .order_by(desc(func.sum(Person.empfangen))).all()
+        if n > len(p): n = len(p)
+        return [[x[0] if x[0] else Config.SN,
+                 x[1] if x[1] else Config.SN, x[2]] for x in p][0:n]

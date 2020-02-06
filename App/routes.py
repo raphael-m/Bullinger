@@ -61,11 +61,10 @@ def get_base_client_variables():
 
 
 @app.route('/admin/setup', methods=['POST', 'GET'])
-@login_required
+# @login_required
 def setup():
     # PASSWORD PROTECTION NEEDED                                                                                    !
-    # BullingerDB.run_ocr_octopus()  # ~1-2 weeks
-    BullingerDB.setup(db.session, "Karteikarten/OCR")  # ~1h
+    BullingerDB(db.session).setup("Karteikarten/OCR")  # ~1h
     return redirect(url_for('admin'))
 
 
@@ -117,7 +116,7 @@ def register():
 # Overviews
 # - year
 @app.route('/overview', methods=['POST', 'GET'])
-@login_required
+# @login_required
 def overview():
     data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(None)
     return render_template('overview.html', title="Übersicht", vars={
@@ -132,7 +131,7 @@ def overview():
 
 # - months
 @app.route('/overview_year/<year>', methods=['POST', 'GET'])
-@login_required
+# @login_required
 def overview_year(year):
     data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(year)
     return render_template('overview_year.html', title="Übersicht", vars={
@@ -148,7 +147,7 @@ def overview_year(year):
 
 # -days
 @app.route('/overview_month/<year>/<month>', methods=['POST', 'GET'])
-@login_required
+# @login_required
 def overview_month(year, month):
     if month == Config.SD: month = 0
     data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview_month(year, month)
@@ -165,9 +164,10 @@ def overview_month(year, month):
     })
 
 
-@app.route('/stats', methods=['POST', 'GET'])
-def stats():
-    n_top, id_file = 50, str(int(time.time()))
+@app.route('/stats', methods=['GET'])
+@app.route('/stats/<n_top>', methods=['GET'])
+def stats(n_top=50):
+    n_top, id_file = int(n_top), str(int(time.time()))
     stats_languages = BullingerDB.get_language_stats()
     BullingerDB.create_plot_user_stats(current_user.username, id_file)
     BullingerDB.create_plot_lang(stats_languages, id_file)
@@ -183,8 +183,51 @@ def stats():
             "lang_stats": stats_languages,
             "top_s": BullingerDB.get_top_n_sender(n_top),
             "top_r": BullingerDB.get_top_n_receiver(n_top),
+            "top_s_gbp": BullingerDB.get_top_n_sender_ignoring_place(n_top),
+            "top_r_gbp": BullingerDB.get_top_n_receiver_ignoring_place(n_top)
         }
     )
+
+
+@app.route('/overview/person_by_name/<name>', methods=['GET'])
+def person_by_name(name):
+    return render_template(
+        "overview_general.html",
+        title="Statistiken",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "user_stats_all": BullingerDB.get_user_stats_all(current_user.username),
+            "table": []
+        }
+    )
+
+@app.route('/overview/person_by_forename/<forename>', methods=['GET'])
+def person_by_forename(forename):
+    return render_template(
+        "overview_general.html",
+        title="Statistiken",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "user_stats_all": BullingerDB.get_user_stats_all(current_user.username),
+            "table": []
+        }
+    )
+
+@app.route('/overview/person_by_place/<place>', methods=['GET'])
+def person_by_place(place):
+    return render_template(
+        "overview_general.html",
+        title="Statistiken",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "user_stats_all": BullingerDB.get_user_stats_all(current_user.username),
+            "table": []
+        }
+    )
+
 
 @app.route('/faq', methods=['POST', 'GET'])
 def faq():
@@ -193,7 +236,7 @@ def faq():
 
 
 @app.route('/quick_start', methods=['POST', 'GET'])
-@login_required
+# @login_required
 def quick_start():
     i = BullingerDB.quick_start()
     if i:  # next card with status 'offen' or 'unklar'
@@ -202,7 +245,7 @@ def quick_start():
 
 
 @app.route('/assignment/<id_brief>', methods=['GET'])
-@login_required
+# @login_required
 def assignment(id_brief):
     ui_path = Config.BULLINGER_UI_PATH
     ui_path = ui_path + ("" if ui_path.endswith("/") else "/")
@@ -223,7 +266,7 @@ def assignment(id_brief):
 
 
 @app.route('/api/assignments/<id_brief>', methods=['GET'])
-@login_required
+# @login_required
 def send_data(id_brief):
     id_brief = int(id_brief)
     kartei = Kartei.query.filter_by(id_brief=id_brief).first()
@@ -315,18 +358,27 @@ def _normalize_input(data):
 
 
 @app.route('/api/assignments/<id_brief>', methods=['POST'])
-@login_required
+# @login_required
 def save_data(id_brief):
     data, user, number_of_changes, t = _normalize_input(request.get_json()), current_user.username, 0, datetime.now()
     number_of_changes += database.save_date(id_brief, data["card"]["date"], user, t)
+    print("Datum", number_of_changes)
     number_of_changes += database.save_autograph(id_brief, data["card"]["autograph"], user, t)
+    print("Auto", number_of_changes)
     number_of_changes += database.save_the_sender(id_brief, data["card"]["sender"], user, t)
+    print("Sender", number_of_changes)
     number_of_changes += database.save_the_receiver(id_brief, data["card"]["receiver"], user, t)
+    print("Empfänger", number_of_changes)
     number_of_changes += database.save_copy(id_brief, data["card"]["copy"], user, t)
+    print("Kopie", number_of_changes)
     number_of_changes += database.save_literature(id_brief, data["card"]["literature"], user, t)
+    print("Literatur", number_of_changes)
     number_of_changes += database.save_language(id_brief, data["card"]["language"], user, t)
+    print("Sprache", number_of_changes)
     number_of_changes += database.save_printed(id_brief, data["card"]["printed"], user, t)
+    print("Gedruckt", number_of_changes)
     number_of_changes += database.save_remark(id_brief, data["card"]["first_sentence"], user, t)
+    print("Satz", number_of_changes)
     database.save_comment_card(id_brief, data["card"]["remarks"], user, t)
     Kartei.update_file_status(database.dbs, id_brief, data["state"])
     User.update_user(database.dbs, user, number_of_changes, data["state"])
@@ -334,7 +386,7 @@ def save_data(id_brief):
 
 
 @app.route('/api/persons', methods=['GET'])
-@login_required
+# @login_required
 def get_persons():
     recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
     recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()

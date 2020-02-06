@@ -76,9 +76,12 @@
 	<h2>Briefwechsel</h2>
 	<div class="h2_section">
 
-		<p>Die häufigsten Korrespondenten:</p>
+		<p>Die eifrigsten Schreiber...</p>
 
-		<h3>Empfangen/Verschickt (je die top {{ vars["n_top"] }})</h3>
+		<h3>Briefe empfangen/verschickt (je die top {{ vars["n_top"] }})</h3>
+
+		<p>Differenziert nacht Ortschaften:</p>
+
 		<div class="parallel">
 			<table class="js-sort-table paleBlueRows">
 				<thead class="my_table_head">
@@ -93,9 +96,9 @@
 				<!-- n top Empfänger -->
 				{% for e in vars["top_r"] %}
 					<tr class="my_table_row">
-						<td class="my_table_cell">{{ e[0] }}</td>
-						<td class="my_table_cell">{{ e[1] }}</td>
-						<td class="my_table_cell">{{ e[2] }}</td>
+						<td class="my_table_cell"><a href="{{url_for('person_by_name', name=e[0])}}"> {{ e[0] }} </a></td>
+						<td class="my_table_cell"><a href="{{url_for('person_by_forename', forename=e[1])}}"> {{ e[1] }} </a></td>
+						<td class="my_table_cell"><a href="{{url_for('person_by_place', place=e[2])}}"> {{ e[2] }} </a></td>
 						<td class="my_table_cell">{{ e[3] }}</td>
 					</tr>
 				{% endfor %}
@@ -117,10 +120,61 @@
 				<!-- n top Absender -->
 				{% for s in vars["top_s"] %}
 					<tr class="my_table_row">
-						<td class="my_table_cell">{{ s[0] }}</td>
-						<td class="my_table_cell">{{ s[1] }}</td>
-						<td class="my_table_cell">{{ s[2] }}</td>
+						<td class="my_table_cell"><a href="{{url_for('person_by_name', name=s[0])}}"> {{ s[0] }} </a></td>
+						<td class="my_table_cell"><a href="{{url_for('person_by_forename', forename=s[1])}}"> {{ s[1] }} </a></td>
+						<td class="my_table_cell"><a href="{{url_for('person_by_place', place=s[2])}}"> {{ s[2] }} </a></td>
 						<td class="my_table_cell">{{ s[3] }}</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="clearing"></div>
+
+
+	<h3>Briefe empfangen/verschickt (je die top {{ vars["n_top"] }})</h3>
+
+		<p>Undifferenziert nacht Ortschaften:</p>
+
+		<div class="parallel">
+			<table class="js-sort-table paleBlueRows">
+				<thead class="my_table_head">
+					<tr class="my_table_head_row">
+						<th class="js-sort-string my_table_head_cell">Name</th>
+						<th class="js-sort-string my_table_head_cell">Vorname</th>
+						<th class="js-sort-number my_table_head_cell">empfangen</th>
+					</tr>
+				</thead>
+				<tbody>
+				<!-- n top Empfänger -->
+				{% for e in vars["top_r_gbp"] %}
+					<tr class="my_table_row">
+						<td class="my_table_cell"><a href="{{url_for('person_by_name', name=e[0])}}"> {{ e[0] }} </a></td>
+						<td class="my_table_cell"><a href="{{url_for('person_by_forename', forename=e[1])}}"> {{ e[1] }} </a></td>
+						<td class="my_table_cell">{{ e[2] }}</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+
+		<div class="parallel">
+			<table class="js-sort-table paleBlueRows">
+				<thead class="my_table_head">
+					<tr class="my_table_head_row">
+						<th class="js-sort-string my_table_head_cell">Name</th>
+						<th class="js-sort-string my_table_head_cell">Vorname</th>
+						<th class="js-sort-number my_table_head_cell">gesendet</th>
+					</tr>
+				</thead>
+				<tbody>
+				<!-- n top Absender -->
+				{% for s in vars["top_s_gbp"] %}
+					<tr class="my_table_row">
+						<td class="my_table_cell"><a href="{{url_for('person_by_name', name=s[0])}}"> {{ s[0] }} </a></td>
+						<td class="my_table_cell"><a href="{{url_for('person_by_forename', forename=s[1])}}"> {{ s[1] }} </a></td>
+						<td class="my_table_cell">{{ s[2] }}</td>
 					</tr>
 				{% endfor %}
 				</tbody>

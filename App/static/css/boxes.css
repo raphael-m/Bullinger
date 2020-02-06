@@ -30,3 +30,22 @@
     font-weight: 400;
     text-align: center;
 }
+
+.heiri_container {
+    background: blue;
+    width: 200px;
+    height: 120px;
+}
+
+/* resize images */
+.container img {
+    width: 100%;
+    height: auto;
+}
+
+.allg_left { width: 14%; }
+.allg_right { width: 86%; }
+
+.clearing {
+    clear: left;
+}
