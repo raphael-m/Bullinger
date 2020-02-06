@@ -61,7 +61,7 @@ def get_base_client_variables():
 
 
 @app.route('/admin/setup', methods=['POST', 'GET'])
-# @login_required
+@login_required
 def setup():
     # PASSWORD PROTECTION NEEDED                                                                                    !
     BullingerDB(db.session).setup("Karteikarten/OCR")  # ~1h
@@ -116,7 +116,7 @@ def register():
 # Overviews
 # - year
 @app.route('/overview', methods=['POST', 'GET'])
-# @login_required
+@login_required
 def overview():
     data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(None)
     return render_template('overview.html', title="Übersicht", vars={
@@ -131,7 +131,7 @@ def overview():
 
 # - months
 @app.route('/overview_year/<year>', methods=['POST', 'GET'])
-# @login_required
+@login_required
 def overview_year(year):
     data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(year)
     return render_template('overview_year.html', title="Übersicht", vars={
@@ -147,7 +147,7 @@ def overview_year(year):
 
 # -days
 @app.route('/overview_month/<year>/<month>', methods=['POST', 'GET'])
-# @login_required
+@login_required
 def overview_month(year, month):
     if month == Config.SD: month = 0
     data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview_month(year, month)
@@ -236,7 +236,7 @@ def faq():
 
 
 @app.route('/quick_start', methods=['POST', 'GET'])
-# @login_required
+@login_required
 def quick_start():
     i = BullingerDB.quick_start()
     if i:  # next card with status 'offen' or 'unklar'
@@ -245,7 +245,7 @@ def quick_start():
 
 
 @app.route('/assignment/<id_brief>', methods=['GET'])
-# @login_required
+@login_required
 def assignment(id_brief):
     ui_path = Config.BULLINGER_UI_PATH
     ui_path = ui_path + ("" if ui_path.endswith("/") else "/")
@@ -266,7 +266,7 @@ def assignment(id_brief):
 
 
 @app.route('/api/assignments/<id_brief>', methods=['GET'])
-# @login_required
+@login_required
 def send_data(id_brief):
     id_brief = int(id_brief)
     kartei = Kartei.query.filter_by(id_brief=id_brief).first()
