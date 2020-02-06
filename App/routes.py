@@ -238,8 +238,7 @@ def faq():
 @login_required
 def quick_start():
     i = BullingerDB.quick_start()
-    if i:  # next card with status 'offen' or 'unklar'
-        return redirect(url_for('assignment', id_brief=str(i)))
+    if i: return redirect(url_for('assignment', id_brief=str(i)))
     return redirect(url_for('overview'))  # we are done !
 
 

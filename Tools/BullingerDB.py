@@ -9,7 +9,7 @@ from Tools.Plots import *
 from App.models import *
 from sqlalchemy import asc, desc, func, and_, or_
 from operator import itemgetter
-from random import sample
+from random import sample, randrange
 
 import os, time
 import numpy as np
@@ -573,10 +573,10 @@ class BullingerDB:
     @staticmethod
     def quick_start():  # ">>"
         """ return the first card with status 'offen'; if there is none anymore, return cards with state 'unklar'"""
-        e = Kartei.query.filter_by(status='offen').first()
-        if e: return e.id_brief
-        e = Kartei.query.filter_by(status='unklar').first()
-        if e: return e.id_brief
+        e = Kartei.query.filter_by(status='offen').all()
+        if e: return e[randrange(len(e))].id_brief
+        e = Kartei.query.filter_by(status='unklar').all()
+        if e: return e[randrange(len(e))].id_brief
         return None  # redirect to another page...
 
     # Navigation between assignments
