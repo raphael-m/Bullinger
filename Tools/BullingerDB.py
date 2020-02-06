@@ -29,7 +29,7 @@ class BullingerDB:
 
     def __init__(self, database_session):
         self.dbs = database_session
-        self.bd = BullingerData(None)
+        self.bd = BullingerData(None, None)
         self.t = datetime.now()
 
     def update_timestamp(self):
@@ -59,7 +59,7 @@ class BullingerDB:
             print(card_nr, path)
             self.update_timestamp()
             self.set_index(card_nr)
-            self.bd = BullingerData(path)
+            self.bd = BullingerData(path, card_nr)
             if self.bd.get_data():
                 self.add_date(card_nr)
                 self.add_correspondents(card_nr, id_bullinger)
@@ -141,6 +141,7 @@ class BullingerDB:
 
     def add_lang(self, card_nr):
         for lang in self.bd.get_sprache(): self.push2db(Sprache(language=lang), card_nr, ADMIN, self.t)
+        if not len(self.bd.get_sprache()): self.push2db(Sprache(language=None), card_nr, ADMIN, self.t)
 
     def add_remark(self, card_nr):
         self.push2db(Bemerkung(remark=self.bd.get_bemerkung()), card_nr, ADMIN, self.t)
@@ -625,8 +626,7 @@ class BullingerDB:
     @staticmethod
     def get_language_stats():
         cd, data, no_lang = CountDict(), [], 0
-        for s in Sprache.query.all():
-            cd.add(s.sprache)
+        for s in Sprache.query.all(): cd.add(s.sprache)
         n = Kartei.query.count()
         for s in cd: data.append([s, cd[s], round(cd[s] / n * 100, 3)])
         # for i in range(n+1):  # too expensive ...

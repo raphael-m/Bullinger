@@ -36,8 +36,10 @@ class BullingerData:
 
     PTH_OCR_KRAKEN = "Karteikarten/OCR_Kraken/"
 
-    def __init__(self, path):
+    def __init__(self, path, card_nr):
         self.path = path
+        self.card_nr = card_nr
+        self.second_try = False
         self.input = self.get_data_as_dict(path)
         self.output = self.extract_values()
 
@@ -46,7 +48,7 @@ class BullingerData:
     def extract_values(self):
         if self.input:
             data = dict()
-            data["year"], data["month"], data["day"] = self.extract_date(self.input)
+            data["year"], data["month"], data["day"] = self.extract_date(self.input, self.card_nr)
             data["a_nn"], data["a_vn"], data["a_ort"], data["a_bem"] = self.analyze_address("Absender")
             data["e_nn"], data["e_vn"], data["e_ort"], data["e_bem"] = self.analyze_address("Empfänger")
             data["a_standort"], data["a_signatur"], data["a_umfang"] = self.extract_ssu("Autograph")
@@ -321,7 +323,7 @@ class BullingerData:
         ["Juli"], ["August"], ["September"], ["Oktober", ], ["November"], ["Dezember"]
     ], 9  # October
 
-    def extract_date(self, data, card_nr=0):
+    def extract_date(self, data, card_nr):
         if "Datum" in data:
             data = [i for j in data["Datum"] for i in j]
             data = [re.sub("[^A-Za-z0-9]", '', token).strip() for token in data]
@@ -381,10 +383,10 @@ class BullingerData:
                             day = int(token)
                             break
             if year: return year, BullingerData.index_predicted+1, day
-        # 2nd try (Kraken)
-        if card_nr:
+        if not self.second_try:
+            self.second_try = True
             path = BullingerData.PTH_OCR_KRAKEN+'/HBBW_Karteikarte_'+(5-len(str(card_nr)))*'0'+str(card_nr)+'.ocr'
-            self.extract_date(self.get_data_as_dict(path), card_nr=0)
+            return self.extract_date(self.get_data_as_dict(path), card_nr)
         return None, None, None
 
     def get_data_as_dict(self, path):
@@ -423,7 +425,7 @@ class BullingerData:
             return data
         else:
             print("*** Warning, file ignored:", self.path)
-            return None
+            return dict()
 
     @staticmethod
     def get_attribute_name(x, y):
