@@ -42,16 +42,44 @@
 	{% include "overview__status.html" %}
 
 
-	<h2>Personen</h2>
+	<h2>Korrespondenten</h2>
 
-	<p>Wählen Sie einen Nachnamen (die Zahl in Klammern gibt an, wieviele (scheinbar) verschiedene
-		Personen mit diesem Namen in der Datenbank enthalten sind):</p>
+	<p>Alle Personen (Name, Vorname, Ort)...</p>
 
-	{% for p in vars["last_names_sorted_by_frequency"] %}
-	<span>
-		<a href="{{url_for('person_by_name', name=p[0])}}">{{ p[0] }}</a> ({{ p[1] }});
-	</span>
-	{% endfor %}
+	<p>Anzahl Treffer: {{ vars["hits"] }}</p>
+
+	<table class="js-sort-table paleBlueRows">
+		<thead class="my_table_head">
+			<tr class="my_table_head_row">
+				<th class="js-sort-string my_table_head_cell">Link</th>
+				<th class="js-sort-string my_table_head_cell">Name</th>
+				<th class="js-sort-string my_table_head_cell">Vorname</th>
+				<th class="js-sort-string my_table_head_cell">Ort</th>
+				<th class="js-sort-number my_table_head_cell">gesendet</th>
+				<th class="js-sort-number my_table_head_cell">empfangen</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for d in vars["persons"] %}
+			<tr class="my_table_row">
+				<td class="my_table_cell">
+					<a href="{{url_for('overview_cards_of_person', name=d[0], forename=d[1], place=d[2])}}">(alle)</a>
+				</td>
+				<td class="my_table_cell">
+					<a href="{{url_for('person_by_name', name=d[0])}}">{{ d[0] }}</a>
+				</td>
+				<td class="my_table_cell">
+					<a href="{{url_for('person_by_forename', forename=d[1])}}">{{ d[1] }}</a>
+				</td>
+				<td class="my_table_cell">
+					<a href="{{url_for('person_by_place', place=d[2])}}">{{ d[2] }}</a>
+				</td>
+				<td class="my_table_cell">{{ d[3] }}</td>
+				<td class="my_table_cell">{{ d[4] }}</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
 
 </div>
 

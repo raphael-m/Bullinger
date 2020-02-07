@@ -110,11 +110,13 @@ def register():
 @login_required
 def overview():
     data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(None)
+    persons = BullingerDB.get_persons_by_var(None, None)
     return render_template('overview.html', title="Übersicht", vars={
         "username": current_user.username,
         "user_stats": BullingerDB.get_user_stats(current_user.username),
         "table": data_overview,
-        "last_names_sorted_by_frequency": [],
+        "persons": persons,
+        "hits": len(persons),
         "url_plot": plot_url,
         "num_of_cards": num_of_cards,
         "stats": data_percentages,
@@ -153,6 +155,26 @@ def overview_month(year, month):
         "stats": data_percentages
     })
 
+@app.route('/overview/<name>/<forename>/<place>', methods=['GET'])
+def overview_cards_of_person(name, forename, place):
+    data = BullingerDB.get_overview_person(
+        None if name == Config.SN else name,
+        None if forename == Config.SN else forename,
+        None if place == Config.SL else place)
+    return render_template(
+        "overview_general_cards.html",
+        title=name + ', ' + forename + ', ' + place,
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "name": name,
+            "forename": forename,
+            "place": place,
+            "table": data,
+            "hits": len(data),
+        }
+    )
+
 @app.route('/stats', methods=['GET'])
 @app.route('/stats/<n_top>', methods=['GET'])
 def stats(n_top=50):
@@ -179,7 +201,7 @@ def stats(n_top=50):
 
 @app.route('/overview/person_by_name/<name>', methods=['GET'])
 def person_by_name(name):
-    data = BullingerDB.get_persons_by_var(name, 0)
+    data = BullingerDB.get_persons_by_var(None if name == Config.SN else name, 0)
     return render_template(
         "overview_general.html",
         title="Statistiken",
@@ -197,7 +219,7 @@ def person_by_name(name):
 
 @app.route('/overview/person_by_forename/<forename>', methods=['GET'])
 def person_by_forename(forename):
-    data = BullingerDB.get_persons_by_var(forename, 1)
+    data = BullingerDB.get_persons_by_var(None if forename == Config.SN else forename, 1)
     return render_template(
         "overview_general.html",
         title="Statistiken",
@@ -215,7 +237,7 @@ def person_by_forename(forename):
 
 @app.route('/overview/person_by_place/<place>', methods=['GET'])
 def person_by_place(place):
-    data = BullingerDB.get_persons_by_var(place, 2)
+    data = BullingerDB.get_persons_by_var(None if place == Config.SL else place, 2)
     return render_template(
         "overview_general.html",
         title="Statistiken",

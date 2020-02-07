@@ -7,7 +7,7 @@
 from Tools.Dictionaries import CountDict
 from Tools.Plots import *
 from App.models import *
-from sqlalchemy import asc, desc, func, and_, or_
+from sqlalchemy import asc, desc, func, and_, or_, literal, union_all, select
 from sqlalchemy.orm import aliased
 from collections import defaultdict
 from operator import itemgetter
@@ -720,84 +720,90 @@ class BullingerDB:
         recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
         # sender
         p1 = db.session.query(
-                Kartei.id_brief,
-                Kartei.rezensionen,
-                Kartei.status,
-                recent_sender.c.id_brief,
-                recent_sender.c.id_person,
-                Person.id,
-                Person.name,
-                Person.vorname,
-                Person.ort
-            ).filter(
+                Person.id.label("p_id_a"),
+                Person.name.label("p_name"),
+                Person.vorname.label("p_forename"),
+                Person.ort.label("p_place"),
+                func.count(Person.id).label("s_count"),
+                literal(0).label("r_count"),
+                recent_sender.c.id_brief.label("id_a"),
+                recent_sender.c.id_person.label("p_id_b"))\
+            .filter(
                 Person.name == variable if mode is 0
                 else Person.vorname == variable if mode is 1
-                else Person.ort == variable
-            )\
-            .join(recent_sender, recent_sender.c.id_person == Person.id)\
-            .join(Kartei, recent_sender.c.id_brief == Kartei.id_brief)
+                else Person.ort == variable if mode is 2
+                else True)\
+            .join(recent_sender, recent_sender.c.id_person == Person.id) \
+            .group_by(Person.name, Person.vorname, Person.ort)
         # receiver
         p2 = db.session.query(
-            Kartei.id_brief,
-            Kartei.rezensionen,
-            Kartei.status,
-            recent_receiver.c.id_brief,
-            recent_receiver.c.id_person,
-            Person.id,
-            Person.name,
-            Person.vorname,
-            Person.ort
-        ).filter(
-            Person.name == variable if mode is 0
-            else Person.vorname == variable if mode is 1
-            else Person.ort == variable)\
-        .join(recent_receiver, recent_receiver.c.id_person == Person.id)\
-        .join(Kartei, recent_receiver.c.id_brief == Kartei.id_brief)
+                Person.id.label("p_id_a"),
+                Person.name.label("p_name"),
+                Person.vorname.label("p_forename"),
+                Person.ort.label("p_place"),
+                literal(0).label("s_count"),
+                func.count(Person.id).label("r_count"),
+                recent_receiver.c.id_brief.label("id_a"),
+                recent_receiver.c.id_person.label("p_id_b"))\
+            .filter(
+                Person.name == variable if mode is 0
+                else Person.vorname == variable if mode is 1
+                else Person.ort == variable if mode is 2
+                else True)\
+            .join(recent_receiver, recent_receiver.c.id_person == Person.id)\
+            .group_by(Person.name, Person.vorname, Person.ort)
+        # full outer join
+        p_all = union_all(p1, p2).alias("united")
+        results = db.session.query(
+                p_all.c.p_name,
+                p_all.c.p_forename,
+                p_all.c.p_place,
+                func.sum(p_all.c.s_count),
+                func.sum(p_all.c.r_count)
+            ).group_by(
+                p_all.c.p_name,
+                p_all.c.p_forename,
+                p_all.c.p_place,)
+        return sorted([[r[0] if r[0] else Config.SN,
+                        r[1] if r[1] else Config.SN,
+                        r[2] if r[2] else Config.SL, r[3], r[4]] for r in results], key=itemgetter(3), reverse=True)
 
-        data, d, count_dict = [], defaultdict(lambda: False), CountDict()
-        for x in [p1, p2]:
-            for p in x:
-                count_dict.add(p.name if p.name else Config.SN)
-                if not d[p.id_person]:
-                    data.append([
-                        'öffnen',
-                        p.name if p.name else Config.SN,
-                        p.vorname if p.vorname else Config.SN,
-                        p.ort if p.ort else Config.SL,
-                        None,
-                        None
-                    ])
-                    d[p.id_person] = True
-        data = sorted(data, key=lambda t: t[1])
-        for row in data:
-            row[4] = len(
-                db.session.query(
-                    Person.id,
-                    Person.name,
-                    Person.vorname,
-                    Person.ort,
-                    recent_sender.c.id_brief,
-                    recent_sender.c.id_person)
-                .filter(Person.name == row[1])
-                .filter(Person.vorname == row[2])
-                .filter(Person.ort == row[3])
-                .join(recent_sender, recent_sender.c.id_person == Person.id)
-                .all()
-            )
-            print(row[4])
-            row[5] = len(
-                db.session.query(
-                    Person.id,
-                    Person.name,
-                    Person.vorname,
-                    Person.ort,
-                    recent_receiver.c.id_brief,
-                    recent_receiver.c.id_person)
-                .filter(Person.name == row[1])
-                .filter(Person.vorname == row[2])
-                .filter(Person.ort == row[3])
-                .join(recent_receiver, recent_receiver.c.id_person == Person.id)
-                .all()
-            )
-            print(row[5])
-        return data
+    @staticmethod
+    def get_overview_person(name, forename, place):
+        recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
+        recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
+        # sender
+        p1 = db.session.query(
+                Person.id.label("p_id_a"),
+                Person.name.label("p_name"),
+                Person.vorname.label("p_forename"),
+                Person.ort.label("p_place"),
+                recent_sender.c.id_person.label("p_id_b"),
+                recent_sender.c.id_brief.label("id_a"))\
+            .filter(Person.name == name)\
+            .filter(Person.vorname == forename)\
+            .filter(Person.ort == place)\
+            .join(recent_sender, recent_sender.c.id_person == Person.id)
+        # receiver
+        p2 = db.session.query(
+                Person.id.label("p_id_a"),
+                Person.name.label("p_name"),
+                Person.vorname.label("p_forename"),
+                Person.ort.label("p_place"),
+                recent_receiver.c.id_person.label("p_id_b"),
+                recent_receiver.c.id_brief.label("id_a"))\
+            .filter(Person.name == name)\
+            .filter(Person.vorname == forename)\
+            .filter(Person.ort == place)\
+            .join(recent_receiver, recent_receiver.c.id_person == Person.id)
+        p_all = union_all(p1, p2).alias("united")
+        results = db.session.query(
+            p_all.c.id_a,
+            p_all.c.p_name,
+            p_all.c.p_forename,
+            p_all.c.p_place,
+        )
+        return sorted([[r[0],
+                        r[1] if r[1] else Config.SN,
+                        r[2] if r[2] else Config.SN,
+                        r[3] if r[3] else Config.SL] for r in results], key=itemgetter(0), reverse=False)
