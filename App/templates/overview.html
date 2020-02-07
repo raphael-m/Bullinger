@@ -41,6 +41,18 @@
 
 	{% include "overview__status.html" %}
 
+
+	<h2>Personen</h2>
+
+	<p>Wählen Sie einen Nachnamen (die Zahl in Klammern gibt an, wieviele (scheinbar) verschiedene
+		Personen mit diesem Namen in der Datenbank enthalten sind):</p>
+
+	{% for p in vars["last_names_sorted_by_frequency"] %}
+	<span>
+		<a href="{{url_for('person_by_name', name=p[0])}}">{{ p[0] }}</a> ({{ p[1] }});
+	</span>
+	{% endfor %}
+
 </div>
 
 {% endblock %}

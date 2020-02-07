@@ -8,6 +8,8 @@ from Tools.Dictionaries import CountDict
 from Tools.Plots import *
 from App.models import *
 from sqlalchemy import asc, desc, func, and_, or_
+from sqlalchemy.orm import aliased
+from collections import defaultdict
 from operator import itemgetter
 from random import sample, randrange
 
@@ -112,7 +114,7 @@ class BullingerDB:
         """ one has to be bullinger """
         if self.bd.is_bullinger_sender():
             nn, vn, ort, bem = self.bd.get_receiver()
-            self.push2db(Absender(id_person=id_bullinger, remark=bem), card_nr, ADMIN, self.t)
+            self.push2db(Absender(id_person=id_bullinger), card_nr, ADMIN, self.t)
             p = Person.query.filter_by(name=nn, vorname=vn, ort=ort).first()
             if not p: self.push2db(Person(name=nn, forename=vn, place=ort), card_nr, ADMIN, self.t)
             p_id = Person.query.filter_by(name=nn, vorname=vn, ort=ort).first().id  # p.id is None (!)
@@ -628,10 +630,7 @@ class BullingerDB:
         cd, data, no_lang = CountDict(), [], 0
         for s in Sprache.query.all(): cd.add(s.sprache)
         n = Kartei.query.count()
-        for s in cd: data.append([s, cd[s], round(cd[s] / n * 100, 3)])
-        # for i in range(n+1):  # too expensive ...
-        #    if not Sprache.query.filter_by(id_brief=i).first(): no_lang += 1
-        # data.append(['-', no_lang, no_lang/n*100, 3])
+        data = [[s if s else Config.NONE, cd[s], round(cd[s] / n * 100, 3)] for s in cd]
         return sorted(data, key=itemgetter(1))
 
     @staticmethod
@@ -710,3 +709,95 @@ class BullingerDB:
         if n > len(p): n = len(p)
         return [[x[0] if x[0] else Config.SN,
                  x[1] if x[1] else Config.SN, x[2]] for x in p][0:n]
+
+    @staticmethod
+    def get_persons_by_var(variable, mode):
+        """ mode=0: variable=Name
+            mode=1: variable=Vorname
+            mode=2: variable=Ort
+            return [[brief_id, nn, vn, ort, rezensionen, status], ...] """
+        recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
+        recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
+        # sender
+        p1 = db.session.query(
+                Kartei.id_brief,
+                Kartei.rezensionen,
+                Kartei.status,
+                recent_sender.c.id_brief,
+                recent_sender.c.id_person,
+                Person.id,
+                Person.name,
+                Person.vorname,
+                Person.ort
+            ).filter(
+                Person.name == variable if mode is 0
+                else Person.vorname == variable if mode is 1
+                else Person.ort == variable
+            )\
+            .join(recent_sender, recent_sender.c.id_person == Person.id)\
+            .join(Kartei, recent_sender.c.id_brief == Kartei.id_brief)
+        # receiver
+        p2 = db.session.query(
+            Kartei.id_brief,
+            Kartei.rezensionen,
+            Kartei.status,
+            recent_receiver.c.id_brief,
+            recent_receiver.c.id_person,
+            Person.id,
+            Person.name,
+            Person.vorname,
+            Person.ort
+        ).filter(
+            Person.name == variable if mode is 0
+            else Person.vorname == variable if mode is 1
+            else Person.ort == variable)\
+        .join(recent_receiver, recent_receiver.c.id_person == Person.id)\
+        .join(Kartei, recent_receiver.c.id_brief == Kartei.id_brief)
+
+        data, d, count_dict = [], defaultdict(lambda: False), CountDict()
+        for x in [p1, p2]:
+            for p in x:
+                count_dict.add(p.name if p.name else Config.SN)
+                if not d[p.id_person]:
+                    data.append([
+                        'öffnen',
+                        p.name if p.name else Config.SN,
+                        p.vorname if p.vorname else Config.SN,
+                        p.ort if p.ort else Config.SL,
+                        None,
+                        None
+                    ])
+                    d[p.id_person] = True
+        data = sorted(data, key=lambda t: t[1])
+        for row in data:
+            row[4] = len(
+                db.session.query(
+                    Person.id,
+                    Person.name,
+                    Person.vorname,
+                    Person.ort,
+                    recent_sender.c.id_brief,
+                    recent_sender.c.id_person)
+                .filter(Person.name == row[1])
+                .filter(Person.vorname == row[2])
+                .filter(Person.ort == row[3])
+                .join(recent_sender, recent_sender.c.id_person == Person.id)
+                .all()
+            )
+            print(row[4])
+            row[5] = len(
+                db.session.query(
+                    Person.id,
+                    Person.name,
+                    Person.vorname,
+                    Person.ort,
+                    recent_receiver.c.id_brief,
+                    recent_receiver.c.id_person)
+                .filter(Person.name == row[1])
+                .filter(Person.vorname == row[2])
+                .filter(Person.ort == row[3])
+                .join(recent_receiver, recent_receiver.c.id_person == Person.id)
+                .all()
+            )
+            print(row[5])
+        return data

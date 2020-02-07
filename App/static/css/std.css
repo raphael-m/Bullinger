@@ -25,10 +25,14 @@ h2 {
 h3 {
     height: 15px;
     line-height: 15px;
-    margin: 8px 0px 8px 30px;
+    margin: 8px 0px 8px 15px;
     padding: 5px 8px;
-    font-size: 1.0em;
-    color: white;
+    font-size: 0.8em;
+    font-style: normal;
+    color: #123;
+    border-bottom: 1px solid #123;
+    background: white;
+    font-variant: normal
 }
 
 /* LISTS */
@@ -48,7 +52,7 @@ ol li {
 }
 
 ul li {
-    margin: 5px;
+    margin: 3px 5px;
 }
 
 /* TEXT */

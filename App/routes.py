@@ -33,7 +33,6 @@ def load_user(id_user):
 @app.route('/admin', methods=['POST', 'GET'])
 def admin(): return render_template('admin.html', title="Admin")
 
-
 @app.route('/', methods=['POST', 'GET'])
 @app.route('/home', methods=['POST', 'GET'])
 @app.route('/index', methods=['POST', 'GET'])
@@ -52,12 +51,10 @@ def index():
         "num_received": letters_received
     })
 
-
 def get_base_client_variables():
     c_vars = dict()
     c_vars["username"], c_vars["user_stats"] = current_user.username, BullingerDB.get_user_stats(current_user.username)
     return c_vars
-
 
 @app.route('/admin/setup', methods=['POST', 'GET'])
 @login_required
@@ -66,13 +63,11 @@ def setup():
     BullingerDB(db.session).setup("Karteikarten/OCR")  # ~1h
     return redirect(url_for('admin'))
 
-
 @app.route('/admin/delete_user/<username>', methods=['POST', 'GET'])
 @login_required
 def delete_user(username):
     BullingerDB(db.session).remove_user(username)
     return redirect(url_for('admin'))
-
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -88,13 +83,11 @@ def login():
         return redirect(url_for('index'))
     return render_template('account_login.html', title='Anmelden', form=form, username=current_user.username)
 
-
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
-
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -111,7 +104,6 @@ def register():
         return redirect(url_for('index'))
     return render_template('account_register.html', title='Registrieren', form=form, username=current_user.username)
 
-
 # Overviews
 # - year
 @app.route('/overview', methods=['POST', 'GET'])
@@ -122,11 +114,11 @@ def overview():
         "username": current_user.username,
         "user_stats": BullingerDB.get_user_stats(current_user.username),
         "table": data_overview,
+        "last_names_sorted_by_frequency": [],
         "url_plot": plot_url,
         "num_of_cards": num_of_cards,
-        "stats": data_percentages
+        "stats": data_percentages,
     })
-
 
 # - months
 @app.route('/overview_year/<year>', methods=['POST', 'GET'])
@@ -142,7 +134,6 @@ def overview_year(year):
         "num_of_cards": num_of_cards,
         "stats": data_percentages
     })
-
 
 # -days
 @app.route('/overview_month/<year>/<month>', methods=['POST', 'GET'])
@@ -161,7 +152,6 @@ def overview_month(year, month):
         "num_of_cards": num_of_cards,
         "stats": data_percentages
     })
-
 
 @app.route('/stats', methods=['GET'])
 @app.route('/stats/<n_top>', methods=['GET'])
@@ -187,9 +177,9 @@ def stats(n_top=50):
         }
     )
 
-
 @app.route('/overview/person_by_name/<name>', methods=['GET'])
 def person_by_name(name):
+    data = BullingerDB.get_persons_by_var(name, 0)
     return render_template(
         "overview_general.html",
         title="Statistiken",
@@ -197,12 +187,17 @@ def person_by_name(name):
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
             "user_stats_all": BullingerDB.get_user_stats_all(current_user.username),
-            "table": []
+            "attribute": "Nachname",
+            "value": name,
+            "table": data,
+            "hits": str(len(data)),
+            "description": "Personen mit Nachname "+name
         }
     )
 
 @app.route('/overview/person_by_forename/<forename>', methods=['GET'])
 def person_by_forename(forename):
+    data = BullingerDB.get_persons_by_var(forename, 1)
     return render_template(
         "overview_general.html",
         title="Statistiken",
@@ -210,12 +205,17 @@ def person_by_forename(forename):
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
             "user_stats_all": BullingerDB.get_user_stats_all(current_user.username),
-            "table": []
+            "attribute": "Vorname",
+            "value": forename,
+            "table": data,
+            "hits": str(len(data)),
+            "description": "Personen mit Vorname "+forename
         }
     )
 
 @app.route('/overview/person_by_place/<place>', methods=['GET'])
 def person_by_place(place):
+    data = BullingerDB.get_persons_by_var(place, 2)
     return render_template(
         "overview_general.html",
         title="Statistiken",
@@ -223,16 +223,18 @@ def person_by_place(place):
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
             "user_stats_all": BullingerDB.get_user_stats_all(current_user.username),
-            "table": []
+            "attribute": "Ort",
+            "value": place,
+            "table": data,
+            "hits": str(len(data)),
+            "description": "Personen von "+place
         }
     )
-
 
 @app.route('/faq', methods=['POST', 'GET'])
 def faq():
     c_vars = get_base_client_variables()
     return render_template('faq.html', title="FAQ", vars=c_vars)
-
 
 @app.route('/quick_start', methods=['POST', 'GET'])
 @login_required
@@ -240,7 +242,6 @@ def quick_start():
     i = BullingerDB.quick_start()
     if i: return redirect(url_for('assignment', id_brief=str(i)))
     return redirect(url_for('overview'))  # we are done !
-
 
 @app.route('/assignment/<id_brief>', methods=['GET'])
 @login_required
@@ -261,7 +262,6 @@ def assignment(id_brief):
     return render_template('assignment_vue.html',
         card_index=id_brief,
         html_content=html_content)
-
 
 @app.route('/api/assignments/<id_brief>', methods=['GET'])
 @login_required
@@ -335,7 +335,6 @@ def send_data(id_brief):
     }
     return jsonify(data)
 
-
 def _normalize_input(data):
     for key in ["language", "literature", "printed", "first_sentence", "remarks"]:  # 1st level
         data["card"][key] = BullingerDB.normalize_str_input(data["card"][key])
@@ -354,9 +353,8 @@ def _normalize_input(data):
         else: data["card"]["date"][key] = BullingerDB.normalize_int_input(data["card"]["date"][key])
     return data
 
-
 @app.route('/api/assignments/<id_brief>', methods=['POST'])
-# @login_required
+@login_required
 def save_data(id_brief):
     bdb = BullingerDB(db.session)
     data, user, number_of_changes, t = _normalize_input(request.get_json()), current_user.username, 0, datetime.now()
@@ -374,10 +372,9 @@ def save_data(id_brief):
     User.update_user(db.session, user, number_of_changes, data["state"])
     return redirect(url_for('assignment', id_brief=id_brief))
 
-
 @app.route('/api/persons', methods=['GET'])
-# @login_required
-def get_persons():
+@login_required
+def get_persons():  # verified persons only
     recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
     recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
     p1 = db.session.query(Person.id, recent_sender.c.id_person, Person.name, Person.vorname, Person.ort)\

@@ -25,3 +25,4 @@ class Config(object):
     SD = 's.d.'  # sine die
     SN = 's.n.'  # sine nomine
     SL = 's.l.'  # sine loco
+    NONE = '-'  # language stats

@@ -2,28 +2,58 @@
 
 {% block content %}
 
-<h1>Übersicht
+<h1><a href="{{url_for('overview')}}">Übersicht</a> /
+	{{ vars["attribute"] }} =
+	"{{ vars["value"] }}"
 	{% include "user_status.html" %}
 </h1>
 
 <div class="main_box">
 
-	<h2>Übersicht nach [...]</h2>
+	<h2>{{ vars["description"] }}</h2>
+
+	<p> Treffer: {{ vars["hits"] }} </p>
 
 	<table class="js-sort-table paleBlueRows">
 		<thead class="my_table_head">
 			<tr class="my_table_head_row">
-				<th class="js-sort-number my_table_head_cell">Brief Nr.</th>
-				<th class="js-sort-number my_table_head_cell">Rezensionen</th>
-				<th class="js-sort-number my_table_head_cell">Status</th>
+				<th class="js-sort-number my_table_head_cell">Link</th>
+				<th class="js-sort-string my_table_head_cell">Name</th>
+				<th class="js-sort-string my_table_head_cell">Vorname</th>
+				<th class="js-sort-string my_table_head_cell">Ort</th>
+				<th class="js-sort-number my_table_head_cell">gesendet</th>
+				<th class="js-sort-string my_table_head_cell">empfangen</th>
 			</tr>
 		</thead>
 		<tbody>
 		{% for d in vars["table"] %}
 			<tr class="my_table_row">
-				<td class="my_table_cell">{{ d[0] }}</td>
-				<td class="my_table_cell">{{ d[1] }}</td>
-				<td class="my_table_cell">{{ d[1] }}</td>
+				<td class="my_table_cell">
+					{{ d[0] }}
+				</td>
+				<td class="my_table_cell">
+				{% if vars["value"]|string() != d[1] %}
+					<a href="{{url_for('person_by_name', name=d[1])}}">{{ d[1] }}</a>
+				{% else %}
+					{{ d[1] }}
+				{% endif %}
+				</td>
+				<td class="my_table_cell">
+				{% if vars["value"]|string() != d[2] %}
+					<a href="{{url_for('person_by_forename', forename=d[2])}}">{{ d[2] }}</a>
+				{% else %}
+					{{ d[2] }}
+				{% endif %}
+				</td>
+				<td class="my_table_cell">
+				{% if vars["value"]|string() != d[3] %}
+					<a href="{{url_for('person_by_place', place=d[3])}}">{{ d[3] }}</a>
+				{% else %}
+					{{ d[3] }}
+				{% endif %}
+				</td>
+				<td class="my_table_cell">{{ d[4] }}</td>
+				<td class="my_table_cell">{{ d[5] }}</td>
 			</tr>
 		{% endfor %}
 		</tbody>
