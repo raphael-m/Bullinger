@@ -10,127 +10,123 @@
 
     <h2>Über die Attribute einer Karteikarte...</h2>
 
-    <h3>&#8594; Was soll ich machen, wenn mehrere Absender oder mehrere Empfänger auf der Karteikarte angegeben sind?</h3>
+    <h3>Was soll ich machen, wenn mehrere Absender oder mehrere Empfänger auf der Karteikarte angegeben sind?</h3>
     <div class="h3_section">
-        <p> <span style="color:red"> TODO. </span> Vorschlag (mappings):
-        <ul>
-            <li>Allg.: ['NN1 && NN2'], ['VN1 && VN2'], ['Ort1 && Ort2']
-                &#8594; ('NN1', 'VN1', 'Ort1'), ('NN2', 'VN2', 'Ort2')</li>
-            <li>Spezialfall: (['NN'], ['VN1'; 'VN2'; 'VN3'], ['ORT'])
-                &#8594; ('NN', 'VN1', 'ORT'), ('NN', 'VN1', 'ORT')</li>
-        </ul>
-        Erlaubte Trennzeichen: ';', '/', ',', '&', '&&', '_', '|'
-        </p>
+        <p>Bitte tragen Sie den ersten Absender bzw. Empfänger in die entsprechenden Felder für Nachname, Vorname und Ort ein. Schreiben Sie bitte zusätzlich in das Feld "Bemerkung" den Kommentar: "Mehrere Absender" bzw. "Mehrere Empfänger".
+        <p>Setzen Sie den Status der Karteikarte auf "Unklar/Unvollständig".</p>
     </div>
 
-    <h3>Was bedeutet “Verifiziert?” bei der Absender- bzw. Empfänger-Angabe?</h3>
+    <h3>Wie gebe ich einen Namen mit "von" ein (z.B. "Stetten Georg von")?</h3>
     <div class="h3_section">
-        <p>Wir markieren einen Korrespondenten als "verifiziert", wenn kein Grund zur Annahme besteht,
-            dass dessen Anschrift evtl. nicht ganz korrekt ist. Eine Adresse ist etwa dann nicht über jeden
-            Zweifel erhaben, wenn Angaben fehlen, in Klammern stehen, oder diese sonst mit einem entsprechenden
-            Hinweis gekennzeichnet sind.
+		<p>Geben Sie als Nachname "von Stetten" und als Vorname "Georg" ein.</p>
+	</div>
+
+    <h3>Wie gebe ich einen Namen für eine Gruppe ein (z.B. "Pfarrherren von Schaffhausen")?</h3>
+    <div class="h3_section">
+		<p>Geben Sie als Nachname "Pfarrherren" ein, lassen Sie das Feld Vorname leer. Und tragen Sie "Schaffhausen" als Ort ein.</p>
+	</div>
+
+    <h3>Was bedeutet “Nicht verifiziert” bei der Absender- bzw. Empfänger-Angabe?</h3>
+    <div class="h3_section">
+        <p>Markieren Sie einen Empfänger oder Schreiber als "Nicht verifiziert", wenn der Name oder der Ort auf der Karteikarte in runden oder eckigen Klammern stehen.
         </p>
-        <p>Verifizierte Adressen stehen zudem umgehend systemweit als Autovervollständigungseintrag zu Verfügung.</p>
+        <p>Bitte geben Sie die Klammern NICHT ein.</p>
+        <p>Alle anderen Adressen werden als verifizierte Adressen gespeichert und stehen umgehend systemweit zur automatischen Vervollständigung zu Verfügung.</p>
     </div>
 
-    <h3>Was bedeutet “Jahr B” bei Datum?</h3>
+    <h3>Was bedeutet “Jahr B, Monat B, Tag B” bei <b>Datum</b>?</h3>
     <div class="h3_section">
-        <p>Fehlt in einem Datum eine Angabe, definiert dieses ein Intervall und kann daher in der Form
-            "frühstens/spätestens am" (&#8594; Datum [A,B]) festgehalten werden - was jedoch nicht zu empfehlen ist,
-            zumal ein Null-Wert das Intervall bereits impliziert.</p>
-
-        <p>Auch undatierte Briefe können implizit Informationen über den Zeitraum beinhalten, in dem diese verfasst
-            wurden. Etwa dann, wenn sie auf bekannte Ereignisse Bezug nehmen, wie andere, datierte Korrespondenzen
-            oder historische Begebenheiten.</p>
-
-        <p>Liegen also zwei Eckdaten vor, die mehr Information beinhalten als ein Null-Wert, erfassen wir diese.
-            Im Falle einfacher Eckdaten (entweder "frühstens am", oder "spätestens am", aber nicht beides), halten wir
-            dies als Bemerkung zum Datum fest.
+        <p>Wenn auf einer Karteikarte zwei Eckdaten angegeben sind, tragen Sie das Startdatum bitte unter "Jahr, Monat, Tag" und das Endedatum unter “Jahr B, Monat B, Tag B” ein.</p>
+        <p>Wenn weitere oder andere Angaben zum Datum auf der Karteikarte vermerkt sind, tragen Sie diese als Bemerkung zum Datum ein.
         </p>
     </div>
 
     <h3>Was bedeutet “s.d.” bei Monat B?</h3>
     <div class="h3_section">
-        <p>"sine die", lat. für "ohne Datum"</p>
-        <p>Weitere lateinische Abkürzungen sind "sine nomine" (s.d.) oder "sine loco" (s.l.)</p>
-        <p>Diese "Null-Werte" werden von unserem System stets ignoriert und finden keinen Einzug in die Datenbank.</p>
+        <p>"s.d." steht für "sine die", das ist lateinisch für "ohne Datum".</p>
+        <p>Weitere lateinische Abkürzungen sind "s.d. = sine nomine" (ohne Namen) oder "s.l. = sine loco" (ohne Ort).</p>
+        <p>Diese "Null-Werte" werden von unserem System ignoriert und finden keinen Einzug in die Datenbank.</p>
     </div>
 
     <h3>Was soll ich machen, wenn beim Datum die Jahreszahl in Klammern steht?</h3>
     <div class="h3_section">
-        <p>siehe Jahr B</p>
+        <p>Wenn die Jahreszahl auf der Karteikarte in Klammern steht, tragen Sie die Jahreszahl ohne Klammer ins Feld "Jahr" ein und tragen Sie als Bemerkung zum Datum ein: "Jahr unsicher"</p>
     </div>
 
     <h3>Wofür steht “Zürich StA”?</h3>
     <div class="h3_section">
-        <p>"Zürich Staatsarchiv"</p>
+        <p><a href="https://staatsarchiv.zh.ch">Staatsarchiv Zürich</a> (= das Archiv des Kantons Zürich)</p>
+        <p>Wenn es sich um den Standort "Zürich StA" handelt, geben Sie die Angabe bitte immer als "Zürich StA" ein (ohne Komma und ohne andere Zeichen).</p>
     </div>
 
     <h3>Wie sieht eine typische Signatur beim Staatsarchiv (StA) Zürich aus? Wie soll ich die StA-Signatur eingeben?</h3>
     <div class="h3_section">
-        <p>Beispiel: "EII 345,678f"</p>
-        <p>A I 123, 456 ff ???</p>
+        <p>Beispiel: E II 345,678 f --> Eingabe bitte: E+[Leerschlag]+II+[Leerschlag]+Zahlen mit Komma getrennt+[Leerschlag]+Buchstabe</p>
+        <p>Beispiel: A I 123,456 ff --> Eingabe bitte: A+[Leerschlag]+I+[Leerschlag]+Zahlen mit Komma getrennt+[Leerschlag]+Buchstabe</p>
     </div>
 
     <h3>Wofür steht “Zürich ZB”?</h3>
     <div class="h3_section">
-        <p>"Zentral Bibliothek"</p>
+        <p><a href="https://www.zb.uzh.ch/">Zentralbibliothek Zürich</a> (= die Bibliothek von Stadt und Kanton Zürich)</p>
     </div>
 
     <h3>Wie sieht eine typische Signatur bei der Zentralbibliothek (ZB) Zürich aus? Wie soll ich die ZB-Signatur eingeben?</h3>
     <div class="h3_section">
-        <p>Beispiel: "Ms S 65,38", "F 182,93", ...</p>
-        <p>A I 123, 456 ff ???</p>
+        <p>Beispiel: Ms S 65,38 --> Eingabe bitte: Ms+[Leerschlag]+S+[Leerschlag]+Zahlen mit Komma getrennt</p>
+        <p>Beispiel: F 182,93 --> Eingabe bitte: F+[Leerschlag]+Zahlen mit Komma getrennt</p>
     </div>
 
     <h3>Was bedeutet “Autograph”?</h3>
     <div class="h3_section">
-        <p>Beim Autograph handelt es sich um das handschriftliche Original. Oft lagert dieses im ZStA oder in der ZZB.</p>
+        <p>Beim Autograph handelt es sich um das handschriftliche Original des Briefes. Oft lagert dieses Original im Staatsarchiv Zürich (StA) oder in der Zentralbibliothek Zürich (ZB).</p>
     </div>
 
     <h3>Was bedeutet “Kopie”?</h3>
     <div class="h3_section">
-        <p>Bezieht sich auf das Autograph.</p>
+        <p>Die Kopie ist eine Abschrift des Briefes.</p>
     </div>
 
     <h3>Warum ist das Feld “Sprache” in der Karteikarte leer?</h3>
     <div class="h3_section">
-        <p></p>
+        <p>Die Anleger der Karteikarten haben oft entschieden, dieses Feld frei zu lassen. Wir bestimmen die Sprache des Briefes automatisch auf der Grundlage des ersten Satzes und tragen sie in die Datenbank ein.</p>
+        <p>Bitte kontrollieren Sie die Angabe und korrigieren Sie die Sprache, wenn sie nicht mit dem Anfangssatz überein stimmt.</p>
     </div>
 
     <h3>Woher kommt der Eintrag zu “Sprache” in der Datenbank?</h3>
     <div class="h3_section">
-        <p>Die Sprache Bezieht sich auf den ersten Satz eines Briefes (bzw. die "Bemerkung" auf einer Karteikarte)</p>
-        <p>Aber: mehrsprachige Briefe!</p>
+        <p>Wir bestimmen die Sprache des Briefes automatisch auf der Grundlage des ersten Satzes. Der erste Satz eines Briefes steht auf der Karteikarte im Feld "Bemerkung".</p>
+        <p>Bitte kontrollieren Sie die Angabe und korrigieren Sie die Sprache, wenn sie nicht mit dem Anfangssatz übereinstimmt.</p>
+        <p>Wenn auf der Karteikarte mehrere Sprachen angegeben sind, dann tragen Sie alle dort vermerkten Sprachen in das Feld ein (mit Komma getrennt).</p>
     </div>
 
-    <h3>Warum sind die Felder “Photokopie” und “Abschrift” ausgebaut?</h3>
+    <h3>Warum sind die Felder “Photokopie” und “Abschrift” grau?</h3>
     <div class="h3_section">
-        <p>Diese existieren nicht mehr...</p>
+        <p>Diese Informationen zu“Photokopie” und “Abschrift” auf den Karteikarten sind nicht mehr aktuell und werden deshalb nicht in die Datenbank übertragen.</p>
     </div>
 
     <h3>Was bedeutet “Erster Satz” in der Datenbank?</h3>
     <div class="h3_section">
-        <p>siehe "Eintrag zur Sprache"</p>
+        <p>Im Feld "Bemerkung" auf der Karteikarte steht meist der Anfang des Briefes (= der erste Satz). Wir übernehmen diesen Briefanfang in die Datenbank, um später eine eindeutige Identifikation des Briefes zu ermöglichen.</p>
+        <p>Bitte korrigieren Sie den automatisch erkannten Text, bis er mit der Karteikarte übereinstimmt. </p>
+        <p>Häufig ist die Zeichensetzung auf der Karteikarte fehlerhaft. Korrigieren Sie die Satzzeichen. Fügen Sie Leerschläge hinter Kommas ein.</p>
+        <p>Wenn auf der Karteikarte im Feld "Bemerkungen" zusätzlich zum Anfangssatz weitere Informationen stehen, tragen Sie diese bitte unter “Anmerkungen / Notiz zu dieser Karteikarte” ein.</p>
     </div>
 
     <h3>Wann soll ich “Anmerkungen / Notiz zu dieser Karteikarte” eintragen?</h3>
     <div class="h3_section">
-        <p>Falls das Erfassen der Daten einer Karteikarte nicht oder nur schwer abgeschlossen werden kann (bswp. wenn
-            eine Handschrift nur schwer entzifferbar ist), kann dieses Feld benutzt werden, um anderen Projektitarbeitern
-            Hinweise zu hinterlassen.
+        <p>Falls Sie das Erfassen einer Karteikarte nicht oder nur schwer abschliessen können (bswp. wenn eine Handschrift nur schwer zu entziffern ist), dann tragen Sie in dieses Feld ihre Beobachtungen ein, um anderen Projektmitarbeitern Hinweise zu hinterlassen.
         </p>
-        <p>Auch für ungültig erklärte Karteikarten (also typischerweise Karteikarten, die gar keine
-            sind), sollten einen entsprechenden Hinweis erhalten.</p>
+        <p>Bitte hinterlassen Sie auch für ungültige Karteikarten (also typischerweise Karten, die keine Karteikarten sind), einen entsprechenden Hinweis.</p>
+        <p>Auch wenn auf der Karteikarte im Feld "Bemerkungen" zusätzlich zum Anfangssatz weitere Informationen stehen, tragen Sie diese bitte hier ein.</p>
     </div>
 
     <h3>Was bedeutet “Status Offen / Unklar / Ungültig / Abgeschlossen”?</h3>
     <div class="h3_section">
         <ul>
-            <li>offen = un- oder teilweise bearbeitet</li>
-            <li>unklar = Schwierigkeiten</li>
-            <li>ungültig = keine Karteikarte, sondern irgend ein anderes Dokument</li>
-            <li>abgeschlossen = erfolgreich digitalisiert</li>
+            <li>Offen = un- oder teilweise bearbeitet</li>
+            <li>Unklar/Unvollständig = Schwierigkeiten bei der Übertragung der Information in die Datenbank</li>
+            <li>Ungültig = keine Karteikarten, sondern ein anderes Dokument</li>
+            <li>Abgeschlossen = erfolgreich und vollständig in der Datenbank eingetragen</li>
         </ul>
     </div>
 
