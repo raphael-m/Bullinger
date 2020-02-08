@@ -46,7 +46,7 @@
 				</td>
 				<td class="my_table_cell">
 				{% if vars["value"]|string() != d[3] %}
-					<a href="{{url_for('person_by_place', place=d[2])}}">{{ d[3] }}</a>
+					<a href="{{url_for('person_by_place', place=d[3])}}">{{ d[3] }}</a>
 				{% else %}
 					{{ d[3] }}
 				{% endif %}
