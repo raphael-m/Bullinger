@@ -150,6 +150,7 @@ class BullingerDB:
 
     @staticmethod
     def count_correspondence():
+        """ very inefficient, but doesn't matter """
         for e in Empfaenger.query.all():
             p = Person.query.get(e.id_person)
             p.empfangen = p.empfangen + 1 if p.empfangen else 1
@@ -763,10 +764,11 @@ class BullingerDB:
             ).group_by(
                 p_all.c.p_name,
                 p_all.c.p_forename,
-                p_all.c.p_place,)
-        return sorted([[r[0] if r[0] else Config.SN,
-                        r[1] if r[1] else Config.SN,
-                        r[2] if r[2] else Config.SL, r[3], r[4]] for r in results], key=itemgetter(3), reverse=True)
+                p_all.c.p_place
+            ).order_by(desc(func.sum(p_all.c.s_count)))
+        return [[r[0] if r[0] else Config.SN,
+                 r[1] if r[1] else Config.SN,
+                 r[2] if r[2] else Config.SL, r[3], r[4]] for r in results]
 
     @staticmethod
     def get_overview_person(name, forename, place):
@@ -802,17 +804,17 @@ class BullingerDB:
             p_all.c.p_name,
             p_all.c.p_forename,
             p_all.c.p_place,
-        )
-        return sorted([[r[0],
-                        r[1] if r[1] else Config.SN,
-                        r[2] if r[2] else Config.SN,
-                        r[3] if r[3] else Config.SL] for r in results], key=itemgetter(0), reverse=False)
+        ).order_by(desc(p_all.c.id_a))
+        return [[r[0],
+                 r[1] if r[1] else Config.SN,
+                 r[2] if r[2] else Config.SN,
+                 r[3] if r[3] else Config.SL] for r in results]
 
     @staticmethod
     def get_overview_languages(lang):
         data = db.session.query(
-            Sprache.id_brief,
-            Sprache.sprache
-        ).filter(Sprache.sprache == lang)
-        return sorted([[d.id_brief, d.sprache if d.sprache else Config.NONE] for d in data],
-                      key=itemgetter(0), reverse=False)
+                Sprache.id_brief,
+                Sprache.sprache
+            ).filter(Sprache.sprache == lang)\
+            .order_by(asc(Sprache.id_brief))
+        return [[d.id_brief, d.sprache if d.sprache else Config.NONE] for d in data]
