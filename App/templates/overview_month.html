@@ -10,9 +10,13 @@
 
 <div class="main_box">
 
-	<h2>Monatsübersicht {{ vars["month"]+' '+vars["year"]}}</h2>
+	<h2>Monatsübersicht vom {{ vars["month"]+' '+vars["year"]}}</h2>
 
-	<p>Wählen Sie eine Karteikarte</p>
+	<p>In der nachstehenden Tabelle können Sie eine spezifische Karteikarte auswählen und diese anschliessend
+		digitalisieren:
+	</p>
+
+	{% include "elem_quickstart.html" %}
 
 	<table class="js-sort-table paleBlueRows">
 		<thead class="my_table_head">
@@ -35,7 +39,8 @@
 		</tbody>
 	</table>
 
-	<p>&#8594; <a href="{{url_for('quick_start')}}">Schnellstart</a></p>
+
+	<h2>Statusübersicht</h2>
 
 	{% include "overview__status.html" %}
 

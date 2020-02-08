@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h1>Bullinger Briefwechsel
+<h1>KoKoS-Bullinger (Kollaboratives-Korrektur-System)
     {% include "user_status.html" %}
 </h1>
 
@@ -10,7 +10,7 @@
 
 <div class="main_box">
 
-    <h2>Allgemeines</h2>
+    <h2>Worum geht es?</h2>
     <div class="h2_section">
         <div>
             <div class="parallel allg_left">
@@ -29,11 +29,11 @@
                 <p> Vielen Dank! </p>
                 <p></p>
                 <p> &#8594; <a href="{{url_for('quick_start')}}">Start</a>
-                    <span style="color:red"> (Testversion) </span>
+                    <span style="color:red"> (Testversion*) </span>
                 </p>
                 <p>
                     <span style="color:red">
-                        ACHTUNG, jetzt erfasste Änderungen gehen möglicherweise wieder verloren.
+                        *ACHTUNG, jetzt erfasste Änderungen gehen möglicherweise wieder verloren.
                     </span>
                 </p>
             </div>
@@ -43,10 +43,10 @@
     </div>
     <div class="h2_separator"></div>
 
-    <h2>Projektziele</h2>
+    <h2>Die etwas längerfristigeren Projektziele ...</h2>
     <div class="h2_section">
         <ul>
-            <li>Aufbau eines Karteisystems zu den Bullinger-Briefwechseln
+            <li>Aufbau eines Karteisystems zum Bullinger-Briefwechsel
                 <a href="https://de.wikipedia.org/wiki/Citizen_Science">(Citizen Science)</a>
             </li>
             <li>Ausbau der Datenbank mit allen Dokumenten aus dem Bullinger-Briefwechsel</li>
@@ -57,7 +57,7 @@
     </div>
     <div class="h2_separator"></div>
 
-    <h2>Links</h2>
+    <h2>Verweise</h2>
     <div class="h2_section">
         <p> Hintergrund-Informationen zum bisherigen Editions-Projekt sind
             <a href="https://www.irg.uzh.ch/de/bullinger-edition/briefwechsel.html">hier</a>
@@ -78,7 +78,7 @@
             (Projektleiter),
             Institut für Computerlinguistik, Andreasstrasse 15, Zürich </p>
         <p> <a href="bernardsilvan.schroffenegger@uzh.ch">Bernard Schroffenegger</a>
-            (Softwareentwickler/Administrator) </p>
+            (Admin/Entwickler) </p>
         <p> <a href="raaphii@gmail.com">Raphael Müller</a>
             (Webdesigner)</p>
         <p> Universität Zürich, 2020</p>
@@ -87,7 +87,9 @@
 
     <h2>Gästebuch</h2>
     <div class="h2_section">
-        <p>Hinterlassen Sie einen Kommentar:</p>
+        <p>Hier können Sie offiziell, d.h. für alle Besucher und Mitarbeiter sichtbar, einen Kommentar verfassen.
+            Vielleicht ist Ihre Bemerkung von allgemeinem Interesse, oder wird von anderen geteilt?
+        </p>
         <table>
             <!--
             <thead>

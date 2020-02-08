@@ -2,15 +2,26 @@
 
 {% block content %}
 
-<h1>Übersicht
+<h1>Kartei-Übersicht
 	{% include "user_status.html" %}
 </h1>
 
 <div class="main_box">
 
+	<h2>Allgemeine Statusübersicht</h2>
+
+	{% include "overview__status.html" %}
+
+
 	<h2>Allgemeine Jahresübersicht</h2>
 
-	<p>Wählen Sie ein Jahr:</p>
+	<p>Mit der Auswahl eines Jahres erhalten Sie über die jeweils darauf folgenden Monate
+		- sofern diese bekannt* sind - Zugriff auf die einzelnen Karteikarten.
+	</p>
+
+	{% include "elem_quickstart.html" %}
+
+	<p>*lat. "s.d.", "sine die"; dt. "undatiert"</p>
 
 	<table class="js-sort-table paleBlueRows">
 		<thead class="my_table_head">
@@ -37,16 +48,55 @@
 		</tbody>
 	</table>
 
-	<p>&#8594; <a href="{{url_for('quick_start')}}">Schnellstart</a></p>
+	<h2>Sprachen</h2>
 
-	{% include "overview__status.html" %}
+	<table class="js-sort-table paleBlueRows">
+		<thead class="my_table_head">
+			<tr class="my_table_head_row">
+				<th class="js-sort-string my_table_head_cell">Sprache</th>
+				<th class="js-sort-number my_table_head_cell">Frequenz</th>
+				<th class="js-sort-number my_table_head_cell">[%]</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for l in vars["table_language"] %}
+			<tr class="my_table_row">
+				<td class="my_table_cell">
+					<a href="{{url_for('overview_languages', lang=l[0])}}"> {{ l[0] }} </a>
+				</td>
+				<td class="my_table_cell">{{ l[1] }}</td>
+				<td class="my_table_cell">{{ l[2] }}</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
 
+	<h2>Die Korrespondenten ...</h2>
 
-	<h2>Korrespondenten</h2>
+	<p>Aktuell können wir innerhalb der gegebenen Kartei {{ vars["hits"] }} Korrespondenten identifizieren.
+		Dass viele Personen gleich mehrfach darin vertreten sind, liegt nicht nur an den vielen bei der
+		automatischen Erfassung der Daten entstandenen Fehlern, sondern auch daran, dass so mancher
+		Korrespondent zeitweise unterschiedliche Anschriften besass.
+	</p>
+	<p>
+		Für Ambrosius Blarer finden wir beispielsweise Winterthur, Konstanz, Würfligen, Biel, und noch
+		weiteren Ortschaften. Eine Tabelle, welche letztere ignoriert und Personen mit identischen Namen
+		zusammenfasst und so etwas besser Aufschluss über die jeweiligen Anzahlen gesendeter und empfangener
+		Briefe pro Person gibt, finden sie
 
-	<p>Alle Personen (Name, Vorname, Ort)...</p>
+		<a href="{{url_for('stats')}}">hier</a>.
+	</p>
 
-	<p>Anzahl Treffer: {{ vars["hits"] }}</p>
+	<p> Bullinger selbst stellt hierbei ein Spezialfall dar: Wir sind bei der automatisierten Digitalisierung
+		davon ausgegangen, dass es sich bei einem der Korrespondenten (Absender oder Empfänger) jeweils zwingend um
+		Heinrich Bullinger von Zürich handeln muss. Damit eliminieren wir viele Fehler der automatischen
+		Zeichenerkennung (OCR, engl. "Optical Character Recognition"). Dafür entgeht es uns jedoch möglicherweise,
+		wo und wann Bullinger seine Ferien verbrachte...
+	</p>
+
+	<p>Null-Werte in der Datenbank sind in diesem Kontext als "s.n." (lat. "sine nomine", dt. "unbenannt")
+		oder "s.l." (lat. "sine loco", dt. "ohne Ortsangabe") vermerkt.
+	</p>
 
 	<table class="js-sort-table paleBlueRows">
 		<thead class="my_table_head">

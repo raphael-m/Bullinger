@@ -807,3 +807,12 @@ class BullingerDB:
                         r[1] if r[1] else Config.SN,
                         r[2] if r[2] else Config.SN,
                         r[3] if r[3] else Config.SL] for r in results], key=itemgetter(0), reverse=False)
+
+    @staticmethod
+    def get_overview_languages(lang):
+        data = db.session.query(
+            Sprache.id_brief,
+            Sprache.sprache
+        ).filter(Sprache.sprache == lang)
+        return sorted([[d.id_brief, d.sprache if d.sprache else Config.NONE] for d in data],
+                      key=itemgetter(0), reverse=False)

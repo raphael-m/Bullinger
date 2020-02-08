@@ -3,9 +3,9 @@
 {% block content %}
 
 <h1><a href="{{url_for('overview')}}">Übersicht</a> /
-	Nachname = {{ vars["name"] }},
-    Vorname = {{ vars["forename"] }},
-    Ort = {{ vars["place"] }}
+	{{ vars["name"] }},
+    {{ vars["forename"] }},
+    {{ vars["place"] }}
 	{% include "user_status.html" %}
 </h1>
 

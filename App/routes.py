@@ -117,9 +117,11 @@ def overview():
         "table": data_overview,
         "persons": persons,
         "hits": len(persons),
+        "table_language": BullingerDB.get_language_stats(),
         "url_plot": plot_url,
         "num_of_cards": num_of_cards,
         "stats": data_percentages,
+        "status_description": ' '.join([str(num_of_cards), 'Karteikarten:'])
     })
 
 # - months
@@ -134,7 +136,8 @@ def overview_year(year):
         "table": data_overview,
         "url_plot": plot_url,
         "num_of_cards": num_of_cards,
-        "stats": data_percentages
+        "stats": data_percentages,
+        "status_description": ' '.join([str(num_of_cards), 'Karteikarten vom Jahr', str(year)+':'])
     })
 
 # -days
@@ -152,7 +155,12 @@ def overview_month(year, month):
         "table": data_overview,
         "url_plot": plot_url,
         "num_of_cards": num_of_cards,
-        "stats": data_percentages
+        "stats": data_percentages,
+        "status_description": ' '.join([
+            str(num_of_cards)+' Karteikarten' if num_of_cards>1 else 'einzigen Karteikarte',
+            'vom' if month != Config.SD else 'mit der Angabe',
+            month, year+':'
+        ])
     })
 
 @app.route('/overview/<name>/<forename>/<place>', methods=['GET'])
@@ -172,6 +180,20 @@ def overview_cards_of_person(name, forename, place):
             "place": place,
             "table": data,
             "hits": len(data),
+        }
+    )
+
+@app.route('/overview/<lang>', methods=['GET'])
+def overview_languages(lang):
+    data = BullingerDB.get_overview_languages(None if lang == Config.NONE else lang)
+    return render_template(
+        "overview_languages_cards.html",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "language": lang,
+            "table": data,
+            "hits": len(data)
         }
     )
 

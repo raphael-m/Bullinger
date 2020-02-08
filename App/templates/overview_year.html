@@ -8,9 +8,12 @@
 
 <div class="main_box">
 
-	<h2>Jahresübersicht {{ vars["year"] }}</h2>
+	<h2>Allgemeine Übersicht zum Jahr {{ vars["year"] }}</h2>
 
-	<p>Wählen Sie einen Monat:</p>
+	<p>Mit der Auswahl eines Monats erhalten Sie Zugriff auf die (evtl. nur mutmasslich) zugehörigen Karteikarten:
+	</p>
+
+	{% include "elem_quickstart.html" %}
 
 	<table class="js-sort-table paleBlueRows">
 		<thead class="my_table_head">
@@ -39,7 +42,7 @@
 		</tbody>
 	</table>
 
-	<p>&#8594; <a href="{{url_for('quick_start')}}">Schnellstart</a></p>
+	<h2>Statusübersicht</h2>
 
 	{% include "overview__status.html" %}
 

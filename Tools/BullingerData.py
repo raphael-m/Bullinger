@@ -216,12 +216,12 @@ class BullingerData:
         return s
 
     def extract_language(self, bemerkung):
-        l = Langid.classify(bemerkung)
-        langs = [] if not l else [l]
+        lng = Langid.classify(bemerkung)
+        languages = [] if not lng else [lng]
         if "Sprache" in self.input["Sprache"]:
             for lang in self.extract_language_basic():
-                if lang not in langs: langs.append(lang)
-        return langs
+                if lang not in languages: languages.append(lang)
+        return languages
 
     def extract_language_basic(self):
         baselines = self.input["Sprache"]

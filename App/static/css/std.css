@@ -31,8 +31,9 @@ h3 {
     font-style: normal;
     color: #123;
     border-bottom: 1px solid #123;
-    background: white;
-    font-variant: normal
+    /*background: white;*/
+    font-variant: normal;
+    color: white;
 }
 
 /* LISTS */
@@ -59,6 +60,7 @@ ul li {
 
 p {
     padding: 8px 5px;
+    line-height: 15pt;
 }
 
 .clearing { clear: both; }
