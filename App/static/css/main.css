@@ -85,3 +85,23 @@ body {
     width: 1px;
     background: white;
 }
+
+/* key words */
+
+.kw {
+    font-weight: bold;
+}
+
+.kw_warning {
+    color: red;
+    font-weight: bold;
+}
+
+.kw_important {
+    color: blue;
+    font-weight: bold;
+}
+
+.kw_highlight {
+    color: yellow;
+}

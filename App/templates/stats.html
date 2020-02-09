@@ -8,7 +8,12 @@
 
 <div class="main_box">
 
-	<h2>Helfer</h2>
+	<h2>Statusübersicht</h2>
+
+	{% include "overview__status.html" %}
+
+
+	<h2>Mitarbeiter</h2>
 	<div class="h2_section">
 
 		<p>Ihr Benutzername ist nur für Sie sichtbar.</p>
@@ -75,7 +80,7 @@
 	</div>
 	<div class="clearing"></div>
 
-	<h2>Korrespondenz-Frequenzen (Top-{{ vars["n_top"] }})</h2>
+	<h2>Top-{{ vars["n_top"] }}-Korrespondenten</h2>
 	<div class="h2_section">
 
 		<p>Wer hat die meisten? Wir ignorieren hier die Ortschaften und Zählen alle Personen

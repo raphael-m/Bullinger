@@ -2,9 +2,9 @@
 
 {% block content %}
 
-<h1><a href="{{url_for('overview')}}">Übersicht</a> /
-	{{ vars["attribute"] }} =
-	"{{ vars["value"] }}"
+<h1><a class="header_link" href="{{url_for('overview')}}">Kartei</a> /
+	{{ vars["attribute"] }} /
+	{{ vars["value"] }}
 	{% include "user_status.html" %}
 </h1>
 

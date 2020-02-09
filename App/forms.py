@@ -39,5 +39,5 @@ class RegistrationForm(FlaskForm):
 
 class GuestBookForm(FlaskForm):
 
-    comment = StringField("Kommentar")
+    comment = StringField("Ihre Bemerkung")
     save = SubmitField('Speichern')

@@ -47,8 +47,8 @@
     height: auto;
 }
 
-.allg_left { width: 18%; }
-.allg_right { width: 82%; }
+.intro_left { width: 18%; }
+.intro_right { width: 82%; }
 
 .clearing {
     clear: left;

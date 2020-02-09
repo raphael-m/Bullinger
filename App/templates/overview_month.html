@@ -3,18 +3,17 @@
 {% block content %}
 
 <h1>
-    <a href="{{url_for('overview')}}">Übersicht</a> /
-    <a href="{{url_for('overview_year', year=vars['year'])}}">{{ vars["year"] }}</a> / {{ vars["month"] }}
+    <a class="header_link" href="{{url_for('overview')}}">Kartei</a> /
+    <a class="header_link" href="{{url_for('overview_year', year=vars['year'])}}">{{ vars["year"] }}</a> /
+	{{ vars["month"] }}
 	{% include "user_status.html" %}
 </h1>
 
 <div class="main_box">
 
-	<h2>Monatsübersicht vom {{ vars["month"]+' '+vars["year"]}}</h2>
+	<h2>Monatsübersicht {{ vars["month"]+' '+vars["year"]}}</h2>
 
-	<p>In der nachstehenden Tabelle können Sie eine spezifische Karteikarte auswählen und diese anschliessend
-		digitalisieren:
-	</p>
+	<p>In der nachstehenden Tabelle können Sie eine Karteikarte auswählen und anschliessend digitalisieren:</p>
 
 	{% include "elem_quickstart.html" %}
 

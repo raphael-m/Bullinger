@@ -1,13 +1,13 @@
 <!-- extends "overview.html", "overview_year.html", "overview_month.html" -->
-<!-- *** --->
 {% block progress %}
-
-<p>Fortschritt und Status bei der Digitalisierung der {{ vars["status_description"] }}</p>
-
-<p> Wir sind zu {{ vars["stats"]["ungültig"][1] + vars["stats"]["abgeschlossen"][1]}}% fertig!</p>
-
-<p>&#8594; <a href="{{url_for('stats')}}">Statistiken</a></p>
-
+<p>Fortschritt bei der Digitalisierung der
+    <span class="kw">{{ vars["status_description"] }}</span>
+</p>
+<p>Wir sind zu
+    <span class="kw">{{ vars["stats"]["ungültig"][1] + vars["stats"]["abgeschlossen"][1]}}%</span>
+    fertig!
+</p>
+<p>&#8594; <a class="text_link" href="{{url_for('stats')}}">Statistiken</a></p>
 <img class="parallel" src="{{url_for('static', filename=vars['url_plot'])}}"/>
 <div class="parallel">
     <table class="js-sort-table paleBlueRows">
@@ -30,5 +30,4 @@
     </table>
 </div>
 <div class="clearing"></div>
-<!-- *** --->
 {% endblock %}

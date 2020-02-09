@@ -1,23 +1,33 @@
 
 a {
-    color: white;
+
 }
 
 a:link {
-  color: LightBlue;
+
 }
 
 /* visited link */
 a:visited {
-  color: Limegreen;
+
 }
 
 /* mouse over link */
 a:hover {
-  color: Limegreen;
+
 }
 
 /* selected link */
 a:active {
   font-weight: bold;
+}
+
+.text_link {
+    color: blue;
+    font-weight: bold;
+}
+
+.header_link {
+    color: limegreen;
+    /*font-weight: bold;*/
 }

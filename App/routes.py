@@ -118,10 +118,10 @@ def overview():
         "persons": persons,
         "hits": len(persons),
         "table_language": BullingerDB.get_language_stats(),
-        "url_plot": plot_url,
-        "num_of_cards": num_of_cards,
-        "stats": data_percentages,
-        "status_description": ' '.join([str(num_of_cards), 'Karteikarten:'])
+        # "url_plot": plot_url,
+        # "num_of_cards": num_of_cards,
+        # "stats": data_percentages,
+        # "status_description": ' '.join([str(num_of_cards), 'Karteikarten:'])
     })
 
 # - months
@@ -202,6 +202,7 @@ def overview_languages(lang):
 def stats(n_top=50):
     n_top, id_file = int(n_top), str(int(time.time()))
     stats_languages = BullingerDB.get_language_stats()
+    data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(None)
     BullingerDB.create_plot_user_stats(current_user.username, id_file)
     BullingerDB.create_plot_lang(stats_languages, id_file)
     return render_template(
@@ -217,7 +218,10 @@ def stats(n_top=50):
             "top_s": BullingerDB.get_top_n_sender(n_top),
             "top_r": BullingerDB.get_top_n_receiver(n_top),
             "top_s_gbp": BullingerDB.get_top_n_sender_ignoring_place(n_top),
-            "top_r_gbp": BullingerDB.get_top_n_receiver_ignoring_place(n_top)
+            "top_r_gbp": BullingerDB.get_top_n_receiver_ignoring_place(n_top),
+            "stats": data_percentages,
+            "url_plot": plot_url,
+            "status_description": ' '.join([str(num_of_cards), 'Karteikarten:'])
         }
     )
 

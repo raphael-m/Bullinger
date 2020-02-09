@@ -2,26 +2,19 @@
 
 {% block content %}
 
-<h1>Kartei-Übersicht
+<h1>Kartei
 	{% include "user_status.html" %}
 </h1>
 
 <div class="main_box">
 
-	<h2>Allgemeine Statusübersicht</h2>
+	<h2>Jahresübersicht</h2>
 
-	{% include "overview__status.html" %}
-
-
-	<h2>Allgemeine Jahresübersicht</h2>
-
-	<p>Mit der Auswahl eines Jahres erhalten Sie über die jeweils darauf folgenden Monate
-		- sofern diese bekannt* sind - Zugriff auf die einzelnen Karteikarten.
-	</p>
+	<p>Mit der Auswahl eines Jahres/Monats erhalten Sie Zugriff auf die einzelnen Karteikarten.</p>
 
 	{% include "elem_quickstart.html" %}
 
-	<p>*lat. "s.d.", "sine die"; dt. "undatiert"</p>
+	<p>lat. "s.d. = sine die" (undatiert)</p>
 
 	<table class="js-sort-table paleBlueRows">
 		<thead class="my_table_head">
@@ -71,32 +64,31 @@
 		</tbody>
 	</table>
 
-	<h2>Die Korrespondenten ...</h2>
+	<h2>Korrespondenten</h2>
 
-	<p>Aktuell können wir innerhalb der gegebenen Kartei {{ vars["hits"] }} Korrespondenten identifizieren.
-		Dass viele Personen gleich mehrfach darin vertreten sind, liegt nicht nur an den vielen bei der
-		automatischen Erfassung der Daten entstandenen Fehlern, sondern auch daran, dass so mancher
-		Korrespondent zeitweise unterschiedliche Anschriften besass.
+	<p>
+		In der Kartei können wir aktuell {{ vars["hits"] }} Korrespondenten identifizieren.
+		Dass viele Personen mehrfach darin enthalten sind, liegt zum einen an bei der automatischen
+		Texterkennung enstandenen Fehlern, und zum anderen anderen an unterschiedlichen Anschriften
+		(Ortschaften) für dieselbe Person.
 	</p>
 	<p>
-		Für Ambrosius Blarer finden wir beispielsweise Winterthur, Konstanz, Würfligen, Biel, und noch
-		weiteren Ortschaften. Eine Tabelle, welche letztere ignoriert und Personen mit identischen Namen
-		zusammenfasst und so etwas besser Aufschluss über die jeweiligen Anzahlen gesendeter und empfangener
-		Briefe pro Person gibt, finden sie
-
-		<a href="{{url_for('stats')}}">hier</a>.
+		Eine Tabelle, welche Ortschaften ignoriert und Personen mit identischen Namen zusammenfasst
+		und so etwas besser Aufschluss über die jeweiligen Anzahlen gesendeter und geschriebener
+		Briefe pro Person gibt, finden sie <a class="text_link" href="{{url_for('stats')}}">hier</a>.
 	</p>
 
-	<p> Bullinger selbst stellt hierbei ein Spezialfall dar: Wir sind bei der automatisierten Digitalisierung
-		davon ausgegangen, dass es sich bei einem der Korrespondenten (Absender oder Empfänger) jeweils zwingend um
-		Heinrich Bullinger von Zürich handeln muss. Damit eliminieren wir viele Fehler der automatischen
-		Zeichenerkennung (OCR, engl. "Optical Character Recognition"). Dafür entgeht es uns jedoch möglicherweise,
-		wo und wann Bullinger seine Ferien verbrachte...
+	<p> Bei der automatischen Erfassung der Daten sind wir davon ausgegangen, dass es sich bei einem
+		zweier Korrespondenten (Absender/Empfänger) jeweils zwingend um Heinrich Bullinger aus Zürich
+		handeln muss.
 	</p>
 
-	<p>Null-Werte in der Datenbank sind in diesem Kontext als "s.n." (lat. "sine nomine", dt. "unbenannt")
-		oder "s.l." (lat. "sine loco", dt. "ohne Ortsangabe") vermerkt.
-	</p>
+	<p></p>
+	Null-Werte:
+	<ul>
+		<li>lat. "s.n. = sine nomine" (unbenannt)</li>
+		<li>lat. "s.l. = sine loco" (ohne Ortsangabe)</li>
+	</ul>
 
 	<table class="js-sort-table paleBlueRows">
 		<thead class="my_table_head">

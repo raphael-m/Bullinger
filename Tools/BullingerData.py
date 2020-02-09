@@ -100,7 +100,7 @@ class BullingerData:
             standort = "Zürich ZB"
             numbers = re.sub(r'[^\d,]', '', standort + signatur + umfang).strip()
             signatur, umfang = ''.join('Ms S ' + numbers).strip(), None
-        elif ssu: standort, signatur, umfang = "Zürich", None, None
+        elif ssu: standort, signatur, umfang = None, None, None
         standort = standort if standort else None
         signatur = signatur if signatur else None
         umfang = umfang if umfang else None
