@@ -10,15 +10,16 @@
     <h2>Anmeldung</h2>
     <div class="h2_section">
 
-        <p> Haben Sie sich schon als Mitarbeiter registriert? </p>
-        <p> &#8594; <a href="{{url_for('register')}}">Registrierung</a> </p>
+        <p> Haben Sie sich schon als Mitarbeiter registriert?
+            &#8594; <a class="text_link" href="{{url_for('register')}}">Registrierung</a>
+        </p>
 
         <div id="login_form">
             <form action="" method="post" novalidate>
                 {{ form.hidden_tag() }}
 
                 <!-- Username -->
-                <div class="prompt">{{ form.username.label }}</div>
+                <div class="kw prompt">{{ form.username.label }}</div>
                 <div class="prompt_input">{{ form.username(size=32, placeholder="Benutzername") }}</div>
                 <div class="error_msg">
                     {% for error in form.username.errors %}
@@ -27,7 +28,7 @@
                 </div>
 
                 <!-- Password -->
-                <div class="prompt">{{ form.password.label }}</div>
+                <div class="kw prompt">{{ form.password.label }}</div>
                 <div class="prompt_input">{{ form.password(size=32, placeholder="Passwort") }}</div>
 
                 <!-- Submission -->

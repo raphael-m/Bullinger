@@ -468,10 +468,6 @@ class BullingerDB:
         return data_overview, data_percentages, plot_url, num_of_cards
 
     @staticmethod
-    def get_progress_data():
-        pass
-
-    @staticmethod
     def normalize_str_input(value):
         if not isinstance(value, str): return None
         elif not value.strip(): return None
