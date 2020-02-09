@@ -144,6 +144,7 @@ def overview_year(year):
 @app.route('/overview_month/<year>/<month>', methods=['POST', 'GET'])
 @login_required
 def overview_month(year, month):
+    m = month
     if month == Config.SD: month = 0
     data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview_month(year, month)
     month = BullingerDB.convert_month_to_str(month)
@@ -159,7 +160,7 @@ def overview_month(year, month):
         "status_description": ' '.join([
             str(num_of_cards)+' Karteikarten' if num_of_cards>1 else 'einzigen Karteikarte',
             'vom' if month != Config.SD else 'mit der Angabe',
-            month, year+':'
+            m, year+':'
         ])
     })
 
