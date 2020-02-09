@@ -149,6 +149,11 @@ class BullingerDB:
         self.push2db(Bemerkung(remark=self.bd.get_bemerkung()), card_nr, ADMIN, self.t)
 
     @staticmethod
+    def track(username, url, t):
+        db.session.add(Tracker(username=username, time=t, url=url))
+        db.session.commit()
+
+    @staticmethod
     def count_correspondence():
         """ very inefficient, but doesn't matter """
         for e in Empfaenger.query.all():
@@ -632,7 +637,7 @@ class BullingerDB:
         for s in Sprache.query.all(): cd.add(s.sprache)
         n = Kartei.query.count()
         data = [[s if s else Config.NONE, cd[s], round(cd[s] / n * 100, 3)] for s in cd]
-        return sorted(data, key=itemgetter(1))
+        return sorted(data, key=itemgetter(1), reverse=True)
 
     @staticmethod
     def create_plot_lang(data, file_name):
@@ -753,7 +758,7 @@ class BullingerDB:
                 else True)\
             .join(recent_receiver, recent_receiver.c.id_person == Person.id)\
             .group_by(Person.name, Person.vorname, Person.ort)
-        # full outer join
+        # full outer join and sum over groups
         p_all = union_all(p1, p2).alias("united")
         results = db.session.query(
                 p_all.c.p_name,

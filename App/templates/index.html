@@ -13,7 +13,7 @@
         <div class="h2_section">
             <div class="parallel intro_left">
                 <div class="container">
-                    <img src="{{ url_for('static', filename='images/heiri.png') }}">
+                    <img alt="Heinrich Bullinger" src="{{ url_for('static', filename='images/heiri.png') }}">
                 </div>
             </div>
             <div class="parallel intro_right">
@@ -33,7 +33,7 @@
                 <p></p>
                 <p>
                     &#8594; <a class="text_link" href="{{url_for('quick_start')}}">Start</a>
-                    <span class="kw_warning">(Testversion)</span>
+                    <span class="kw_warning">(Testversion 1.0)</span>
                 </p>
                 <p>
                     <span class="kw_warning">
@@ -140,7 +140,7 @@
                 </tbody>
             </table>
             <!-- new comments -->
-            <form action="" method="post" novalidate>
+            <form method="post" novalidate>
                 {{ form.csrf_token }}
                 {{ form.hidden_tag() }}
                 <div>{{ form.comment(class="note", placeholder="Ihre Bemerkung zum Projekt") }}</div>

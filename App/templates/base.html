@@ -22,13 +22,12 @@
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/header.css') }}">
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script type="text/javascript" src = "{{ url_for('static', filename='js/account.js') }}"></script>
-        <script type="text/javascript" src = "{{ url_for('static', filename='js/load.js') }}"></script>
-        <script type="text/javascript" src = "{{ url_for('static', filename='js/image.js') }}"></script>
-        <script type="text/javascript" src = "{{ url_for('static', filename='js/sort-table.js') }}"></script>
-        <script type="text/javascript" src = "{{ url_for('static', filename='js/sort-table.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/account.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/load.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/image.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/sort-table.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/sort-table.min.js') }}"></script>
 
-        <!-- Import Google Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Noto+Serif&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
         {% endblock %}
@@ -37,7 +36,7 @@
         <div class="bu-header">
             <div class="bu-header-logo">
                 <a href="/">
-                    <img src="{{url_for('static', filename='images/logo.svg')}}" width="266px" />
+                    <img src="{{url_for('static', filename='images/logo.svg')}}" width="266" />
                 </a>
             </div>
             <ul class="bu-header-menu">
