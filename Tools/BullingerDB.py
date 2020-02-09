@@ -39,6 +39,8 @@ class BullingerDB:
 
     def delete_all(self):
         self.dbs.query(User).delete()
+        self.dbs.query(Role).delete()
+        self.dbs.query(UserRoles).delete()
         self.dbs.query(Kartei).delete()
         self.dbs.query(Datum).delete()
         self.dbs.query(Person).delete()
@@ -51,10 +53,12 @@ class BullingerDB:
         self.dbs.query(Gedruckt).delete()
         self.dbs.query(Bemerkung).delete()
         self.dbs.query(Notiz).delete()
+        self.dbs.query(Tracker).delete()
         self.dbs.commit()
 
     def setup(self, dir_path):
         self.delete_all()
+        self.set_roles()
         card_nr, num_ignored_cards, ignored_card_ids = 1, 0, []
         id_bullinger = self.add_bullinger()
         for path in FileSystem.get_file_paths(dir_path, recursively=False):
@@ -150,8 +154,9 @@ class BullingerDB:
 
     @staticmethod
     def track(username, url, t):
-        db.session.add(Tracker(username=username, time=t, url=url))
-        db.session.commit()
+        if username != ADMIN:
+            db.session.add(Tracker(username=username, time=t, url=url))
+            db.session.commit()
 
     @staticmethod
     def count_correspondence():

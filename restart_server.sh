@@ -1,4 +1,12 @@
 #!/bin/bash
+#restart_server.sh
+
+source venv/bin/activate
+
+pip freeze > requirements.txt
+pip install -r requirements.txt
+
+git pull
 
 pkill gunicorn
 

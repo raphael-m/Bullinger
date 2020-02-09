@@ -8,7 +8,7 @@
 
 from App import app, login_manager
 from App.forms import *
-from flask import render_template, flash, redirect, url_for, make_response, jsonify, request, session
+from flask import render_template, flash, redirect, url_for, make_response, jsonify, request
 from flask_login import current_user, login_user, login_required, logout_user
 from Tools.BullingerDB import BullingerDB
 from collections import defaultdict
@@ -21,24 +21,31 @@ import re
 import time
 
 APP_NAME = "KoKoS-Bullinger"
+ADMINS = []
 
 
 @app.errorhandler(404)
-def not_found(error): return make_response(jsonify({'error': 'Not found'}), 404)
+def not_found(error):
+    BullingerDB.track(current_user.username, '/error/page_not_found', datetime.now())
+    print(error)
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
 @login_manager.user_loader
 def load_user(id_user):
     return User.query.get(int(id_user))
 
 @app.route('/admin', methods=['POST', 'GET'])
-def admin(): return render_template('admin.html', title="Admin")
+@login_required
+def admin():
+    BullingerDB.track(current_user.username, '/admin', datetime.now())
+    return render_template('admin.html', title="Admin")
 
 @app.route('/', methods=['POST', 'GET'])
 @app.route('/home', methods=['POST', 'GET'])
 @app.route('/index', methods=['POST', 'GET'])
 def index():
     """ start page """
-    BullingerDB.track(current_user.username, 'Start', datetime.now())
+    BullingerDB.track(current_user.username, '/home', datetime.now())
     guest_book = GuestBookForm()
     if guest_book.validate_on_submit() and guest_book.save.data:
         BullingerDB.save_comment(guest_book.comment.data, current_user.username, datetime.now())
@@ -52,15 +59,10 @@ def index():
         "num_received": letters_received
     })
 
-def get_base_client_variables():
-    c_vars = dict()
-    c_vars["username"], c_vars["user_stats"] = current_user.username, BullingerDB.get_user_stats(current_user.username)
-    return c_vars
-
 @app.route('/admin/setup', methods=['POST', 'GET'])
-@login_required
+# @login_required
 def setup():
-    # PASSWORD PROTECTION NEEDED                                                                                    !
+    # PASSWORD PROTECTION NEEDED
     BullingerDB(db.session).setup("Karteikarten/OCR")  # ~1h
     return redirect(url_for('admin'))
 
@@ -113,21 +115,25 @@ def register():
 @app.route('/overview', methods=['POST', 'GET'])
 @login_required
 def overview():
-    BullingerDB.track(current_user.username, 'Übersicht', datetime.now())
+    BullingerDB.track(current_user.username, '/overview', datetime.now())
     data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(None)
     persons = BullingerDB.get_persons_by_var(None, None)
-    return render_template('overview.html', title="Übersicht", vars={
-        "username": current_user.username,
-        "user_stats": BullingerDB.get_user_stats(current_user.username),
-        "table": data_overview,
-        "persons": persons,
-        "hits": len(persons),
-        "table_language": BullingerDB.get_language_stats(),
-        # "url_plot": plot_url,
-        # "num_of_cards": num_of_cards,
-        # "stats": data_percentages,
-        # "status_description": ' '.join([str(num_of_cards), 'Karteikarten:'])
-    })
+    return render_template(
+        'overview.html',
+        title="Übersicht",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "table": data_overview,
+            "persons": persons,
+            "hits": len(persons),
+            "table_language": BullingerDB.get_language_stats(),
+            # "url_plot": plot_url,
+            # "num_of_cards": num_of_cards,
+            # "stats": data_percentages,
+            # "status_description": ' '.join([str(num_of_cards), 'Karteikarten:'])
+        }
+    )
 
 # - months
 @app.route('/overview_year/<year>', methods=['POST', 'GET'])
@@ -295,8 +301,15 @@ def person_by_place(place):
 @app.route('/faq', methods=['POST', 'GET'])
 def faq():
     BullingerDB.track(current_user.username, 'FAQ', datetime.now())
-    c_vars = get_base_client_variables()
-    return render_template('faq.html', title="FAQ", vars=c_vars)
+    return render_template(
+        'faq.html',
+        title="FAQ",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username)
+        }
+    )
+
 
 @app.route('/quick_start', methods=['POST', 'GET'])
 @login_required

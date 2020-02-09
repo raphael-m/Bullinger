@@ -307,7 +307,7 @@ class User(UserMixin, db.Model):
     changes = db.Column(db.Integer)
     finished = db.Column(db.Integer)
     password_hash = db.Column(db.String(128))
-    time = db.Column(db.String(64))
+    time = db.Column(db.String(LENGTH_S))
 
     def __init__(self, username=None, e_mail=None, changes=0, finished=0, time=datetime.now()):
         self.username = username
@@ -344,7 +344,7 @@ class Tracker(db.Model):
     def __init__(self, username=None, url=None, time=datetime.now()):
         self.username = username
         self.url = url
-        self.zeit = time
+        self.time = time
 
     def __repr__(self):
         return '<Record {} {} {} {}>'.format(self.id, self.username, self.url, self.time)

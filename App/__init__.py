@@ -9,6 +9,8 @@ from flask import Flask
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_babelex import Babel
+from flask_user import SQLAlchemyAdapter, UserManager
 from flask_login import LoginManager
 from App.user import Anonymous
 from flask_admin import Admin
@@ -22,6 +24,7 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+
 # Accounts
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -30,14 +33,14 @@ login_manager.login_view = 'login'
 # login_manager.session_protection = "strong"
 # REMEMBER_COOKIE_DURATION = datetime.timedelta(minutes=60)
 
-# Admin
-# app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
-admin = Admin(app)
-
 # no cyclic imports (!)
 from App import routes, models
 from App.models import Kartei, User, Datum, Person, Absender, Empfaenger, Autograph, Kopie, Sprache, Literatur,\
     Gedruckt, Bemerkung, Notiz, Tracker
+
+# Admin
+# app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
+admin = Admin(app)
 
 admin.add_view(ModelView(User, db.session))
 admin.add_view(ModelView(Kartei, db.session))
