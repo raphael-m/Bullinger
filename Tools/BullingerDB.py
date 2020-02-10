@@ -854,4 +854,4 @@ class BullingerDB:
             tf = "%d.%m.%Y, %H:%M:%S"
             t = t0.strftime(tf)
             return n, t
-        return n, 't'
+        return n, '-'
