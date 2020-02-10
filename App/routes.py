@@ -55,7 +55,6 @@ def index():
     guest_book.process()
     letters_sent, letters_received = BullingerDB.get_bullinger_number_of_letters()
     n, t = BullingerDB.get_number_of_page_visits()
-    print(n, t)
     return render_template("index.html", title=APP_NAME, form=guest_book, vars={
         "username": current_user.username,
         "user_stats": BullingerDB.get_user_stats(current_user.username),

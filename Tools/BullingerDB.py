@@ -830,7 +830,7 @@ class BullingerDB:
             p_all.c.p_name,
             p_all.c.p_forename,
             p_all.c.p_place,
-        ).order_by(desc(p_all.c.id_a))
+        ).order_by(asc(p_all.c.id_a))
         return [[r[0],
                  r[1] if r[1] else Config.SN,
                  r[2] if r[2] else Config.SN,
