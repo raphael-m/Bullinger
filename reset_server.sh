@@ -1,5 +1,10 @@
 #!/bin/bash
-#reset_server.sh
+#restart_server.sh
+
+source venv/bin/activate
+
+pip freeze > requirements.txt
+pip install -r requirements.txt
 
 git pull || git reset --hard origin/master
 
