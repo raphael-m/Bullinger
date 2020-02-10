@@ -6,7 +6,7 @@ source venv/bin/activate
 pip freeze > requirements.txt
 pip install -r requirements.txt
 
-git pull
+git pull || git reset --hard origin/master
 
 pkill gunicorn
 

@@ -3,14 +3,11 @@
 # __init__.py
 # Bernard Schroffenegger
 # 20th of October, 2019
-import datetime
 
 from flask import Flask
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_babelex import Babel
-from flask_user import SQLAlchemyAdapter, UserManager
 from flask_login import LoginManager
 from App.user import Anonymous
 from flask_admin import Admin
@@ -23,7 +20,6 @@ app.config.from_object(Config)
 # Database
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-
 
 # Accounts
 login_manager = LoginManager()
@@ -39,7 +35,7 @@ from App.models import Kartei, User, Datum, Person, Absender, Empfaenger, Autogr
     Gedruckt, Bemerkung, Notiz, Tracker
 
 # Admin
-# app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
+app.config['FLASK_ADMIN_SWATCH'] = 'cosmo'  # cerulean, slate, cosmo
 admin = Admin(app)
 
 admin.add_view(ModelView(User, db.session))

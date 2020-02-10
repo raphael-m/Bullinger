@@ -7,9 +7,7 @@
 from Tools.Dictionaries import CountDict
 from Tools.Plots import *
 from App.models import *
-from sqlalchemy import asc, desc, func, and_, or_, literal, union_all, select
-from sqlalchemy.orm import aliased
-from collections import defaultdict
+from sqlalchemy import asc, desc, func, and_, or_, literal, union_all
 from operator import itemgetter
 from random import sample, randrange
 
@@ -39,8 +37,6 @@ class BullingerDB:
 
     def delete_all(self):
         self.dbs.query(User).delete()
-        self.dbs.query(Role).delete()
-        self.dbs.query(UserRoles).delete()
         self.dbs.query(Kartei).delete()
         self.dbs.query(Datum).delete()
         self.dbs.query(Person).delete()
@@ -58,7 +54,6 @@ class BullingerDB:
 
     def setup(self, dir_path):
         self.delete_all()
-        self.set_roles()
         card_nr, num_ignored_cards, ignored_card_ids = 1, 0, []
         id_bullinger = self.add_bullinger()
         for path in FileSystem.get_file_paths(dir_path, recursively=False):
@@ -94,7 +89,7 @@ class BullingerDB:
         zeros = (5 - len(str(i))) * '0'
         pdf = os.path.join("Karteikarten/PDF", "HBBW_Karteikarte_" + zeros + str(i) + ".pdf")
         ocr = os.path.join("Karteikarten/OCR", "HBBW_Karteikarte_" + zeros + str(i) + ".ocr")
-        self.dbs.add(Kartei(id_brief=i, path_pdf=pdf, path_ocr=ocr))
+        self.dbs.add(Kartei(id_brief=i, path_pdf=pdf, path_ocr=ocr, user=ADMIN, time=self.t))
         self.dbs.commit()
 
     def remove_user(self, username):
@@ -440,14 +435,15 @@ class BullingerDB:
     @staticmethod
     def _get_data_overview(year=None, state=None):
         y = None if year == Config.SD else year
+        recent_index = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
         recent_dates = BullingerDB.get_most_recent_only(db.session, Datum).subquery()
         base = db.session.query(
-            Kartei.id_brief,
-            Kartei.status,
+            recent_index.c.id_brief,
+            recent_index.c.status,
             recent_dates.c.jahr_a,
             recent_dates.c.monat_a
-        ).join(recent_dates, recent_dates.c.id_brief == Kartei.id_brief)
-        if state: base = base.filter(Kartei.status == state)
+        ).join(recent_dates, recent_dates.c.id_brief == recent_index.c.id_brief)
+        if state: base = base.filter(recent_index.c.status == state)
         if year: base = base.filter(recent_dates.c.jahr_a == y)
         col = recent_dates.c.jahr_a if not y else recent_dates.c.monat_a
         null_count = len(base.filter(col.is_(None)).all())
@@ -549,8 +545,9 @@ class BullingerDB:
         m_num = BullingerDB.convert_month_to_int(month)
         data, null = [], []
         for d in Datum.query.filter_by(jahr_a=year, monat_a=m_num):
-            r = Kartei.query.filter_by(id_brief=d.id_brief).first().rezensionen
-            s = Kartei.query.filter_by(id_brief=d.id_brief).first().status
+            recent_index = BullingerDB.get_most_recent_only(db.session, Kartei).filter_by(id_brief=d.id_brief).first()
+            r = recent_index.rezensionen
+            s = recent_index.status
             if d.tag_a: data.append([d.id_brief, d.tag_a, d.monat_a, d.jahr_a, r, s])
             else: null.append([d.id_brief, d.tag_a, d.monat_a, d.jahr_a, r, s])
         data, new = null + sorted(data, key=itemgetter(1)), []
@@ -572,40 +569,51 @@ class BullingerDB:
         """ :return: [<int>: total number of cards; <dict>: state <str> -> [count <int>, percentage <float>] """
         data, number_of_cards = dict(), sum([o, a, u, i])
         if number_of_cards > 0:
-            data["offen"] = [o, round(100 * o / number_of_cards, 3)]
-            data["abgeschlossen"] = [a, round(100 * a / number_of_cards, 3)]
-            data["unklar"] = [u, round(100 * u / number_of_cards, 3)]
-            data["ungültig"] = [i, round(100 * i / number_of_cards, 3)]
+            data[Config.S_OPEN] = [o, round(100 * o / number_of_cards, 3)]
+            data[Config.S_FINISHED] = [a, round(100 * a / number_of_cards, 3)]
+            data[Config.S_UNKNOWN] = [u, round(100 * u / number_of_cards, 3)]
+            data[Config.S_INVALID] = [i, round(100 * i / number_of_cards, 3)]
         else:
-            data["offen"] = [o, '-']
-            data["abgeschlossen"] = [a, '-']
-            data["unklar"] = [u, '-']
-            data["ungültig"] = [i, '-']
+            data[Config.S_OPEN] = [o, Config.NONE]
+            data[Config.S_FINISHED] = [a, Config.NONE]
+            data[Config.S_UNKNOWN] = [u, Config.NONE]
+            data[Config.S_INVALID] = [i, Config.NONE]
         return [number_of_cards, data]
 
     @staticmethod
     def quick_start():  # ">>"
-        """ return the first card with status 'offen'; if there is none anymore, return cards with state 'unklar'"""
-        e = Kartei.query.filter_by(status='offen').all()
+        e = BullingerDB.get_cards_with_status(Config.S_OPEN)
         if e: return e[randrange(len(e))].id_brief
-        e = Kartei.query.filter_by(status='unklar').all()
+        e = BullingerDB.get_cards_with_status(Config.S_UNKNOWN)
         if e: return e[randrange(len(e))].id_brief
         return None  # redirect to another page...
+
+    @staticmethod
+    def get_cards_with_status(status):
+        recent_index = BullingerDB.get_most_recent_only(db.session, Kartei).subquery().alias("recent_index")
+        return db.session.query(
+                recent_index.c.id_brief,
+                recent_index.c.status
+            ).filter(recent_index.c.status == status).all()
+
+    @staticmethod
+    def get_number_of_cards():
+        return BullingerDB.get_most_recent_only(db.session, Kartei).count()
 
     # Navigation between assignments
     @staticmethod
     def get_next_card_number(i):  # ">"
         """ next card in order """
-        return i + 1 if i + 1 <= Kartei.query.count() else 1
+        return i + 1 if i + 1 <= BullingerDB.get_number_of_cards() else 1
 
     @staticmethod
     def get_prev_card_number(i):  # "<"
-        return i - 1 if i - 1 > 0 else Kartei.query.count()
+        return i - 1 if i - 1 > 0 else BullingerDB.get_number_of_cards()
 
     @staticmethod
     def get_prev_assignment(i):  # "<<"
         """ prev open (/unclear, if #open is 0) """
-        i, j = BullingerDB.get_prev_card_number(i), Kartei.query.count()
+        i, j = BullingerDB.get_prev_card_number(i), BullingerDB.get_number_of_cards()
         while not BullingerDB.is_assignable(i) and j > 0:
             i = BullingerDB.get_prev_card_number(i)
             j -= 1
@@ -613,7 +621,7 @@ class BullingerDB:
 
     @staticmethod
     def get_next_assignment(i):  # ">>"
-        i, j = BullingerDB.get_next_card_number(i), Kartei.query.count()
+        i, j = BullingerDB.get_next_card_number(i), BullingerDB.get_number_of_cards()
         while not BullingerDB.is_assignable(i) and j > 0:
             i = BullingerDB.get_next_card_number(i)
             j -= 1
@@ -621,7 +629,15 @@ class BullingerDB:
 
     @staticmethod
     def is_assignable(i):
-        c = Kartei.query.filter_by(id_brief=i).filter(or_(Kartei.status == 'offen', Kartei.status == 'unklar')).first()
+        recent_index = BullingerDB.get_most_recent_only(db.session, Kartei).subquery().alias("recent_index")
+        c = db.session.query(
+                recent_index.c.id_brief,
+                recent_index.c.status
+            ).filter(recent_index.c.id_brief == i)\
+            .filter(or_(
+                recent_index.c.status == 'offen',
+                recent_index.c.status == 'unklar')
+            ).first()
         return True if c else False
 
     # Stats/Plots
@@ -640,7 +656,7 @@ class BullingerDB:
     def get_language_stats():
         cd, data, no_lang = CountDict(), [], 0
         for s in Sprache.query.all(): cd.add(s.sprache)
-        n = Kartei.query.count()
+        n = BullingerDB.get_number_of_cards()
         data = [[s if s else Config.NONE, cd[s], round(cd[s] / n * 100, 3)] for s in cd]
         return sorted(data, key=itemgetter(1), reverse=True)
 
@@ -828,3 +844,12 @@ class BullingerDB:
             ).filter(Sprache.sprache == lang)\
             .order_by(asc(Sprache.id_brief))
         return [[d.id_brief, d.sprache if d.sprache else Config.NONE] for d in data]
+
+    @staticmethod
+    def get_number_of_page_visits():
+        n = Tracker.query.count()
+        t0 = Tracker.query.order_by(asc(Tracker.time)).first().time
+        t0 = datetime.strptime(t0, "%Y-%m-%d %H:%M:%S.%f")
+        tf = "%d.%m.%Y, %H:%M:%S"
+        t = t0.strftime(tf)
+        return n, t

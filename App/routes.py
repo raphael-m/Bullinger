@@ -12,7 +12,6 @@ from flask import render_template, flash, redirect, url_for, make_response, json
 from flask_login import current_user, login_user, login_required, logout_user
 from Tools.BullingerDB import BullingerDB
 from collections import defaultdict
-from sqlalchemy import desc
 from App.models import *
 from config import Config
 
@@ -23,12 +22,15 @@ import time
 APP_NAME = "KoKoS-Bullinger"
 ADMINS = []
 
-
 @app.errorhandler(404)
 def not_found(error):
-    BullingerDB.track(current_user.username, '/error/page_not_found', datetime.now())
+    BullingerDB.track(current_user.username, '/page_not_found', datetime.now())
     print(error)
     return make_response(jsonify({'error': 'Not found'}), 404)
+
+def restrict_access():
+    if current_user.username != 'Admin': return index()
+    else: return None
 
 @login_manager.user_loader
 def load_user(id_user):
@@ -37,7 +39,8 @@ def load_user(id_user):
 @app.route('/admin', methods=['POST', 'GET'])
 @login_required
 def admin():
-    BullingerDB.track(current_user.username, '/admin', datetime.now())
+    x = restrict_access()
+    if x: return x
     return render_template('admin.html', title="Admin")
 
 @app.route('/', methods=['POST', 'GET'])
@@ -51,24 +54,31 @@ def index():
         BullingerDB.save_comment(guest_book.comment.data, current_user.username, datetime.now())
     guest_book.process()
     letters_sent, letters_received = BullingerDB.get_bullinger_number_of_letters()
+    n, t = BullingerDB.get_number_of_page_visits()
+    print(n, t)
     return render_template("index.html", title=APP_NAME, form=guest_book, vars={
         "username": current_user.username,
         "user_stats": BullingerDB.get_user_stats(current_user.username),
         "comments": BullingerDB.get_comments(current_user.username),
         "num_sent": letters_sent,
-        "num_received": letters_received
+        "num_received": letters_received,
+        "num_page_visits": n,
+        "since": t
     })
 
 @app.route('/admin/setup', methods=['POST', 'GET'])
-# @login_required
+@login_required
 def setup():
-    # PASSWORD PROTECTION NEEDED
+    x = restrict_access()
+    if x: return x
     BullingerDB(db.session).setup("Karteikarten/OCR")  # ~1h
     return redirect(url_for('admin'))
 
 @app.route('/admin/delete_user/<username>', methods=['POST', 'GET'])
 @login_required
 def delete_user(username):
+    x = restrict_access()
+    if x: return x
     BullingerDB(db.session).remove_user(username)
     return redirect(url_for('admin'))
 
@@ -344,7 +354,7 @@ def assignment(id_brief):
 @login_required
 def send_data(id_brief):
     id_brief = int(id_brief)
-    kartei = Kartei.query.filter_by(id_brief=id_brief).first()
+    kartei = Kartei.query.filter_by(id_brief=id_brief).order_by(desc(Kartei.zeit)).first()
     date = Datum.query.filter_by(id_brief=id_brief).order_by(desc(Datum.zeit)).first()
     r = Empfaenger.query.filter_by(id_brief=id_brief).order_by(desc(Empfaenger.zeit)).first()
     receiver = Person.query.get(r.id_person) if r else None
@@ -445,7 +455,7 @@ def save_data(id_brief):
     number_of_changes += bdb.save_printed(id_brief, data["card"]["printed"], user, t)
     number_of_changes += bdb.save_remark(id_brief, data["card"]["first_sentence"], user, t)
     bdb.save_comment_card(id_brief, data["card"]["remarks"], user, t)
-    Kartei.update_file_status(db.session, id_brief, data["state"])
+    Kartei.update_file_status(db.session, id_brief, data["state"], user, t)
     User.update_user(db.session, user, number_of_changes, data["state"])
     return redirect(url_for('assignment', id_brief=id_brief))
 

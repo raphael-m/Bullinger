@@ -33,7 +33,7 @@
                 <p></p>
                 <p>
                     &#8594; <a class="text_link" href="{{url_for('quick_start')}}">Start</a>
-                    <span class="kw_warning">(Testversion 1.0)</span>
+                    <span class="kw_warning">(Testversion v1.1)</span>
                 </p>
                 <p>
                     <span class="kw_warning">
@@ -149,7 +149,13 @@
         </div>
     </div>
     <div class="h2_separator"></div>
+    <div class="clearing"></div>
 
 </div>
+
+<p></p>
+
+Dies ist der {{ vars["num_page_visits"] }}. Seitenaufruf seit dem {{ vars["since"] }}.
+
 
 {% endblock %}

@@ -3,14 +3,13 @@
 # models.py
 # Bernard Schroffenegger
 # 20th of October, 2019
+from sqlalchemy import desc
 
 from App import db
 from config import Config
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-
-import os
 
 """ DATABASE SCHEMA DEFINITIONS
 
@@ -31,21 +30,26 @@ class Kartei(db.Model):
     status = db.Column(db.String(LENGTH_S))
     pfad_OCR = db.Column(db.String(LENGTH_M))
     pfad_PDF = db.Column(db.String(LENGTH_M))
+    anwender = db.Column(db.String(LENGTH_S))
+    zeit = db.Column(db.String(LENGTH_S))
 
-    def __init__(self, id_brief=None, reviews=0, state=Config.S_OPEN, path_ocr=None, path_pdf=None):
+    def __init__(
+            self, id_brief=None, reviews=0, state=Config.S_OPEN,
+            path_ocr=None, path_pdf=None,
+            user=None,
+            time=datetime.now()
+    ):
         self.id_brief = id_brief
         self.rezensionen = reviews
         self.status = state
         self.pfad_OCR = path_ocr
         self.pfad_PDF = path_pdf
+        self.anwender = user
+        self.zeit = time
 
     @staticmethod
-    def update_file_status(database, id_brief, state):
-        file = Kartei.query.filter_by(id_brief=id_brief).first()
-        if file:
-            file.status = state
-            file.rezensionen += 1
-        else: database.add(Kartei(id_brief=id_brief, state=state))
+    def update_file_status(database, id_brief, state, user, t):
+        database.add(Kartei(id_brief=id_brief, state=state, user=user, time=t))
         database.commit()
 
     def __repr__(self):
