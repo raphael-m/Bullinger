@@ -848,8 +848,10 @@ class BullingerDB:
     @staticmethod
     def get_number_of_page_visits():
         n = Tracker.query.count()
-        t0 = Tracker.query.order_by(asc(Tracker.time)).first().time
-        t0 = datetime.strptime(t0, "%Y-%m-%d %H:%M:%S.%f")
-        tf = "%d.%m.%Y, %H:%M:%S"
-        t = t0.strftime(tf)
-        return n, t
+        t0 = Tracker.query.order_by(asc(Tracker.time)).first()
+        if t0:
+            t0 = datetime.strptime(t0, "%Y-%m-%d %H:%M:%S.%f")
+            tf = "%d.%m.%Y, %H:%M:%S"
+            t = t0.strftime(tf)
+            return n, t
+        return n, 't'
