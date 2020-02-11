@@ -17,14 +17,9 @@
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/links.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/form.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/table.css') }}">
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/card.css') }}">
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/menu_account.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/header.css') }}">
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="{{ url_for('static', filename='js/account.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/load.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/image.js') }}"></script>
         <script src="{{ url_for('static', filename='js/sort-table.js') }}"></script>
         <script src="{{ url_for('static', filename='js/sort-table.min.js') }}"></script>
 
@@ -40,10 +35,10 @@
                 </a>
             </div>
             <ul class="bu-header-menu">
-                <li><a {%- if request.path == "/"  %} class="active"{% endif %} href="/">Allgemeines</a></li>
+                <li><a {%- if request.path=="/" %} class="active"{% endif %} href="/">Allgemeines</a></li>
                 <li><a {%- if request.path.startswith("/overview") or request.path.startswith("/assignment") %} class="active"{% endif %} href="/overview">Übersicht</a></li>
-                <li><a {%- if request.path == "/stats" %} class="active"{% endif %} href="/stats">Statistiken</a></li>
-                <li><a {%- if request.path == "/faq" %} class="active"{% endif %} href="/faq">FAQ</a></li>
+                <li><a {%- if request.path=="/stats" %} class="active"{% endif %} href="/stats">Statistiken</a></li>
+                <li><a {%- if request.path=="/faq" %} class="active"{% endif %} href="/faq">FAQ</a></li>
                 <li><a href="/quick_start">Los!</a></li>
             </ul>
             <div class="bu-header-account">

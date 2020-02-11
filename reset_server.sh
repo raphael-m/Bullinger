@@ -3,10 +3,10 @@
 
 source venv/bin/activate
 
+git pull || git reset --hard origin/master
+
 pip freeze > requirements.txt
 pip install -r requirements.txt
-
-git pull || git reset --hard origin/master
 
 pkill gunicorn
 

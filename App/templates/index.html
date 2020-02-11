@@ -2,7 +2,9 @@
 
 {% block content %}
 
-<h1>Bullinger-KoKoS (Kollaboratives-Korrektur-System)
+<h1>
+    >
+    Bullinger-KoKoS (Kollaboratives-Korrektur-System)
     {% include "user_status.html" %}
 </h1>
 
@@ -17,29 +19,31 @@
                 </div>
             </div>
             <div class="parallel intro_right">
-                <p>
-                    Der Zürcher Reformator
-                    <a class="text_link" href="https://de.wikipedia.org/wiki/Heinrich_Bullinger">Heinrich Bullinger</a>
-                    (1504-1575) war Mitarbeiter und Nachfolger von Zwingli und ein wichtiger Multiplikator für die Ideen
-                    der Reformation in der Schweiz und in Europa. Entsprechend gross war sein Korrespondenz-Netzwerk.
-                </p>
-                <p>
-                    Der erhaltene Briefwechsel besteht aus mehr als 2000 Briefen, die er geschrieben und rund 10’000 Briefen,
-                    die er erhalten hat. Die Originale liegen mehrheitlich im Staatsarchiv Zürich und in der Zentralbibliothek
-                    Zürich. Zu jedem Brief gibt es eine Karteikarte auf Papier. Bitte helfen Sie uns, diese Karteikarte in
-                    unsere Datenbank zu überführen.
-                </p>
-                <p>Vielen Dank!</p>
-                <p></p>
-                <p>
-                    &#8594; <a class="text_link" href="{{url_for('quick_start')}}">Start</a>
-                    <span class="kw_warning">(Testversion v1.1)</span>
-                </p>
-                <p>
-                    <span class="kw_warning">
-                        ACHTUNG, jetzt erfasste Änderungen gehen möglicherweise wieder verloren.
-                    </span>
-                </p>
+                <div class="intro_text">
+                    <p>
+                        Der Zürcher Reformator
+                        <a class="text_link" href="https://de.wikipedia.org/wiki/Heinrich_Bullinger">Heinrich Bullinger</a>
+                        (1504-1575) war Mitarbeiter und Nachfolger von Zwingli und ein wichtiger Multiplikator für die Ideen
+                        der Reformation in der Schweiz und in Europa. Entsprechend gross war sein Korrespondenz-Netzwerk.
+                    </p>
+                    <p>
+                        Der erhaltene Briefwechsel besteht aus mehr als 2000 Briefen, die er geschrieben und rund 10’000 Briefen,
+                        die er erhalten hat. Die Originale liegen mehrheitlich im Staatsarchiv Zürich und in der Zentralbibliothek
+                        Zürich. Zu jedem Brief gibt es eine Karteikarte auf Papier. Bitte helfen Sie uns, diese Karteikarte in
+                        unsere Datenbank zu überführen.
+                    </p>
+                    <p>Vielen Dank!</p>
+                    <p></p>
+                    <p>
+                        &#8594; <a class="text_link" href="{{url_for('quick_start')}}">Start</a>
+                        <span class="kw_warning">(Testversion v1.2)</span>
+                    </p>
+                    <p>
+                        <span class="kw_warning">
+                            ACHTUNG, jetzt erfasste Änderungen gehen möglicherweise wieder verloren.
+                        </span>
+                    </p>
+                </div>
             </div>
             <div class="clearing"></div>
         </div>
@@ -47,7 +51,7 @@
     <div class="h2_separator"></div>
 
     <div class="h2_box">
-        <h2>Längerfristigere Projektziele</h2>
+        <h2>Projektziele</h2>
         <div class="h2_section">
             <ul>
                 <li><span class="kw">Aktuell: Aufbau eines Karteisystems zum Bullinger-Briefwechsel</span>
@@ -95,7 +99,7 @@
                 </li>
                 <li>
                     <a href="bernardsilvan.schroffenegger@uzh.ch">Bernard Schroffenegger</a>
-                    (Softwareentwickler/Administrator),
+                    (Admin/Programmierer),
                     Institut für Computerlinguistik,
                     Andreasstrasse 15,
                     Zürich
@@ -143,19 +147,19 @@
             <form method="post" novalidate>
                 {{ form.csrf_token }}
                 {{ form.hidden_tag() }}
-                <div>{{ form.comment(class="note", placeholder="Ihre Bemerkung zum Projekt") }}</div>
+                <div>{{ form.comment(class="note", placeholder="Bemerkung zum Projekt") }}</div>
                 <div>{{ form.save(class="buttonX button_frills") }}</div>
             </form>
         </div>
     </div>
-    <div class="h2_separator"></div>
     <div class="clearing"></div>
-
 </div>
 
-<p></p>
-
-Dies ist der {{ vars["num_page_visits"] }}. Seitenaufruf seit dem {{ vars["since"] }}.
-
+<div class="page_views">
+    Seitenaufruf
+    #{{ vars["num_page_visits"] }}
+    seit dem {{ vars["since"] }}
+    ({{ vars["date"] }})
+</div>
 
 {% endblock %}

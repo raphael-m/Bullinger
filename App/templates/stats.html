@@ -2,16 +2,18 @@
 
 {% block content %}
 
-<h1>Statistiken
+<h1>
+	>
+	Statistiken
 	{% include "user_status.html" %}
 </h1>
 
 <div class="main_box">
 
 	<h2>Statusübersicht</h2>
-
-	{% include "overview__status.html" %}
-
+	<div class="h2_section">
+		{% include "overview__status.html" %}
+	</div>
 
 	<h2>Mitarbeiter</h2>
 	<div class="h2_section">
@@ -83,12 +85,16 @@
 	<h2>Top-{{ vars["n_top"] }}-Korrespondenten</h2>
 	<div class="h2_section">
 
-		<p>Wer hat die meisten? Wir ignorieren hier die Ortschaften und Zählen alle Personen
-			mit identschen Namen (Vor-/Nachname).
+		<p>
+			Wer hat die meisten?
+			Ignorieren wir die Ortschaften und zählen alle Absender/Empfänger
+			mit identschen Namen (Vor-/Nachname), bietet sich folgendes Bild:
 		</p>
 
+		<!--
 		<p>http://130.60.24.72/stats/&#60;NUMMER_TOP_N&#62;</p>
-
+		-->
+		
 		<div class="parallel">
 			<table class="js-sort-table paleBlueRows">
 				<thead class="my_table_head">

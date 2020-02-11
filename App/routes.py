@@ -24,13 +24,13 @@ ADMINS = []
 
 @app.errorhandler(404)
 def not_found(error):
-    BullingerDB.track(current_user.username, '/page_not_found', datetime.now())
+    BullingerDB.track(current_user.username, '/not_found', datetime.now())
     print(error)
     return make_response(jsonify({'error': 'Not found'}), 404)
 
-def restrict_access():
-    if current_user.username != 'Admin': return index()
-    else: return None
+def is_admin():
+    if current_user.username == 'Admin': return True
+    else: return False
 
 @login_manager.user_loader
 def load_user(id_user):
@@ -39,9 +39,8 @@ def load_user(id_user):
 @app.route('/admin', methods=['POST', 'GET'])
 @login_required
 def admin():
-    x = restrict_access()
-    if x: return x
-    return render_template('admin.html', title="Admin")
+    if is_admin(): return render_template('admin.html', title="Admin")
+    return index()
 
 @app.route('/', methods=['POST', 'GET'])
 @app.route('/home', methods=['POST', 'GET'])
@@ -54,7 +53,7 @@ def index():
         BullingerDB.save_comment(guest_book.comment.data, current_user.username, datetime.now())
     guest_book.process()
     letters_sent, letters_received = BullingerDB.get_bullinger_number_of_letters()
-    n, t = BullingerDB.get_number_of_page_visits()
+    n, t0, date = BullingerDB.get_number_of_page_visits()
     return render_template("index.html", title=APP_NAME, form=guest_book, vars={
         "username": current_user.username,
         "user_stats": BullingerDB.get_user_stats(current_user.username),
@@ -62,28 +61,29 @@ def index():
         "num_sent": letters_sent,
         "num_received": letters_received,
         "num_page_visits": n,
-        "since": t
+        "since": t0,
+        "date": date,
     })
 
 @app.route('/admin/setup', methods=['POST', 'GET'])
 @login_required
 def setup():
-    x = restrict_access()
-    if x: return x
-    BullingerDB(db.session).setup("Karteikarten/OCR")  # ~1h
-    return redirect(url_for('admin'))
+    if is_admin():
+        BullingerDB(db.session).setup("Karteikarten/OCR")  # ~1h
+        return redirect(url_for('admin'))
+    return index()
 
 @app.route('/admin/delete_user/<username>', methods=['POST', 'GET'])
 @login_required
 def delete_user(username):
-    x = restrict_access()
-    if x: return x
-    BullingerDB(db.session).remove_user(username)
-    return redirect(url_for('admin'))
+    if is_admin():
+        BullingerDB(db.session).remove_user(username)
+        return redirect(url_for('admin'))
+    return index()
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    BullingerDB.track(current_user.username, 'Login', datetime.now())
+    BullingerDB.track(current_user.username, '/login', datetime.now())
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
@@ -99,13 +99,13 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
-    BullingerDB.track(current_user.username, 'Logout', datetime.now())
+    BullingerDB.track(current_user.username, '/logout', datetime.now())
     logout_user()
     return redirect(url_for('index'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    BullingerDB.track(current_user.username, 'Register', datetime.now())
+    BullingerDB.track(current_user.username, '/register', datetime.now())
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = RegistrationForm()
@@ -148,7 +148,7 @@ def overview():
 @app.route('/overview_year/<year>', methods=['POST', 'GET'])
 @login_required
 def overview_year(year):
-    BullingerDB.track(current_user.username, 'Übersicht Jahr '+year, datetime.now())
+    BullingerDB.track(current_user.username, '/overview/'+year, datetime.now())
     data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(year)
     return render_template('overview_year.html', title="Übersicht", vars={
         "username": current_user.username,
@@ -165,7 +165,7 @@ def overview_year(year):
 @app.route('/overview_month/<year>/<month>', methods=['POST', 'GET'])
 @login_required
 def overview_month(year, month):
-    BullingerDB.track(current_user.username, "Übersicht "+str(month)+" "+str(year), datetime.now())
+    BullingerDB.track(current_user.username, '/'.join(['', str(month), str(year)]), datetime.now())
     if month == Config.SD: month = 0
     data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview_month(year, month)
     month = BullingerDB.convert_month_to_str(month)
@@ -187,7 +187,7 @@ def overview_month(year, month):
 
 @app.route('/overview/<name>/<forename>/<place>', methods=['GET'])
 def overview_cards_of_person(name, forename, place):
-    BullingerDB.track(current_user.username, 'Übersicht Person '+name, datetime.now())
+    BullingerDB.track(current_user.username, '/overview/'+name, datetime.now())
     data = BullingerDB.get_overview_person(
         None if name == Config.SN else name,
         None if forename == Config.SN else forename,
@@ -208,7 +208,7 @@ def overview_cards_of_person(name, forename, place):
 
 @app.route('/overview/<lang>', methods=['GET'])
 def overview_languages(lang):
-    BullingerDB.track(current_user.username, 'Übersicht Sprache '+lang, datetime.now())
+    BullingerDB.track(current_user.username, 'overview/'+lang, datetime.now())
     data = BullingerDB.get_overview_languages(None if lang == Config.NONE else lang)
     return render_template(
         "overview_languages_cards.html",
@@ -224,7 +224,7 @@ def overview_languages(lang):
 @app.route('/stats', methods=['GET'])
 @app.route('/stats/<n_top>', methods=['GET'])
 def stats(n_top=50):
-    BullingerDB.track(current_user.username, 'Stats, Top '+str(n_top), datetime.now())
+    BullingerDB.track(current_user.username, '/stats', datetime.now())
     n_top, id_file = int(n_top), str(int(time.time()))
     stats_languages = BullingerDB.get_language_stats()
     data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(None)
@@ -252,7 +252,7 @@ def stats(n_top=50):
 
 @app.route('/overview/person_by_name/<name>', methods=['GET'])
 def person_by_name(name):
-    BullingerDB.track(current_user.username, 'Person '+name, datetime.now())
+    BullingerDB.track(current_user.username, '/overview/'+name, datetime.now())
     data = BullingerDB.get_persons_by_var(None if name == Config.SN else name, 0)
     return render_template(
         "overview_general.html",
@@ -271,7 +271,7 @@ def person_by_name(name):
 
 @app.route('/overview/person_by_forename/<forename>', methods=['GET'])
 def person_by_forename(forename):
-    BullingerDB.track(current_user.username, 'Person ' + forename, datetime.now())
+    BullingerDB.track(current_user.username, '/overview/' + forename, datetime.now())
     data = BullingerDB.get_persons_by_var(None if forename == Config.SN else forename, 1)
     return render_template(
         "overview_general.html",
@@ -290,7 +290,7 @@ def person_by_forename(forename):
 
 @app.route('/overview/person_by_place/<place>', methods=['GET'])
 def person_by_place(place):
-    BullingerDB.track(current_user.username, 'Person ' + place, datetime.now())
+    BullingerDB.track(current_user.username, '/overview/' + place, datetime.now())
     data = BullingerDB.get_persons_by_var(None if place == Config.SL else place, 2)
     return render_template(
         "overview_general.html",
@@ -309,7 +309,7 @@ def person_by_place(place):
 
 @app.route('/faq', methods=['POST', 'GET'])
 def faq():
-    BullingerDB.track(current_user.username, 'FAQ', datetime.now())
+    BullingerDB.track(current_user.username, '/faq', datetime.now())
     return render_template(
         'faq.html',
         title="FAQ",
@@ -323,7 +323,7 @@ def faq():
 @app.route('/quick_start', methods=['POST', 'GET'])
 @login_required
 def quick_start():
-    BullingerDB.track(current_user.username, 'LOS!', datetime.now())
+    BullingerDB.track(current_user.username, '/start', datetime.now())
     i = BullingerDB.quick_start()
     if i: return redirect(url_for('assignment', id_brief=str(i)))
     return redirect(url_for('overview'))  # we are done !
@@ -331,7 +331,7 @@ def quick_start():
 @app.route('/assignment/<id_brief>', methods=['GET'])
 @login_required
 def assignment(id_brief):
-    BullingerDB.track(current_user.username, 'Karte ' + str(id_brief), datetime.now())
+    BullingerDB.track(current_user.username, '/card/' + str(id_brief), datetime.now())
     ui_path = Config.BULLINGER_UI_PATH
     ui_path = ui_path + ("" if ui_path.endswith("/") else "/")
     # Load vue html from deployment and strip unneeded tags (html, body, doctype, title, icon, fonts etc.)

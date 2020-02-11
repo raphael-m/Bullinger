@@ -3,6 +3,7 @@
 {% block content %}
 
 <h1>
+	>
     <a class="header_link" href="{{url_for('overview')}}">Kartei</a> /
     <a class="header_link" href="{{url_for('overview_year', year=vars['year'])}}">{{ vars["year"] }}</a> /
 	{{ vars["month"] }}
@@ -11,38 +12,42 @@
 
 <div class="main_box">
 
-	<h2>Monatsübersicht {{ vars["month"]+' '+vars["year"]}}</h2>
+	<div class="h2_box">
+		<h2>Monatsübersicht {{ vars["month"]+' '+vars["year"]}}</h2>
+		<div class="h2_section">
+			<p>In der nachstehenden Tabelle können Sie eine Karteikarte auswählen und anschliessend digitalisieren:</p>
 
-	<p>In der nachstehenden Tabelle können Sie eine Karteikarte auswählen und anschliessend digitalisieren:</p>
+			{% include "elem_quickstart.html" %}
 
-	{% include "elem_quickstart.html" %}
+			<table class="js-sort-table paleBlueRows">
+				<thead class="my_table_head">
+					<tr class="my_table_head_row">
+						<th class="js-sort-number my_table_head_cell">Brief Nr.</th>
+						<th class="js-sort-number my_table_head_cell">Datum</th>
+						<th class="js-sort-number my_table_head_cell">Rezensionen</th>
+						<th class="js-sort-string my_table_head_cell">Status</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for r in vars["table"] %}
+					<tr class="my_table_row">
+						<td class="my_table_cell"><a href="{{url_for('assignment', id_brief=r[0])}}">{{ r[0] }}</a></td>
+						<td class="my_table_cell"> {{ r[1][0] }} </td>
+						<td class="my_table_cell"> {{ r[2] }} </td>
+						<td class="my_table_cell"> {{ r[3] }} </td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
 
-	<table class="js-sort-table paleBlueRows">
-		<thead class="my_table_head">
-			<tr class="my_table_head_row">
-				<th class="js-sort-number my_table_head_cell">Brief Nr.</th>
-				<th class="js-sort-number my_table_head_cell">Datum</th>
-				<th class="js-sort-number my_table_head_cell">Rezensionen</th>
-				<th class="js-sort-string my_table_head_cell">Status</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for r in vars["table"] %}
-			<tr class="my_table_row">
-				<td class="my_table_cell"><a href="{{url_for('assignment', id_brief=r[0])}}">{{ r[0] }}</a></td>
-				<td class="my_table_cell"> {{ r[1][0] }} </td>
-				<td class="my_table_cell"> {{ r[2] }} </td>
-				<td class="my_table_cell"> {{ r[3] }} </td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-
-
-	<h2>Statusübersicht</h2>
-
-	{% include "overview__status.html" %}
-
+	<div class="h2_box">
+		<h2>Statusübersicht</h2>
+		<div class="h2_section">
+			{% include "overview__status.html" %}
+		</div>
+	</div>
 </div>
 
 {% endblock %}

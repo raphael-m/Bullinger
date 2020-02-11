@@ -2,50 +2,52 @@
 
 {% block content %}
 
-<h1><a class="header_link" href="{{url_for('overview')}}">Übersicht</a> / {{ vars["year"] }}
+<h1>
+	>
+	<a class="header_link" href="{{url_for('overview')}}">Übersicht</a> /
+	{{ vars["year"] }}
 	{% include "user_status.html" %}
 </h1>
-
 <div class="main_box">
-
-	<h2>Jahresübersicht {{ vars["year"] }}</h2>
-
-	<p>Mit der Auswahl eines Monats erhalten Sie Zugriff auf die zugehörigen Karteikarten:
-	</p>
-
-	{% include "elem_quickstart.html" %}
-
-	<table class="js-sort-table paleBlueRows">
-		<thead class="my_table_head">
-			<tr class="my_table_head_row">
-				<th class="js-sort-string my_table_head_cell">Monat</th>
-				<th class="js-sort-number my_table_head_cell">Anzahl Briefe</th>
-				<th class="js-sort-number my_table_head_cell">offen</th>
-				<th class="js-sort-number my_table_head_cell">unklar</th>
-				<th class="js-sort-number my_table_head_cell">abgeschlossen</th>
-				<th class="js-sort-number my_table_head_cell">ungültig</th>
-			</tr>
-		</thead>
-		<tbody>
-		{% for d in vars["table"] %}
-			<tr class="my_table_row">
-				<td class="my_table_cell">
-					<a href="{{url_for('overview_month', year=vars['year'], month=d[0][1])}}">{{ d[0][0] }}</a>
-				</td>
-				<td class="my_table_cell">{{ d[1]+d[2]+d[3]+d[4] }}</td>
-				<td class="my_table_cell">{{ d[1] }}</td>
-				<td class="my_table_cell">{{ d[2] }}</td>
-				<td class="my_table_cell">{{ d[3] }}</td>
-				<td class="my_table_cell">{{ d[4] }}</td>
-			</tr>
-		{% endfor %}
-		</tbody>
-	</table>
-
-	<h2>Status</h2>
-
-	{% include "overview__status.html" %}
-
+	<div class="h2_box">
+		<h2>Jahresübersicht {{ vars["year"] }}</h2>
+		<div class="h2_section">
+			<p>Mit der Auswahl eines Monats erhalten Sie Zugriff auf die zugehörigen Karteikarten:</p>
+			{% include "elem_quickstart.html" %}
+			<table class="js-sort-table paleBlueRows">
+				<thead class="my_table_head">
+					<tr class="my_table_head_row">
+						<th class="js-sort-string my_table_head_cell">Monat</th>
+						<th class="js-sort-number my_table_head_cell">Anzahl Briefe</th>
+						<th class="js-sort-number my_table_head_cell">offen</th>
+						<th class="js-sort-number my_table_head_cell">unklar</th>
+						<th class="js-sort-number my_table_head_cell">abgeschlossen</th>
+						<th class="js-sort-number my_table_head_cell">ungültig</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for d in vars["table"] %}
+					<tr class="my_table_row">
+						<td class="my_table_cell">
+							<a href="{{url_for('overview_month', year=vars['year'], month=d[0][1])}}">{{ d[0][0] }}</a>
+						</td>
+						<td class="my_table_cell">{{ d[1]+d[2]+d[3]+d[4] }}</td>
+						<td class="my_table_cell">{{ d[1] }}</td>
+						<td class="my_table_cell">{{ d[2] }}</td>
+						<td class="my_table_cell">{{ d[3] }}</td>
+						<td class="my_table_cell">{{ d[4] }}</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="h2_box">
+		<h2>Status</h2>
+		<div class="h2_section">
+			{% include "overview__status.html" %}
+		</div>
+	</div>
 </div>
 
 {% endblock %}

@@ -2,7 +2,6 @@
 .hidden { height: 0px; }
 
 /* Status */
-#status_info { float: right; }
 .status_open { color: red; }
 .status_invalid { color: orange; }
 .status_unclear {color: yellow; }
