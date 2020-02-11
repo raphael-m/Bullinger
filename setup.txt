@@ -114,10 +114,6 @@ $ sudo supervisorctl stop all
 $ sudo service supervisor restart
 $ sudo service nginx restart
 
-
-$ sudo systemctl stop nginx
-$ sudo supervisorctl stop all
-$ sudo service nginx restart
 $ sudo service supervisor reload
 $ sudo supervisorctl reload
 $ gunicorn -w 33 App:app

@@ -14,10 +14,12 @@ class Langid:
 
     @staticmethod
     def classify(s):
-        lang = langid.classify(s)[0]
-        return {
-            'de': 'Deutsch',
-            'la': 'Latein',
-            'el': 'Griechisch',
-            'fr': 'Französisch'
-        }[lang]
+        if s:
+            lang = langid.classify(s)[0]
+            return {
+                'de': 'Deutsch',
+                'la': 'Latein',
+                'el': 'Griechisch',
+                'fr': 'Französisch'
+            }[lang]
+        else: return None

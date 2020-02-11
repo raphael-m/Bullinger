@@ -5,33 +5,48 @@
 
 <h1>Anmelden</h1>
 
-<p> &#8594; <a href="{{url_for('register')}}">Registrierung</a> </p>
+<div class="main_box">
 
-<div id="login_form">
-    <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
+    <h2>Anmeldung</h2>
+    <div class="h2_section">
 
-        <!-- Username -->
-        <div class="prompt">{{ form.username.label }}</div>
-        <div class="prompt_input">{{ form.username(size=32, placeholder="Benutzername") }}</div>
-        <div class="error_msg">
-            {% for error in form.username.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
+        <p> Haben Sie sich schon als Mitarbeiter registriert?
+            &#8594; <a class="text_link" href="{{url_for('register')}}">Registrierung</a>
+        </p>
+
+        <div id="login_form">
+            <form action="" method="post" novalidate>
+                {{ form.hidden_tag() }}
+
+                <!-- Username -->
+                <div class="kw prompt">{{ form.username.label }}</div>
+                <div class="prompt_input">{{ form.username(size=32, placeholder="Benutzername") }}</div>
+                <div class="error_msg">
+                    {% for error in form.username.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </div>
+
+                <!-- Password -->
+                <div class="kw prompt">{{ form.password.label }}</div>
+                <div class="prompt_input">{{ form.password(size=32, placeholder="Passwort") }}</div>
+
+                <!-- Submission -->
+                <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+                <p>{{ form.submit() }}</p>
+
+                <!-- Messages -->
+                <div class="error_msg">
+                    {% for error in form.password.errors %}
+                        <span class="error">[{{ error }}]</span>
+                    {% endfor %}
+                </div>
+            </form>
         </div>
 
-        <!-- Password -->
-        <div class="prompt">{{ form.password.label }}</div>
-        <div class="prompt_input">{{ form.password(size=32, placeholder="Passwort") }}</div>
-        <div class="error_msg">
-            {% for error in form.password.errors %}
-                <span class="error">[{{ error }}]</span>
-            {% endfor %}
-        </div>
+    </div>
+    <div class="h2_separator"></div>
 
-        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-        <p>{{ form.submit() }}</p>
-    </form>
 </div>
 
 {% endblock %}

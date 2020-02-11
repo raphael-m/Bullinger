@@ -10,11 +10,7 @@ from Tools.OCR2 import *
 from Tools.Dictionaries import ListDict
 from Tools.NGrams import NGrams
 from Tools.Langid import *
-from App.models import *
 
-SN = 's.n.'  # sine nomine
-SL = 's.l.'  # sine loco
-SD = 's.d.'  # sine die
 ADMIN = 'Admin'  # username
 
 
@@ -27,149 +23,185 @@ class BullingerData:
     # Data
     AVG_PAGE_SIZE = [9860, 6978]
     AVG_PAGE_SIZE_DEV = [11, 10]
+    NG_MAX = 4  # n-grams (precision)
 
     ATTRIBUTES = ["Datum", "Absender", "Empfänger", "Autograph", "Kopie", "Photokopie", "Standort", "Bull.", "Corr.",
                   "Sign.", "Abschrift", "Umfang", "Sprache", "Literatur", "Gedruckt", "Bemerkungen"]
+    TYPEWRITER_ABBREV = ["StA", "ZB", "BPU", "UB", "KB", "StB", "AST", "BNU", "BM", "UL", "StUB", "BurgerB", "BSG",
+                         "BN", "BRU", "TC", "StUA", "BL"]
+    TYPEWRITER_ = ['Simler', 'Prof.']
+    TYPEWRITER = ["Zürich", "Genf", "Basel", "Schaffhausen", "Gallen", "Marburg", "Zofingen", "Strassburg", "London",
+                  "Cambridge", "Winterthur", "Hamburg", "Bern", "Chur", "Weimar", "Paris", "Utrecht", "Dresden",
+                  "Kopenhagen", "Dublin", "Prag", "Oxford", "Nr.", "Ms.", "Hr."] + TYPEWRITER_ABBREV + TYPEWRITER_
 
-    # Patterns for attributnames
-    p_standort = '[Ss$][tlf1I|]a[nm]d[o0°O]r[tlf1I]'
-    p_signatur = '[Ss][il][g8B]n[.]?'
-    p_umfang = '[Uu][mn][ftl]a[nm][g8B]'
+    PTH_OCR_KRAKEN = "Karteikarten/OCR_Kraken/"
 
-    TYPEWRITER = ['StA', 'StB', 'Nr.', 'Ms.', 'Hr.', 'ZB', 'Zürich', 'Genf', 'Basel', 'Zofingen', 'Schaffhausen',
-                  'London', 'Hamburg', 'Oxford', 'Gallen', 'Strassburg']
+    def __init__(self, path, card_nr):
+        self.path = path
+        self.card_nr = card_nr
+        self.second_try = False
+        if path:
+            self.input = self.get_data_as_dict(path)
+            self.output = self.extract_values()
 
-    def __init__(self):
-        pass
+    def get_data(self): return self.output
 
-    @staticmethod
-    def get_ssu(data, index):
-        """ applies to 'Autograph' and 'Kopie' """
-        standort_baselines, baselines_signatur, is_typewriter = None, None, False
-        standort_str, standort, signatur_str, signatur = '', '', '', ''
-        umfang_baselines, umfang_str, umfang = '', '', ''
-        if "Standort "+index in data:
-            standort_baselines = data["Standort "+index]
-            standort_str = [t for s in data["Standort "+index] for t in s]
-            standort_str = re.sub(BullingerData.p_standort, '', ' '.join(standort_str))
-            standort = BullingerData.clean_str(standort_str)
-        if "Sign. "+index in data:
-            baselines_signatur = data["Sign. "+index]
-            signatur_str = [t for s in data["Sign. "+index] for t in s]
-            signatur_str = re.sub(BullingerData.p_signatur, '', ' '.join(signatur_str))
-            signatur = BullingerData.clean_str(signatur_str)
-        if "Umfang "+index in data:
-            umfang_str = [t for s in data["Umfang "+index] for t in s]
-            umfang_str = re.sub(BullingerData.p_umfang, '', ' '.join(umfang_str))
-            umfang = ' '.join(umfang_str)
+    def extract_values(self):
+        if self.input:
+            data = dict()
+            data["year"], data["month"], data["day"] = self.extract_date(self.input, self.card_nr)
+            data["a_nn"], data["a_vn"], data["a_ort"], data["a_bem"] = self.analyze_address("Absender")
+            data["e_nn"], data["e_vn"], data["e_ort"], data["e_bem"] = self.analyze_address("Empfänger")
+            data["a_standort"], data["a_signatur"], data["a_umfang"] = self.extract_ssu("Autograph")
+            data["c_standort"], data["c_signatur"], data["c_umfang"] = self.extract_ssu("Kopie")
+            data["literatur"] = self.extract_literature()
+            data["gedruckt"] = self.extract_printed()
+            data["bemerkung"] = self.extract_remark()
+            data["sprache"] = self.extract_language(data["bemerkung"])
+            return data
+        return None
 
-        # 1. Typewriter Data
-        if BullingerData.is_typewriter(standort_baselines) or BullingerData.is_typewriter(baselines_signatur):
-            if standort:
-                d = standort + signatur + umfang
-                m = re.match(r"(.*)StA\s(E[\d\s,]*)([^\d]*)", d)
-                m = re.match(r"(.*)StA\s(A[\d\s,]*)([^\d]*)", d) if not m else None
-                m = re.match(r"(.*)ZB\s([MsS\d\s,]*)([^\d]*)", d) if not m else None
-                standort = m.group(1) if m else standort
-                signatur = ' '.join([m.group(2), ]) if m else signatur
-                umfang = m.group(3) if m else umfang
+    def get_date(self): return self.output["year"], self.output["month"], self.output["day"]
+    def get_sender(self): return self.output["a_nn"], self.output["a_vn"], self.output["a_ort"], self.output["a_bem"]
+    def get_receiver(self): return self.output["e_nn"], self.output["e_vn"], self.output["e_ort"], self.output["e_bem"]
+    def get_autograph(self): return self.output["a_standort"], self.output["a_signatur"], self.output["a_umfang"]
+    def get_copy(self): return self.output["c_standort"], self.output["c_signatur"], self.output["c_umfang"]
+    def get_literature(self): return self.output["literatur"]
+    def get_printed(self): return self.output["gedruckt"]
+    def get_bemerkung(self): return self.output["bemerkung"]
+    def get_sprache(self): return self.output["sprache"]
 
-        elif BullingerData.check_stdort_for_zuerich_sta(standort) or \
-                BullingerData.check_sign_for_zurich_sta(signatur):
-            standort, is_zsta = "Zürich StA", True
-            number = re.sub(r'[^\d,f]', '', signatur + umfang)
-            n_i = BullingerData.how_many_i(signatur)
-            signatur = ' '.join(['E', n_i, number.strip(',')])
+    def get_data_as_string(self, field_id, index, clean=True):
+        if index: field_id = ' '.join([field_id, index])
+        if field_id in self.input:
+            string = ' '.join([token for baseline in self.input[field_id] for token in baseline])
+            string = BullingerData.clean_str(re.sub(field_id, '', string)) if clean else string
+            return string
+        return ''
 
-        elif BullingerData.check_place_zzb(standort):
+    def extract_ssu(self, attribute):  # Autograph/Kopie
+        index = "A" if attribute == "Autograph" else "B"
+        standort = self.get_data_as_string("Standort", index)
+        signatur = self.get_data_as_string("Sign.", index)
+        umfang = self.get_data_as_string("Umfang", index)
+        ssu = ' '.join([standort, signatur, umfang])
+        if BullingerData.is_typewriter(ssu):
+            for a in BullingerData.TYPEWRITER_ABBREV:
+                if a in ssu:
+                    standort, signatur = BullingerData.split_string_after(ssu, a)
+                    break
+        elif BullingerData.is_standort_zsta(standort) or BullingerData.is_signatur_zsta(signatur):
+            standort = "Zürich StA"
+            num_arabic = re.sub(r'[^\d,f]', '', ssu).strip(',')  # e.g. 666,666ff
+            if 'f' in num_arabic: re.sub(r'[f]', '', ssu)+'f'
+            num_roman = BullingerData.get_roman_signature(signatur)
+            signatur, umfang = ' '.join(['E', num_roman, num_arabic]).strip(), None
+        elif BullingerData.is_standort_zzb(standort):
             standort = "Zürich ZB"
-            numbers = re.sub(r'[^\d,]', '', standort + signatur + umfang)
-            signatur = ''.join('Ms S ' + numbers)
-
-        elif len(standort_str) or len(signatur_str) or len(umfang_str):
-            standort = "Zürich"
-
-        return standort.strip(), signatur.strip(), umfang.strip()
+            numbers = re.sub(r'[^\d,]', '', standort + signatur + umfang).strip()
+            signatur, umfang = ''.join('Ms S ' + numbers).strip(), None
+        elif ssu: standort, signatur, umfang = None, None, None
+        standort = standort if standort else None
+        signatur = signatur if signatur else None
+        umfang = umfang if umfang else None
+        return standort, signatur, umfang
 
     @staticmethod
-    def get_literature(data):
-        if "Literatur" in data:
-            literature = ' '.join([t for s in data["Literatur"] for t in s])
-            literature = re.sub("Literatur", '', literature)
-            if not BullingerData.is_probably_junk(literature):
-                return BullingerData.clean_str(literature)
+    def split_string_after(string, delimiter):
+        splits = re.sub(r'\s+', ' ', string.strip()).split(delimiter)
+        return ' '.join(splits[:1]+[delimiter]).strip(), ' '.join(splits[1:]).strip()
+
+    @staticmethod
+    def is_typewriter(string):
+        for k in BullingerData.TYPEWRITER:
+            if k in string: return True
+        return False
+
+    @staticmethod
+    def is_signatur_zsta(string):
+        if string:
+            first = string[0:4]
+            for char in ['E', '£', '€', 'B', 'A', '4', 'I', 'II', 'T', 'X']:  # EI, EII, AI, AII
+                if char in first: return True
+        return False
+
+    @staticmethod
+    def is_standort_zsta(string):
+        if string:
+            last = string[-4:]
+            for char in ['S', '$', '8', 't', 'A', '4']:  # StA
+                if char in last: return True
+        return False
+
+    @staticmethod
+    def is_standort_zzb(string):
+        if string:
+            first, last = string[:4], string[-4:]
+            for char in ['Z', '2', 'B', '8']:
+                if char in last: return True
+            for s in ['ZZ', 'Z2', '2Z', '22']:
+                if s in first: return True
+        return False
+
+    @staticmethod
+    def get_roman_signature(str_signature):
+        for char in ['II', 'U', 'X', 'T', 'H']:
+            if char in str_signature: return 'II'
+        return 'I'
+
+    def extract_literature(self):
+        if "Literatur" in self.input:
+            literature = self.get_data_as_string("Literatur", '', clean=False)
+            if BullingerData.is_probably_junk(literature): return None
+            literature = BullingerData.clean_str(literature)
+            return literature if literature else None
         return None
 
-    @staticmethod
-    def get_printed(data):
-        if "Gedruckt" in data:
-            p = ' '.join([t for s in data["Gedruckt"] for t in s])
-            p = re.sub("Gedruckt", '', p)
-            if not BullingerData.is_probably_junk(p):
-                return BullingerData.clean_str(p)
+    def extract_printed(self):
+        if "Gedruckt" in self.input:
+            literature = self.get_data_as_string("Gedruckt", '', clean=False)
+            if BullingerData.is_probably_junk(literature): return None
+            literature = BullingerData.clean_str(literature)
+            return literature if literature else None
         return None
 
-    @staticmethod
-    def get_remark(data):
-        if 'Bemerkungen' in data:
-            remark, concat = list(), [False]
-            for baseline in data["Bemerkungen"]:
+    def extract_remark(self):
+        if 'Bemerkungen' in self.input:
+            a, concat = [], [False]
+            for baseline in self.input["Bemerkungen"]:
                 bl = [BullingerData.clean_str(s) for s in baseline]
                 bl = [re.sub('Bemerkung', '', t) for t in bl if t]
                 if len(bl) > 0:
                     if bl[-1][-1] == '-':
                         bl[-1] = re.sub('-', '', bl[-1]).strip()
                         concat += [True]
+                    else: concat += [False]
+                if len(bl) > 0: a.append(bl)
+            b = []
+            if len(a) > 1:
+                for i, bl in enumerate(a):
+                    if not concat[i]: b += bl
                     else:
-                        concat += [False]
-                if len(bl) > 0:
-                    remark.append(bl)
-            rem = []
-            if len(remark) > 1:
-                for i, bl in enumerate(remark):
-                    if not concat[i]:
-                        rem += bl
-                    else:
-                        rem[-1] = rem[-1] + str(bl[0])
-                        if len(bl) > 1:
-                            rem += bl[1:]
-            rem = BullingerData.remove_leading_junk(' '.join(rem))
-            if rem:
-                return rem.replace(' ,', ',').replace(' .', '.').strip()
+                        b[-1] = b[-1] + str(bl[0])
+                        if len(bl) > 1: b += bl[1:]
+            remark = BullingerData.remove_leading_junk(' '.join(b))
+            remark = remark.replace(' ,', ',').replace(' .', '.').strip()
+            return remark if remark else None
         return None
 
     @staticmethod
-    def get_lang(data, bemerkung):
-        langs = [Langid.classify(bemerkung)]
-        if "Sprache" in data:
-            for lang in BullingerData.analyze_language(data["Sprache"]):
-                if lang not in langs:
-                    langs.append(lang)
-        return langs
-
-    @staticmethod
     def clean_str(s):
-        if s:
-            s = re.sub(r'[^\w\d.,:;\-?!() ]', '', str(s))
-            return re.sub(r'\s+', ' ', str(s)).strip()
-        return ''
+        s = re.sub(r'[^\w\d.,:;\-?!() ]', '', str(s))
+        return re.sub(r'\s+', ' ', str(s)).strip()
 
     @staticmethod
     def is_probably_junk(s):
-        # more than 42% symbols
-        s2, s1 = re.sub(r'[^\w\d]', '', s), re.sub(r'[\s]', '', s)
-        if len(s1) == 0:
-            return True
-        if 0.58 > len(s2) / len(s1):
-            return True
-        # avg-str-length < 3
-        tokens = s.split()
-        if sum([len(s0) for s0 in tokens])/len(tokens) < 3:
-            return True
-        # big letters between small letters
-        if re.match(r'.*[a-z]+[A-Z]+.*', s):
-            return True
-        if re.match(r'.*\s[^\s]\s.*\s[^\s]\s.*', s):
+        tokens, abc123, all_chars = s.split(), re.sub(r'[^\w\d]', '', s), re.sub(r'[\s]', '', s)
+        if len(all_chars) == 0 \
+                or 0.58 > len(abc123) / len(all_chars) \
+                or sum([len(s0) for s0 in tokens])/len(tokens) < 3 \
+                or re.match(r'.*[a-z]+[A-Z]+.*', s) \
+                or re.match(r'.*\s[^\s]\s.*\s[^\s]\s.*', s):
             return True
         return False
 
@@ -178,103 +210,43 @@ class BullingerData:
         s = s.replace('_', ' ')
         m, i = re.match(r'^([^\w\d(.]*)(.*)$', s, re.M | re.I), 0
         if m.group(2):
-            while i < len(m.group(2)) and m.group(2)[i] == '.':
-                i += 1
-            if i >= 3:
-                return m.group(2)[(i-3):].strip()
+            while i < len(m.group(2)) and m.group(2)[i] == '.': i += 1
+            if i >= 3: return m.group(2)[(i-3):].strip()
             return m.group(2)[i:].strip()
+        return s
 
-    @staticmethod
-    def is_typewriter(baselines):
-        if baselines:
-            for b in baselines:
-                if b:
-                    for t in b:
-                        for k in BullingerData.TYPEWRITER:
-                            if k in t:
-                                return True
-        return False
+    def extract_language(self, bemerkung):
+        lng = Langid.classify(bemerkung)
+        languages = [] if not lng else [lng]
+        if "Sprache" in self.input["Sprache"]:
+            for lang in self.extract_language_basic():
+                if lang not in languages: languages.append(lang)
+        return languages
 
-    @staticmethod
-    def check_sign_for_zurich_sta(s):
-        j = len(s)
-        if j:
-            j = s[0:(4 if j > 4 else j)]
-            if 'E' in j or '£' in j or '€' in j or 'T' in j or 'X' in j or 'B' in j or 'II' in j:
-                return True
-        return False
-
-    @staticmethod
-    def check_stdort_for_zuerich_sta(s):
-        """ :param s: <str>
-            :return: True, if there is an 'A' or '4' within the last four characters """
-        if s:
-            j = len(s)
-            if j:
-                j = s[-(4 if j > 4 else j):]
-                if 'A' in j or '4' in j or 't' in j or 'S' in j:
-                    return True
-                if re.match(r'\d\d\d,', s):
-                    return True
-        return False
-
-    @staticmethod
-    def check_place_zzb(s):
-        j = len(s)
-        post = ['Z', '2', 'B', '8']
-        if j:
-            s1 = s[-(2 if j > 2 else j):]
-            for c in post:
-                if c in s1:
-                    return True
-            s2 = s[:(3 if j > 3 else j)]
-            if len(re.findall(r'[Z2]', s2)) > 1:
-                return True
-        return False
-
-    @staticmethod
-    def how_many_i(s):
-        m = re.match(r'[^E£€]*([^\d]*)\d.*', s)
-        if m:
-            s = m.group(1).replace('U', 'II').replace('X', 'II').replace('i', 'I').replace('J', 'I').replace('T', 'I')
-            count = sum([1 for c in s if c == 'I'])
-            return 'II' if count > 1 else 'I'
-        return 'II'
-
-    @staticmethod
-    def analyze_language(baselines):
+    def extract_language_basic(self):
+        baselines = self.input["Sprache"]
         if len(baselines[0]):
             lang, junk = [], []
             s = re.sub("[^A-Za-z]", ' ', ' '.join(baselines[0])).split()
             for t in s:
                 t = t.lower()
-                if t in "dts" or t in "deutsch":
-                    if "Deutsch" not in lang:
-                        lang.append("Deutsch")
-                elif t in "lateinisch":
-                    if "Latein" not in lang:
-                        lang.append("Latein")
-                elif t in "griechisch":
-                    if "Griechisch" not in lang:
-                        lang.append("Griechisch")
-                else:
-                    junk.append(t)
+                if (t in "dts" or t in "deutsch") and "Deutsch" not in lang: lang.append("Deutsch")
+                elif t in "lateinisch" and "Latein" not in lang: lang.append("Latein")
+                elif t in "griechisch" and "Griechisch" not in lang: lang.append("Griechisch")
+                else: junk.append(t)
             # lang += junk
             return lang if len(lang) > 0 else []
         return []
 
-    @staticmethod
-    def analyze_address(baselines):
-        """ Analyzes data from 'Absender' or 'Empfänger'
-            :param baselines: list of lists
-            :return: <name>, <forename>, <location>, <remarks> """
-        nn, vn, ort, bemerkung = SN, SN, SL, ''
+    def analyze_address(self, attribute):
+        nn, vn, ort, bemerkung = None, None, None, None
+        baselines = self.input["Absender"] if attribute == "Absender" else self.input["Empfänger"]
         baselines = BullingerData.clean_up_baselines_sender_receiver(baselines)
         if len(baselines) > 0:
             # Rule 1 - 1st line 1st word == name
-            nn = baselines[0][0]
+            nn = baselines[0][0].strip()
             if len(baselines[0]) > 1:
-                vn = ' '.join(baselines[0][1:])
+                vn = ' '.join(baselines[0][1:]).strip()
                 if nn != 'Geistliche':
                     # Title
                     if re.match(r'.*(?:^|\s+)von(?:\s+|$).*', vn):
@@ -291,9 +263,12 @@ class BullingerData:
                     nn = "Geistliche"
         if len(baselines) > 1:
             ort = ' '.join(baselines[-1])
-            ort = re.sub(r'\s+', ' ', ort.replace('.', '. '))
-        if len(baselines) > 2:
-            bemerkung = ' '.join([t for b in baselines[1:-1] for t in b])
+            ort = re.sub(r'\s+', ' ', ort.replace('.', '. ')).strip()
+        if len(baselines) > 2: bemerkung = ' '.join([t for b in baselines[1:-1] for t in b]).strip()
+        nn = nn if nn else None
+        vn = vn if vn else None
+        ort = ort if ort else None
+        bemerkung = bemerkung if bemerkung else None
         return nn, vn, ort, bemerkung
 
     @staticmethod
@@ -305,37 +280,37 @@ class BullingerData:
                 t = re.sub("[^A-Za-zäöüéèêàâñë.]", '', token)
                 legal = True
                 for x in _filter:
-                    if x in t:
-                        legal = False
-                if legal and t != '' and t != '.':
-                    new_b += [t]
-            if new_b:
-                new_baselines += [new_b]
+                    if x in t: legal = False
+                if legal and t != '' and t != '.': new_b += [t]
+            if new_b: new_baselines += [new_b]
         return new_baselines
 
-    @staticmethod
-    def is_bullinger_sender(data, b_n_grams, h_n_grams):
-        precision = 4
+    def is_bullinger_sender(self):
         threshold = 0.5
-        if "Absender" in data and "Empfänger" in data:
-            sender, receiver = [t for s in data["Absender"] for t in s], [t for s in data["Empfänger"] for t in s]
+        precision = BullingerData.NG_MAX
+        b_n_grams = NGrams.get_ngram_dicts_dicts("Bullinger", precision)
+        h_n_grams = NGrams.get_ngram_dicts_dicts("Heinrich", precision)
+        if "Absender" in self.input and "Empfänger" in self.input:
+            sender = [t for s in self.input["Absender"] for t in s]
+            receiver = [t for s in self.input["Empfänger"] for t in s]
             pbs, phs = BullingerData.compute_similarities(sender, precision, b_n_grams, h_n_grams)
             pbr, phr = BullingerData.compute_similarities(receiver, precision, b_n_grams, h_n_grams)
-            return max(pbs) + max(phs) > max(pbr) + max(phr)
-        elif "Absender" in data:  # Empfänger missing
-            sender = [t for s in data["Absender"] for t in s]
+            return max(pbs) + max(phs) > max(pbr) + max(phr)  # match-percentages bullinger/heinrich sender/receiver
+        elif "Absender" in self.input:  # Empfänger missing
+            sender = [t for s in self.input["Absender"] for t in s]
             pbs, phs = BullingerData.compute_similarities(sender, precision, b_n_grams, h_n_grams)
             return max(pbs)+max(phs) > 2*threshold
-        elif "Empfänger" in data:  # Absender missing
-            receiver = [t for s in data["Empfänger"] for t in s]
+        elif "Empfänger" in self.input:  # Absender missing
+            receiver = [t for s in self.input["Empfänger"] for t in s]
             pbr, phr = BullingerData.compute_similarities(receiver, precision, b_n_grams, h_n_grams)
             return max(pbr)+max(phr) > 2*threshold
-        return False
+        return False  # dead code
 
     @staticmethod
     def compute_similarities(tokens, precision, bng, hng):
         pb, ph = [], []
-        for t in tokens:
+        if not len(tokens): return [0], [0]
+        for t in tokens:  # else
             nga = [NGrams.create_n_gram_dict(i, t) for i in range(1, precision)]
             dices_bullinger = [NGrams.compute_dice(nga[i], bng[i]) for i in range(len(nga))]
             dices_heiri = [NGrams.compute_dice(nga[i], hng[i]) for i in range(len(nga))]
@@ -349,8 +324,7 @@ class BullingerData:
         ["Juli"], ["August"], ["September"], ["Oktober", ], ["November"], ["Dezember"]
     ], 9  # October
 
-    @staticmethod
-    def extract_date(id_brief, data):
+    def extract_date(self, data, card_nr):
         if "Datum" in data:
             data = [i for j in data["Datum"] for i in j]
             data = [re.sub("[^A-Za-z0-9]", '', token).strip() for token in data]
@@ -380,7 +354,7 @@ class BullingerData:
                         if token in m and len(token) > 2:
                             data.remove(token)
                             BullingerData.index_predicted = i
-            day = SD
+            day = None
             for token in data:
                 if token.isdigit():
                     if 0 < int(token) < 32:
@@ -390,7 +364,7 @@ class BullingerData:
             # correction mechanisms
             if str(BullingerData.year_predicted-1) in data:
                 BullingerData.year_predicted -= 1
-            if day == SD and len(data) > 0:
+            if not day and len(data) > 0:
                 modified_tokens = []
                 for token in data:  # ocr-errors
                     token = token.replace('o', '0')
@@ -409,15 +383,15 @@ class BullingerData:
                         if 0 < int(token) < 32:
                             day = int(token)
                             break
-            return Datum(
-                id_brief=id_brief, year_a=BullingerData.year_predicted, month_a=BullingerData.index_predicted+1, day_a=day,
-                year_b='', month_b='', day_b='', remark=''
-            )
-        return None
+            if year: return year, BullingerData.index_predicted+1, day
+        if not self.second_try:
+            self.second_try = True
+            path = BullingerData.PTH_OCR_KRAKEN+'/HBBW_Karteikarte_'+(5-len(str(card_nr)))*'0'+str(card_nr)+'.ocr'
+            return self.extract_date(self.get_data_as_dict(path), card_nr)
+        return None, None, None
 
-    @staticmethod
-    def get_data_as_dict(path):
-        d = ListDict()
+    def get_data_as_dict(self, path):
+        data = ListDict()
         size = OCR2.get_page_size(path)
         if size:
             scale_factor_x = BullingerData.AVG_PAGE_SIZE[0]/size[0]
@@ -448,11 +422,11 @@ class BullingerData:
                     else:
                         line.append(row['Value'])
                 lines.append(line)
-                d.add(attribute, lines)
-            return d
+                data.add(attribute, lines)
+            return data
         else:
-            print("*** Warning, file ignored:", path)
-            return None
+            print("*** Warning, file ignored:", self.path)
+            return dict()
 
     @staticmethod
     def get_attribute_name(x, y):
@@ -481,26 +455,6 @@ class BullingerData:
             elif y <= 3559: return "Bull. Corr.", 'B'
             elif y <= 5303: return "Literatur", None
             else: return "Bemerkungen", None
-
-    @staticmethod
-    def linear_separation(df, attr):
-        """ to distinguish between duplicate attribute names """
-        x_sep, y_sep, results, a = 2000, 3000, [], "Value"
-        if attr in ['Standort', 'Sign.', 'Umfang']:  # duplicate
-            d_l = df[(df[a] == attr) & (df['x'] < x_sep)].copy()
-            d_r = df[(df[a] == attr) & (df['x'] > x_sep)].copy()
-            d_l.loc[:, a] = d_l[a].apply(lambda x: x + '-Left')
-            d_r.loc[:, a] = d_r[a].apply(lambda x: x + '-Right')
-            results += [d_l, d_r]
-        elif attr in ['Bull.', 'Corr.']:
-            d_t = df[(df[a] == attr) & (df['y'] < y_sep)].copy()
-            d_b = df[(df[a] == attr) & (df['y'] > y_sep)].copy()
-            d_t.loc[:, a] = d_t[a].apply(lambda x: attr + '-Left')
-            d_b.loc[:, a] = d_b[a].apply(lambda x: attr + '-Right')
-            results += [d_t, d_b]
-        else:
-            results += [df]
-        return results
 
     @staticmethod
     def is_attribute(attribute_name, x_coord, y_coord, deviation=3):
@@ -561,4 +515,24 @@ class BullingerData:
      Bemerkungen &  3752.0 &  5691.0 &  19.0 &  15.0 \\
     \bottomrule
     \end{tabular}
+    '''
+    '''
+    @staticmethod
+    def linear_separation(df, attr):
+        """ to distinguish between duplicate attribute names """
+        x_sep, y_sep, results, a = 2000, 3000, [], "Value"
+        if attr in ['Standort', 'Sign.', 'Umfang']:  # duplicate
+            d_l = df[(df[a] == attr) & (df['x'] < x_sep)].copy()
+            d_r = df[(df[a] == attr) & (df['x'] > x_sep)].copy()
+            d_l.loc[:, a] = d_l[a].apply(lambda x: x + '-Left')
+            d_r.loc[:, a] = d_r[a].apply(lambda x: x + '-Right')
+            results += [d_l, d_r]
+        elif attr in ['Bull.', 'Corr.']:
+            d_t = df[(df[a] == attr) & (df['y'] < y_sep)].copy()
+            d_b = df[(df[a] == attr) & (df['y'] > y_sep)].copy()
+            d_t.loc[:, a] = d_t[a].apply(lambda x: attr + '-Left')
+            d_b.loc[:, a] = d_b[a].apply(lambda x: attr + '-Right')
+            results += [d_t, d_b]
+        else: results += [df]
+        return results
     '''

@@ -2,70 +2,164 @@
 
 {% block content %}
 
-<h1>Allgemeines
+<h1>
+    >
+    KoKoS-Bullinger (Kollaboratives-Korrektur-System)
     {% include "user_status.html" %}
 </h1>
 
 <div class="main_box">
 
-    <h2>Bullinger Briefwechsel</h2>
-    <div class="h2_section">
-
-        <p> Der Zürcher Reformator Heinrich Bullinger (1504-1575) hatte ein grosses Korrespondenz-Netzwerk.
-            Er hat rund 2000 Briefe geschrieben und 10'000 Briefe erhalten. ... </p>
-
-        <p> Zu jedem Brief gibt es eine Karteikarte auf Papier.
-            Bitte helfen Sie uns, diese Karteikarte in unsere Datenbank zu überführen. </p>
-
-        <p> Vielen Dank.</p>
-
+    <div class="h2_box">
+        <h2>Worum geht es?</h2>
+        <div class="h2_section">
+            <div class="parallel intro_left">
+                <div class="container">
+                    <img alt="Heinrich Bullinger" src="{{ url_for('static', filename='images/heiri.png') }}">
+                </div>
+            </div>
+            <div class="parallel intro_right">
+                <div class="intro_text">
+                    <p>
+                        Der Zürcher Reformator
+                        <a class="text_link" href="https://de.wikipedia.org/wiki/Heinrich_Bullinger">Heinrich Bullinger</a>
+                        (1504-1575) war Mitarbeiter und Nachfolger von Zwingli und ein wichtiger Multiplikator für die Ideen
+                        der Reformation in der Schweiz und in Europa. Entsprechend gross war sein Korrespondenz-Netzwerk.
+                    </p>
+                    <p>
+                        Der erhaltene Briefwechsel besteht aus mehr als 2000 Briefen, die er geschrieben und rund 10’000 Briefen,
+                        die er erhalten hat. Die Originale liegen mehrheitlich im Staatsarchiv Zürich und in der Zentralbibliothek
+                        Zürich. Zu jedem Brief gibt es eine Karteikarte auf Papier. Bitte helfen Sie uns, diese Karteikarte in
+                        unsere Datenbank zu überführen.
+                    </p>
+                    <p>Vielen Dank!</p>
+                    <p></p>
+                    <p>
+                        &#8594; <a class="text_link" href="{{url_for('quick_start')}}">Start</a>
+                        <span class="kw_warning">(Testversion v1.2)</span>
+                    </p>
+                    <p>
+                        <span class="kw_warning">
+                            ACHTUNG, jetzt erfasste Änderungen gehen möglicherweise wieder verloren.
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <div class="clearing"></div>
+        </div>
     </div>
-
     <div class="h2_separator"></div>
-    <h2>Kommentare</h2>
-    <div class="h2_section">
-        <p>Bemerkungen und Anregungen ...</p>
-        <table>
-            <!--
-            <thead>
-                <tr>
-                    <th>Benutzer</th>
-                    <th>Kommentar</th>
-                </tr>
-            </thead>
-            -->
-            <tbody>
-            {% for c in vars["comments"] %}
-                <tr>
-                    <td class="comment_user">{{ c[0] }}</td>
-                    <td class="comment_text" rowspan="3">{{ c[3] }}</td>
-                </tr>
-                <tr>
-                    <td class="comment_date">{{ c[1] }}</td>
-                </tr>
-                <tr>
-                    <td class="comment_time">{{ c[2] }}</td>
-                </tr>
-                <tr class="comment_break"></tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        <!-- new comments -->
-        <form action="" method="post" novalidate>
-            {{ form.csrf_token }}
-            {{ form.hidden_tag() }}
-            <div>{{ form.comment(class="note", placeholder="Ihr Kommentar") }}</div>
-            <div>{{ form.save(class="buttonX button_frills") }}</div>
-        </form>
+
+    <div class="h2_box">
+        <h2>Projektziele</h2>
+        <div class="h2_section">
+            <ul>
+                <li><span class="kw">Aktuell: Aufbau eines Karteisystems zum Bullinger-Briefwechsel</span>
+                    <a class="text_link" href="https://de.wikipedia.org/wiki/Citizen_Science">(Citizen Science)</a>
+                </li>
+                <li>Ausbau der Datenbank mit allen Dokumenten aus dem Bullinger-Briefwechsel</li>
+                <li>automatische Erschliessung der noch nicht editieren Briefe (Scannen, Handschriften-OCR)</li>
+                <li>Aufbau eines massgeschneiderten Systems zur maschinellen Übersetzung Latein &#8594; Deutsch</li>
+                <li>Modernisierung und Erweiterung des Suchsystems</li>
+            </ul>
+        </div>
+    </div>
+    <div class="h2_separator"></div>
+
+    <div class="h2_box">
+        <h2>Links</h2>
+        <div class="h2_section">
+            <p> <span class="kw">Hintergrund-Informationen</span> zum bisherigen Editions-Projekt finden Sie
+                <a class="text_link" href="https://www.irg.uzh.ch/de/bullinger-edition/briefwechsel.html">hier</a>.
+                Rund 3000 Briefe sind schon transkribiert und editiert, und können online durchsucht werden.
+                Das Suchsystem für die bisher editieren <span class="kw">Briefe</span> finden Sie
+                <a class="text_link" href="http://teoirgsed.uzh.ch/">hier</a>.
+            </p>
+        </div>
+    </div>
+    <div class="h2_separator"></div>
+
+    <div class="h2_box">
+        <h2>Kontakt</h2>
+        <div class="h2_section">
+            <ul>
+                <li>
+                    <a href="mailto:bodenmann.reinhard@theol.uzh.ch">Reinhard Bodenmann</a>
+                    (Leiter Bullinger-Briefwechsel-Edition),
+                    Institut für Schweizerische Reformationsgeschichte,
+                    Kirchgasse 9,
+                    Zürich
+                </li>
+                <li>
+                    <a href="mailto:volk@cl.uzh.ch">Prof. Dr. Martin Volk</a>
+                    (Projektleiter),
+                    Institut für Computerlinguistik,
+                    Andreasstrasse 15,
+                    Zürich
+                </li>
+                <li>
+                    <a href="bernard.schroffenegger@uzh.ch">Bernard Schroffenegger</a>
+                    (Admin/Programmierer),
+                    Institut für Computerlinguistik,
+                    Andreasstrasse 15,
+                    Zürich
+                </li>
+                <li>
+                    <a href="raaphii@gmail.com">Raphael Müller</a>
+                    (Webdesigner),
+                    externer Mitarbeiter
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="h2_separator"></div>
+
+    <div class="h2_box">
+        <h2>Gästebuch</h2>
+        <div class="h2_section">
+            <p>Hier können Sie (für alle Besucher und Mitarbeiter sichtbar) einen Kommentar verfassen.</p>
+            <table>
+                <!--
+                <thead>
+                    <tr>
+                        <th>Benutzer</th>
+                        <th>Kommentar</th>
+                    </tr>
+                </thead>
+                -->
+                <tbody>
+                {% for c in vars["comments"] %}
+                    <tr>
+                        <td class="comment_user">{{ c[0] }}</td>
+                        <td class="comment_text" rowspan="3">{{ c[3] }}</td>
+                    </tr>
+                    <tr>
+                        <td class="comment_date">{{ c[1] }}</td>
+                    </tr>
+                    <tr>
+                        <td class="comment_time">{{ c[2] }}</td>
+                    </tr>
+                    <tr class="comment_break"></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <!-- new comments -->
+            <form method="post" novalidate>
+                {{ form.csrf_token }}
+                {{ form.hidden_tag() }}
+                <div>{{ form.comment(class="note", placeholder="Bemerkung zum Projekt") }}</div>
+                <div>{{ form.save(class="buttonX button_frills") }}</div>
+            </form>
+        </div>
     </div>
     <div class="clearing"></div>
+</div>
 
-    <h2>Kontakt</h2>
-    <div class="h2_section">
-        <p>E-Mail-Adresse(n); (Namen/Verantwortliche?) </p>
-    </div>
-    <div class="h2_separator"></div>
-
+<div class="page_views">
+    Seitenaufruf
+    #{{ vars["num_page_visits"] }}
+    seit dem {{ vars["since"] }}
+    ({{ vars["date"] }})
 </div>
 
 {% endblock %}

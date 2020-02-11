@@ -1,11 +1,28 @@
 .main_box {
-    margin: 0px 20% 0px 20%;
+    margin: 20px 30px 0px 30px;
     background: white;
-    border-left: 3px solid Silver;
-    border-right: 3px solid Silver;
+    /*border-left: 3px solid Silver;
+    border-right: 3px solid Silver;*/
 }
 
 .h2_section {
+    margin-left: 15px;
+    padding-left: 5px;
+}
+
+.h2_separator {
+    height: 0em;
+}
+
+.h3_separator {
+    height: 2em;
+}
+
+.h3_section {
+    margin-left: 5px;
+}
+
+.h4_section {
 
 }
 
@@ -14,3 +31,42 @@
     width: 50%;
 }
 
+.note {
+    margin: 0px;
+    padding: 0px;
+    width: 50%;
+    height: 30px;
+}
+
+.error_msg {
+    color: blue;
+    height: 15px;
+    line-height: 15px;
+    font-size: 12pt;
+    font-style: italic;
+    font-weight: 400;
+    text-align: center;
+}
+
+/* resize images */
+.container img {
+    width: 100%;
+    height: auto;
+}
+
+.intro_left { width: 18%; }
+.intro_right {
+    width: 82%;
+}
+
+.intro_text {
+    margin: 0px 15px;
+}
+
+.page_views {
+    margin: 30px 5px 10px 3px;
+}
+
+.clearing {
+    clear: left;
+}

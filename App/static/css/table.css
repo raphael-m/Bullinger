@@ -41,21 +41,3 @@ table.paleBlueRows tfoot {
 table.paleBlueRows tfoot td {
     font-size: 14px;
 }
-
-
-/*
-.my_table_head {
-    height: 20px;
-    line-height: 20px;
-}
-
-.my_table_head_row, .my_table_row {
-    height: 20px;
-    line-height: 20px;
-}
-
-.my_table_head_cell, .my_table_cell {
-    height: 20px;
-    line-height: 20px;
-}
-*/

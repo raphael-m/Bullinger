@@ -3,8 +3,10 @@
 # models.py
 # Bernard Schroffenegger
 # 20th of October, 2019
+from sqlalchemy import desc
 
-from App import db, login
+from App import db
+from config import Config
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
@@ -14,50 +16,78 @@ from flask_login import UserMixin
     Variable/Class names (!) correspond to actual DB-Column/Relation names.
     The character '_' will be replaced by ' ' (1st subsequent letter uppercase) """
 
+# db-textfield lengths
+LENGTH_S = 50  # status, username, time
+LENGTH_M = 200  # path, name,forename, place, signature, sprache
+LENGTH_B = 500  # remark, literatur, gedruckt
+
 
 class Kartei(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     id_brief = db.Column(db.Integer, index=True)
     rezensionen = db.Column(db.Integer)
-    status = db.Column(db.String(50))
-    pfad_OCR = db.Column(db.String(100))
-    pfad_PDF = db.Column(db.String(100))
+    status = db.Column(db.String(LENGTH_S))
+    pfad_OCR = db.Column(db.String(LENGTH_M))
+    pfad_PDF = db.Column(db.String(LENGTH_M))
+    anwender = db.Column(db.String(LENGTH_S))
+    zeit = db.Column(db.String(LENGTH_S))
 
-    def __init__(self, id_brief=None, rezensionen=0, status="offen", pfad_ocr=None, pfad_pdf=None):
+    def __init__(
+            self, id_brief=None, reviews=0, state=Config.S_OPEN,
+            path_ocr=None, path_pdf=None,
+            user=None,
+            time=datetime.now()
+    ):
         self.id_brief = id_brief
-        self.rezensionen = rezensionen
-        self.status = status
-        self.pfad_OCR = pfad_ocr
-        self.pfad_PDF = pfad_pdf
+        self.rezensionen = reviews
+        self.status = state
+        self.pfad_OCR = path_ocr
+        self.pfad_PDF = path_pdf
+        self.anwender = user
+        self.zeit = time
+
+    @staticmethod
+    def update_file_status(database, id_brief, state, user, t):
+        database.add(Kartei(id_brief=id_brief, state=state, user=user, time=t))
+        database.commit()
 
     def __repr__(self):
-        return "<Kartei {}>".format(self.id_brief)
+        return "<Kartei {} {} {} {} {} {}>".format(
+            self.id, self.id_brief, self.rezensionen, self.status, self.pfad_OCR, self.pfad_PDF)
 
 
 class Datum(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     id_brief = db.Column(db.Integer, index=True)
-    jahr_a = db.Column(db.Integer, index=True)  # frühstens
-    monat_a = db.Column(db.String(9))
+    jahr_a = db.Column(db.Integer, index=True)
+    monat_a = db.Column(db.Integer)
     tag_a = db.Column(db.Integer)
-    jahr_b = db.Column(db.Integer, index=True)  # spätestens
-    monat_b = db.Column(db.String(9))
+    jahr_b = db.Column(db.Integer, index=True)
+    monat_b = db.Column(db.Integer)
     tag_b = db.Column(db.Integer)
-    bemerkung = db.Column(db.String(50))
-    anwender = db.Column(db.String(50))
-    zeit = db.Column(db.String(50))
+    bemerkung = db.Column(db.String(LENGTH_B))
+    anwender = db.Column(db.String(LENGTH_S))
+    zeit = db.Column(db.String(LENGTH_S))
 
-    def __init__(self, id_brief=None, year_a=None, month_a=None, day_a=None, year_b=None, month_b=None, day_b=None,
-                 remark=None, user=None, time=datetime.now()):
+    def __init__(
+        self, id_brief=None, year_a=None, month_a=None,
+        day_a=None, year_b=None, month_b=None, day_b=None,
+        remark=None, user=None, time=datetime.now()
+    ):
         self.id_brief = id_brief
         self.jahr_a, self.monat_a, self.tag_a = year_a, month_a, day_a
         self.jahr_b, self.monat_b, self.tag_b = year_b, month_b, day_b
         self.bemerkung, self.anwender, self.zeit = remark, user, time
 
     def __repr__(self):
-        return '<Datum {}>'.format(self.id_brief)
+        return '<Datum {} {} {} {} {} {} {} {} {} {} {}>'.format(
+            self.id, self.id_brief,
+            self.jahr_a, self.monat_a, self.tag_a,
+            self.jahr_b, self.monat_b, self.tag_b,
+            self.bemerkung, self.anwender, self.zeit
+        )
 
 
 class Absender(db.Model):
@@ -65,19 +95,22 @@ class Absender(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_brief = db.Column(db.Integer, index=True)
     id_person = db.Column(db.Integer)
-    bemerkung = db.Column(db.String(50))
-    anwender = db.Column(db.String(50))
-    zeit = db.Column(db.String(50))
+    verifiziert = db.Column(db.Boolean)
+    bemerkung = db.Column(db.String(LENGTH_B))
+    anwender = db.Column(db.String(LENGTH_S))
+    zeit = db.Column(db.String(LENGTH_S))
 
-    def __init__(self, id_brief=None, id_person=None, remark=None, user=None, time=datetime.now()):
+    def __init__(self, id_brief=None, id_person=None, verified=None, remark=None, user=None, time=datetime.now()):
         self.id_brief = id_brief
         self.id_person = id_person
+        self.verifiziert = verified
         self.bemerkung = remark
         self.anwender = user
         self.zeit = time
 
     def __repr__(self):
-        return '<Absender {}>'.format(self.id_person)
+        return '<Absender {} {} {} {} {} {} {}>'.format(
+            self.id, self.id_brief, self.id_person, self.verifiziert, self.bemerkung, self.anwender, self.zeit)
 
 
 class Empfaenger(db.Model):
@@ -85,99 +118,108 @@ class Empfaenger(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_brief = db.Column(db.Integer, index=True)
     id_person = db.Column(db.Integer)
-    bemerkung = db.Column(db.String(50))
-    anwender = db.Column(db.String(50))
-    zeit = db.Column(db.String(50))
+    verifiziert = db.Column(db.Boolean)
+    bemerkung = db.Column(db.String(LENGTH_B))
+    anwender = db.Column(db.String(LENGTH_S))
+    zeit = db.Column(db.String(LENGTH_S))
 
-    def __init__(self, id_brief=None, id_person=None, remark=None, user=None, time=datetime.now()):
+    def __init__(self, id_brief=None, id_person=None, verified=None, remark=None, user=None, time=datetime.now()):
         self.id_brief = id_brief
         self.id_person = id_person
+        self.verifiziert = verified
         self.bemerkung = remark
         self.anwender = user
         self.zeit = time
 
     def __repr__(self):
-        return '<Empfänger {}>'.format(self.id_person)
+        return '<Empfänger {} {} {} {} {} {} {}>'.format(
+            self.id, self.id_brief, self.id_person, self.verifiziert, self.bemerkung, self.anwender, self.zeit)
 
 
 class Person(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50))
-    vorname = db.Column(db.String(50))
-    ort = db.Column(db.String(50))
-    verifiziert = db.Column(db.String(10))
+    name = db.Column(db.String(LENGTH_M))
+    vorname = db.Column(db.String(LENGTH_M))
+    ort = db.Column(db.String(LENGTH_M))
     empfangen = db.Column(db.Integer)
     gesendet = db.Column(db.Integer)
-    anwender = db.Column(db.String(50))
-    zeit = db.Column(db.String(50))
+    anwender = db.Column(db.String(LENGTH_S))
+    zeit = db.Column(db.String(LENGTH_S))
 
-    def __init__(self, name=None, forename=None, place=None, remark=None, verified='Nein',
-                 empfangen=0, gesendet=0, user=None, time=datetime.now()):
+    def __init__(
+        self, name=None, forename=None, place=None, remark=None,
+        received=0, sent=0, user=None, time=datetime.now()
+    ):
         self.name = name
         self.vorname = forename
         self.ort = place
         self.bemerkung = remark
-        self.verifiziert = verified
-        self.empfangen = empfangen
-        self.gesendet = gesendet
+        self.empfangen = received
+        self.gesendet = sent
         self.anwender = user
         self.zeit = time
 
     def __repr__(self):
-        return '<Person {}>'.format(self.name)
+        return '<Person {} {} {} {} {} {} {} {} {}>'.format(
+            self.id, self.name, self.vorname, self.ort, self.bemerkung, self.empfangen, self.gesendet,
+            self.anwender, self.zeit
+        )
 
 
 class Autograph(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     id_brief = db.Column(db.Integer, index=True)
-    standort = db.Column(db.String(50))
-    signatur = db.Column(db.String(50))
-    bemerkung = db.Column(db.String(50))
-    anwender = db.Column(db.String(50))
-    zeit = db.Column(db.String(50))
+    standort = db.Column(db.String(LENGTH_M))
+    signatur = db.Column(db.String(LENGTH_M))
+    bemerkung = db.Column(db.String(LENGTH_B))
+    anwender = db.Column(db.String(LENGTH_S))
+    zeit = db.Column(db.String(LENGTH_S))
 
-    def __init__(self, id_brief=None, standort=None, signatur=None, umfang=None, user=None, time=datetime.now()):
+    def __init__(self, id_brief=None, location=None, signature=None, remark=None, user=None, time=datetime.now()):
         self.id_brief = id_brief
-        self.standort = standort
-        self.signatur = signatur
-        self.bemerkung = umfang
+        self.standort = location
+        self.signatur = signature
+        self.bemerkung = remark
         self.anwender = user
         self.zeit = time
 
     def __repr__(self):
-        return '<Autograph {}>'.format(self.standort)
+        return '<Autograph {} {} {} {} {} {} {}>'.format(
+            self.id, self.id_brief, self.standort, self.signatur, self.bemerkung, self.anwender, self.zeit)
 
 
 class Kopie(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     id_brief = db.Column(db.Integer, index=True)
-    standort = db.Column(db.String(50))
-    signatur = db.Column(db.String(50))
-    bemerkung = db.Column(db.String(50))
-    anwender = db.Column(db.String(50))
-    zeit = db.Column(db.String(50))
+    standort = db.Column(db.String(LENGTH_M))
+    signatur = db.Column(db.String(LENGTH_M))
+    bemerkung = db.Column(db.String(LENGTH_B))
+    anwender = db.Column(db.String(LENGTH_S))
+    zeit = db.Column(db.String(LENGTH_S))
 
-    def __init__(self, id_brief=None, standort=None, signatur=None, umfang=None, user=None, time=datetime.now()):
+    def __init__(self, id_brief=None, location=None, signature=None, remark=None, user=None, time=datetime.now()):
         self.id_brief = id_brief
-        self.standort = standort
-        self.signatur = signatur
-        self.bemerkung = umfang
+        self.standort = location
+        self.signatur = signature
+        self.bemerkung = remark
         self.anwender = user
         self.zeit = time
 
     def __repr__(self):
-        return '<Kopie {}>'.format(self.id_brief)
+        return '<Kopie {} {} {} {} {} {} {}>'.format(
+            self.id, self.id_brief, self.standort, self.signatur, self.bemerkung, self.anwender, self.zeit)
 
 
 class Literatur(db.Model):
+
     id = db.Column(db.Integer, primary_key=True)
     id_brief = db.Column(db.Integer, index=True)
-    literatur = db.Column(db.String(50))
-    anwender = db.Column(db.String(50))
-    zeit = db.Column(db.String(50))
+    literatur = db.Column(db.String(LENGTH_B))
+    anwender = db.Column(db.String(LENGTH_S))
+    zeit = db.Column(db.String(LENGTH_S))
 
     def __init__(self, id_brief=None, literature=None, user=None, time=datetime.now()):
         self.id_brief = id_brief
@@ -186,16 +228,16 @@ class Literatur(db.Model):
         self.zeit = time
 
     def __repr__(self):
-        return '<Literatur {}>'.format(self.id)
+        return '<Literatur {} {} {} {} {}>'.format(self.id, self.id_brief, self.literatur, self.anwender, self.zeit)
 
 
 class Sprache(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     id_brief = db.Column(db.Integer, index=True)
-    sprache = db.Column(db.String(200))
-    anwender = db.Column(db.String(50))
-    zeit = db.Column(db.String(50))
+    sprache = db.Column(db.String(LENGTH_M))
+    anwender = db.Column(db.String(LENGTH_S))
+    zeit = db.Column(db.String(LENGTH_S))
 
     def __init__(self, id_brief=None, language=None, user=None, time=datetime.now()):
         self.id_brief = id_brief
@@ -204,16 +246,16 @@ class Sprache(db.Model):
         self.zeit = time
 
     def __repr__(self):
-        return '<Sprache {}>'.format(self.id)
+        return '<Sprache {} {} {} {} {}>'.format(self.id, self.id_brief, self.sprache, self.anwender, self.zeit)
 
 
 class Gedruckt(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     id_brief = db.Column(db.Integer, index=True)
-    gedruckt = db.Column(db.String(200))
-    anwender = db.Column(db.String(50))
-    zeit = db.Column(db.String(50))
+    gedruckt = db.Column(db.String(LENGTH_B))
+    anwender = db.Column(db.String(LENGTH_S))
+    zeit = db.Column(db.String(LENGTH_S))
 
     def __init__(self, id_brief=None, printed=None, user=None, time=datetime.now()):
         self.id_brief = id_brief
@@ -222,16 +264,16 @@ class Gedruckt(db.Model):
         self.zeit = time
 
     def __repr__(self):
-        return '<Gedruckt {}>'.format(self.id)
+        return '<Gedruckt {} {} {} {} {}>'.format(self.id, self.id_brief, self.gedruckt, self.anwender, self.zeit)
 
 
 class Bemerkung(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     id_brief = db.Column(db.Integer, index=True)
-    bemerkung = db.Column(db.String(400))
-    anwender = db.Column(db.String(50))
-    zeit = db.Column(db.String(50))
+    bemerkung = db.Column(db.String(LENGTH_B))
+    anwender = db.Column(db.String(LENGTH_S))
+    zeit = db.Column(db.String(LENGTH_S))
 
     def __init__(self, id_brief=None, remark=None, user=None, time=datetime.now()):
         self.id_brief = id_brief
@@ -240,32 +282,28 @@ class Bemerkung(db.Model):
         self.zeit = time
 
     def __repr__(self):
-        return '<Bemerkung {}>'.format(self.id)
+        return '<Bemerkung {} {} {} {} {}>'.format(self.id, self.id_brief, self.bemerkung, self.anwender, self.zeit)
 
 
 class Notiz(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     id_brief = db.Column(db.Integer, index=True)
-    notiz = db.Column(db.String(400))
-    anwender = db.Column(db.String(50))
-    zeit = db.Column(db.String(50))
+    notiz = db.Column(db.String(LENGTH_B))
+    anwender = db.Column(db.String(LENGTH_S))
+    zeit = db.Column(db.String(LENGTH_S))
 
-    def __init__(self, id_brief=None, notiz=None, user=None, time=datetime.now()):
+    def __init__(self, id_brief=None, note=None, user=None, time=datetime.now()):
         self.id_brief = id_brief
-        self.notiz = notiz
+        self.notiz = note
         self.anwender = user
         self.zeit = time
 
     def __repr__(self):
-        return '<Notiz {}>'.format(self.id)
+        return '<Notiz {} {} {} {} {}>'.format(self.id, self.id_brief, self.notiz, self.anwender, self.zeit)
 
 
 class User(UserMixin, db.Model):
-
-    """ E.g.:
-            u = User(username='susan', email='susan@example.com')
-            u.set_password('mypassword') """
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
@@ -273,7 +311,7 @@ class User(UserMixin, db.Model):
     changes = db.Column(db.Integer)
     finished = db.Column(db.Integer)
     password_hash = db.Column(db.String(128))
-    time = db.Column(db.String(64))
+    time = db.Column(db.String(LENGTH_S))
 
     def __init__(self, username=None, e_mail=None, changes=0, finished=0, time=datetime.now()):
         self.username = username
@@ -288,10 +326,29 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    @staticmethod
+    def update_user(database, user, number_of_changes, state):
+        user = User.query.filter_by(username=user).first()
+        if user:
+            user.changes += number_of_changes
+            user.finished += 1 if state == Config.S_FINISHED else 0
+        database.commit()
+
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
 
-@login.user_loader
-def load_user(id_user):
-    return User.query.get(int(id_user))
+class Tracker(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(LENGTH_S))
+    url = db.Column(db.String(LENGTH_M))
+    time = db.Column(db.String(LENGTH_S))
+
+    def __init__(self, username=None, url=None, time=datetime.now()):
+        self.username = username
+        self.url = url
+        self.time = time
+
+    def __repr__(self):
+        return '<Record {} {} {} {}>'.format(self.id, self.username, self.url, self.time)

@@ -22,19 +22,21 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 # Accounts
-login = LoginManager(app)
-login.anonymous_user = Anonymous
-login.login_view = 'login'
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.anonymous_user = Anonymous
+login_manager.login_view = 'login'
+# login_manager.session_protection = "strong"
+# REMEMBER_COOKIE_DURATION = datetime.timedelta(minutes=60)
+
+# no cyclic imports (!)
+from App import routes, models
+from App.models import Kartei, User, Datum, Person, Absender, Empfaenger, Autograph, Kopie, Sprache, Literatur,\
+    Gedruckt, Bemerkung, Notiz, Tracker
 
 # Admin
-# app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
+app.config['FLASK_ADMIN_SWATCH'] = 'cosmo'  # cerulean, slate, cosmo
 admin = Admin(app)
-
-# no cyclic imports
-from App import routes, models
-from App.models import Kartei, User, Datum, Person, Absender, Empfaenger
-from App.models import Autograph, Kopie
-from App.models import Sprache, Literatur, Gedruckt, Bemerkung, Notiz
 
 admin.add_view(ModelView(User, db.session))
 admin.add_view(ModelView(Kartei, db.session))
@@ -49,3 +51,4 @@ admin.add_view(ModelView(Literatur, db.session))
 admin.add_view(ModelView(Gedruckt, db.session))
 admin.add_view(ModelView(Bemerkung, db.session))
 admin.add_view(ModelView(Notiz, db.session))
+admin.add_view(ModelView(Tracker, db.session))
