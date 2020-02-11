@@ -7,49 +7,7 @@
     <list default="true" id="6d2cb28e-bb45-42c9-b203-59c8af68dfbb" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/css/boxes.css" beforeDir="false" afterPath="$PROJECT_DIR$/App/static/css/boxes.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/css/card.css" beforeDir="false" afterPath="$PROJECT_DIR$/Trash/card.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/css/header.css" beforeDir="false" afterPath="$PROJECT_DIR$/App/static/css/header.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/App/static/css/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/css/menu_account.css" beforeDir="false" afterPath="$PROJECT_DIR$/Trash/menu_account.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/css/std.css" beforeDir="false" afterPath="$PROJECT_DIR$/App/static/css/std.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/css/table.css" beforeDir="false" afterPath="$PROJECT_DIR$/App/static/css/table.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/Heinrich_Bullinger.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Trash/Heinrich_Bullinger.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/Karteikarte.png" beforeDir="false" afterPath="$PROJECT_DIR$/Trash/Karteikarte.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/bullinger.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Trash/bullinger.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/heiri.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Trash/heiri.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/icons/arrow-down-2.png" beforeDir="false" afterPath="$PROJECT_DIR$/Trash/arrow-down-2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/icons/arrow-down-double-2.png" beforeDir="false" afterPath="$PROJECT_DIR$/Trash/arrow-down-double-2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/icons/arrow-left-2.png" beforeDir="false" afterPath="$PROJECT_DIR$/Trash/arrow-left-2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/icons/arrow-left-double-2.png" beforeDir="false" afterPath="$PROJECT_DIR$/Trash/arrow-left-double-2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/icons/arrow-right-2.png" beforeDir="false" afterPath="$PROJECT_DIR$/Trash/arrow-right-2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/icons/arrow-right-double-2.png" beforeDir="false" afterPath="$PROJECT_DIR$/Trash/arrow-right-double-2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/icons/arrow-up-2.png" beforeDir="false" afterPath="$PROJECT_DIR$/Trash/arrow-up-2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/icons/arrow-up-double-2.png" beforeDir="false" afterPath="$PROJECT_DIR$/Trash/arrow-up-double-2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/icons/zoom-fit-height.png" beforeDir="false" afterPath="$PROJECT_DIR$/Trash/zoom-fit-height.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/icons/zoom-fit-width.png" beforeDir="false" afterPath="$PROJECT_DIR$/Trash/zoom-fit-width.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/icons/zoom-in-3.png" beforeDir="false" afterPath="$PROJECT_DIR$/Trash/zoom-in-3.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/icons/zoom-out-3.png" beforeDir="false" afterPath="$PROJECT_DIR$/Trash/zoom-out-3.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/Trash/logo.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/logo_original.png" beforeDir="false" afterPath="$PROJECT_DIR$/Trash/logo_original.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/js/account.js" beforeDir="false" afterPath="$PROJECT_DIR$/Trash/account.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/js/image.js" beforeDir="false" afterPath="$PROJECT_DIR$/Trash/image.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/js/load.js" beforeDir="false" afterPath="$PROJECT_DIR$/Trash/load.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/assignment.html" beforeDir="false" afterPath="$PROJECT_DIR$/Trash/assignment.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/faq.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/faq.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/overview.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/overview.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/overview__status.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/overview__status.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/overview_general.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/overview_general.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/overview_general_cards.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/overview_general_cards.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/overview_languages_cards.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/overview_languages_cards.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/overview_month.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/overview_month.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/overview_year.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/overview_year.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/stats.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/stats.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tools/BullingerDB.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tools/BullingerDB.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/app.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reset_server.sh" beforeDir="false" afterPath="$PROJECT_DIR$/reset_server.sh" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -66,12 +24,12 @@
         <entry file="file://$PROJECT_DIR$/App/static/css/main.css">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="614">
-              <caret line="58" lean-forward="true" selection-start-line="58" selection-end-line="58" />
+              <caret line="58" selection-start-line="58" selection-end-line="58" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/templates/overview.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="153">
@@ -83,17 +41,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/templates/base.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-106">
-              <caret line="18" column="104" selection-start-line="18" selection-start-column="104" selection-end-line="18" selection-end-column="104" />
+            <state relative-caret-position="339">
+              <caret line="53" column="39" lean-forward="true" selection-start-line="53" selection-start-column="39" selection-end-line="53" selection-end-column="39" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/App/routes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-4937">
-              <caret line="20" lean-forward="true" selection-start-line="20" selection-end-line="20" />
+            <state relative-caret-position="277">
+              <caret line="45" lean-forward="true" selection-start-line="45" selection-end-line="45" />
               <folding>
                 <element signature="e#172#206#0" expanded="true" />
               </folding>
@@ -123,7 +81,7 @@
         <entry file="file://$PROJECT_DIR$/App/static/css/std.css">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="585">
-              <caret line="39" lean-forward="true" selection-start-line="39" selection-end-line="39" />
+              <caret line="39" selection-start-line="39" selection-end-line="39" />
             </state>
           </provider>
         </entry>
@@ -223,12 +181,12 @@
         <option value="$PROJECT_DIR$/App/static/css/header.css" />
         <option value="$PROJECT_DIR$/App/static/css/table.css" />
         <option value="$PROJECT_DIR$/Trash/card.css" />
-        <option value="$PROJECT_DIR$/App/templates/base.html" />
         <option value="$PROJECT_DIR$/App/static/css/main.css" />
-        <option value="$PROJECT_DIR$/App/routes.py" />
         <option value="$PROJECT_DIR$/App/templates/index.html" />
         <option value="$PROJECT_DIR$/App/static/css/boxes.css" />
         <option value="$PROJECT_DIR$/App/templates/overview.html" />
+        <option value="$PROJECT_DIR$/App/templates/base.html" />
+        <option value="$PROJECT_DIR$/App/routes.py" />
       </list>
     </option>
   </component>
@@ -257,19 +215,6 @@
               <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
               <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
               <item name="App" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
-              <item name="App" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
-              <item name="App" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="css" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
@@ -363,9 +308,9 @@
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" sideWeight="0.38134432" side_tool="true" weight="0.32959852" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.6186557" visible="true" weight="0.3911205" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.6186557" visible="true" weight="0.25581396" />
       <window_info id="Structure" order="2" sideWeight="0.15205725" side_tool="true" weight="0.29495615" />
-      <window_info anchor="bottom" id="Terminal" order="0" weight="0.05898491" />
+      <window_info anchor="bottom" id="Terminal" order="0" visible="true" weight="0.31138545" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="2" weight="0.32967034" />
       <window_info anchor="bottom" id="Message" order="3" />
@@ -663,30 +608,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-106">
-          <caret line="18" column="104" selection-start-line="18" selection-start-column="104" selection-end-line="18" selection-end-column="104" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/routes.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4937">
-          <caret line="20" lean-forward="true" selection-start-line="20" selection-end-line="20" />
-          <folding>
-            <element signature="e#172#206#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="22" selection-start-line="22" selection-end-line="44" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/static/css/boxes.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="479">
@@ -697,14 +618,14 @@
     <entry file="file://$PROJECT_DIR$/App/static/css/std.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="585">
-          <caret line="39" lean-forward="true" selection-start-line="39" selection-end-line="39" />
+          <caret line="39" selection-start-line="39" selection-end-line="39" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/App/static/css/main.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="614">
-          <caret line="58" lean-forward="true" selection-start-line="58" selection-end-line="58" />
+          <caret line="58" selection-start-line="58" selection-end-line="58" />
         </state>
       </provider>
     </entry>
@@ -712,6 +633,30 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="81" column="41" selection-start-line="81" selection-start-column="41" selection-end-line="81" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="205">
+          <caret line="22" selection-start-line="22" selection-end-line="44" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="339">
+          <caret line="53" column="39" lean-forward="true" selection-start-line="53" selection-start-column="39" selection-end-line="53" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/routes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="277">
+          <caret line="45" lean-forward="true" selection-start-line="45" selection-end-line="45" />
+          <folding>
+            <element signature="e#172#206#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

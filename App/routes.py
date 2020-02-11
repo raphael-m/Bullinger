@@ -36,11 +36,13 @@ def is_admin():
 def load_user(id_user):
     return User.query.get(int(id_user))
 
+"""
 @app.route('/admin', methods=['POST', 'GET'])
 @login_required
 def admin():
     if is_admin(): return render_template('admin.html', title="Admin")
-    return index()
+    return redirect(url_for('index', next=request.url))
+"""
 
 @app.route('/', methods=['POST', 'GET'])
 @app.route('/home', methods=['POST', 'GET'])
@@ -71,7 +73,7 @@ def setup():
     if is_admin():
         BullingerDB(db.session).setup("Karteikarten/OCR")  # ~1h
         return redirect(url_for('admin'))
-    return index()
+    return redirect(url_for('index', next=request.url))
 
 @app.route('/admin/delete_user/<username>', methods=['POST', 'GET'])
 @login_required
@@ -79,7 +81,7 @@ def delete_user(username):
     if is_admin():
         BullingerDB(db.session).remove_user(username)
         return redirect(url_for('admin'))
-    return index()
+    return redirect(url_for('index', next=request.url))
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -223,6 +225,7 @@ def overview_languages(lang):
 
 @app.route('/stats', methods=['GET'])
 @app.route('/stats/<n_top>', methods=['GET'])
+@login_required
 def stats(n_top=50):
     BullingerDB.track(current_user.username, '/stats', datetime.now())
     n_top, id_file = int(n_top), str(int(time.time()))
