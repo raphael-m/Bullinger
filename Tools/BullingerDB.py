@@ -349,7 +349,7 @@ class BullingerDB:
     def update_language(lang, lang_records):
         s_old = [s.sprache for s in lang_records if s.sprache]
         s_new = BullingerDB.split_lang(lang)
-        new_languages = []
+        new_languages, n = [], 0
         if not set(s_old) == set(s_new):
             for s in s_new: new_languages.append(Sprache(language=s.strip()))
             if len(s_new) is 0:
