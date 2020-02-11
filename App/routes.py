@@ -10,6 +10,7 @@ from App import app, login_manager
 from App.forms import *
 from flask import render_template, flash, redirect, url_for, make_response, jsonify, request
 from flask_login import current_user, login_user, login_required, logout_user
+from sqlalchemy import desc
 from Tools.BullingerDB import BullingerDB
 from collections import defaultdict
 from App.models import *
@@ -390,14 +391,14 @@ def send_data(id_brief):
                 "lastname": sender.name if sender else '',
                 "location": sender.ort if sender else '',
                 "remarks": s.bemerkung if s else '',
-                "verified": s.verifiziert if s else False
+                "not_verified": s.nicht_verifiziert if s else False
             },
             "receiver": {
                 "firstname": receiver.vorname if receiver else '',
                 "lastname": receiver.name if receiver else '',
                 "location": receiver.ort if receiver else '',
                 "remarks": r.bemerkung if r else '',
-                "verified": r.verifiziert if r else False
+                "not_verified": r.nicht_verifiziert if r else False
             },
             "autograph": {
                 "location": autograph.standort if autograph else '',
@@ -432,7 +433,7 @@ def _normalize_input(data):
             data["card"][key][k] = BullingerDB.normalize_str_input(data["card"][key][k])
     for key in ["sender", "receiver"]:  # special case: verified
         for k in data["card"][key]:
-            if k == "verified": data["card"][key][k] = True if data["card"][key][k] else None
+            if k == "not_verified": data["card"][key][k] = True if data["card"][key][k] else None
             else: data["card"][key][k] = BullingerDB.normalize_str_input(data["card"][key][k])
     for key in data["card"]["date"]:  # numbers
         if key == 'remarks':
@@ -467,9 +468,9 @@ def get_persons():  # verified persons only
     recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
     recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
     p1 = db.session.query(Person.id, recent_sender.c.id_person, Person.name, Person.vorname, Person.ort)\
-        .filter(recent_sender.c.verifiziert == 1).join(recent_sender, recent_sender.c.id_person == Person.id)
+        .filter(recent_sender.c.nicht_verifiziert is None).join(recent_sender, recent_sender.c.id_person == Person.id)
     p2 = db.session.query(Person.id, recent_receiver.c.id_person, Person.name, Person.vorname, Person.ort)\
-        .filter(recent_receiver.c.verifiziert == 1).join(recent_receiver, recent_receiver.c.id_person == Person.id)
+        .filter(recent_receiver.c.nicht_verifiziert is None).join(recent_receiver, recent_receiver.c.id_person == Person.id)
     data, d = [], defaultdict(lambda: False)
     for p in p1:
         if not d[p.id_person]: data.append({"lastname": p.name, "firstname": p.vorname, "location": p.ort})

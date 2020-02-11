@@ -25,6 +25,14 @@ L_PROGRESS = ["offen", "abgeschlossen", "unklar", "ungültig"]  # labels (plots)
 C_PROGRESS = ["navy", "forestgreen", "orange", "red"]
 
 
+VIP = [
+    ['Admin', 'bernard.schroffenegger@uzh.ch', 'pbkdf2:sha256:150000$1umhs15s$53a0112b531299deec3c9ceffb4e0bb2e437dd7fdd44da1c51798dbcd8c2e255'],
+    ['mvolk', 'volk@cl.uzh.ch', 'pbkdf2:sha256:150000$gks2YwDf$0eb9a44d24b9b71ed512ed78f4cfbfb987688681a6505440eac959923bdb6fde'],
+    ['Annette', 'annette.kielholz@uzhfoundation.ch', 'pbkdf2:sha256:150000$sYuju3iL$91654867aa11d90236f91b06d893ed7dc01f55e375f1d3de14195e8141aa0804'],
+    ['raaphii', 'raaphii@gmail.com', 'pbkdf2:sha256:150000$mOb4XFy6$c77e92687410fb6d283267d44ff90fcf38c8fefb08b059c9d6df6e78f0780ea7'],
+    ['Patricia', 'patricia.scheurer@uzh.ch', 'pbkdf2:sha256:150000$YRgxPBWk$cf9d78f6a6f427ced80cc8906871cc78f3e12b62cc21f84ddc0ef032714fae84']
+]
+
 class BullingerDB:
 
     def __init__(self, database_session):
@@ -54,6 +62,7 @@ class BullingerDB:
 
     def setup(self, dir_path):
         self.delete_all()
+        self.add_vip_users()
         card_nr, num_ignored_cards, ignored_card_ids = 1, 0, []
         id_bullinger = self.add_bullinger()
         for path in FileSystem.get_file_paths(dir_path, recursively=False):
@@ -79,6 +88,12 @@ class BullingerDB:
             self.dbs.commit()
         if num_ignored_cards: print("*** WARNING,", num_ignored_cards, "files ignored:", ignored_card_ids)
         BullingerDB.count_correspondence()  # post-processing
+
+    def add_vip_users(self):
+        for u in VIP:
+            if not User.query.filter_by(username=u[0]).first():
+                self.dbs.add(User(username=u[0], e_mail=u[1], changes=0, finished=0, hash=u[2], time=self.t))
+        self.dbs.commit()
 
     def add_bullinger(self):
         self.dbs.add(Person(name="Bullinger", forename="Heinrich", place="Zürich", user=ADMIN, time=self.t))
@@ -235,9 +250,9 @@ class BullingerDB:
         return n
 
     def save_the_receiver(self, i, d, user, t):
-        d["verified"], n = None if not d["verified"] else True, 5
+        d["not_verified"], n = True if not d["not_verified"] else None, 5
         e_old = Empfaenger.query.filter_by(id_brief=i).order_by(desc(Empfaenger.zeit)).first()
-        e_new = Empfaenger(verified=d["verified"], remark=d["remarks"])
+        e_new = Empfaenger(not_verified=d["not_verified"], remark=d["remarks"])
         p_old = Person.query.filter_by(id=e_old.id_person).order_by(desc(Person.zeit)).first() if e_old else None
         p_new = Person.query.filter_by(name=d["lastname"], vorname=d["firstname"], ort=d["location"]) \
             .order_by(desc(Person.zeit)).first()
@@ -250,7 +265,7 @@ class BullingerDB:
         if e_old and p_old:
             n = BullingerDB.get_number_of_differences_from_person(d, p_old)
             if e_old.bemerkung != d["remarks"]: n += 1
-            if e_old.verifiziert != d["verified"]: n += 1
+            if e_old.nicht_verifiziert != d["not_verified"]: n += 1
             if n > 0: self.push2db(e_new, i, user, t)
         else:
             self.push2db(e_new, i, user, t)
@@ -258,9 +273,9 @@ class BullingerDB:
         return n
 
     def save_the_sender(self, i, d, user, t):
-        d["verified"], n = None if not d["verified"] else True, 5
+        d["not_verified"], n = True if not d["not_verified"] else None, 5
         a_old = Absender.query.filter_by(id_brief=i).order_by(desc(Absender.zeit)).first()
-        a_new = Absender(verified=d["verified"], remark=d["remarks"])
+        a_new = Absender(not_verified=d["not_verified"], remark=d["remarks"])
         p_old = Person.query.filter_by(id=a_old.id_person).order_by(desc(Person.zeit)).first() if a_old else None
         p_new = Person.query.filter_by(name=d["lastname"], vorname=d["firstname"], ort=d["location"]) \
             .order_by(desc(Person.zeit)).first()
@@ -273,7 +288,7 @@ class BullingerDB:
         if a_old and p_old:
             n = BullingerDB.get_number_of_differences_from_person(d, p_old)
             if a_old.bemerkung != d["remarks"]: n += 1
-            if a_old.verifiziert != d["verified"]: n += 1
+            if a_old.nicht_verifiziert != d["not_verified"]: n += 1
             if n > 0: self.push2db(a_new, i, user, t)
         else:
             self.push2db(a_new, i, user, t)

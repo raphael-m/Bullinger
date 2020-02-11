@@ -12,9 +12,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
 """ DATABASE SCHEMA DEFINITIONS
-
-    Variable/Class names (!) correspond to actual DB-Column/Relation names.
-    The character '_' will be replaced by ' ' (1st subsequent letter uppercase) """
+    ===========================
+    - Variable/Class names (!) correspond to actual DB-Column/Relation names.
+    - The character '_' will be replaced by ' ' (1st subsequent letter uppercase)
+"""
 
 # db-textfield lengths
 LENGTH_S = 50  # status, username, time
@@ -49,7 +50,9 @@ class Kartei(db.Model):
 
     @staticmethod
     def update_file_status(database, id_brief, state, user, t):
-        database.add(Kartei(id_brief=id_brief, state=state, user=user, time=t))
+        k = Kartei.query.filter_by(id_brief=id_brief).order_by(desc(Kartei.zeit)).first()
+        if k: database.add(Kartei(id_brief=id_brief, reviews=k.reviews+1, state=state, user=user, time=t))
+        else: database.add(Kartei(id_brief=id_brief, reviews=1, state=state, user=user, time=t))
         database.commit()
 
     def __repr__(self):
@@ -95,22 +98,22 @@ class Absender(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_brief = db.Column(db.Integer, index=True)
     id_person = db.Column(db.Integer)
-    verifiziert = db.Column(db.Boolean)
+    nicht_verifiziert = db.Column(db.Boolean)
     bemerkung = db.Column(db.String(LENGTH_B))
     anwender = db.Column(db.String(LENGTH_S))
     zeit = db.Column(db.String(LENGTH_S))
 
-    def __init__(self, id_brief=None, id_person=None, verified=None, remark=None, user=None, time=datetime.now()):
+    def __init__(self, id_brief=None, id_person=None, not_verified=True, remark=None, user=None, time=datetime.now()):
         self.id_brief = id_brief
         self.id_person = id_person
-        self.verifiziert = verified
+        self.nicht_verifiziert = not_verified
         self.bemerkung = remark
         self.anwender = user
         self.zeit = time
 
     def __repr__(self):
         return '<Absender {} {} {} {} {} {} {}>'.format(
-            self.id, self.id_brief, self.id_person, self.verifiziert, self.bemerkung, self.anwender, self.zeit)
+            self.id, self.id_brief, self.id_person, self.nicht_verifiziert, self.bemerkung, self.anwender, self.zeit)
 
 
 class Empfaenger(db.Model):
@@ -118,22 +121,22 @@ class Empfaenger(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_brief = db.Column(db.Integer, index=True)
     id_person = db.Column(db.Integer)
-    verifiziert = db.Column(db.Boolean)
+    nicht_verifiziert = db.Column(db.Boolean)
     bemerkung = db.Column(db.String(LENGTH_B))
     anwender = db.Column(db.String(LENGTH_S))
     zeit = db.Column(db.String(LENGTH_S))
 
-    def __init__(self, id_brief=None, id_person=None, verified=None, remark=None, user=None, time=datetime.now()):
+    def __init__(self, id_brief=None, id_person=None, not_verified=True, remark=None, user=None, time=datetime.now()):
         self.id_brief = id_brief
         self.id_person = id_person
-        self.verifiziert = verified
+        self.nicht_verifiziert = not_verified
         self.bemerkung = remark
         self.anwender = user
         self.zeit = time
 
     def __repr__(self):
         return '<Empfänger {} {} {} {} {} {} {}>'.format(
-            self.id, self.id_brief, self.id_person, self.verifiziert, self.bemerkung, self.anwender, self.zeit)
+            self.id, self.id_brief, self.id_person, self.nicht_verifiziert, self.bemerkung, self.anwender, self.zeit)
 
 
 class Person(db.Model):
@@ -313,11 +316,12 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     time = db.Column(db.String(LENGTH_S))
 
-    def __init__(self, username=None, e_mail=None, changes=0, finished=0, time=datetime.now()):
+    def __init__(self, username=None, e_mail=None, hash=None, changes=0, finished=0, time=datetime.now()):
         self.username = username
         self.e_mail = e_mail
         self.changes = changes
         self.finished = finished
+        self.password_hash = hash
         self.time = time
 
     def set_password(self, password):
@@ -331,7 +335,7 @@ class User(UserMixin, db.Model):
         user = User.query.filter_by(username=user).first()
         if user:
             user.changes += number_of_changes
-            user.finished += 1 if state == Config.S_FINISHED else 0
+            user.finished += 1 if state == Config.S_FINISHED else user.finished
         database.commit()
 
     def __repr__(self):
