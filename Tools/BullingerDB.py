@@ -108,11 +108,14 @@ class BullingerDB:
         self.dbs.commit()
 
     def remove_user(self, username):
-        """ delete a user and all its changes """
-        self.dbs.query(User).filter_by(username=username).delete()
-        for t in [Datum, Person, Absender, Empfaenger, Autograph, Kopie, Sprache, Literatur, Gedruckt, Bemerkung, Notiz]:
-            self.dbs.query(t).filter_by(anwender=username).delete()
-        self.dbs.commit()
+        """ delete a user and all its changes. keeps the admin account """
+        if username != ADMIN:
+            for t in [Kartei, Person, Datum, Absender, Empfaenger, Autograph, Kopie, Sprache, Literatur, Gedruckt,
+                      Bemerkung, Notiz]:
+                self.dbs.query(t).filter_by(anwender=username).delete()
+            self.dbs.query(Tracker).filter_by(username=username).delete()
+            self.dbs.query(User).filter_by(username=username).delete()
+            self.dbs.commit()
 
     @staticmethod
     def get_bullinger_number_of_letters():
@@ -871,3 +874,27 @@ class BullingerDB:
             t0 = t0.strftime(t_format)
             return n, t0, t_now
         return n, '[kein Datum verfügbar]', t_now
+
+    @staticmethod
+    def get_changes_per_day_data():
+        """
+        r_all = db.session.query(
+                Kartei.anwender.label("a"),
+                Kartei.zeit.label("zeit")
+            )
+
+        for r in [Kartei, Person, Datum, Absender, Empfaenger, Autograph, Kopie, Sprache, Literatur, Gedruckt, Bemerkung, Notiz]:
+            r_all = union(
+                r_all,
+                db.session.query(
+                    r.anwender.label("a"),
+                    r.zeit.label("zeit")
+                )
+            )
+        r_all = r_all.alias("r_all")
+        ##x = db.session.query(func.count(func.strftime("%d", r_all.c.zeit))).group_by(func.strftime("%d", r_all.c.zeit))
+        for t in db.session.query(r_all):
+            print(t)
+        """
+        pass
+

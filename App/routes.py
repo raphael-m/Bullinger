@@ -50,6 +50,7 @@ def admin():
 @app.route('/index', methods=['POST', 'GET'])
 def index():
     """ start page """
+    BullingerDB.get_changes_per_day_data()
     BullingerDB.track(current_user.username, '/home', datetime.now())
     guest_book = GuestBookForm()
     if guest_book.validate_on_submit() and guest_book.save.data:
@@ -68,21 +69,28 @@ def index():
         "date": date,
     })
 
+@app.route('/admin', methods=['POST', 'GET'])
+def admin():
+    print('executed')
+    return redirect(url_for('index'))
+
 @app.route('/admin/setup', methods=['POST', 'GET'])
 @login_required
 def setup():
     if is_admin():
         BullingerDB(db.session).setup("Karteikarten/OCR")  # ~1h
         return redirect(url_for('admin'))
-    return redirect(url_for('index', next=request.url))
+    logout_user()
+    return redirect(url_for('login', next=request.url))
 
 @app.route('/admin/delete_user/<username>', methods=['POST', 'GET'])
 @login_required
 def delete_user(username):
     if is_admin():
         BullingerDB(db.session).remove_user(username)
-        return redirect(url_for('admin'))
-    return redirect(url_for('index', next=request.url))
+        return redirect(url_for('admin.index'))
+    logout_user()
+    return redirect(url_for('login', next=request.url))
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -330,7 +338,7 @@ def quick_start():
     BullingerDB.track(current_user.username, '/start', datetime.now())
     i = BullingerDB.quick_start()
     if i: return redirect(url_for('assignment', id_brief=str(i)))
-    return redirect(url_for('overview'))  # we are done !
+    return redirect(url_for('stats'))  # we are done !
 
 @app.route('/assignment/<id_brief>', methods=['GET'])
 @login_required
@@ -371,6 +379,8 @@ def send_data(id_brief):
     gedruckt = Gedruckt.query.filter_by(id_brief=id_brief).order_by(desc(Gedruckt.zeit)).first()
     satz = Bemerkung.query.filter_by(id_brief=id_brief).order_by(desc(Bemerkung.zeit)).first()
     notiz = Notiz.query.filter_by(id_brief=id_brief).order_by(desc(Notiz.zeit)).first()
+    prev_assignent = BullingerDB.get_prev_card_number(id_brief)
+    next_assignent = BullingerDB.get_prev_assignment(id_brief)
     data = {
         "id": id_brief,
         "state": kartei.status,
@@ -419,8 +429,8 @@ def send_data(id_brief):
         "navigation": {
             "next": "/assignment/"+str(BullingerDB.get_next_card_number(id_brief)),
             "next_unedited": "/assignment/"+str(BullingerDB.get_next_assignment(id_brief)),
-            "previous": "/assignment/"+str(BullingerDB.get_prev_card_number(id_brief)),
-            "previous_unedited": "/assignment/"+str(BullingerDB.get_prev_assignment(id_brief))
+            "previous": "/assignment/"+(str(prev_assignent) if prev_assignent else 'stats'),
+            "previous_unedited": "/assignment/"+(str(next_assignent) if next_assignent else 'stats')
         }
     }
     return jsonify(data)
