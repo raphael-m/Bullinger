@@ -62,7 +62,7 @@ ol li {
 
 p {
     padding: 4px 0px 4px 0px;
-    line-height: 16pt;
+    line-height: 1em;
 }
 
 .clearing { clear: both; }

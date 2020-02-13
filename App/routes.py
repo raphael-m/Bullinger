@@ -10,6 +10,7 @@ from App import app, login_manager
 from App.forms import *
 from flask import render_template, flash, redirect, url_for, make_response, jsonify, request
 from flask_login import current_user, login_user, login_required, logout_user
+from sqlalchemy import desc
 from Tools.BullingerDB import BullingerDB
 from collections import defaultdict
 from App.models import *
@@ -67,21 +68,28 @@ def index():
         "date": date,
     })
 
+@app.route('/admin', methods=['POST', 'GET'])
+def admin():
+    print('executed')
+    return redirect(url_for('index'))
+
 @app.route('/admin/setup', methods=['POST', 'GET'])
 @login_required
 def setup():
     if is_admin():
         BullingerDB(db.session).setup("Karteikarten/OCR")  # ~1h
         return redirect(url_for('admin'))
-    return redirect(url_for('index', next=request.url))
+    logout_user()
+    return redirect(url_for('login', next=request.url))
 
 @app.route('/admin/delete_user/<username>', methods=['POST', 'GET'])
 @login_required
 def delete_user(username):
     if is_admin():
         BullingerDB(db.session).remove_user(username)
-        return redirect(url_for('admin'))
-    return redirect(url_for('index', next=request.url))
+        return redirect(url_for('admin.index'))
+    logout_user()
+    return redirect(url_for('login', next=request.url))
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -249,6 +257,7 @@ def stats(n_top=50):
             "top_r_gbp": BullingerDB.get_top_n_receiver_ignoring_place(n_top),
             "stats": data_percentages,
             "url_plot": plot_url,
+            "url_changes_per_day": BullingerDB.get_changes_per_day_data(id_file),
             "status_description": ' '.join([str(num_of_cards), 'Karteikarten:'])
         }
     )
@@ -329,7 +338,7 @@ def quick_start():
     BullingerDB.track(current_user.username, '/start', datetime.now())
     i = BullingerDB.quick_start()
     if i: return redirect(url_for('assignment', id_brief=str(i)))
-    return redirect(url_for('overview'))  # we are done !
+    return redirect(url_for('stats'))  # we are done !
 
 @app.route('/assignment/<id_brief>', methods=['GET'])
 @login_required
@@ -370,6 +379,8 @@ def send_data(id_brief):
     gedruckt = Gedruckt.query.filter_by(id_brief=id_brief).order_by(desc(Gedruckt.zeit)).first()
     satz = Bemerkung.query.filter_by(id_brief=id_brief).order_by(desc(Bemerkung.zeit)).first()
     notiz = Notiz.query.filter_by(id_brief=id_brief).order_by(desc(Notiz.zeit)).first()
+    prev_assignent = BullingerDB.get_prev_card_number(id_brief)
+    next_assignent = BullingerDB.get_prev_assignment(id_brief)
     data = {
         "id": id_brief,
         "state": kartei.status,
@@ -390,14 +401,14 @@ def send_data(id_brief):
                 "lastname": sender.name if sender else '',
                 "location": sender.ort if sender else '',
                 "remarks": s.bemerkung if s else '',
-                "verified": s.verifiziert if s else False
+                "not_verified": s.nicht_verifiziert if s else False
             },
             "receiver": {
                 "firstname": receiver.vorname if receiver else '',
                 "lastname": receiver.name if receiver else '',
                 "location": receiver.ort if receiver else '',
                 "remarks": r.bemerkung if r else '',
-                "verified": r.verifiziert if r else False
+                "not_verified": r.nicht_verifiziert if r else False
             },
             "autograph": {
                 "location": autograph.standort if autograph else '',
@@ -418,8 +429,8 @@ def send_data(id_brief):
         "navigation": {
             "next": "/assignment/"+str(BullingerDB.get_next_card_number(id_brief)),
             "next_unedited": "/assignment/"+str(BullingerDB.get_next_assignment(id_brief)),
-            "previous": "/assignment/"+str(BullingerDB.get_prev_card_number(id_brief)),
-            "previous_unedited": "/assignment/"+str(BullingerDB.get_prev_assignment(id_brief))
+            "previous": "/assignment/"+(str(prev_assignent) if prev_assignent else 'stats'),
+            "previous_unedited": "/assignment/"+(str(next_assignent) if next_assignent else 'stats')
         }
     }
     return jsonify(data)
@@ -432,7 +443,7 @@ def _normalize_input(data):
             data["card"][key][k] = BullingerDB.normalize_str_input(data["card"][key][k])
     for key in ["sender", "receiver"]:  # special case: verified
         for k in data["card"][key]:
-            if k == "verified": data["card"][key][k] = True if data["card"][key][k] else None
+            if k == "not_verified": data["card"][key][k] = True if data["card"][key][k] else None
             else: data["card"][key][k] = BullingerDB.normalize_str_input(data["card"][key][k])
     for key in data["card"]["date"]:  # numbers
         if key == 'remarks':
@@ -458,7 +469,8 @@ def save_data(id_brief):
     number_of_changes += bdb.save_remark(id_brief, data["card"]["first_sentence"], user, t)
     bdb.save_comment_card(id_brief, data["card"]["remarks"], user, t)
     Kartei.update_file_status(db.session, id_brief, data["state"], user, t)
-    User.update_user(db.session, user, number_of_changes, data["state"])
+    old_state = BullingerDB.get_most_recent_only(db.session, Kartei).filter_by(id_brief=id_brief).first().rezensionen
+    User.update_user(db.session, user, number_of_changes, data["state"], old_state)
     return redirect(url_for('assignment', id_brief=id_brief))
 
 @app.route('/api/persons', methods=['GET'])
@@ -467,9 +479,9 @@ def get_persons():  # verified persons only
     recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
     recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
     p1 = db.session.query(Person.id, recent_sender.c.id_person, Person.name, Person.vorname, Person.ort)\
-        .filter(recent_sender.c.verifiziert == 1).join(recent_sender, recent_sender.c.id_person == Person.id)
+        .filter(recent_sender.c.nicht_verifiziert is None).join(recent_sender, recent_sender.c.id_person == Person.id)
     p2 = db.session.query(Person.id, recent_receiver.c.id_person, Person.name, Person.vorname, Person.ort)\
-        .filter(recent_receiver.c.verifiziert == 1).join(recent_receiver, recent_receiver.c.id_person == Person.id)
+        .filter(recent_receiver.c.nicht_verifiziert is None).join(recent_receiver, recent_receiver.c.id_person == Person.id)
     data, d = [], defaultdict(lambda: False)
     for p in p1:
         if not d[p.id_person]: data.append({"lastname": p.name, "firstname": p.vorname, "location": p.ort})

@@ -51,7 +51,9 @@
                             <a href="/login">Anmelden</a>
                             <a href="/register">Registrieren</a>
                         {% endif %}
-                        <a href="/admin">Admin</a>
+                        {% if current_user.username == 'Admin' %}
+                            <a href="/admin">Admin</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

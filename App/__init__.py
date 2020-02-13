@@ -4,14 +4,17 @@
 # Bernard Schroffenegger
 # 20th of October, 2019
 
-from flask import Flask
+
+from flask import Flask, url_for
+from flask_basicauth import BasicAuth
+
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_login import LoginManager
-from App.user import Anonymous
+from flask_login import LoginManager, logout_user
+from App.user import *
 from flask_admin import Admin
-from flask_admin.contrib.sqla import ModelView
+
 
 # Application
 app = Flask(__name__)
@@ -28,6 +31,37 @@ login_manager.anonymous_user = Anonymous
 login_manager.login_view = 'login'
 # login_manager.session_protection = "strong"
 # REMEMBER_COOKIE_DURATION = datetime.timedelta(minutes=60)
+
+from flask_admin.contrib import sqla
+from werkzeug.exceptions import HTTPException
+from werkzeug import Response
+from flask import redirect
+from flask_login import current_user
+
+# hack to protect the admin view
+# https://computableverse.com/blog/flask-admin-using-basicauth
+# ---
+basic_auth = BasicAuth(app)
+
+class ModelView(sqla.ModelView):
+
+    def is_accessible(self):
+        if current_user.username != 'Admin':
+            raise AuthException('Not authenticated.')
+        else: return True
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(basic_auth.challenge())
+
+
+class AuthException(HTTPException):
+    def __init__(self, message):
+        super(AuthException, self).__init__(message, Response(
+            "You could not be authenticated. Please refresh the page.", 401,
+            {'WWW-Authenticate': 'Basic realm="Login Required"'}
+        ))
+# ---
+
 
 # no cyclic imports (!)
 from App import routes, models

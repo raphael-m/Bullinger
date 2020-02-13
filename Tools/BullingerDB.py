@@ -25,6 +25,18 @@ L_PROGRESS = ["offen", "abgeschlossen", "unklar", "ungültig"]  # labels (plots)
 C_PROGRESS = ["navy", "forestgreen", "orange", "red"]
 
 
+VIP = [
+    ['Admin', 'bernard.schroffenegger@uzh.ch', 'pbkdf2:sha256:150000$1umhs15s$53a0112b531299deec3c9ceffb4e0bb2e437dd7fdd44da1c51798dbcd8c2e255'],
+    ['mvolk', 'volk@cl.uzh.ch', 'pbkdf2:sha256:150000$gks2YwDf$0eb9a44d24b9b71ed512ed78f4cfbfb987688681a6505440eac959923bdb6fde'],
+    ['pstroebel', 'pstroebel@cl.uzh.ch', 'pbkdf2:sha256:150000$Y0EJOIMN$d9e2fe42ddeed925fd3a603b56734634e5bd1fc39259903e375d88330d7a23ef'],
+    ['Annette', 'annette.kielholz@uzhfoundation.ch', 'pbkdf2:sha256:150000$sYuju3iL$91654867aa11d90236f91b06d893ed7dc01f55e375f1d3de14195e8141aa0804'],
+    ['raaphii', 'raaphii@gmail.com', 'pbkdf2:sha256:150000$mOb4XFy6$c77e92687410fb6d283267d44ff90fcf38c8fefb08b059c9d6df6e78f0780ea7'],
+    ['Patricia', 'patricia.scheurer@uzh.ch', 'pbkdf2:sha256:150000$YRgxPBWk$cf9d78f6a6f427ced80cc8906871cc78f3e12b62cc21f84ddc0ef032714fae84'],
+    ['Anne Goehring', 'goehring@cl.uzh.ch', 'pbkdf2:sha256:150000$Z6wpZK20$bcf9bbe87dc8dcb4df7130e6b8fd2ad751a5e10b0b49eae25949540edb28e1dc'],
+    ['Noah Bubenhofer', 'noah.bubenhofer@ds.uzh.ch', 'pbkdf2:sha256:150000$8JUmkNvJ$eb3837cf17b58cbceb497348f2f0f44f4f97e28bea72fb1893e4c9eb725c35f9'],
+    ['Judith Steiniger', 'steiniger@theol.uzh.ch', 'pbkdf2:sha256:150000$a6UPqVM4$bfc610cad1000169e73b44e84802d51661056a327cdd5ff7d312f1635a099671'],
+]
+
 class BullingerDB:
 
     def __init__(self, database_session):
@@ -54,6 +66,7 @@ class BullingerDB:
 
     def setup(self, dir_path):
         self.delete_all()
+        self.add_vip_users()
         card_nr, num_ignored_cards, ignored_card_ids = 1, 0, []
         id_bullinger = self.add_bullinger()
         for path in FileSystem.get_file_paths(dir_path, recursively=False):
@@ -80,6 +93,12 @@ class BullingerDB:
         if num_ignored_cards: print("*** WARNING,", num_ignored_cards, "files ignored:", ignored_card_ids)
         BullingerDB.count_correspondence()  # post-processing
 
+    def add_vip_users(self):
+        for u in VIP:
+            if not User.query.filter_by(username=u[0]).first():
+                self.dbs.add(User(username=u[0], e_mail=u[1], changes=0, finished=0, hash=u[2], time=self.t))
+        self.dbs.commit()
+
     def add_bullinger(self):
         self.dbs.add(Person(name="Bullinger", forename="Heinrich", place="Zürich", user=ADMIN, time=self.t))
         self.dbs.commit()
@@ -93,11 +112,14 @@ class BullingerDB:
         self.dbs.commit()
 
     def remove_user(self, username):
-        """ delete a user and all its changes """
-        self.dbs.query(User).filter_by(username=username).delete()
-        for t in [Datum, Person, Absender, Empfaenger, Autograph, Kopie, Sprache, Literatur, Gedruckt, Bemerkung, Notiz]:
-            self.dbs.query(t).filter_by(anwender=username).delete()
-        self.dbs.commit()
+        """ delete a user and all its changes. keeps the admin account """
+        if username != ADMIN:
+            for t in [Kartei, Person, Datum, Absender, Empfaenger, Autograph, Kopie, Sprache, Literatur, Gedruckt,
+                      Bemerkung, Notiz]:
+                self.dbs.query(t).filter_by(anwender=username).delete()
+            self.dbs.query(Tracker).filter_by(username=username).delete()
+            self.dbs.query(User).filter_by(username=username).delete()
+            self.dbs.commit()
 
     @staticmethod
     def get_bullinger_number_of_letters():
@@ -235,9 +257,9 @@ class BullingerDB:
         return n
 
     def save_the_receiver(self, i, d, user, t):
-        d["verified"], n = None if not d["verified"] else True, 5
+        d["not_verified"], n = True if not d["not_verified"] else None, 5
         e_old = Empfaenger.query.filter_by(id_brief=i).order_by(desc(Empfaenger.zeit)).first()
-        e_new = Empfaenger(verified=d["verified"], remark=d["remarks"])
+        e_new = Empfaenger(not_verified=d["not_verified"], remark=d["remarks"])
         p_old = Person.query.filter_by(id=e_old.id_person).order_by(desc(Person.zeit)).first() if e_old else None
         p_new = Person.query.filter_by(name=d["lastname"], vorname=d["firstname"], ort=d["location"]) \
             .order_by(desc(Person.zeit)).first()
@@ -250,7 +272,7 @@ class BullingerDB:
         if e_old and p_old:
             n = BullingerDB.get_number_of_differences_from_person(d, p_old)
             if e_old.bemerkung != d["remarks"]: n += 1
-            if e_old.verifiziert != d["verified"]: n += 1
+            if e_old.nicht_verifiziert != d["not_verified"]: n += 1
             if n > 0: self.push2db(e_new, i, user, t)
         else:
             self.push2db(e_new, i, user, t)
@@ -258,9 +280,9 @@ class BullingerDB:
         return n
 
     def save_the_sender(self, i, d, user, t):
-        d["verified"], n = None if not d["verified"] else True, 5
+        d["not_verified"], n = True if not d["not_verified"] else None, 5
         a_old = Absender.query.filter_by(id_brief=i).order_by(desc(Absender.zeit)).first()
-        a_new = Absender(verified=d["verified"], remark=d["remarks"])
+        a_new = Absender(not_verified=d["not_verified"], remark=d["remarks"])
         p_old = Person.query.filter_by(id=a_old.id_person).order_by(desc(Person.zeit)).first() if a_old else None
         p_new = Person.query.filter_by(name=d["lastname"], vorname=d["firstname"], ort=d["location"]) \
             .order_by(desc(Person.zeit)).first()
@@ -273,7 +295,7 @@ class BullingerDB:
         if a_old and p_old:
             n = BullingerDB.get_number_of_differences_from_person(d, p_old)
             if a_old.bemerkung != d["remarks"]: n += 1
-            if a_old.verifiziert != d["verified"]: n += 1
+            if a_old.nicht_verifiziert != d["not_verified"]: n += 1
             if n > 0: self.push2db(a_new, i, user, t)
         else:
             self.push2db(a_new, i, user, t)
@@ -334,7 +356,7 @@ class BullingerDB:
     def update_language(lang, lang_records):
         s_old = [s.sprache for s in lang_records if s.sprache]
         s_new = BullingerDB.split_lang(lang)
-        new_languages = []
+        new_languages, n = [], 0
         if not set(s_old) == set(s_new):
             for s in s_new: new_languages.append(Sprache(language=s.strip()))
             if len(s_new) is 0:
@@ -544,7 +566,16 @@ class BullingerDB:
         year = BullingerDB.normalize_int_input(year)
         m_num = BullingerDB.convert_month_to_int(month)
         data, null = [], []
-        for d in Datum.query.filter_by(jahr_a=year, monat_a=m_num):
+        rel = BullingerDB.get_most_recent_only(db.session, Datum).subquery()
+        dates = db.session.query(
+                rel.c.id_brief,
+                rel.c.jahr_a,
+                rel.c.monat_a,
+                rel.c.tag_a,
+            ).filter(rel.c.jahr_a == year)\
+            .filter(rel.c.monat_a == m_num)\
+            .all()
+        for d in dates:
             recent_index = BullingerDB.get_most_recent_only(db.session, Kartei).filter_by(id_brief=d.id_brief).first()
             r = recent_index.rezensionen
             s = recent_index.status
@@ -856,3 +887,24 @@ class BullingerDB:
             t0 = t0.strftime(t_format)
             return n, t0, t_now
         return n, '[kein Datum verfügbar]', t_now
+
+    @staticmethod
+    def get_changes_per_day_data(file_id):
+        d = CountDict()
+        for r in [Kartei, Person, Datum, Absender, Empfaenger, Autograph, Kopie, Sprache, Literatur, Gedruckt, Bemerkung, Notiz]:
+            t = db.session.query(r.zeit).filter(r.anwender != ADMIN).all()
+            for x in t:
+                dt = datetime.strptime(x[0], "%Y-%m-%d %H:%M:%S.%f")
+                d.add(dt.strftime('%Y%m%d'))
+        d = d.get_pairs_sorted()
+        objects = ['' for _ in d]
+        y_pos = np.arange(len(objects))
+        performance = [t[1] for t in d]
+        fig = plt.figure()
+        plt.bar(y_pos, performance, align='center', alpha=0.5)
+        plt.xticks(y_pos, objects)
+        #plt.ylabel('')
+        plt.title('Anzahl Änderungen pro Tag')
+        fig.savefig('App/static/images/plots/changes_'+file_id+'.png')
+        plt.close()
+        return 'images/plots/overview_'+file_id+'.png'
