@@ -50,7 +50,6 @@ def admin():
 @app.route('/index', methods=['POST', 'GET'])
 def index():
     """ start page """
-    BullingerDB.get_changes_per_day_data()
     BullingerDB.track(current_user.username, '/home', datetime.now())
     guest_book = GuestBookForm()
     if guest_book.validate_on_submit() and guest_book.save.data:
@@ -258,6 +257,7 @@ def stats(n_top=50):
             "top_r_gbp": BullingerDB.get_top_n_receiver_ignoring_place(n_top),
             "stats": data_percentages,
             "url_plot": plot_url,
+            "url_changes_per_day": BullingerDB.get_changes_per_day_data(id_file),
             "status_description": ' '.join([str(num_of_cards), 'Karteikarten:'])
         }
     )
@@ -469,7 +469,8 @@ def save_data(id_brief):
     number_of_changes += bdb.save_remark(id_brief, data["card"]["first_sentence"], user, t)
     bdb.save_comment_card(id_brief, data["card"]["remarks"], user, t)
     Kartei.update_file_status(db.session, id_brief, data["state"], user, t)
-    User.update_user(db.session, user, number_of_changes, data["state"])
+    old_state = BullingerDB.get_most_recent_only(db.session, Kartei).filter_by(id_brief=id_brief).first().rezensionen
+    User.update_user(db.session, user, number_of_changes, data["state"], old_state)
     return redirect(url_for('assignment', id_brief=id_brief))
 
 @app.route('/api/persons', methods=['GET'])

@@ -127,3 +127,5 @@ class PieChart:
         fig.savefig('App/static/images/plots/overview_'+file_id+'.png')
         plt.close()
         return 'images/plots/overview_'+file_id+'.png'
+
+

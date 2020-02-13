@@ -28,9 +28,13 @@ C_PROGRESS = ["navy", "forestgreen", "orange", "red"]
 VIP = [
     ['Admin', 'bernard.schroffenegger@uzh.ch', 'pbkdf2:sha256:150000$1umhs15s$53a0112b531299deec3c9ceffb4e0bb2e437dd7fdd44da1c51798dbcd8c2e255'],
     ['mvolk', 'volk@cl.uzh.ch', 'pbkdf2:sha256:150000$gks2YwDf$0eb9a44d24b9b71ed512ed78f4cfbfb987688681a6505440eac959923bdb6fde'],
+    ['pstroebel', 'pstroebel@cl.uzh.ch', 'pbkdf2:sha256:150000$Y0EJOIMN$d9e2fe42ddeed925fd3a603b56734634e5bd1fc39259903e375d88330d7a23ef'],
     ['Annette', 'annette.kielholz@uzhfoundation.ch', 'pbkdf2:sha256:150000$sYuju3iL$91654867aa11d90236f91b06d893ed7dc01f55e375f1d3de14195e8141aa0804'],
     ['raaphii', 'raaphii@gmail.com', 'pbkdf2:sha256:150000$mOb4XFy6$c77e92687410fb6d283267d44ff90fcf38c8fefb08b059c9d6df6e78f0780ea7'],
-    ['Patricia', 'patricia.scheurer@uzh.ch', 'pbkdf2:sha256:150000$YRgxPBWk$cf9d78f6a6f427ced80cc8906871cc78f3e12b62cc21f84ddc0ef032714fae84']
+    ['Patricia', 'patricia.scheurer@uzh.ch', 'pbkdf2:sha256:150000$YRgxPBWk$cf9d78f6a6f427ced80cc8906871cc78f3e12b62cc21f84ddc0ef032714fae84'],
+    ['Anne Goehring', 'goehring@cl.uzh.ch', 'pbkdf2:sha256:150000$Z6wpZK20$bcf9bbe87dc8dcb4df7130e6b8fd2ad751a5e10b0b49eae25949540edb28e1dc'],
+    ['Noah Bubenhofer', 'noah.bubenhofer@ds.uzh.ch', 'pbkdf2:sha256:150000$8JUmkNvJ$eb3837cf17b58cbceb497348f2f0f44f4f97e28bea72fb1893e4c9eb725c35f9'],
+    ['Judith Steiniger', 'steiniger@theol.uzh.ch', 'pbkdf2:sha256:150000$a6UPqVM4$bfc610cad1000169e73b44e84802d51661056a327cdd5ff7d312f1635a099671'],
 ]
 
 class BullingerDB:
@@ -562,7 +566,16 @@ class BullingerDB:
         year = BullingerDB.normalize_int_input(year)
         m_num = BullingerDB.convert_month_to_int(month)
         data, null = [], []
-        for d in Datum.query.filter_by(jahr_a=year, monat_a=m_num):
+        rel = BullingerDB.get_most_recent_only(db.session, Datum).subquery()
+        dates = db.session.query(
+                rel.c.id_brief,
+                rel.c.jahr_a,
+                rel.c.monat_a,
+                rel.c.tag_a,
+            ).filter(rel.c.jahr_a == year)\
+            .filter(rel.c.monat_a == m_num)\
+            .all()
+        for d in dates:
             recent_index = BullingerDB.get_most_recent_only(db.session, Kartei).filter_by(id_brief=d.id_brief).first()
             r = recent_index.rezensionen
             s = recent_index.status
@@ -876,25 +889,22 @@ class BullingerDB:
         return n, '[kein Datum verfügbar]', t_now
 
     @staticmethod
-    def get_changes_per_day_data():
-        """
-        r_all = db.session.query(
-                Kartei.anwender.label("a"),
-                Kartei.zeit.label("zeit")
-            )
-
+    def get_changes_per_day_data(file_id):
+        d = CountDict()
         for r in [Kartei, Person, Datum, Absender, Empfaenger, Autograph, Kopie, Sprache, Literatur, Gedruckt, Bemerkung, Notiz]:
-            r_all = union(
-                r_all,
-                db.session.query(
-                    r.anwender.label("a"),
-                    r.zeit.label("zeit")
-                )
-            )
-        r_all = r_all.alias("r_all")
-        ##x = db.session.query(func.count(func.strftime("%d", r_all.c.zeit))).group_by(func.strftime("%d", r_all.c.zeit))
-        for t in db.session.query(r_all):
-            print(t)
-        """
-        pass
-
+            t = db.session.query(r.zeit).filter(r.anwender != ADMIN).all()
+            for x in t:
+                dt = datetime.strptime(x[0], "%Y-%m-%d %H:%M:%S.%f")
+                d.add(dt.strftime('%Y%m%d'))
+        d = d.get_pairs_sorted()
+        objects = ['' for _ in d]
+        y_pos = np.arange(len(objects))
+        performance = [t[1] for t in d]
+        fig = plt.figure()
+        plt.bar(y_pos, performance, align='center', alpha=0.5)
+        plt.xticks(y_pos, objects)
+        #plt.ylabel('')
+        plt.title('Anzahl Änderungen pro Tag')
+        fig.savefig('App/static/images/plots/changes_'+file_id+'.png')
+        plt.close()
+        return 'images/plots/overview_'+file_id+'.png'

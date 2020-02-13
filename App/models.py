@@ -331,11 +331,12 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     @staticmethod
-    def update_user(database, user, number_of_changes, state):
+    def update_user(database, user, number_of_changes, new_state, old_state):
         user = User.query.filter_by(username=user).first()
         if user:
             user.changes += number_of_changes
-            user.finished += 1 if state == Config.S_FINISHED else user.finished
+            if new_state == Config.S_FINISHED and new_state != old_state:
+                user.finished += 1
         database.commit()
 
     def __repr__(self):
