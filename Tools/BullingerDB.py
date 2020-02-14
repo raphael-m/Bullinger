@@ -3,6 +3,7 @@
 # BullingerDB.py
 # Bernard Schroffenegger
 # 30th of November, 2019
+from collections import defaultdict
 
 from Tools.Dictionaries import CountDict
 from Tools.Plots import *
@@ -28,13 +29,13 @@ C_PROGRESS = ["navy", "forestgreen", "orange", "red"]
 VIP = [
     ['Admin', 'bernard.schroffenegger@uzh.ch', 'pbkdf2:sha256:150000$1umhs15s$53a0112b531299deec3c9ceffb4e0bb2e437dd7fdd44da1c51798dbcd8c2e255'],
     ['mvolk', 'volk@cl.uzh.ch', 'pbkdf2:sha256:150000$gks2YwDf$0eb9a44d24b9b71ed512ed78f4cfbfb987688681a6505440eac959923bdb6fde'],
-    ['pstroebel', 'pstroebel@cl.uzh.ch', 'pbkdf2:sha256:150000$Y0EJOIMN$d9e2fe42ddeed925fd3a603b56734634e5bd1fc39259903e375d88330d7a23ef'],
     ['Annette', 'annette.kielholz@uzhfoundation.ch', 'pbkdf2:sha256:150000$sYuju3iL$91654867aa11d90236f91b06d893ed7dc01f55e375f1d3de14195e8141aa0804'],
     ['raaphii', 'raaphii@gmail.com', 'pbkdf2:sha256:150000$mOb4XFy6$c77e92687410fb6d283267d44ff90fcf38c8fefb08b059c9d6df6e78f0780ea7'],
     ['Patricia', 'patricia.scheurer@uzh.ch', 'pbkdf2:sha256:150000$YRgxPBWk$cf9d78f6a6f427ced80cc8906871cc78f3e12b62cc21f84ddc0ef032714fae84'],
+    ['Judith Steiniger', 'steiniger@theol.uzh.ch', 'pbkdf2:sha256:150000$a6UPqVM4$bfc610cad1000169e73b44e84802d51661056a327cdd5ff7d312f1635a099671'],
+    ['pstroebel', 'pstroebel@cl.uzh.ch', 'pbkdf2:sha256:150000$Y0EJOIMN$d9e2fe42ddeed925fd3a603b56734634e5bd1fc39259903e375d88330d7a23ef'],
     ['Anne Goehring', 'goehring@cl.uzh.ch', 'pbkdf2:sha256:150000$Z6wpZK20$bcf9bbe87dc8dcb4df7130e6b8fd2ad751a5e10b0b49eae25949540edb28e1dc'],
     ['Noah Bubenhofer', 'noah.bubenhofer@ds.uzh.ch', 'pbkdf2:sha256:150000$8JUmkNvJ$eb3837cf17b58cbceb497348f2f0f44f4f97e28bea72fb1893e4c9eb725c35f9'],
-    ['Judith Steiniger', 'steiniger@theol.uzh.ch', 'pbkdf2:sha256:150000$a6UPqVM4$bfc610cad1000169e73b44e84802d51661056a327cdd5ff7d312f1635a099671'],
 ]
 
 class BullingerDB:
@@ -91,7 +92,7 @@ class BullingerDB:
             card_nr += 1
             self.dbs.commit()
         if num_ignored_cards: print("*** WARNING,", num_ignored_cards, "files ignored:", ignored_card_ids)
-        BullingerDB.count_correspondence()  # post-processing
+        # BullingerDB.count_correspondence()  # post-processing
 
     def add_vip_users(self):
         for u in VIP:
@@ -175,6 +176,7 @@ class BullingerDB:
             db.session.add(Tracker(username=username, time=t, url=url))
             db.session.commit()
 
+    '''
     @staticmethod
     def count_correspondence():
         """ very inefficient, but doesn't matter """
@@ -185,6 +187,7 @@ class BullingerDB:
             p = Person.query.get(a.id_person)
             p.gesendet = p.gesendet + 1 if p.gesendet else 1
         db.session.commit()
+    '''
 
     def save_date(self, i, data_date, user, t):
         datum_old, n = Datum.query.filter_by(id_brief=i).order_by(desc(Datum.zeit)).first(), 0
@@ -257,7 +260,7 @@ class BullingerDB:
         return n
 
     def save_the_receiver(self, i, d, user, t):
-        d["not_verified"], n = True if not d["not_verified"] else None, 5
+        n = 5
         e_old = Empfaenger.query.filter_by(id_brief=i).order_by(desc(Empfaenger.zeit)).first()
         e_new = Empfaenger(not_verified=d["not_verified"], remark=d["remarks"])
         p_old = Person.query.filter_by(id=e_old.id_person).order_by(desc(Person.zeit)).first() if e_old else None
@@ -273,14 +276,17 @@ class BullingerDB:
             n = BullingerDB.get_number_of_differences_from_person(d, p_old)
             if e_old.bemerkung != d["remarks"]: n += 1
             if e_old.nicht_verifiziert != d["not_verified"]: n += 1
-            if n > 0: self.push2db(e_new, i, user, t)
+            if n > 0 or e_old.anwender == Config.ADMIN:
+                # update admin references for reliable auto suggestions ("not_verified-issue")
+                if e_old.anwender == Config.ADMIN: user = 'System' if user == Config.ADMIN else user
+                self.push2db(e_new, i, user, t)
         else:
             self.push2db(e_new, i, user, t)
         self.dbs.commit()
         return n
 
     def save_the_sender(self, i, d, user, t):
-        d["not_verified"], n = True if not d["not_verified"] else None, 5
+        n = 5
         a_old = Absender.query.filter_by(id_brief=i).order_by(desc(Absender.zeit)).first()
         a_new = Absender(not_verified=d["not_verified"], remark=d["remarks"])
         p_old = Person.query.filter_by(id=a_old.id_person).order_by(desc(Person.zeit)).first() if a_old else None
@@ -296,7 +302,9 @@ class BullingerDB:
             n = BullingerDB.get_number_of_differences_from_person(d, p_old)
             if a_old.bemerkung != d["remarks"]: n += 1
             if a_old.nicht_verifiziert != d["not_verified"]: n += 1
-            if n > 0: self.push2db(a_new, i, user, t)
+            if n > 0 or a_old.anwender == Config.ADMIN:
+                if a_old.anwender == Config.ADMIN: user = 'System' if user == Config.ADMIN else user
+                self.push2db(a_new, i, user, t)
         else:
             self.push2db(a_new, i, user, t)
         return n
@@ -734,6 +742,7 @@ class BullingerDB:
         fig.savefig('App/static/images/plots/user_stats_finished_' + file_name + '.png')
         plt.close()
 
+    """
     @staticmethod
     def get_top_n_sender(n):
         p = Person.query.order_by(desc(Person.gesendet)).all()
@@ -749,24 +758,55 @@ class BullingerDB:
         return [[x.name if x.name else Config.SN,
                  x.vorname if x.vorname else Config.SN,
                  x.ort if x.ort else Config.SL, x.empfangen] for x in p][0:n]
+    """
+
+    @staticmethod
+    def get_top_data(mode):
+        """ mode = 0: sender
+            mode = 1: empfänger """
+        recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
+        recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
+        # sender
+        p1 = db.session.query(
+                Person.id.label("p_id_a"),
+                Person.name.label("p_name"),
+                Person.vorname.label("p_forename"),
+                func.count(Person.id).label("s_count"),
+                literal(0).label("r_count"),
+                recent_sender.c.id_brief.label("id_a"),
+                recent_sender.c.id_person.label("p_id_b")
+            ).join(recent_sender, recent_sender.c.id_person == Person.id) \
+            .group_by(Person.name, Person.vorname, Person.ort)
+        # receiver
+        p2 = db.session.query(
+                Person.id.label("p_id_a"),
+                Person.name.label("p_name"),
+                Person.vorname.label("p_forename"),
+                literal(0).label("s_count"),
+                func.count(Person.id).label("r_count"),
+                recent_receiver.c.id_brief.label("id_a"),
+                recent_receiver.c.id_person.label("p_id_b")
+            ).join(recent_receiver, recent_receiver.c.id_person == Person.id)\
+            .group_by(Person.name, Person.vorname, Person.ort)
+        # full outer join and sum over groups
+        p_all = union_all(p1, p2).alias("united")
+        return db.session.query(
+                p_all.c.p_name,
+                p_all.c.p_forename,
+                func.sum(p_all.c.s_count),
+                func.sum(p_all.c.r_count)
+            ).group_by(
+                p_all.c.p_name,
+                p_all.c.p_forename,
+            ).order_by(desc(func.sum(p_all.c.s_count if not mode else p_all.c.r_count)))
 
     @staticmethod
     def get_top_n_sender_ignoring_place(n):
-        p = db.session.query(Person.name, Person.vorname, func.sum(Person.gesendet))\
-            .group_by(Person.name, Person.vorname)\
-            .order_by(desc(func.sum(Person.gesendet))).all()
-        if n > len(p): n = len(p)
-        return [[x[0] if x[0] else Config.SN,
-                 x[1] if x[1] else Config.SN, x[2]] for x in p][0:n]
+        return [[r[0] if r[0] else Config.SN, r[1] if r[1] else Config.SN, r[2]] for r in BullingerDB.get_top_data(0)][0:n]
 
     @staticmethod
     def get_top_n_receiver_ignoring_place(n):
-        p = db.session.query(Person.name, Person.vorname, func.sum(Person.empfangen))\
-            .group_by(Person.name, Person.vorname)\
-            .order_by(desc(func.sum(Person.empfangen))).all()
-        if n > len(p): n = len(p)
-        return [[x[0] if x[0] else Config.SN,
-                 x[1] if x[1] else Config.SN, x[2]] for x in p][0:n]
+        return [[r[0] if r[0] else Config.SN, r[1] if r[1] else Config.SN, r[3]] for r in BullingerDB.get_top_data(1)][0:n]
 
     @staticmethod
     def get_persons_by_var(variable, mode):

@@ -55,14 +55,14 @@ def index():
     if guest_book.validate_on_submit() and guest_book.save.data:
         BullingerDB.save_comment(guest_book.comment.data, current_user.username, datetime.now())
     guest_book.process()
-    letters_sent, letters_received = BullingerDB.get_bullinger_number_of_letters()
+    # letters_sent, letters_received = BullingerDB.get_bullinger_number_of_letters()
     n, t0, date = BullingerDB.get_number_of_page_visits()
     return render_template("index.html", title=APP_NAME, form=guest_book, vars={
         "username": current_user.username,
         "user_stats": BullingerDB.get_user_stats(current_user.username),
         "comments": BullingerDB.get_comments(current_user.username),
-        "num_sent": letters_sent,
-        "num_received": letters_received,
+        # "num_sent": letters_sent,
+        # "num_received": letters_received,
         "num_page_visits": n,
         "since": t0,
         "date": date,
@@ -70,7 +70,6 @@ def index():
 
 @app.route('/admin', methods=['POST', 'GET'])
 def admin():
-    print('executed')
     return redirect(url_for('index'))
 
 @app.route('/admin/setup', methods=['POST', 'GET'])
@@ -251,14 +250,15 @@ def stats(n_top=50):
             "n_top": n_top,
             "file_id": id_file,
             "lang_stats": stats_languages,
-            "top_s": BullingerDB.get_top_n_sender(n_top),
-            "top_r": BullingerDB.get_top_n_receiver(n_top),
+            # "top_s": BullingerDB.get_top_n_sender(n_top),
+            # "top_r": BullingerDB.get_top_n_receiver(n_top),
             "top_s_gbp": BullingerDB.get_top_n_sender_ignoring_place(n_top),
             "top_r_gbp": BullingerDB.get_top_n_receiver_ignoring_place(n_top),
             "stats": data_percentages,
             "url_plot": plot_url,
             "url_changes_per_day": BullingerDB.get_changes_per_day_data(id_file),
-            "status_description": ' '.join([str(num_of_cards), 'Karteikarten:'])
+            "status_description": ' '.join([str(num_of_cards), 'Karteikarten:']),
+            "page_index": "stats"
         }
     )
 
@@ -379,8 +379,8 @@ def send_data(id_brief):
     gedruckt = Gedruckt.query.filter_by(id_brief=id_brief).order_by(desc(Gedruckt.zeit)).first()
     satz = Bemerkung.query.filter_by(id_brief=id_brief).order_by(desc(Bemerkung.zeit)).first()
     notiz = Notiz.query.filter_by(id_brief=id_brief).order_by(desc(Notiz.zeit)).first()
-    prev_assignent = BullingerDB.get_prev_card_number(id_brief)
-    next_assignent = BullingerDB.get_prev_assignment(id_brief)
+    prev_card_nr, next_card_nr = BullingerDB.get_prev_card_number(id_brief), BullingerDB.get_next_card_number(id_brief)
+    prev_assignment, next_assignment = BullingerDB.get_prev_assignment(id_brief), BullingerDB.get_next_assignment(id_brief)
     data = {
         "id": id_brief,
         "state": kartei.status,
@@ -401,14 +401,14 @@ def send_data(id_brief):
                 "lastname": sender.name if sender else '',
                 "location": sender.ort if sender else '',
                 "remarks": s.bemerkung if s else '',
-                "not_verified": s.nicht_verifiziert if s else False
+                "not_verified": s.nicht_verifiziert if s and s.nicht_verifiziert else False
             },
             "receiver": {
                 "firstname": receiver.vorname if receiver else '',
                 "lastname": receiver.name if receiver else '',
                 "location": receiver.ort if receiver else '',
                 "remarks": r.bemerkung if r else '',
-                "not_verified": r.nicht_verifiziert if r else False
+                "not_verified": r.nicht_verifiziert if r and r.nicht_verifiziert else False
             },
             "autograph": {
                 "location": autograph.standort if autograph else '',
@@ -427,10 +427,10 @@ def send_data(id_brief):
             "remarks": notiz.notiz if notiz else ''
         },
         "navigation": {
-            "next": "/assignment/"+str(BullingerDB.get_next_card_number(id_brief)),
-            "next_unedited": "/assignment/"+str(BullingerDB.get_next_assignment(id_brief)),
-            "previous": "/assignment/"+(str(prev_assignent) if prev_assignent else 'stats'),
-            "previous_unedited": "/assignment/"+(str(next_assignent) if next_assignent else 'stats')
+            "next": "/assignment/"+str(next_card_nr),
+            "next_unedited": ("/assignment/"+str(next_assignment)) if next_assignment else '/stats',
+            "previous": "/assignment/"+str(prev_card_nr),
+            "previous_unedited": ("/assignment/"+str(prev_assignment)) if prev_assignment else '/stats'
         }
     }
     return jsonify(data)
@@ -458,6 +458,7 @@ def _normalize_input(data):
 def save_data(id_brief):
     bdb = BullingerDB(db.session)
     data, user, number_of_changes, t = _normalize_input(request.get_json()), current_user.username, 0, datetime.now()
+    old_state = BullingerDB.get_most_recent_only(db.session, Kartei).filter_by(id_brief=id_brief).first().status
     number_of_changes += bdb.save_date(id_brief, data["card"]["date"], user, t)
     number_of_changes += bdb.save_autograph(id_brief, data["card"]["autograph"], user, t)
     number_of_changes += bdb.save_the_sender(id_brief, data["card"]["sender"], user, t)
@@ -469,7 +470,6 @@ def save_data(id_brief):
     number_of_changes += bdb.save_remark(id_brief, data["card"]["first_sentence"], user, t)
     bdb.save_comment_card(id_brief, data["card"]["remarks"], user, t)
     Kartei.update_file_status(db.session, id_brief, data["state"], user, t)
-    old_state = BullingerDB.get_most_recent_only(db.session, Kartei).filter_by(id_brief=id_brief).first().rezensionen
     User.update_user(db.session, user, number_of_changes, data["state"], old_state)
     return redirect(url_for('assignment', id_brief=id_brief))
 
@@ -479,9 +479,14 @@ def get_persons():  # verified persons only
     recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
     recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
     p1 = db.session.query(Person.id, recent_sender.c.id_person, Person.name, Person.vorname, Person.ort)\
-        .filter(recent_sender.c.nicht_verifiziert is None).join(recent_sender, recent_sender.c.id_person == Person.id)
+        .filter(recent_sender.c.anwender != Config.ADMIN)\
+        .filter(recent_sender.c.nicht_verifiziert == None)\
+        .join(recent_sender, recent_sender.c.id_person == Person.id)
+    # cation: "== None" may not be replaced with "is None" here!
     p2 = db.session.query(Person.id, recent_receiver.c.id_person, Person.name, Person.vorname, Person.ort)\
-        .filter(recent_receiver.c.nicht_verifiziert is None).join(recent_receiver, recent_receiver.c.id_person == Person.id)
+        .filter(recent_sender.c.anwender != Config.ADMIN)\
+        .filter(recent_receiver.c.nicht_verifiziert == None)\
+        .join(recent_receiver, recent_receiver.c.id_person == Person.id)
     data, d = [], defaultdict(lambda: False)
     for p in p1:
         if not d[p.id_person]: data.append({"lastname": p.name, "firstname": p.vorname, "location": p.ort})
