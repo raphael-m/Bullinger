@@ -36,6 +36,7 @@ VIP = [
     ['pstroebel', 'pstroebel@cl.uzh.ch', 'pbkdf2:sha256:150000$Y0EJOIMN$d9e2fe42ddeed925fd3a603b56734634e5bd1fc39259903e375d88330d7a23ef'],
     ['Anne Goehring', 'goehring@cl.uzh.ch', 'pbkdf2:sha256:150000$Z6wpZK20$bcf9bbe87dc8dcb4df7130e6b8fd2ad751a5e10b0b49eae25949540edb28e1dc'],
     ['Noah Bubenhofer', 'noah.bubenhofer@ds.uzh.ch', 'pbkdf2:sha256:150000$8JUmkNvJ$eb3837cf17b58cbceb497348f2f0f44f4f97e28bea72fb1893e4c9eb725c35f9'],
+    ['System', 'schroffbe@hotmail.com', 'pbkdf2:sha256:150000$1umhs15s$53a0112b531299deec3c9ceffb4e0bb2e437dd7fdd44da1c51798dbcd8c2e255']
 ]
 
 class BullingerDB:
@@ -277,8 +278,7 @@ class BullingerDB:
             if e_old.bemerkung != d["remarks"]: n += 1
             if e_old.nicht_verifiziert != d["not_verified"]: n += 1
             if n > 0 or e_old.anwender == Config.ADMIN:
-                # update admin references for reliable auto suggestions ("not_verified-issue")
-                if e_old.anwender == Config.ADMIN: user = 'System' if user == Config.ADMIN else user
+                if user == Config.ADMIN: user = 'System'
                 self.push2db(e_new, i, user, t)
         else:
             self.push2db(e_new, i, user, t)
@@ -303,7 +303,7 @@ class BullingerDB:
             if a_old.bemerkung != d["remarks"]: n += 1
             if a_old.nicht_verifiziert != d["not_verified"]: n += 1
             if n > 0 or a_old.anwender == Config.ADMIN:
-                if a_old.anwender == Config.ADMIN: user = 'System' if user == Config.ADMIN else user
+                if user == Config.ADMIN: user = 'System'
                 self.push2db(a_new, i, user, t)
         else:
             self.push2db(a_new, i, user, t)

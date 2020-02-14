@@ -50,6 +50,7 @@ class Kartei(db.Model):
 
     @staticmethod
     def update_file_status(database, id_brief, state, user, t):
+        print(id_brief, state, user, t)
         k = Kartei.query.filter_by(id_brief=id_brief).order_by(desc(Kartei.zeit)).first()
         if k: database.add(Kartei(id_brief=id_brief, reviews=k.rezensionen+1, state=state, user=user, time=t))
         else: database.add(Kartei(id_brief=id_brief, reviews=1, state=state, user=user, time=t))

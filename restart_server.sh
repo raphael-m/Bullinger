@@ -1,6 +1,8 @@
 #!/bin/bash
 #reset_server.sh
 
+rm App/static/images/plots/*.png
+
 git pull || git reset --hard origin/master
 
 pkill gunicorn
