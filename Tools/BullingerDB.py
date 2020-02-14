@@ -277,9 +277,7 @@ class BullingerDB:
             n = BullingerDB.get_number_of_differences_from_person(d, p_old)
             if e_old.bemerkung != d["remarks"]: n += 1
             if e_old.nicht_verifiziert != d["not_verified"]: n += 1
-            if n > 0 or e_old.anwender == Config.ADMIN:
-                if user == Config.ADMIN: user = 'System'
-                self.push2db(e_new, i, user, t)
+            if n > 0: self.push2db(e_new, i, user, t)
         else:
             self.push2db(e_new, i, user, t)
         self.dbs.commit()
@@ -302,9 +300,7 @@ class BullingerDB:
             n = BullingerDB.get_number_of_differences_from_person(d, p_old)
             if a_old.bemerkung != d["remarks"]: n += 1
             if a_old.nicht_verifiziert != d["not_verified"]: n += 1
-            if n > 0 or a_old.anwender == Config.ADMIN:
-                if user == Config.ADMIN: user = 'System'
-                self.push2db(a_new, i, user, t)
+            if n > 0: self.push2db(a_new, i, user, t)
         else:
             self.push2db(a_new, i, user, t)
         return n
@@ -948,3 +944,53 @@ class BullingerDB:
         fig.savefig('App/static/images/plots/changes_'+file_id+'.png')
         plt.close()
         return 'images/plots/overview_'+file_id+'.png'
+
+    @staticmethod
+    def get_persons_as_autosuggestion():
+        recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
+        recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
+        # sender
+        p1 = db.session.query(
+            Person.id.label("p_id_a"),
+            Person.name.label("p_name"),
+            Person.vorname.label("p_forename"),
+            Person.ort.label("p_place"),
+            func.count(Person.id).label("s_count"),
+            literal(0).label("r_count"),
+            recent_sender.c.id_brief.label("id_a"),
+            recent_sender.c.id_person.label("p_id_b")) \
+            .join(recent_sender, recent_sender.c.id_person == Person.id) \
+            .group_by(Person.name, Person.vorname, Person.ort)
+        # receiver
+        p2 = db.session.query(
+            Person.id.label("p_id_a"),
+            Person.name.label("p_name"),
+            Person.vorname.label("p_forename"),
+            Person.ort.label("p_place"),
+            literal(0).label("s_count"),
+            func.count(Person.id).label("r_count"),
+            recent_receiver.c.id_brief.label("id_a"),
+            recent_receiver.c.id_person.label("p_id_b")) \
+            .filter(
+            Person.name == variable if mode is 0
+            else Person.vorname == variable if mode is 1
+            else Person.ort == variable if mode is 2
+            else True) \
+            .join(recent_receiver, recent_receiver.c.id_person == Person.id) \
+            .group_by(Person.name, Person.vorname, Person.ort)
+        # full outer join and sum over groups
+        p_all = union_all(p1, p2).alias("united")
+        results = db.session.query(
+            p_all.c.p_name,
+            p_all.c.p_forename,
+            p_all.c.p_place,
+            func.sum(p_all.c.s_count),
+            func.sum(p_all.c.r_count)
+        ).group_by(
+            p_all.c.p_name,
+            p_all.c.p_forename,
+            p_all.c.p_place
+        ).order_by(desc(func.sum(p_all.c.s_count)))
+        return [[r[0] if r[0] else Config.SN,
+                 r[1] if r[1] else Config.SN,
+                 r[2] if r[2] else Config.SL, r[3], r[4]] for r in results]

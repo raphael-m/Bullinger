@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/Tools/BullingerDB.py" line="826" mnemonic="7" />
+    <bookmark url="file://$PROJECT_DIR$/Tools/BullingerDB.py" line="822" mnemonic="7" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6d2cb28e-bb45-42c9-b203-59c8af68dfbb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/App/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Tools/BullingerDB.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tools/BullingerDB.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/app.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/restart_server.sh" beforeDir="false" afterPath="$PROJECT_DIR$/restart_server.sh" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,11 +20,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="478">
-              <caret line="683" column="8" selection-start-line="683" selection-start-column="8" selection-end-line="683" selection-end-column="8" />
+            <state relative-caret-position="726">
+              <caret line="996" lean-forward="true" selection-start-line="996" selection-end-line="996" />
               <folding>
                 <element signature="e#118#153#0" expanded="true" />
               </folding>
@@ -33,11 +32,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/routes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3234">
-              <caret line="248" column="48" lean-forward="true" selection-start-line="248" selection-start-column="48" selection-end-line="248" selection-end-column="48" />
+            <state relative-caret-position="480">
+              <caret line="497" selection-start-line="497" selection-end-line="497" />
               <folding>
                 <element signature="e#172#206#0" expanded="true" />
               </folding>
@@ -69,7 +68,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>quick</find>
       <find>page_</find>
       <find>h3_box</find>
       <find>h3_section</find>
@@ -99,6 +97,7 @@
       <find>num_sent</find>
       <find>/stats</find>
       <find>def push</find>
+      <find>print(</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -153,10 +152,10 @@
         <option value="$PROJECT_DIR$/App/static/css/std.css" />
         <option value="$PROJECT_DIR$/App/templates/index.html" />
         <option value="$PROJECT_DIR$/App/templates/faq.html" />
-        <option value="$PROJECT_DIR$/App/routes.py" />
         <option value="$PROJECT_DIR$/App/templates/overview__status.html" />
         <option value="$PROJECT_DIR$/restart_server.sh" />
         <option value="$PROJECT_DIR$/App/models.py" />
+        <option value="$PROJECT_DIR$/App/routes.py" />
         <option value="$PROJECT_DIR$/Tools/BullingerDB.py" />
       </list>
     </option>
@@ -273,9 +272,9 @@
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" sideWeight="0.38134432" side_tool="true" weight="0.32959852" />
-      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.6186557" weight="0.29576194" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.6186557" visible="true" weight="0.29576194" />
       <window_info id="Structure" order="2" sideWeight="0.15205725" side_tool="true" weight="0.29495615" />
-      <window_info anchor="bottom" id="Terminal" order="0" weight="0.19183673" />
+      <window_info anchor="bottom" id="Terminal" order="0" visible="true" weight="0.18095239" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="2" weight="0.32967034" />
       <window_info anchor="bottom" id="Message" order="3" />
@@ -285,7 +284,7 @@
       <window_info anchor="bottom" id="Debug" order="7" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
-      <window_info active="true" anchor="bottom" id="TODO" order="10" visible="true" weight="0.6435374" />
+      <window_info anchor="bottom" id="TODO" order="10" weight="0.6435374" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -595,22 +594,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
+    <entry file="file://$PROJECT_DIR$/App/routes.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="478">
-          <caret line="683" column="8" selection-start-line="683" selection-start-column="8" selection-end-line="683" selection-end-column="8" />
+        <state relative-caret-position="480">
+          <caret line="497" selection-start-line="497" selection-end-line="497" />
           <folding>
-            <element signature="e#118#153#0" expanded="true" />
+            <element signature="e#172#206#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/routes.py">
+    <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3234">
-          <caret line="248" column="48" lean-forward="true" selection-start-line="248" selection-start-column="48" selection-end-line="248" selection-end-column="48" />
+        <state relative-caret-position="726">
+          <caret line="996" lean-forward="true" selection-start-line="996" selection-end-line="996" />
           <folding>
-            <element signature="e#172#206#0" expanded="true" />
+            <element signature="e#118#153#0" expanded="true" />
           </folding>
         </state>
       </provider>
