@@ -50,7 +50,6 @@ class Kartei(db.Model):
 
     @staticmethod
     def update_file_status(database, id_brief, state, user, t):
-        print(id_brief, state, user, t)
         k = Kartei.query.filter_by(id_brief=id_brief).order_by(desc(Kartei.zeit)).first()
         if k: database.add(Kartei(id_brief=id_brief, reviews=k.rezensionen+1, state=state, user=user, time=t))
         else: database.add(Kartei(id_brief=id_brief, reviews=1, state=state, user=user, time=t))
@@ -331,11 +330,9 @@ class User(UserMixin, db.Model):
         user = User.query.filter_by(username=user).first()
         if user:
             user.changes += number_of_changes
-            print("new", new_state)
-            print("old", old_state)
             if old_state != Config.S_FINISHED and new_state == Config.S_FINISHED:
                 user.finished += 1
-        database.commit()
+            database.commit()
 
     def __repr__(self):
         return '<User {}>'.format(self.username)

@@ -476,6 +476,7 @@ def save_data(id_brief):
 @app.route('/api/persons', methods=['GET'])
 @login_required
 def get_persons():  # verified persons only
+    """ DON'T !
     recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
     recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
     p1 = db.session.query(Person.id, recent_sender.c.id_person, Person.name, Person.vorname, Person.ort)\
@@ -495,3 +496,6 @@ def get_persons():  # verified persons only
         if not d[p.id_person]: data.append({"lastname": p.name, "firstname": p.vorname, "location": p.ort})
         d[p.id_person] = True
     return jsonify(data)
+    """
+    return jsonify([])
+

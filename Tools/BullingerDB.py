@@ -35,8 +35,7 @@ VIP = [
     ['Judith Steiniger', 'steiniger@theol.uzh.ch', 'pbkdf2:sha256:150000$a6UPqVM4$bfc610cad1000169e73b44e84802d51661056a327cdd5ff7d312f1635a099671'],
     ['pstroebel', 'pstroebel@cl.uzh.ch', 'pbkdf2:sha256:150000$Y0EJOIMN$d9e2fe42ddeed925fd3a603b56734634e5bd1fc39259903e375d88330d7a23ef'],
     ['Anne Goehring', 'goehring@cl.uzh.ch', 'pbkdf2:sha256:150000$Z6wpZK20$bcf9bbe87dc8dcb4df7130e6b8fd2ad751a5e10b0b49eae25949540edb28e1dc'],
-    ['Noah Bubenhofer', 'noah.bubenhofer@ds.uzh.ch', 'pbkdf2:sha256:150000$8JUmkNvJ$eb3837cf17b58cbceb497348f2f0f44f4f97e28bea72fb1893e4c9eb725c35f9'],
-    ['System', 'schroffbe@hotmail.com', 'pbkdf2:sha256:150000$1umhs15s$53a0112b531299deec3c9ceffb4e0bb2e437dd7fdd44da1c51798dbcd8c2e255']
+    ['Noah Bubenhofer', 'noah.bubenhofer@ds.uzh.ch', 'pbkdf2:sha256:150000$8JUmkNvJ$eb3837cf17b58cbceb497348f2f0f44f4f97e28bea72fb1893e4c9eb725c35f9']
 ]
 
 class BullingerDB:
@@ -947,6 +946,8 @@ class BullingerDB:
 
     @staticmethod
     def get_persons_as_autosuggestion():
+        pass
+        """
         recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
         recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
         # sender
@@ -994,3 +995,4 @@ class BullingerDB:
         return [[r[0] if r[0] else Config.SN,
                  r[1] if r[1] else Config.SN,
                  r[2] if r[2] else Config.SL, r[3], r[4]] for r in results]
+        """
