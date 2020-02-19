@@ -4,7 +4,11 @@
     <bookmark url="file://$PROJECT_DIR$/Tools/BullingerDB.py" line="825" mnemonic="7" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6d2cb28e-bb45-42c9-b203-59c8af68dfbb" name="Default Changelist" comment="" />
+    <list default="true" id="6d2cb28e-bb45-42c9-b203-59c8af68dfbb" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/App/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tools/BullingerDB.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tools/BullingerDB.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/app.db" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,8 +23,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="389">
-              <caret line="1009" column="49" selection-start-line="1009" selection-start-column="49" selection-end-line="1009" selection-end-column="49" />
+            <state relative-caret-position="871">
+              <caret line="998" column="31" lean-forward="true" selection-start-line="998" selection-start-column="31" selection-end-line="998" selection-end-column="31" />
               <folding>
                 <element signature="e#118#153#0" expanded="true" />
               </folding>
@@ -31,8 +35,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/App/routes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="21" selection-start-line="21" selection-end-line="21" />
+            <state relative-caret-position="310">
+              <caret line="521" column="78" selection-start-line="521" selection-start-column="78" selection-end-line="521" selection-end-column="78" />
               <folding>
                 <element signature="e#172#206#0" expanded="true" />
               </folding>
@@ -303,11 +307,12 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="153" y="23" width="1287" height="827" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" sideWeight="0.38134432" side_tool="true" weight="0.32959852" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.6186557" visible="true" weight="0.27725118" />
+      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.6186557" visible="true" weight="0.27725118" />
       <window_info id="Structure" order="2" sideWeight="0.15205725" side_tool="true" weight="0.29495615" />
-      <window_info anchor="bottom" id="Terminal" order="0" visible="true" weight="0.2897959" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="0" visible="true" weight="0.2897959" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="2" weight="0.32967034" />
       <window_info anchor="bottom" id="Message" order="3" />
@@ -629,8 +634,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="389">
-          <caret line="1009" column="49" selection-start-line="1009" selection-start-column="49" selection-end-line="1009" selection-end-column="49" />
+        <state relative-caret-position="871">
+          <caret line="998" column="31" lean-forward="true" selection-start-line="998" selection-start-column="31" selection-end-line="998" selection-end-column="31" />
           <folding>
             <element signature="e#118#153#0" expanded="true" />
           </folding>
@@ -639,8 +644,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/App/routes.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" selection-start-line="21" selection-end-line="21" />
+        <state relative-caret-position="310">
+          <caret line="521" column="78" selection-start-line="521" selection-start-column="78" selection-end-line="521" selection-end-column="78" />
           <folding>
             <element signature="e#172#206#0" expanded="true" />
           </folding>

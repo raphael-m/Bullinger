@@ -950,6 +950,7 @@ class BullingerDB:
 
     @staticmethod
     def get_timeline_data_all(name=None, prename=None, location=None):
+        print(name, prename, location)
         recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
         recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
         # sender
