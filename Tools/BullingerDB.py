@@ -36,7 +36,10 @@ VIP = [
     ['pstroebel', 'pstroebel@cl.uzh.ch', 'pbkdf2:sha256:150000$Y0EJOIMN$d9e2fe42ddeed925fd3a603b56734634e5bd1fc39259903e375d88330d7a23ef'],
     ['Anne Goehring', 'goehring@cl.uzh.ch', 'pbkdf2:sha256:150000$Z6wpZK20$bcf9bbe87dc8dcb4df7130e6b8fd2ad751a5e10b0b49eae25949540edb28e1dc'],
     ['Noah Bubenhofer', 'noah.bubenhofer@ds.uzh.ch', 'pbkdf2:sha256:150000$8JUmkNvJ$eb3837cf17b58cbceb497348f2f0f44f4f97e28bea72fb1893e4c9eb725c35f9'],
-    ['rana', 'wilms@drwilms.ch', 'pbkdf2:sha256:150000$p74klHpv$d8ffc260527a6985da1463b18d2749abe3e79b24a598585126dedf638f6e1e9f']
+    ['rana', 'wilms@drwilms.ch', 'pbkdf2:sha256:150000$p74klHpv$d8ffc260527a6985da1463b18d2749abe3e79b24a598585126dedf638f6e1e9f'],
+    ['hrh6@cornell.edu', 'hrh6@cornell.edu', 'pbkdf2:sha256:150000$wLNcPVgn$76bfb3df45e702082b91e76433078f47136261e6910a659ec2deeb757b2e9f09'],
+    ['Sarah', 'sarahelisabeth.kiener@uzh.ch', 'pbkdf2:sha256:150000$RE0t7veh$edfad88e1bef4c7cec1f831c36351144e2d5c525eb2a34367355780b7e68304b'],
+    ['thodel', 'tobias.hodel@wbkolleg.unibe.ch', 'pbkdf2:sha256:150000$ALR5UMNz$f820596401935725cf8e800db08ea7db90448727a4708a5050a4e68b44509564']
 ]
 
 class BullingerDB:
@@ -944,6 +947,70 @@ class BullingerDB:
         fig.savefig('App/static/images/plots/changes_'+file_id+'.png')
         plt.close()
         return 'images/plots/overview_'+file_id+'.png'
+
+    @staticmethod
+    def get_timeline_data_all(name=None, prename=None, location=None):
+        recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
+        recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
+        # sender
+        p1 = db.session.query(
+                Person.id.label("p_id_a"),
+                Person.name.label("p_name"),
+                Person.vorname.label("p_forename"),
+                Person.ort.label("p_place"),
+                recent_sender.c.id_person.label("p_id_b"),
+                recent_sender.c.id_brief.label("id_a"))\
+            .join(recent_sender, recent_sender.c.id_person == Person.id).subquery().alias("p1")
+        # receiver
+        p2 = db.session.query(
+                Person.id.label("p_id_a"),
+                Person.name.label("p_name"),
+                Person.vorname.label("p_forename"),
+                Person.ort.label("p_place"),
+                recent_receiver.c.id_person.label("p_id_b"),
+                recent_receiver.c.id_brief.label("id_a"))\
+            .join(recent_receiver, recent_receiver.c.id_person == Person.id).subquery().alias("p2")
+        results = db.session.query(
+            Datum.id_brief,  # 0
+            Datum.jahr_a,
+            Datum.monat_a,
+            Datum.tag_a,
+            p1.c.id_a,
+            p1.c.p_id_b,
+            p1.c.p_name, # 6
+            p1.c.p_forename,
+            p1.c.p_place,
+            p2.c.id_a,
+            p2.c.p_id_b,
+            p2.c.p_name,  # 11
+            p2.c.p_forename,
+            p2.c.p_place)\
+        .join(p1, p1.c.id_a == Datum.id_brief)\
+        .join(p2, p2.c.id_a == Datum.id_brief)\
+        .filter(or_(p1.c.p_name == 'Bullinger', p1.c.p_name == name) if name else True)\
+        .filter(or_(p2.c.p_name == 'Bullinger', p2.c.p_name == name) if name else True)\
+        .filter(or_(p1.c.p_forename == 'Heinrich', p1.c.p_forename == prename) if prename else True)\
+        .filter(or_(p2.c.p_forename == 'Heinrich', p2.c.p_forename == prename) if prename else True)\
+        .filter(or_(p1.c.p_place == 'Zürich', p1.c.p_place == location) if location else True)\
+        .filter(or_(p2.c.p_place == 'Zürich', p2.c.p_place == location) if location else True)
+        data = dict()
+        for r in results:
+            data[r[0]] = dict()
+            data[r[0]]["year"] = r[1] if r[1] else 0,
+            data[r[0]]["month"] = r[2] if r[2] else 0,
+            data[r[0]]["day"] = r[3] if r[3] else 0,
+            if r[6] == "Bullinger" and r[7] == "Heinrich" and r[8] == "Zürich":
+                data[r[0]]["name"] = r[11] if r[11] else Config.SN,
+                data[r[0]]["forename"] = r[12] if r[12] else Config.SN,
+                data[r[0]]["location"] = r[13] if r[13] else Config.SN,
+                data[r[0]]["is_sender"] = True
+            else:
+                data[r[0]]["name"] = r[6] if r[6] else Config.SN,
+                data[r[0]]["forename"] = r[7] if r[7] else Config.SN,
+                data[r[0]]["place"] = r[8] if r[8] else Config.SN,
+                data[r[0]]["is_sender"] = False
+        return data
+
 
     @staticmethod
     def get_persons_as_autosuggestion():

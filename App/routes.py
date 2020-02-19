@@ -131,7 +131,6 @@ def register():
 # Overviews
 # - year
 @app.route('/overview', methods=['POST', 'GET'])
-@login_required
 def overview():
     BullingerDB.track(current_user.username, '/overview', datetime.now())
     data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(None)
@@ -146,16 +145,28 @@ def overview():
             "persons": persons,
             "hits": len(persons),
             "table_language": BullingerDB.get_language_stats(),
-            # "url_plot": plot_url,
-            # "num_of_cards": num_of_cards,
-            # "stats": data_percentages,
-            # "status_description": ' '.join([str(num_of_cards), 'Karteikarten:'])
         }
     )
 
+
+@app.route('/persons', methods=['POST', 'GET'])
+def overview_persons():
+    BullingerDB.track(current_user.username, '/persons', datetime.now())
+    persons = BullingerDB.get_persons_by_var(None, None)
+    return render_template(
+        'overview_persons.html',
+        title="Übersicht",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "persons": persons,
+            "hits": len(persons),
+        }
+    )
+
+
 # - months
 @app.route('/overview_year/<year>', methods=['POST', 'GET'])
-@login_required
 def overview_year(year):
     BullingerDB.track(current_user.username, '/overview/'+year, datetime.now())
     data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(year)
@@ -172,7 +183,6 @@ def overview_year(year):
 
 # -days
 @app.route('/overview_month/<year>/<month>', methods=['POST', 'GET'])
-@login_required
 def overview_month(year, month):
     BullingerDB.track(current_user.username, '/'.join(['', str(month), str(year)]), datetime.now())
     if month == Config.SD: month = 0
@@ -232,7 +242,6 @@ def overview_languages(lang):
 
 @app.route('/stats', methods=['GET'])
 @app.route('/stats/<n_top>', methods=['GET'])
-@login_required
 def stats(n_top=50):
     BullingerDB.track(current_user.username, '/stats', datetime.now())
     n_top, id_file = int(n_top), str(int(time.time()))
@@ -474,9 +483,9 @@ def save_data(id_brief):
     return redirect(url_for('assignment', id_brief=id_brief))
 
 @app.route('/api/persons', methods=['GET'])
-@login_required
 def get_persons():  # verified persons only
-    """ DON'T !
+    """ TODO: introduction of a separate relation for verified addresses?
+    DON'T !
     recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
     recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
     p1 = db.session.query(Person.id, recent_sender.c.id_person, Person.name, Person.vorname, Person.ort)\
@@ -489,6 +498,7 @@ def get_persons():  # verified persons only
         .filter(recent_receiver.c.nicht_verifiziert == None)\
         .join(recent_receiver, recent_receiver.c.id_person == Person.id)
     data, d = [], defaultdict(lambda: False)
+    # this is shit
     for p in p1:
         if not d[p.id_person]: data.append({"lastname": p.name, "firstname": p.vorname, "location": p.ort})
         d[p.id_person] = True
@@ -499,3 +509,17 @@ def get_persons():  # verified persons only
     """
     return jsonify([])
 
+
+# 4 Steven
+@app.route('/api/get_correspondence/<name>/<forename>/<location>',
+           methods=['GET'],
+           defaults={'name': None, 'forename': None, 'location': None}
+           )
+def get_correspondences_all(name, forename, location):
+    n, f, l = name if name else None, forename if forename else None, location if location else None
+    return jsonify(BullingerDB.get_timeline_data_all(name=n, prename=f, location=l))
+
+
+@app.route('/api/get_persons', methods=['GET'])
+def get_persons_all():
+    return jsonify(BullingerDB.get_persons_by_var(None, None))
