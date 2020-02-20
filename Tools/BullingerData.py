@@ -258,6 +258,12 @@ class BullingerData:
                     if re.match(r'.*(?:^|\s+)du(?:\s+|$).*', vn):
                         vn = vn.replace('du', '').strip()
                         nn = 'du ' + nn
+                    if re.match(r'.*(?:^|\s+)a(?:\s+|$).*', vn):
+                        vn = vn.replace('a', '').strip()
+                        nn = 'a ' + nn
+                    if re.match(r'.*(?:^|\s+)zum(?:\s+|$).*', vn):
+                        vn = vn.replace('zum', '').strip()
+                        nn = 'zum ' + nn
                 else:  # Geistliche
                     ort = vn.replace('von', '').strip()
                     nn = "Geistliche"
@@ -265,6 +271,9 @@ class BullingerData:
             ort = ' '.join(baselines[-1])
             ort = re.sub(r'\s+', ' ', ort.replace('.', '. ')).strip()
         if len(baselines) > 2: bemerkung = ' '.join([t for b in baselines[1:-1] for t in b]).strip()
+        if nn: nn = nn.replace('.', '')
+        if vn: vn = vn.replace('.', '')
+        if ort: ort = ort.replace('.', '')
         nn = nn if nn else None
         vn = vn if vn else None
         ort = ort if ort else None

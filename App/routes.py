@@ -69,6 +69,7 @@ def index():
     })
 
 @app.route('/admin', methods=['POST', 'GET'])
+@login_required
 def admin():
     return redirect(url_for('index'))
 
@@ -516,11 +517,10 @@ def get_persons():  # verified persons only
            # defaults={'name': None, 'forename': None, 'location': None}
            )
 def get_correspondences_all(name, forename, location):
-    print(name, forename, location)
     n, f, l = name if name and name != '0' and name != 'None' else None,\
               forename if forename and forename != '0' and forename != 'None' else None,\
               location if location and location != '0' and location != 'None' else None
-    return jsonify(BullingerDB.get_timeline_data_all(name=n, prename=f, location=l))
+    return jsonify(BullingerDB.get_timeline_data_all(name=n, forename=f, location=l))
 
 
 @app.route('/api/get_persons', methods=['GET'])
