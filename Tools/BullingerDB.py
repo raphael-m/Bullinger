@@ -104,9 +104,6 @@ class BullingerDB:
         self.post_process_db()
 
     def post_process_db(self):
-        # Columns
-        for fj in Person.query.filter_by(name="Fabrizius", vorname='s.n.', ort='Johannes').all():
-            fj.vorname, fj.ort = 'Johannes', 's.n.'
         nn_adj = [  # n:1
             [["Klarer", "klarer", "Biarer", "Blaurer", "Blarsr"], "Blarer"],
             [["Fabrieius", "Babricius", "Fabricus", "Fabridis", "Fabrieims", "Fabrieius", "Fabritius", "Fabrüus", "Fahreins", "faEricfius", "fairius", "abricius"], "Fabricius"],
@@ -183,6 +180,17 @@ class BullingerDB:
         for p in Person.query.filter_by(name="von Philipp", vorname="Landgraf"):
             p.name, p.vorname = "von Landgraf", "Philipp"
             self.dbs.commit()
+        for fj in Person.query.filter_by(name="Fabrizius", vorname='s.n.', ort='Johannes').all():
+            fj.vorname, fj.ort = 'Johannes', 's.l.'
+            self.dbs.commit()
+        for fj in Person.query.filter_by(name="Fabricius", vorname='s.n.', ort='Johannes').all():
+            fj.vorname, fj.ort = 'Johannes', 's.l.'
+            self.dbs.commit()
+        for p in Person.query.filter_by(name="a", vorname="Lasco Johannes"):
+            p.name, p.vorname = "a Lasco", "Johannes"
+            self.dbs.commit()
+
+
 
     def add_vip_users(self):
         for u in VIP:
