@@ -150,18 +150,20 @@ class BullingerDB:
                     self.dbs.commit()
         loc_adj = [
             [["St Gallen", "St fallen", "StGallen", "St.Gallen", "St. allen", "St.G llen", "st. Galle", "St. allen", "St. GAllea", "Sta Gallen", "St. Gllen", "St. Galln", "St. Sailen", "St. alleh", "Sf. alLev", "t. Sailen", "t . Ballen", "Sf Saliern", "St. allen", "St. Galle", "St. Salieh", "St. Ggllen"], "St. Gallen"],
-            [["enf", "Senf", "G nf", "Gef", "Genf u", "ehf", "en f", "s. l. Genf"], "Genf"],
+            [["enf", "Senf", "G nf", "Gef", "Genf u", "ehf", "en f", "s. l. Genf", "Gemf", "Gen"], "Genf"],
             [["ern", "lern"], "Bern"],
             [["Happoltsweiler", "Happoldsweiler", "Bappoltsweiler", "Rapolisweiler", "Rappoläsweiler", "Rappolt sweier", ], "Rappoltsweiler"],
             [["Hochheizer", "Hochhelxer", "Hoehholzer"], "Hochholzer"],
             [["Schaff hausen", "SchafIhausen", "Schaffheyuen", "Sekaffkamsem", "Schaffhuttsen", "Schaffhansen", "Schaffhauscn"], "Schaffhausen"],
-            [["Ghur", "Cbur", "Cfrur", "ChAr", "Chub", "hur", "Chor", "Gaur", "iChur", "Ohur"], "Chur"],  # 8x
+            [["Ghur", "Cbur", "Cfrur", "ChAr", "Chub", "hur", "Chor", "Gaur", "iChur", "Ohur", "Char", "Cher", "Chu r", "Ckur", "Ckor", "Ckmr"], "Chur"],  # 8x
             [["Strasshurg"], "Straassburg"],
             [["fKöln"], "Köln"],
             [["Konstant", "Konstanzj", "Konst an zj"], "Konstanz"],
             [["Gri essenberg", "F Griessenberg"], "Griessenberg"],
             [["Heideberg", "Heiedelberg", "Heidelberf", "s l Heidelberg", "Haideiberg"], "Heidelberg"],
-            [["Lensburg", "Lenzhurg", ], "Lenzburg"]
+            [["Lensburg", "Lenzhurg", ], "Lenzburg"],
+            [["Chiavenmla", "Chiavenm", "Chiaveana", "Chiavenna J", "Chivenna", "Chlavenna", "CMavenna"], "Chiavenna"],
+
         ]
         for loc in loc_adj:
             for err in loc[0]:
@@ -180,10 +182,10 @@ class BullingerDB:
         for p in Person.query.filter_by(name="von Philipp", vorname="Landgraf"):
             p.name, p.vorname = "von Landgraf", "Philipp"
             self.dbs.commit()
-        for fj in Person.query.filter_by(name="Fabrizius", vorname='s.n.', ort='Johannes').all():
+        for fj in Person.query.filter_by(name="Fabrizius", vorname='s.n.', ort='Johannes'):
             fj.vorname, fj.ort = 'Johannes', 's.l.'
             self.dbs.commit()
-        for fj in Person.query.filter_by(name="Fabricius", vorname='s.n.', ort='Johannes').all():
+        for fj in Person.query.filter_by(name="Fabricius", vorname='s.n.', ort='Johannes'):
             fj.vorname, fj.ort = 'Johannes', 's.l.'
             self.dbs.commit()
         for p in Person.query.filter_by(name="a", vorname="Lasco Johannes"):
