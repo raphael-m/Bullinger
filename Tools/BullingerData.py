@@ -274,9 +274,9 @@ class BullingerData:
         if nn: nn = nn.replace('.', '')
         if vn: vn = vn.replace('.', '')
         if ort: ort = ort.replace('.', '')
-        nn = nn if nn else None
-        vn = vn if vn else None
-        ort = ort if ort else None
+        nn = nn if nn and len(nn) > 3 else None
+        vn = vn if vn and len(vn) > 2 else None
+        ort = ort if ort and len(ort) > 2 else None
         bemerkung = bemerkung if bemerkung else None
         return nn, vn, ort, bemerkung
 

@@ -145,16 +145,20 @@ class Person(db.Model):
     name = db.Column(db.String(LENGTH_M))
     vorname = db.Column(db.String(LENGTH_M))
     ort = db.Column(db.String(LENGTH_M))
+    wiki_url = db.Column(db.String(LENGTH_M))
+    photo = db.Column(db.String(LENGTH_M))
     anwender = db.Column(db.String(LENGTH_S))
     zeit = db.Column(db.String(LENGTH_S))
 
     def __init__(
-        self, name=None, forename=None, place=None, remark=None, user=None, time=datetime.now()
+        self, name=None, forename=None, place=None, remark=None, wiki_url=None, photo=None, user=None, time=datetime.now()
     ):
         self.name = name
         self.vorname = forename
         self.ort = place
         self.bemerkung = remark
+        self.wiki_url = wiki_url
+        self.photo = photo
         self.anwender = user
         self.zeit = time
 

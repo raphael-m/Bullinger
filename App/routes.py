@@ -51,16 +51,11 @@ def admin():
 def index():
     """ start page """
     BullingerDB.track(current_user.username, '/home', datetime.now())
-    guest_book = GuestBookForm()
-    if guest_book.validate_on_submit() and guest_book.save.data:
-        BullingerDB.save_comment(guest_book.comment.data, current_user.username, datetime.now())
-    guest_book.process()
     # letters_sent, letters_received = BullingerDB.get_bullinger_number_of_letters()
     n, t0, date = BullingerDB.get_number_of_page_visits()
-    return render_template("index.html", title=APP_NAME, form=guest_book, vars={
+    return render_template("index.html", title=APP_NAME, vars={
         "username": current_user.username,
         "user_stats": BullingerDB.get_user_stats(current_user.username),
-        "comments": BullingerDB.get_comments(current_user.username),
         # "num_sent": letters_sent,
         # "num_received": letters_received,
         "num_page_visits": n,
@@ -332,12 +327,18 @@ def person_by_place(place):
 @app.route('/faq', methods=['POST', 'GET'])
 def faq():
     BullingerDB.track(current_user.username, '/faq', datetime.now())
+    guest_book = GuestBookForm()
+    if guest_book.validate_on_submit() and guest_book.save.data:
+        BullingerDB.save_comment(guest_book.comment.data, current_user.username, datetime.now())
+    guest_book.process()
     return render_template(
         'faq.html',
         title="FAQ",
+        form=guest_book,
         vars={
             "username": current_user.username,
-            "user_stats": BullingerDB.get_user_stats(current_user.username)
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "comments": BullingerDB.get_comments(current_user.username),
         }
     )
 
@@ -379,8 +380,16 @@ def send_data(id_brief):
     date = Datum.query.filter_by(id_brief=id_brief).order_by(desc(Datum.zeit)).first()
     r = Empfaenger.query.filter_by(id_brief=id_brief).order_by(desc(Empfaenger.zeit)).first()
     receiver = Person.query.get(r.id_person) if r else None
+    r_wiki_url, r_photo = "", ""
+    if receiver:
+        p = Person.query.filter_by(name=receiver.name, vorname=receiver.vorname, ort=receiver.ort).first()
+        r_wiki_url, r_photo = p.wiki_url, p.photo
     s = Absender.query.filter_by(id_brief=id_brief).order_by(desc(Absender.zeit)).first()
     sender = Person.query.get(s.id_person) if s else None
+    s_wiki_url, s_photo = "", ""
+    if sender:
+        p = Person.query.filter_by(name=sender.name, vorname=sender.vorname, ort=sender.ort).first()
+        s_wiki_url, s_photo = p.wiki_url, p.photo
     autograph = Autograph.query.filter_by(id_brief=id_brief).order_by(desc(Autograph.zeit)).first()
     copy = Kopie.query.filter_by(id_brief=id_brief).order_by(desc(Kopie.zeit)).first()
     literatur = Literatur.query.filter_by(id_brief=id_brief).order_by(desc(Literatur.zeit)).first()
@@ -411,14 +420,18 @@ def send_data(id_brief):
                 "lastname": sender.name if sender else '',
                 "location": sender.ort if sender else '',
                 "remarks": s.bemerkung if s else '',
-                "not_verified": s.nicht_verifiziert if s and s.nicht_verifiziert else False
+                "not_verified": s.nicht_verifiziert if s and s.nicht_verifiziert else False,
+                "wiki_url": s_wiki_url,
+                "photo": s_photo,
             },
             "receiver": {
                 "firstname": receiver.vorname if receiver else '',
                 "lastname": receiver.name if receiver else '',
                 "location": receiver.ort if receiver else '',
                 "remarks": r.bemerkung if r else '',
-                "not_verified": r.nicht_verifiziert if r and r.nicht_verifiziert else False
+                "not_verified": r.nicht_verifiziert if r and r.nicht_verifiziert else False,
+                "wiki_url": r_wiki_url,
+                "photo": r_photo,
             },
             "autograph": {
                 "location": autograph.standort if autograph else '',
@@ -517,6 +530,7 @@ def get_persons():  # verified persons only
            # defaults={'name': None, 'forename': None, 'location': None}
            )
 def get_correspondences_all(name, forename, location):
+    BullingerDB.track(current_user.username, '/api/correspondences', datetime.now())
     n, f, l = name if name and name != '0' and name != 'None' else None,\
               forename if forename and forename != '0' and forename != 'None' else None,\
               location if location and location != '0' and location != 'None' else None
@@ -525,4 +539,5 @@ def get_correspondences_all(name, forename, location):
 
 @app.route('/api/get_persons', methods=['GET'])
 def get_persons_all():
+    BullingerDB.track(current_user.username, '/api/get_persons', datetime.now())
     return jsonify(BullingerDB.get_persons_by_var(None, None))

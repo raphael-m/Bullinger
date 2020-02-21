@@ -105,17 +105,33 @@ class BullingerDB:
 
     def post_process_db(self):
         nn_adj = [  # n:1
-            [["Klarer", "klarer", "Biarer", "Blaurer", "Blarsr"], "Blarer"],
-            [["Fabrieius", "Babricius", "Fabricus", "Fabridis", "Fabrieims", "Fabrieius", "Fabritius", "Fabrüus", "Fahreins", "faEricfius", "fairius", "abricius"], "Fabricius"],
-            [["ffullinger", "Suilinger", "Sufilnger", "Sullger", "Sullinger", "BUllinger", "BUlliuger", "Ballinfcer", "Ballinger", "Bhllinger", "Billinger", "Bmllinger", "Bnllinger", "Bulliger", "Bullimger", "Bullinfcer", "Sulnger", "lullinger", "Bulllnger"], "Bullinger"],
-            [["Egll", "Egii"], "Egli"],
+            [["Blurer", "Bläurer", "Blrer", "Blazer", "Blaren", "Blanrer", "Klarer", "klarer", "Biarer", "Blaurer", "Blarsr", "Blaürer", "Marer"], "Blarer"],
+            [["FabriciCus", "Fabriciae", "Fabricias", "Eabricius", "Eabrieius", "fabricius", "Fabrlelus", "Fabrieius", "Babricius", "Fabricus", "Fabridis", "Fabrieims", "Fabrieius", "Fabritius", "Fabrüus", "Fahreins", "faEricfius", "fairius", "abricius"], "Fabricius"],
+            [["Hullinger", "ffullinger", "Suilinger", "Sufilnger", "Sullger", "Sullinger", "BUllinger", "BUlliuger", "Ballinfcer", "Ballinger", "Bhllinger", "Billinger", "Bmllinger", "Bnllinger", "Bulliger", "Bullimger", "Bullinfcer", "Sulnger", "lullinger", "Bulllnger"], "Bullinger"],
+            [["Adelschwller", "Adetschwiler", "dlischwiler"], "Adlischwiler"],
+            [["Mycoaius", "Mysonius", "Mycpnius", ], "Myconius"],
+            [["AgritYa"], "Agricola"],
+            [["Bureher"], "Burcher"],
+            [["Egll", "Egii", "EgXi", "Eii", "Eili", "Bgli", "Bgfl", "Sgli"], "Egli"],
+            [["Baller", "aller"], "Haller"],
             [["Finaler", "Pinsler"], "Finsler"],
-            [["rastas"], "Erastus"],
+            [["rastas", "rastus", "Epastus"], "Erastus"],
             [["Bernrdin", "ernardin", "Bemardin"], "Bernardin"],
-            [["de lAubespine", "de lAübespine", "de lübespine", "de öambray", "de übespine"], "de l'Aubespine"],
+            [["de Aubespine", "de lAubespine", "de lAübespine", "de lübespine", "de öambray", "de übespine", "de Aübespine"], "de l'Aubespine"],
             [["Bertiin"], "Bertlin"],
-            [["eza"], "Beza"],
+            [["eza", "Besä", "Baeza", "Bbxa", "Bbza", "Bfcsa", "Bfe"], "Beza"],
             [["Erh"], "Erb"],
+            [["Eüeger", "Büeger", "Hüeger", "Ruer"], "Rüeger"],
+            [["Ooignet"], "Coignet"],
+            [["Ularer"], "Ulmer"],
+            [["von Bümlang"], "von Rümlang"],
+            [["Jonvillers", "Jonvllllers", ], "Jenvilliers"],
+            [["Sulser"], "Sulzer"],
+            [["de Bellievre", "de BelliSvre", "BelilSvre", "BelliSvreV", "Bellidvre", "Bellievre", "Bellifcvre", "Belliivre", "Bellive", "Bellivre"], "de Bellièvre"],
+            [["girier"], "Zirler"],
+            [["Aiehinger", "Aichlnger"], "Aichinger"],
+            [["Ajrnold", "Armold"], "Arnold"],
+            [["Campe", "Campeil", "Canpell", "Caspell", "Cmpell"], "Campell"]
         ]
         for nn in nn_adj:
             for err in nn[0]:
@@ -123,25 +139,37 @@ class BullingerDB:
                     p.name = nn[1]
                     self.dbs.commit()
         vn_adj = [
-            [["oachim"], "Joachim"],
+            [["oachim", "Joachlm", "Joekinm", "J oachim"], "Joachim"],
+            [["Theoder"], "Theodor"],
+            [["Christophen", "Ohristopher"], "Christopher"],
+            [["hristoph"], "Christoph"],
+            [["Chrlstoplaorux"], "Christopherus"],
             [["Kakob"], "Jakob"],
-            [["H ns", "Haas", "Hsoas", "Sans"], "Hans"],
-            [["ohann Konrad"], "Johann Konrad"],
-            [["Sans Rudolf", "Hans Budolf", "H ns Rudolf", "Haas Rudolf", "Haas Udolf", "Hans Eudolf", "Harns Rudolf",
+            [["ams", "Harns", "Hais", "H ns", "Haas", "Hsoas", "Sans", "ans"], "Hans"],
+            [["ohann Konrad", "Johann lonrad", "Johann KonracL", "Johann Eonrad", "Johann lonrad", "Jehann Kenrad", ], "Johann Konrad"],
+            [["Hans Hudolf", "H Rudolf", "H Budolf", "Hans R dolf", "Hns Eudolf", "Haas Budolf", "HansRudolf", "ans Budolf", "Hns Eudolf", "ans Rudolf", "ans Budolf", "Sans Radelf", "", "HansEudolf", "Haas udolf", "Sans Rudolf", "Hans Budolf", "H ns Rudolf", "Haas Rudolf", "Haas Udolf", "Hans Eudolf", "Harns Rudolf",
               "ans Eudolf", "Bans Rudolf", "Hans Badelf", "Hans Radelf", "Hans HttdClf", "Hans Bfcdolf", "Hans Bfcdolf",
               "Hane BUdelf", "Hane Rudolf"], "Hans Rudolf"],  # 11x
-            [["A broslue", "A brosius", "Ambresius", "Ambrfcsius", "Ambrisius", "Ambrofcius", "Ambroim", "Umbrosius", "brosius", "mhrosius", "nbrosius", "A brosiua"], "Ambrosius"],
-            [["MyConius", "Myconlus", "Mycouius", "Mycqnius", "Myeonius", ""], "Myconius"],
+            [["Amhrosius", "Amtfrosius", "Aybroalus", "A brolsue", "AmbrcdLus", "A broslue", "A brosius", "Ambresius", "Ambrfcsius", "Ambrisius", "Ambrofcius", "Ambroim", "Umbrosius", "brosius", "mhrosius", "nbrosius", "A brosiua"], "Ambrosius"],
+            [["MyConius", "Myconlus", "Mycouius", "Mycqnius", "Myeonius", "MyConius", "Myconlus", "Mycouius", "Mycqnius", "Myeonius", ""], "Myconius"],
             [["Mafcthieu", "Mathieu iun.", "Matt hi eu", "Mattheu", "Matthleu", "Mtthleu", "atthieu", "tthieu", "Matt hi eu", ], "Mathieu"],
             [["Eivhard", "Bichard", "Eichard", "Eiehard"], "Richard"],
             [["Frangois", "Erangois", "Franc ois", "Francois", "Franqois", "Frantjois", "rangois", "ranqois", "Frantjois"], "François"],
             [["Tbi s", "Tebias", "Thobias", "Tobi s"], "Tobias"],
             [["hristain"], "Christian"],
             [["Je.", "ean"], "Jean"],
-            [["ohannes", "J ohanne s", "Johaaaes", "Hohannes", "Jeahnnes", "Jebannes", "Jhhann.es", "JoAhhanes v", "Joahames", "Johamaes", "Johannas", "Johannes", "Johanties", "Johhmmes", "Jonnes", "Johaaa.es", "Jobaaaes", "Johanne s", "JoWnnes", "Jehannes", "Hohannes", "Johannnes", "Johhnnes", "Jekannes"], "Johannes"],
+            [["J hannes", "Jehamms", "Jehumes", "Jekaanes", "Johammes", "Johamnea", "Johan aes", "Johanne", "ohannes", "J ohanne s", "Johaaaes", "Hohannes", "Jeahnnes", "Jebannes", "Jhhann.es", "JoAhhanes v", "Joahames", "Johamaes", "Johannas", "Johannes", "Johanties", "Johhmmes", "Jonnes", "Johaaa.es", "Jobaaaes", "Johanne s", "JoWnnes", "Jehannes", "Hohannes", "Johannnes", "Johhnnes", "Jekannes"], "Johannes"],
             [["Welfgang", "Wolf gang", "jfoifgang", "olfgsng", "W lfgang"], "Wolfgang"],
-            [["Gabriel tS", "Gfabrie", "GjabrielJ"], "Gabriel"],
+            [["Sabriel", "abriel", "Gjäbriel", "Gabriel tS", "Gfabrie", "GjabrielJ", "Gjäbriel"], "Gabriel"],
             [["Bernrdin", "Bernardin", "Bemardin", "Beraardia", "ernardin"], "Bernardin"],
+            [["Oswqld", "swald"], "Oswald"],
+            [["ebastien", "Sdbastien"], "Sebastien"],
+            [["ean Jacques"], "Jean Jacques"],
+            [["von Stettea"], "von Stetten"],
+            [["Laureat ins"], "Laurentius"],
+            [["Theeder", "Theodoer", "Theodoi"], "Theodor"],
+            [["Jokaames", "Johames", "J ohannes", "Johannss", "Johanoes", "Johamm", "Johahnes", "Johaaaec", "Joahnnes", "Joahhnes", "Joahannes", "Jehammes", " 	Jehamaes"], "Johannes"],
+            [["Dobias", "Tobias C", "Zobias", "fobias", "loblas"], "Tobias"]
         ]
         for vn in vn_adj:
             for err in vn[0]:
@@ -149,21 +177,29 @@ class BullingerDB:
                     p.vorname = vn[1]
                     self.dbs.commit()
         loc_adj = [
-            [["St Gallen", "St fallen", "StGallen", "St.Gallen", "St. allen", "St.G llen", "st. Galle", "St. allen", "St. GAllea", "Sta Gallen", "St. Gllen", "St. Galln", "St. Sailen", "St. alleh", "Sf. alLev", "t. Sailen", "t . Ballen", "Sf Saliern", "St. allen", "St. Galle", "St. Salieh", "St. Ggllen"], "St. Gallen"],
-            [["enf", "Senf", "G nf", "Gef", "Genf u", "ehf", "en f", "s. l. Genf", "Gemf", "Gen"], "Genf"],
-            [["ern", "lern"], "Bern"],
-            [["Happoltsweiler", "Happoldsweiler", "Bappoltsweiler", "Rapolisweiler", "Rappoläsweiler", "Rappolt sweier", ], "Rappoltsweiler"],
+            [["Bäsel", "Fasel", "Basels", "Ba sei", "Bpsel"], "Basel"],
+            [["StBallen", "St Galle", "St Gllen", "St Gallea", "St Gallem", "St GAllea", "St Galln", "St Gllen", "St Sailen", "St Sallen", "St alleh", "StSailen", "t Ballen", "t Sailen", "t fallen", "St allen", "St G llen", "St. allen", "St Gallen", "St fallen", "StGallen", "St.Gallen", "St. allen", "St.G llen", "st. Galle", "St. allen", "St. GAllea", "Sta Gallen", "St. Gllen", "St. Galln", "St. Sailen", "St. alleh", "Sf. alLev", "t. Sailen", "t . Ballen", "Sf Saliern", "St. allen", "St. Galle", "St. Salieh", "St. Ggllen"], "St. Gallen"],
+            [["Geenf", "Gefif", "enf", "Senf", "G nf", "Gef", "Genf u", "ehf", "en f", "Genfi", "s. l. Genf", "Gemf", "Gen", "Geaf", "Gnf", "Genfn"], "Genf"],
+            [["ern", "lern", "lerm", "Barn", "BernJ", "Berm", "Berh", "Bera", "Ber n", "B ra", "Hera"], "Bern"],
+            [["Bheinfelden", "Birg Bheinfelden"], "Rheinfelden"],
+            [["RappolUsweiler", "Happeltsweiler", "Rappaltsweiler", "Happoltsweller", "Happolt sweiler", "Eappoltsweilsr", "EappeltsweilerV", "Bappoltsweilmr", "Bappeltwweiler", "Bappeltsweiler", "Beichemreier", "Happoltsweiler", "Happoldsweiler", "Bappoltsweiler", "Rapolisweiler", "Rappoläsweiler", "Rappolt sweier", ], "Rappoltsweiler"],
             [["Hochheizer", "Hochhelxer", "Hoehholzer"], "Hochholzer"],
-            [["Schaff hausen", "SchafIhausen", "Schaffheyuen", "Sekaffkamsem", "Schaffhuttsen", "Schaffhansen", "Schaffhauscn"], "Schaffhausen"],
-            [["Ghur", "Cbur", "Cfrur", "ChAr", "Chub", "hur", "Chor", "Gaur", "iChur", "Ohur", "Char", "Cher", "Chu r", "Ckur", "Ckor", "Ckmr"], "Chur"],  # 8x
-            [["Strasshurg"], "Straassburg"],
+            [["Schaphausen", "schaffhausen", "Schaffhausea", "Schaffhau sen", "Sehaffhausen", "Schaff hausen", "SchafIhausen", "Schaffheyuen", "Sekaffkamsem", "Schaffhuttsen", "Schaffhansen", "Schaffhauscn"], "Schaffhausen"],
+            [["Ghur", "Chnr", "Cbur", "Cfrur", "ChAr", "Chub", "hur", "Chor", "Gaur", "iChur", "Ohur", "Char", "Cher", "Chu r", "Ckur", "Ckor", "Ckmr", "Chur f j"], "Chur"],  # 8x
+            [["Strasshurg", "Straburg", "Strahurg", "Strasburg", "Straassburg"], "Straassburg"],
             [["fKöln"], "Köln"],
             [["Konstant", "Konstanzj", "Konst an zj"], "Konstanz"],
             [["Gri essenberg", "F Griessenberg"], "Griessenberg"],
             [["Heideberg", "Heiedelberg", "Heidelberf", "s l Heidelberg", "Haideiberg"], "Heidelberg"],
             [["Lensburg", "Lenzhurg", ], "Lenzburg"],
-            [["Chiavenmla", "Chiavenm", "Chiaveana", "Chiavenna J", "Chivenna", "Chlavenna", "CMavenna"], "Chiavenna"],
-
+            [["Ghiavenna", "Ohiavenna", "Chiavenmla", "Chiavenm", "Chiaveana", "Chiavenna J", "Chivenna", "Chlavenna", "CMavenna"], "Chiavenna"],
+            [["St Germain"], "St. Germain"],
+            [["Wissehburg", "Wssehburg"], "Wissenburg"],
+            [["iTreiburg", "reiburg"], "Freiburg"],
+            [["Hisox"], "Misox"],
+            [["Winterktur", "nterthur"], "Winterthur"],
+            [["glarus", "Glaru", "Giarus", "Qlarus"], "Glarus"],
+            [["Selothum"], "Solothurn"]
         ]
         for loc in loc_adj:
             for err in loc[0]:
@@ -171,10 +207,22 @@ class BullingerDB:
                     p.ort = loc[1]
                     self.dbs.commit()
         for p in Person.query.filter_by(name="Von", vorname="Stetten Georg"):
-            p.name, p.vorname = "Von Stetten", "Georg"
+            p.name, p.vorname = "von Stetten", "Georg"
+            self.dbs.commit()
+        for p in Person.query.filter_by(name="von", vorname="Stetten Georg"):
+            p.name, p.vorname = "von Stetten", "Georg"
+            self.dbs.commit()
+        for p in Person.query.filter_by(name="von", vorname="Stetten Georg dJ"):
+            p.name, p.vorname = "von Stetten", "Georg"
+            self.dbs.commit()
+        for p in Person.query.filter_by(name="Stetten", vorname="Georg ron"):
+            p.name, p.vorname = "von Stetten", "Georg"
             self.dbs.commit()
         for p in Person.query.filter_by(name="Von Georg", vorname="Württemberg"):
-            p.name, p.vorname = "Von Württemberg", "Georg"
+            p.name, p.vorname = "von Württemberg", "Georg"
+            self.dbs.commit()
+        for p in Person.query.filter_by(name="von Georg", vorname="Württemberg"):
+            p.name, p.vorname = "von Württemberg", "Georg"
             self.dbs.commit()
         for p in Person.query.filter_by(name="de", vorname="Bellievre Jean"):
             p.name, p.vorname = "de Bellievre", "Jean"
@@ -182,17 +230,27 @@ class BullingerDB:
         for p in Person.query.filter_by(name="von Philipp", vorname="Landgraf"):
             p.name, p.vorname = "von Landgraf", "Philipp"
             self.dbs.commit()
-        for fj in Person.query.filter_by(name="Fabrizius", vorname='s.n.', ort='Johannes'):
-            fj.vorname, fj.ort = 'Johannes', 's.l.'
+        for fj in Person.query.filter_by(name="Fabrizius", vorname=None, ort='Johannes'):
+            fj.vorname, fj.ort = 'Johannes', None
             self.dbs.commit()
-        for fj in Person.query.filter_by(name="Fabricius", vorname='s.n.', ort='Johannes'):
-            fj.vorname, fj.ort = 'Johannes', 's.l.'
+        for fj in Person.query.filter_by(name="Fabricius", vorname=None, ort='Johannes'):
+            fj.vorname, fj.ort = 'Johannes', None
             self.dbs.commit()
         for p in Person.query.filter_by(name="a", vorname="Lasco Johannes"):
             p.name, p.vorname = "a Lasco", "Johannes"
             self.dbs.commit()
-
-
+        for p in Person.query.filter_by(vorname=None, ort="Oswald"):
+            p.vorname, p.ort = "Oswald", None
+            self.dbs.commit()
+        for p in Person.query.filter_by(vorname=None, ort="Gabriel"):
+            p.vorname, p.ort = "Gabriel", None
+            self.dbs.commit()
+        for p in Person.query.filter_by(vorname="BelliSvre Jean"):
+            p.name, p.vorname = "de Bellièvre", "Jean"
+            self.dbs.commit()
+        for p in Person.query.filter_by(ort="Johannes", vorname=None):
+            p.vorname, p.ort = "Johannes", None
+            self.dbs.commit()
 
     def add_vip_users(self):
         for u in VIP:
