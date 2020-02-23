@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>
+	>
+	Gästebuch
+	{% include "user_status.html" %}
+</h1>
+
+<div class="main_box">
+
+	<div class="h2_box>">
+
+		<h2>Gästebuch</h2>
+		<div class="h2_section">
+
+            <p>
+                Für (anonymisierte) Fragen, Hinweise oder Bemerkungen, die vielleicht von allgemeinem Interesse sind...
+            </p>
+            <table>
+                <!--
+                <thead>
+                    <tr>
+                        <th>Benutzer</th>
+                        <th>Kommentar</th>
+                    </tr>
+                </thead>
+                -->
+                <tbody>
+                {% for c in vars["comments"] %}
+                    <tr>
+                        <td class="comment_user">{{ c[0] }}</td>
+                        <td class="comment_text" rowspan="3">{{ c[3] }}</td>
+                    </tr>
+                    <tr>
+                        <td class="comment_date">{{ c[1] }}</td>
+                    </tr>
+                    <tr>
+                        <td class="comment_time">{{ c[2] }}</td>
+                    </tr>
+                    <tr class="comment_break"></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <!-- new comments -->
+            <form method="post" novalidate>
+                {{ form.csrf_token }}
+                {{ form.hidden_tag() }}
+                <div>{{ form.comment(class="note", placeholder="Ihre Bemerkung") }}</div>
+                <div>{{ form.save(class="buttonX button_frills") }}</div>
+            </form>
+		</div>
+	</div>
+    <div class="clearing"></div>
+    <div class="h2_separator"></div>
+    <div class="css_sucks"></div>
+</div>
+
+{% endblock %}

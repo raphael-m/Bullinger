@@ -78,6 +78,12 @@ class BullingerDB:
         self.add_vip_users()
         card_nr, num_ignored_cards, ignored_card_ids = 1, 0, []
         id_bullinger = self.add_bullinger()
+        if os.path.isfile("Data/persons_corr.txt"):
+            os.remove("Data/persons_corr.txt")
+            open("Data/persons_corr.txt", "w").close()
+        if os.path.isfile("Data/locations_corr.txt"):
+            os.remove("Data/locations_corr.txt")
+            open("Data/locations_corr.txt", "w").close()
         for path in FileSystem.get_file_paths(dir_path, recursively=False):
             print(card_nr, path)
             self.update_timestamp()
@@ -101,43 +107,45 @@ class BullingerDB:
             self.dbs.commit()
         if num_ignored_cards: print("*** WARNING,", num_ignored_cards, "files ignored:", ignored_card_ids)
         # BullingerDB.count_correspondence()  # post-processing
-        self.post_process_db()
+        BullingerDB.post_process_db()
 
-    def post_process_db(self):
+    @staticmethod
+    def post_process_db():
         nn_adj = [  # n:1
-            [["Blurer", "Bläurer", "Blrer", "Blazer", "Blaren", "Blanrer", "Klarer", "klarer", "Biarer", "Blaurer", "Blarsr", "Blaürer", "Marer"], "Blarer"],
-            [["FabriciCus", "Fabriciae", "Fabricias", "Eabricius", "Eabrieius", "fabricius", "Fabrlelus", "Fabrieius", "Babricius", "Fabricus", "Fabridis", "Fabrieims", "Fabrieius", "Fabritius", "Fabrüus", "Fahreins", "faEricfius", "fairius", "abricius"], "Fabricius"],
-            [["Hullinger", "ffullinger", "Suilinger", "Sufilnger", "Sullger", "Sullinger", "BUllinger", "BUlliuger", "Ballinfcer", "Ballinger", "Bhllinger", "Billinger", "Bmllinger", "Bnllinger", "Bulliger", "Bullimger", "Bullinfcer", "Sulnger", "lullinger", "Bulllnger"], "Bullinger"],
             [["Adelschwller", "Adetschwiler", "dlischwiler"], "Adlischwiler"],
-            [["Mycoaius", "Mysonius", "Mycpnius", ], "Myconius"],
             [["AgritYa"], "Agricola"],
-            [["Bureher"], "Burcher"],
-            [["Egll", "Egii", "EgXi", "Eii", "Eili", "Bgli", "Bgfl", "Sgli"], "Egli"],
-            [["Baller", "aller"], "Haller"],
-            [["Finaler", "Pinsler"], "Finsler"],
-            [["rastas", "rastus", "Epastus"], "Erastus"],
-            [["Bernrdin", "ernardin", "Bemardin"], "Bernardin"],
             [["de Aubespine", "de lAubespine", "de lAübespine", "de lübespine", "de öambray", "de übespine", "de Aübespine"], "de l'Aubespine"],
-            [["Bertiin"], "Bertlin"],
+            [["Aiehinger", "Aichlnger"], "Aichinger"],
+            [["Ajrnold", "Armold"], "Arnold"],
             [["eza", "Besä", "Baeza", "Bbxa", "Bbza", "Bfcsa", "Bfe"], "Beza"],
-            [["Erh"], "Erb"],
-            [["Eüeger", "Büeger", "Hüeger", "Ruer"], "Rüeger"],
+            [["Bernrdin", "ernardin", "Bemardin"], "Bernardin"],
+            [["Bertiin"], "Bertlin"],
+            [["Blurer", "Bläurer", "Blrer", "Blazer", "Blaren", "Blanrer", "Klarer", "klarer", "Biarer", "Blaurer", "Blarsr", "Blaürer", "Marer"], "Blarer"],
+            [["Bureher"], "Burcher"],
             [["Ooignet"], "Coignet"],
+            [["Erh"], "Erb"],
+            [["Ehern"], "Ehem"],
+            [["Hullinger", "ffullinger", "Suilinger", "Sufilnger", "Sullger", "Sullinger", "BUllinger", "BUlliuger", "Ballinfcer", "Ballinger", "Bhllinger", "Billinger", "Bmllinger", "Bnllinger", "Bulliger", "Bullimger", "Bullinfcer", "Sulnger", "lullinger", "Bulllnger"], "Bullinger"],
+            [["Campe", "Campeil", "Canpell", "Caspell", "Cmpell"], "Campell"],
+            [["Egll", "Egii", "EgXi", "Eii", "Eili", "Bgli", "Bgfl", "Sgli"], "Egli"],
+            [["rastas", "rastus", "Epastus"], "Erastus"],
+            [["FabriciCus", "Fabriciae", "Fabricias", "Eabricius", "Eabrieius", "fabricius", "Fabrlelus", "Fabrieius", "Babricius", "Fabricus", "Fabridis", "Fabrieims", "Fabrieius", "Fabritius", "Fabrüus", "Fahreins", "faEricfius", "fairius", "abricius"], "Fabricius"],
+            [["Finaler", "Pinsler"], "Finsler"],
+            [["Baller", "aller"], "Haller"],
+            [["Mycoaius", "Mysonius", "Mycpnius", ], "Myconius"],
+            [["Eüeger", "Büeger", "Hüeger", "Ruer"], "Rüeger"],
             [["Ularer"], "Ulmer"],
             [["von Bümlang"], "von Rümlang"],
             [["Jonvillers", "Jonvllllers", ], "Jenvilliers"],
             [["Sulser"], "Sulzer"],
             [["de Bellievre", "de BelliSvre", "BelilSvre", "BelliSvreV", "Bellidvre", "Bellievre", "Bellifcvre", "Belliivre", "Bellive", "Bellivre"], "de Bellièvre"],
             [["girier"], "Zirler"],
-            [["Aiehinger", "Aichlnger"], "Aichinger"],
-            [["Ajrnold", "Armold"], "Arnold"],
-            [["Campe", "Campeil", "Canpell", "Caspell", "Cmpell"], "Campell"]
         ]
         for nn in nn_adj:
             for err in nn[0]:
                 for p in Person.query.filter_by(name=err):
                     p.name = nn[1]
-                    self.dbs.commit()
+                    db.session.commit()
         vn_adj = [
             [["oachim", "Joachlm", "Joekinm", "J oachim"], "Joachim"],
             [["Theoder"], "Theodor"],
@@ -164,6 +172,7 @@ class BullingerDB:
             [["Bernrdin", "Bernardin", "Bemardin", "Beraardia", "ernardin"], "Bernardin"],
             [["Oswqld", "swald"], "Oswald"],
             [["ebastien", "Sdbastien"], "Sebastien"],
+            [["Schiatter"], "Schlatter"],
             [["ean Jacques"], "Jean Jacques"],
             [["von Stettea"], "von Stetten"],
             [["Laureat ins"], "Laurentius"],
@@ -175,7 +184,7 @@ class BullingerDB:
             for err in vn[0]:
                 for p in Person.query.filter_by(vorname=err):
                     p.vorname = vn[1]
-                    self.dbs.commit()
+                    db.session.commit()
         loc_adj = [
             [["Bäsel", "Fasel", "Basels", "Ba sei", "Bpsel"], "Basel"],
             [["StBallen", "St Galle", "St Gllen", "St Gallea", "St Gallem", "St GAllea", "St Galln", "St Gllen", "St Sailen", "St Sallen", "St alleh", "StSailen", "t Ballen", "t Sailen", "t fallen", "St allen", "St G llen", "St. allen", "St Gallen", "St fallen", "StGallen", "St.Gallen", "St. allen", "St.G llen", "st. Galle", "St. allen", "St. GAllea", "Sta Gallen", "St. Gllen", "St. Galln", "St. Sailen", "St. alleh", "Sf. alLev", "t. Sailen", "t . Ballen", "Sf Saliern", "St. allen", "St. Galle", "St. Salieh", "St. Ggllen"], "St. Gallen"],
@@ -190,6 +199,7 @@ class BullingerDB:
             [["fKöln"], "Köln"],
             [["Konstant", "Konstanzj", "Konst an zj"], "Konstanz"],
             [["Gri essenberg", "F Griessenberg"], "Griessenberg"],
+            [["Leadea"], "London"],
             [["Heideberg", "Heiedelberg", "Heidelberf", "s l Heidelberg", "Haideiberg"], "Heidelberg"],
             [["Lensburg", "Lenzhurg", ], "Lenzburg"],
             [["Ghiavenna", "Ohiavenna", "Chiavenmla", "Chiavenm", "Chiaveana", "Chiavenna J", "Chivenna", "Chlavenna", "CMavenna"], "Chiavenna"],
@@ -205,52 +215,52 @@ class BullingerDB:
             for err in loc[0]:
                 for p in Person.query.filter_by(ort=err):
                     p.ort = loc[1]
-                    self.dbs.commit()
+                    db.session.commit()
         for p in Person.query.filter_by(name="Von", vorname="Stetten Georg"):
             p.name, p.vorname = "von Stetten", "Georg"
-            self.dbs.commit()
+            db.session.commit()
         for p in Person.query.filter_by(name="von", vorname="Stetten Georg"):
             p.name, p.vorname = "von Stetten", "Georg"
-            self.dbs.commit()
+            db.session.commit()
         for p in Person.query.filter_by(name="von", vorname="Stetten Georg dJ"):
             p.name, p.vorname = "von Stetten", "Georg"
-            self.dbs.commit()
+            db.session.commit()
         for p in Person.query.filter_by(name="Stetten", vorname="Georg ron"):
             p.name, p.vorname = "von Stetten", "Georg"
-            self.dbs.commit()
+            db.session.commit()
         for p in Person.query.filter_by(name="Von Georg", vorname="Württemberg"):
             p.name, p.vorname = "von Württemberg", "Georg"
-            self.dbs.commit()
+            db.session.commit()
         for p in Person.query.filter_by(name="von Georg", vorname="Württemberg"):
             p.name, p.vorname = "von Württemberg", "Georg"
-            self.dbs.commit()
+            db.session.commit()
         for p in Person.query.filter_by(name="de", vorname="Bellievre Jean"):
             p.name, p.vorname = "de Bellievre", "Jean"
-            self.dbs.commit()
+            db.session.commit()
         for p in Person.query.filter_by(name="von Philipp", vorname="Landgraf"):
             p.name, p.vorname = "von Landgraf", "Philipp"
-            self.dbs.commit()
+            db.session.commit()
         for fj in Person.query.filter_by(name="Fabrizius", vorname=None, ort='Johannes'):
             fj.vorname, fj.ort = 'Johannes', None
-            self.dbs.commit()
+            db.session.commit()
         for fj in Person.query.filter_by(name="Fabricius", vorname=None, ort='Johannes'):
             fj.vorname, fj.ort = 'Johannes', None
-            self.dbs.commit()
+            db.session.commit()
         for p in Person.query.filter_by(name="a", vorname="Lasco Johannes"):
             p.name, p.vorname = "a Lasco", "Johannes"
-            self.dbs.commit()
+            db.session.commit()
         for p in Person.query.filter_by(vorname=None, ort="Oswald"):
             p.vorname, p.ort = "Oswald", None
-            self.dbs.commit()
+            db.session.commit()
         for p in Person.query.filter_by(vorname=None, ort="Gabriel"):
             p.vorname, p.ort = "Gabriel", None
-            self.dbs.commit()
+            db.session.commit()
         for p in Person.query.filter_by(vorname="BelliSvre Jean"):
             p.name, p.vorname = "de Bellièvre", "Jean"
-            self.dbs.commit()
+            db.session.commit()
         for p in Person.query.filter_by(ort="Johannes", vorname=None):
             p.vorname, p.ort = "Johannes", None
-            self.dbs.commit()
+            db.session.commit()
 
     def add_vip_users(self):
         for u in VIP:
@@ -292,8 +302,27 @@ class BullingerDB:
 
     def add_correspondents(self, card_nr, id_bullinger):
         """ one has to be bullinger """
+        precisio = 4
         if self.bd.is_bullinger_sender():
             nn, vn, ort, bem = self.bd.get_receiver()
+            with open("Data/persons_corr.txt", 'a') as corr:
+                with open("Data/persons.txt", 'r') as in_file:
+                    for line in in_file.readlines():
+                        if line.strip('\n') and line[0] != '#' and '\t' in line:
+                            nn_, vn_ = line.strip('\n').split('\t')
+                            s = (NGrams.compute_similarity(nn, nn_, precisio) + NGrams.compute_similarity(vn, vn_, precisio)) / 2
+                            if s > 0.74 and s != 1.0:
+                                corr.write(nn + " " + vn + "\t--->\t" + nn_ + " " + vn_ + "\n")
+                                nn, vn = nn_, vn_
+            with open("Data/locations_corr.txt", 'a') as corr:
+                with open("Data/locations.txt", 'r') as in_file:
+                    for line in in_file.readlines():
+                        if line.strip('\n') and line[0] != '#':
+                            loc = line.strip()
+                            s = NGrams.compute_similarity(loc, ort, precisio)
+                            if s > 0.74 and s != 1.0:
+                                corr.write(ort + "\t--->\t" + loc + "\n")
+                                ort = loc
             self.push2db(Absender(id_person=id_bullinger), card_nr, ADMIN, self.t)
             p = Person.query.filter_by(name=nn, vorname=vn, ort=ort).first()
             if not p: self.push2db(Person(name=nn, forename=vn, place=ort), card_nr, ADMIN, self.t)
@@ -302,6 +331,24 @@ class BullingerDB:
         else:
             self.push2db(Empfaenger(id_brief=card_nr, id_person=id_bullinger), card_nr, ADMIN, self.t)
             nn, vn, ort, bem = self.bd.get_sender()
+            with open("Data/persons_corr.txt", 'a') as corr:
+                with open("Data/persons.txt", 'r') as in_file:
+                    for line in in_file.readlines():
+                        if line.strip('\n') and line[0] != '#' and '\t' in line:
+                            nn_, vn_ = line.strip('\n').split('\t')
+                            s = (NGrams.compute_similarity(nn, nn_, precisio) + NGrams.compute_similarity(vn, vn_, precisio)) / 2
+                            if s > 0.74 and s != 1.0:
+                                corr.write(nn + " " + vn + "\t--->\t" + nn_ + " " + vn_ + "\n")
+                                nn, vn = nn_, vn_
+            with open("Data/locations_corr.txt", 'a') as corr:
+                with open("Data/locations.txt", 'r') as in_file:
+                    for line in in_file.readlines():
+                        if line.strip('\n') and line[0] != '#':
+                            loc = line.strip()
+                            s = NGrams.compute_similarity(loc, ort, precisio)
+                            if s > 0.74 and s != 1.0:
+                                corr.write(ort + "\t--->\t" + loc + "\n")
+                                ort = loc
             p = Person.query.filter_by(name=nn, vorname=vn, ort=ort).first()
             if not p: self.push2db(Person(name=nn, forename=vn, place=ort), card_nr, ADMIN, self.t)
             p_id = Person.query.filter_by(name=nn, vorname=vn, ort=ort).first().id

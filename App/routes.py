@@ -12,9 +12,11 @@ from flask import render_template, flash, redirect, url_for, make_response, json
 from flask_login import current_user, login_user, login_required, logout_user
 from sqlalchemy import desc
 from Tools.BullingerDB import BullingerDB
+from Tools.Dictionaries import CountDict
 from collections import defaultdict
 from App.models import *
 from config import Config
+from Tools.NGrams import NGrams
 
 import requests
 import re
@@ -327,13 +329,25 @@ def person_by_place(place):
 @app.route('/faq', methods=['POST', 'GET'])
 def faq():
     BullingerDB.track(current_user.username, '/faq', datetime.now())
+    return render_template(
+        'faq.html',
+        title="FAQ",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+        }
+    )
+
+
+@app.route('/guestbook', methods=['POST', 'GET'])
+def guestbook():
     guest_book = GuestBookForm()
     if guest_book.validate_on_submit() and guest_book.save.data:
         BullingerDB.save_comment(guest_book.comment.data, current_user.username, datetime.now())
     guest_book.process()
     return render_template(
-        'faq.html',
-        title="FAQ",
+        'guestbook.html',
+        title="Gästebuch",
         form=guest_book,
         vars={
             "username": current_user.username,
@@ -525,19 +539,86 @@ def get_persons():  # verified persons only
 
 
 # 4 Steven
-@app.route('/api/get_correspondence/<name>/<forename>/<location>',
-           methods=['GET'],
-           # defaults={'name': None, 'forename': None, 'location': None}
-           )
+@app.route('/api/get_correspondence/<name>/<forename>/<location>', methods=['GET'])
 def get_correspondences_all(name, forename, location):
     BullingerDB.track(current_user.username, '/api/correspondences', datetime.now())
-    n, f, l = name if name and name != '0' and name != 'None' else None,\
-              forename if forename and forename != '0' and forename != 'None' else None,\
-              location if location and location != '0' and location != 'None' else None
-    return jsonify(BullingerDB.get_timeline_data_all(name=n, forename=f, location=l))
+    name = name if name and name != '0' and name != 'None' else None
+    forename = forename if forename and forename != '0' and forename != 'None' else None
+    location = location if location and location != '0' and location != 'None' else None
+    return jsonify(BullingerDB.get_timeline_data_all(name=name, forename=forename, location=location))
 
 
 @app.route('/api/get_persons', methods=['GET'])
 def get_persons_all():
     BullingerDB.track(current_user.username, '/api/get_persons', datetime.now())
     return jsonify(BullingerDB.get_persons_by_var(None, None))
+
+
+@app.route('/api/post_process', methods=['GET'])
+def post_process():
+    BullingerDB.post_process_db()
+    return jsonify(BullingerDB.get_persons_by_var(None, None))
+
+
+
+
+'''
+@app.route('/api/print_nn_vn_pairs', methods=['GET'])
+def print_persons():
+    persons = BullingerDB.get_persons_by_var(None, None)
+    with open("Data/persons.txt", 'a') as out:
+        pairs = set()
+        for p in persons:
+            if (p[0], p[1]) not in pairs:
+                pairs.add((p[0], p[1]))
+        for p in persons:
+            if (p[0], p[1]) in pairs:
+                out.write("#\t" + p[0] + '\t' + p[1] + '\n')
+                pairs.remove((p[0], p[1]))
+    return jsonify([])
+
+
+@app.route('/api/print_locations', methods=['GET'])
+def print_locations():
+    with open("Data/locations.txt", 'w') as out:
+        locs = set()
+        d = CountDict()
+        for p in Person.query.all():
+            if p.ort:
+                d.add(p.ort)
+        print(d.get_pairs_sorted(by_value=True, reverse=True))
+        for loc in d.get_pairs_sorted(by_value=True, reverse=True):
+            if loc[0]:
+                out.write("#\t" + loc[0] + '\n')
+    return jsonify([])
+
+
+@app.route('/api/compute_similarities', methods=['GET'])
+def print_similarities():
+    precisio = 4
+    with open("Data/persons_corr.txt", 'w') as corr:
+        with open("Data/persons.txt", 'r') as in_file:
+            for line in in_file.readlines():
+                if line.strip('\n') and line[0] != '#' and '\t' in line:
+                    nn, vn = line.strip('\n').split('\t')
+                    for p in Person.query.all():
+                        s = (NGrams.compute_similarity(nn, p.name, precisio)+NGrams.compute_similarity(vn, p.vorname, precisio))/2
+                        if s > 0.74 and s != 1.0:
+                            corr.write(p.name + " " + p.vorname + "\t--->\t" + nn + " " + vn + "\n")
+                            p.name, p.vorname = nn, vn
+                            db.session.commit()
+    with open("Data/locations_corr.txt", 'w') as corr:
+        with open("Data/locations.txt", 'r') as in_file:
+            for line in in_file.readlines():
+                if line.strip('\n') and line[0] != '#':
+                    loc = line.strip()
+                    for p in Person.query.all():
+                        if p.ort:
+                            s = NGrams.compute_similarity(loc, p.ort, precisio)
+                            if s > 0.74 and s != 1.0:
+                                print(p.ort + "\t--->\t" + loc, s)
+                                corr.write(p.ort + "\t--->\t" + loc + "\n")
+                                p.ort = loc
+                                db.session.commit()
+    return jsonify([])
+'''

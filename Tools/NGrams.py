@@ -33,3 +33,23 @@ class NGrams:
     @staticmethod
     def get_ngram_dicts_dicts(string, limit):
         return [NGrams.create_n_gram_dict(i, string) for i in range(1, limit)]
+
+    @staticmethod
+    def compute_similarity(str1, str2, precision):
+        if not str1 or not str2: return 0
+        ngd_str1 = [NGrams.create_n_gram_dict(i, str1) for i in range(1, precision)]
+        ngd_str2 = [NGrams.create_n_gram_dict(i, str2) for i in range(1, precision)]
+        dices = [NGrams.compute_dice(ngd_str1[i], ngd_str2[i]) for i in range(len(ngd_str1))]
+        return sum(dices)/len(dices)
+
+
+    """ pb, ph = [], []
+        if not len(tokens): return [0], [0]
+        for t in tokens:  # else
+            nga = [NGrams.create_n_gram_dict(i, t) for i in range(1, precision)]
+            dices_bullinger = [NGrams.compute_dice(nga[i], bng[i]) for i in range(len(nga))]
+            dices_heiri = [NGrams.compute_dice(nga[i], hng[i]) for i in range(len(nga))]
+            pb.append(sum(dices_bullinger) / len(dices_bullinger))
+            ph.append(sum(dices_heiri) / len(dices_heiri))
+        return pb, ph
+    """

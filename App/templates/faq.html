@@ -45,6 +45,39 @@
                             <p>Alle anderen Adressen werden als verifizierte Adressen gespeichert und stehen umgehend systemweit zur automatischen Vervollständigung zu Verfügung.</p>
                         </div>
                     </div>
+                    <div class="h4_box">
+                        <h4>Was mache ich, wenn die Karteikarten Schreibvarianten für Namen oder Orte enthalten
+                            (z.B. "Ambrosius Blarer" vs. "Ambrosius Blaurer”; oder “Petrus Paulus Vergerius” vs.
+                            “Pietro Paolo Vergerius”)?</h4>
+                        <div class="rule"></div>
+                        <div class="h4_section">
+                            <p>Bitte übertragen Sie die Schreibung von der Karteikarte in die Datenbank, ausser bei
+                                offensichtlichen Schreibfehlern. Bitte vermerken Sie zusätzlich in den Bemerkungen zum
+                                Namen oder im Feld unten “Anmerkungen zu dieser Karte", dass Sie eine Schreibvariante
+                                bemerkt haben. Wir werden dann im Nachgang Verweise zwischen den Varianten einfügen.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="h4_box">
+                        <h4>Was mache ich, wenn die Karteikarten Schreibfehler (z.B. “Tubingen” statt “Tübingen”)
+                            oder Namens-Abkürzungen (z.B. “Ger.” für “Gereon”) enthalten?</h4>
+                        <div class="rule"></div>
+                        <div class="h4_section">
+                            <p>Bitte tragen Sie die korrekte und vollständige Variante in die Datenbank ein. Wenn Sie
+                                unsicher sind, fügen Sie eine Bemerkung hinzu.
+                            </p>
+                        </div>
+                    </div>
+                    <!--
+                    <div class="h4_box">
+                        <h4></h4>
+                        <div class="rule"></div>
+                        <div class="h4_section">
+                            <p></p>
+
+                        </div>
+                    </div>
+                    -->
                 </div>
             </div>
             <div class="h3_separator"></div>
@@ -271,49 +304,7 @@
         </div>
     </div>
     <div class="clearing"></div>
-
-    <div class="h2_box">
-        <h2>Offene Fragen</h2>
-        <div class="h2_section">
-            <p>
-                Für (anonymisierte) Fragen, Hinweise oder Bemerkungen, die vielleicht von allgemeinem Interesse sind...
-            </p>
-            <table>
-                <!--
-                <thead>
-                    <tr>
-                        <th>Benutzer</th>
-                        <th>Kommentar</th>
-                    </tr>
-                </thead>
-                -->
-                <tbody>
-                {% for c in vars["comments"] %}
-                    <tr>
-                        <td class="comment_user">{{ c[0] }}</td>
-                        <td class="comment_text" rowspan="3">{{ c[3] }}</td>
-                    </tr>
-                    <tr>
-                        <td class="comment_date">{{ c[1] }}</td>
-                    </tr>
-                    <tr>
-                        <td class="comment_time">{{ c[2] }}</td>
-                    </tr>
-                    <tr class="comment_break"></tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            <!-- new comments -->
-            <form method="post" novalidate>
-                {{ form.csrf_token }}
-                {{ form.hidden_tag() }}
-                <div>{{ form.comment(class="note", placeholder="Ihr Hinweis") }}</div>
-                <div>{{ form.save(class="buttonX button_frills") }}</div>
-            </form>
-        </div>
-    </div>
     <div class="h2_separator"></div>
-    <div class="css_sucks"></div>
 
 </div>
 
