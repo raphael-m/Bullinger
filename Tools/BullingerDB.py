@@ -73,17 +73,20 @@ class BullingerDB:
         self.dbs.query(Tracker).delete()
         self.dbs.commit()
 
+    @staticmethod
+    def create_log_file(name):
+        if os.path.isfile(name): os.remove(name)
+        open(name, "w").close()
+
     def setup(self, dir_path):
         self.delete_all()
         self.add_vip_users()
         card_nr, num_ignored_cards, ignored_card_ids = 1, 0, []
         id_bullinger = self.add_bullinger()
-        if os.path.isfile("Data/persons_corr.txt"):
-            os.remove("Data/persons_corr.txt")
-            open("Data/persons_corr.txt", "w").close()
-        if os.path.isfile("Data/locations_corr.txt"):
-            os.remove("Data/locations_corr.txt")
-            open("Data/locations_corr.txt", "w").close()
+        BullingerDB.create_log_file("Data/persons_corr.txt")
+        BullingerDB.create_log_file("Data/locations_corr.txt")
+        BullingerDB.create_log_file("Data/p_all_locations.txt")
+        BullingerDB.create_log_file("Data/p_all_persons.txt")
         for path in FileSystem.get_file_paths(dir_path, recursively=False):
             print(card_nr, path)
             self.update_timestamp()
@@ -300,29 +303,58 @@ class BullingerDB:
         date = Datum(year_a=y, month_a=m, day_a=d)
         self.push2db(date, card_nr, ADMIN, self.t)
 
+    @staticmethod
+    def name_correction(card_nr, nn, vn, precision):
+        with open("Data/persons_corr.txt", 'a') as corr:
+            evaluation = []
+            with open("Data/persons.txt", 'r') as in_file:
+                for line in in_file.readlines():
+                    if line.strip('\n') and line[0] != '#' and '\t' in line:
+                        nn_, vn_ = line.strip('\n').split('\t')
+                        s = (NGrams.compute_similarity(nn, nn_, precision) + NGrams.compute_similarity(vn, vn_, precision)) / 2
+                        evaluation.append([s, nn_, vn_])
+            if len(evaluation) > 0:
+                evaluation.sort(key=lambda x: x[0], reverse=True)
+                if evaluation[0][0] > 0.74 and evaluation[0][0] != 1.0:
+                    corr.write("#"+str(card_nr) + " " + nn + " " + vn + "\t--->\t" + str(evaluation[0][1]) + " " + str(evaluation[0][2]) + "\t("+str(round(evaluation[0][0]*100,3))+"%)\n")
+                    return evaluation[0][1], evaluation[0][2]
+            log_length = 3
+            with open("Data/p_all_persons.txt", 'a') as log:
+                for e in evaluation[:log_length]:
+                    if e[1] and e[2] and nn and vn:
+                        log.write("#"+str(card_nr) + " " + nn + ", " + vn + " vs. " + str(e[1]) + ", " + str(e[2]) + "\t(" +str(round(e[0]*100,3))+ "%)\n")
+        return nn, vn
+
+    @staticmethod
+    def location_correction(card_nr, location, precision):
+        with open("Data/locations_corr.txt", 'a') as corr:
+            evaluation = []
+            location = "Bern" if location == "lern" else location
+            with open("Data/locations.txt", 'r') as in_file:
+                for line in in_file.readlines():
+                    if line.strip('\n') and line[0] != '#':
+                        loc = line.strip()
+                        s = NGrams.compute_similarity(loc, location, precision)
+                        evaluation.append([s, loc])
+                if len(evaluation) > 0:
+                    evaluation.sort(key=lambda x: x[0], reverse=True)
+                    if evaluation[0][0] > 0.74 and evaluation[0][0] != 1.0:
+                        corr.write("#"+str(card_nr) + " " + location + "\t--->\t" + evaluation[0][1] + "\t("+ str(round(evaluation[0][0]*100, 3)) + "%)\n")
+                        return evaluation[0][1]
+            log_length = 3
+            with open("Data/p_all_locations.txt", 'a') as log:
+                for e in evaluation[:log_length]:
+                    if e[1] and location:
+                        log.write("#"+str(card_nr) + " " + location + " vs. " + str(e[1]) + "\t(" + str(round(e[0]*100,3)) + "%)\n")
+        return location
+
     def add_correspondents(self, card_nr, id_bullinger):
         """ one has to be bullinger """
-        precisio = 4
+        precision_names, precision_loc = 4, 2
         if self.bd.is_bullinger_sender():
             nn, vn, ort, bem = self.bd.get_receiver()
-            with open("Data/persons_corr.txt", 'a') as corr:
-                with open("Data/persons.txt", 'r') as in_file:
-                    for line in in_file.readlines():
-                        if line.strip('\n') and line[0] != '#' and '\t' in line:
-                            nn_, vn_ = line.strip('\n').split('\t')
-                            s = (NGrams.compute_similarity(nn, nn_, precisio) + NGrams.compute_similarity(vn, vn_, precisio)) / 2
-                            if s > 0.74 and s != 1.0:
-                                corr.write(nn + " " + vn + "\t--->\t" + nn_ + " " + vn_ + "\n")
-                                nn, vn = nn_, vn_
-            with open("Data/locations_corr.txt", 'a') as corr:
-                with open("Data/locations.txt", 'r') as in_file:
-                    for line in in_file.readlines():
-                        if line.strip('\n') and line[0] != '#':
-                            loc = line.strip()
-                            s = NGrams.compute_similarity(loc, ort, precisio)
-                            if s > 0.74 and s != 1.0:
-                                corr.write(ort + "\t--->\t" + loc + "\n")
-                                ort = loc
+            nn, vn = BullingerDB.name_correction(card_nr, nn, vn, precision_names)
+            ort = BullingerDB.location_correction(card_nr, ort, precision_loc)
             self.push2db(Absender(id_person=id_bullinger), card_nr, ADMIN, self.t)
             p = Person.query.filter_by(name=nn, vorname=vn, ort=ort).first()
             if not p: self.push2db(Person(name=nn, forename=vn, place=ort), card_nr, ADMIN, self.t)
@@ -331,24 +363,8 @@ class BullingerDB:
         else:
             self.push2db(Empfaenger(id_brief=card_nr, id_person=id_bullinger), card_nr, ADMIN, self.t)
             nn, vn, ort, bem = self.bd.get_sender()
-            with open("Data/persons_corr.txt", 'a') as corr:
-                with open("Data/persons.txt", 'r') as in_file:
-                    for line in in_file.readlines():
-                        if line.strip('\n') and line[0] != '#' and '\t' in line:
-                            nn_, vn_ = line.strip('\n').split('\t')
-                            s = (NGrams.compute_similarity(nn, nn_, precisio) + NGrams.compute_similarity(vn, vn_, precisio)) / 2
-                            if s > 0.74 and s != 1.0:
-                                corr.write(nn + " " + vn + "\t--->\t" + nn_ + " " + vn_ + "\n")
-                                nn, vn = nn_, vn_
-            with open("Data/locations_corr.txt", 'a') as corr:
-                with open("Data/locations.txt", 'r') as in_file:
-                    for line in in_file.readlines():
-                        if line.strip('\n') and line[0] != '#':
-                            loc = line.strip()
-                            s = NGrams.compute_similarity(loc, ort, precisio)
-                            if s > 0.74 and s != 1.0:
-                                corr.write(ort + "\t--->\t" + loc + "\n")
-                                ort = loc
+            nn, vn = BullingerDB.name_correction(card_nr, nn, vn, precision_names)
+            ort = BullingerDB.location_correction(card_nr, ort, precision_loc)
             p = Person.query.filter_by(name=nn, vorname=vn, ort=ort).first()
             if not p: self.push2db(Person(name=nn, forename=vn, place=ort), card_nr, ADMIN, self.t)
             p_id = Person.query.filter_by(name=nn, vorname=vn, ort=ort).first().id

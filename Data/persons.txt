@@ -42,6 +42,7 @@ Rüeger	Jakob
 Ursinus	Zacharias
 Curio	Coelius Secundus
 von Ulm	Johannes
+von Ulm Johannes Konrad
 von Württemberg	Georg
 Hyperius	Andreas
 von Salis	Friedrich
@@ -76,7 +77,7 @@ Mainard	Augustin
 Micronius	Martin
 Mont	Christopher
 Müller	Johann Baptist
-Rüger	Jakob
+Rüeger	Jakob
 Brunner	Fridolin
 Dryander	Franciscus
 Schenck	Mathias
@@ -107,7 +108,6 @@ Brunner	Fridolin
 Fonteius    Fridolin
 Frey	Johann Leopold
 Jaske	Johannes
-Sulzer	Simon
 Steiger	Johannes
 Utenhove	Jan
 Utenhove	Johannes
@@ -118,7 +118,7 @@ Adelschwiler	Hans Jakob
 Aichinger	Christoph
 # Bullinger	Johannes
 Dürnhofer	Laurentius
-Ehinger	Johannes
+# Ehinger	Johannes
 Haller	Wolfgang
 Hoser	Simprecht
 Klebitz	Wilhelm
@@ -136,31 +136,25 @@ Schenck	Mathias
 Stucki	Johann Wilhelm
 Stumpf	Johann Rudolf
 Tillmann	Samuel
-#	de l'Aubespine	Sebastien
-#	von Diesbach	Nikolaus
+von Diesbach	Nikolaus
 #	von Rümlang	Eberhard
-#	Agricola	Laurentius
-#	Arnold	Gabriel
-#	Bertlin	Bartholomäus
-#	Bitter	Dietrich
+Agricola	Laurentius
+Arnold	Gabriel
+Bertlin	Bartholomäus
+Bitter	Dietrich
 #	Blarer	Thomas
-#	Brunner	Fonteius Fridolin
+Brunner Fonteius    Fridolin
 #	Chytraeus	David
 #	Dathenus	Petrus
 #	Dunus	Thaddaeus
-# Erast	Thomas
 #	Fabricius	Karl
-#	Frei	Johann Leopold
-#	Funck	Johannes
-#	Geistliche	s.n.
 #	Girier	Stephan
 #	Goignet	Matthieu
 #	Grey	Jane
 #	Grindal	Edmund
 #	Haug	David
 #	Hooper	Anne
-#	Johannes	s.n.
-#	Kilchmeyer	Jost
+Kilchmeyer	Jost
 #	Lever	Thomas
 #	Melanchthon	Philipp
 #	Niger	Franciscus
@@ -287,7 +281,7 @@ Steiger	Hans
 #	von Philipp	Hessen
 #	von Salia	Friedrich
 #	von Salis	Herkules
-#	von Starkenburg	Nikolaus
+von Starkenburg	Nikolaus
 #	Abel	Johann
 #	Abel	Johannes
 #	Abel	John
@@ -394,16 +388,9 @@ Bechlin	Johann
 #	BiuT	Theodor
 #	Biuntschil	Johannes
 #	Bizynski	Hieronymus
-#	Bjfrrcmann	Johannes
-#	BlLUAtrfc	s.n.
-#	Blarar	Ambrosius
-#	Blarer	Ambroius
-#	Blarer	Ambrosis
-#	Blarer	Johann Jakob
-#	Blarer	Jörg
-#	Blarer	Thomas dJ
-#	BlarerAmbrosius	s.n.
-#	Blauer	Ambrosius
+Blarer	Johann Jakob
+Blarer	Jörg
+Blarer	Thomas
 #	Bleuler	Plüwler Ulrich
 #	Bluntfcschli	Johannes
 #	BluntschliBlunschly	s.n.
@@ -628,12 +615,9 @@ Bramburg	Paul
 #	Frlpching	Christiana
 #	Frobenius	Hieronymus
 #	Froschauer	Christoph jun
-#	Frölich	G org
 #	FrölichLaetus	Georg
 #	Ftmek	Jekamnes
-#	Funck	Johann
-#	FunckFunccius	Johannes
-Funk	Johannes
+Funck   Johannes
 #	Fäbrieims	Johannes
 #	Fäbrieius	Johannes
 #	Fünkli	Jakob
@@ -862,9 +846,6 @@ Gleim	Otto
 #	Keller	Diethelm
 #	Keller	G org
 #	Kielmann	Johannes
-#	Kilchmayer	Jost
-#	Kilchmeyer	Jmst
-#	Kilchmeyer	ost
 #	Kirche	s.n.
 #	Kirche	StGallen
 #	Kirchenräte	der
@@ -1245,20 +1226,6 @@ Gleim	Otto
 #	Stucki	ohann Wilhelm
 #	Stumpf	Johannes
 #	Sturm	Johannes
-#	Suier	Simon
-#	Sulaer	Simon
-#	Suleer	Simon
-#	Sulz	er Simon
-#	Sulzer	Simem
-#	Sulzer	Simen
-#	Sulzer	Simon Basler Geistl
-#	Sulzer	Simon BaslerSeist
-#	Sulzer	Simon J
-#	Sulzer	Simonr
-#	Sulzer	Sinion
-#	Sulzer	Slaon
-#	Sulzer	Ssen
-#	Sulzer	imon
 #	Susliga	Florili
 #	Sylvio	Bartolomeo
 #	Syndicques	und lat
@@ -1544,9 +1511,7 @@ Gleim	Otto
 #	de Mus	eau Antoine Morelet
 #	de Museau	Moreiet
 #	de Museau	Morelet
-#	de l'Aubespine	Jean Jacques
-#	de l'Aubespine	Sebastiah
-#	dieKopie	s.n.
+de l'Aubespine	Jean Jacques
 #	dirler	Stephan
 #	drfitpin	s.n.
 #	du Fralsse	Jean
@@ -1756,7 +1721,6 @@ Gleim	Otto
 #	von Starkeriburfe	Nikolaus
 #	von Synode	Pihczow
 #	von Synode	Pinczöw
-#	von Ulm	Johannes Konrad
 #	von Ulrich	Philipp  Hohen
 #	von Wfön	Georg
 #	von Wied	Hermann
@@ -1793,10 +1757,6 @@ Gleim	Otto
 #	ütenhove	Johannes
 #	ütfi	er Johannes
 #	Achatius	Israelin
-#	AdelKirche	und alle
-#	Adlischwiler	s.n.
-#	Adlischwiler	jun
-#	Ambr	Blarer
 #	Babrieius	Johannes
 #	Bacher	Konrad
 #	Badziwill	s.n.
@@ -1809,16 +1769,6 @@ Gleim	Otto
 #	Bftldi	Joachim
 #	Bing	Simon
 #	Bischofszell	s.n.
-#	Blamrer	Anbreslma
-#	Blarer	s.n.
-#	Blarer	A bresius
-#	Blarer	A brsius
-#	Blarer	A orosius
-#	Blarer	Ambro sius
-#	Blarer	Ambrosius v
-#	Blarer	Augustin
-#	Blarer	Imbrosius
-#	Blarer	trosius
 #	Bluntschli	Johannes
 #	Bochetel	Beraardin
 #	Boner	Johannes
@@ -2050,8 +2000,6 @@ des Gallars Nicolas
 #	Strifoelius	Victorinus
 #	Stuck	Johann Wilhelm
 #	Stumpf	Ar loVtVtV vAcfcoVf
-#	Sulzer	s.n.
-#	Synode	s.n.
 #	SöStöfeer	Hans Badolt
 #	Sülier	Budolf
 #	TLkWm	s.n.
@@ -2122,8 +2070,6 @@ des Gallars Nicolas
 #	fSfarer	Ambrosius
 #	fSger	Budol
 #	fWaidner	Wolfgang
-#	farius	Johannes
-#	feegexo	Pier Paolo
 #	ffier	Hans Rudolf
 #	ffiier	Budolf
 #	ffius	Johannes
@@ -2141,8 +2087,3 @@ des Gallars Nicolas
 #	von Pankraz	Freiburg
 #	von Savoyen	Margareta
 #	von Wilhelm	Sulz
-#	von Wilhelm	iv  Hessen
-#	zum Anjou	polnKönig
-#	äYspiniaa	Johannes
-#	ägli	Totiaa
-#	önigMaximilian	s.n.
