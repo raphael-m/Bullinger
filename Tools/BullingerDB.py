@@ -26,26 +26,6 @@ L_PROGRESS = ["offen", "abgeschlossen", "unklar", "ungültig"]  # labels (plots)
 C_PROGRESS = ["navy", "forestgreen", "orange", "red"]
 
 
-VIP = [
-    ['Admin', 'bernard.schroffenegger@uzh.ch', 'pbkdf2:sha256:150000$1umhs15s$53a0112b531299deec3c9ceffb4e0bb2e437dd7fdd44da1c51798dbcd8c2e255'],
-    ['mvolk', 'volk@cl.uzh.ch', 'pbkdf2:sha256:150000$gks2YwDf$0eb9a44d24b9b71ed512ed78f4cfbfb987688681a6505440eac959923bdb6fde'],
-    ['Annette', 'annette.kielholz@uzhfoundation.ch', 'pbkdf2:sha256:150000$sYuju3iL$91654867aa11d90236f91b06d893ed7dc01f55e375f1d3de14195e8141aa0804'],
-    ['raaphii', 'raaphii@gmail.com', 'pbkdf2:sha256:150000$mOb4XFy6$c77e92687410fb6d283267d44ff90fcf38c8fefb08b059c9d6df6e78f0780ea7'],
-    ['Patricia', 'patricia.scheurer@uzh.ch', 'pbkdf2:sha256:150000$YRgxPBWk$cf9d78f6a6f427ced80cc8906871cc78f3e12b62cc21f84ddc0ef032714fae84'],
-    ['Judith Steiniger', 'steiniger@theol.uzh.ch', 'pbkdf2:sha256:150000$a6UPqVM4$bfc610cad1000169e73b44e84802d51661056a327cdd5ff7d312f1635a099671'],
-    ['pstroebel', 'pstroebel@cl.uzh.ch', 'pbkdf2:sha256:150000$Y0EJOIMN$d9e2fe42ddeed925fd3a603b56734634e5bd1fc39259903e375d88330d7a23ef'],
-    ['Anne Goehring', 'goehring@cl.uzh.ch', 'pbkdf2:sha256:150000$Z6wpZK20$bcf9bbe87dc8dcb4df7130e6b8fd2ad751a5e10b0b49eae25949540edb28e1dc'],
-    ['Noah Bubenhofer', 'noah.bubenhofer@ds.uzh.ch', 'pbkdf2:sha256:150000$8JUmkNvJ$eb3837cf17b58cbceb497348f2f0f44f4f97e28bea72fb1893e4c9eb725c35f9'],
-    ['rana', 'wilms@drwilms.ch', 'pbkdf2:sha256:150000$p74klHpv$d8ffc260527a6985da1463b18d2749abe3e79b24a598585126dedf638f6e1e9f'],
-    ['hrh6@cornell.edu', 'hrh6@cornell.edu', 'pbkdf2:sha256:150000$wLNcPVgn$76bfb3df45e702082b91e76433078f47136261e6910a659ec2deeb757b2e9f09'],
-    ['Sarah', 'sarahelisabeth.kiener@uzh.ch', 'pbkdf2:sha256:150000$RE0t7veh$edfad88e1bef4c7cec1f831c36351144e2d5c525eb2a34367355780b7e68304b'],
-    ['thodel', 'tobias.hodel@wbkolleg.unibe.ch', 'pbkdf2:sha256:150000$ALR5UMNz$f820596401935725cf8e800db08ea7db90448727a4708a5050a4e68b44509564'],
-    ['Automatix', 'schroffbe@hotmail.com', 'pbkdf2:sha256:150000$OJmrhPD8$e421186442c80a32b9e2bc49f5f9d376f4ce50dc823208f378bbd9f72e4f6ee4'],
-    ['tschudi1505', 'christian.sieber@ji.zh.ch', 'pbkdf2:sha256:150000$Gb9bppJz$32d1842e5f5ef2bc8d092a554942e781d71f467b83e5d9206b4243a8520a7ecf'],
-    ['Matthias.Baer', 'matthias.baer@phzh.ch', 'pbkdf2:sha256:150000$FQ1rNhtU$c15d748e86772e0a2e2fc373e75cd89b9d8a4c6798b5fd2e6f542759e33ac3d3'],
-    ['stazhplue', 'rebekka.pluess@ji.zh.ch', 'pbkdf2:sha256:150000$POqqdT33$544afa93c5ad05c24b8fff663c32e3bddda265d66839b416eed245b654fe159c']
-]
-
 class BullingerDB:
 
     def __init__(self, database_session):
@@ -85,8 +65,8 @@ class BullingerDB:
         id_bullinger = self.add_bullinger()
         BullingerDB.create_log_file("Data/persons_corr.txt")
         BullingerDB.create_log_file("Data/locations_corr.txt")
-        BullingerDB.create_log_file("Data/p_all_locations.txt")
-        BullingerDB.create_log_file("Data/p_all_persons.txt")
+        # BullingerDB.create_log_file("Data/p_all_locations.txt")
+        # BullingerDB.create_log_file("Data/p_all_persons.txt")
         for path in FileSystem.get_file_paths(dir_path, recursively=False):
             print(card_nr, path)
             self.update_timestamp()
@@ -264,11 +244,35 @@ class BullingerDB:
         for p in Person.query.filter_by(ort="Johannes", vorname=None):
             p.vorname, p.ort = "Johannes", None
             db.session.commit()
+        BullingerDB.add_wiki_links()
+
+    @staticmethod
+    def add_wiki_links():
+        with open('Data/wiki_links.txt') as in_file:
+            for line in in_file:
+                line = line.strip()
+                if line:
+                    print(line)
+                    data, nn, vn, wiki_url, bild_url = line.split(', '), '', '', '', ''
+                    print(data)
+                    if len(data) == 4: nn, vn, wiki_url, bild_url = data[0], data[1], data[2], data[3]
+                    if len(data) == 3: nn, vn, wiki_url = data[0], data[1], data[2]
+                    if len(data) == 2: nn, vn = data[0], data[1]
+                    if nn and vn:
+                        per = Person.query.filter_by(name=nn, vorname=vn).all()
+                        for p in per:
+                            p.wiki_url = wiki_url
+                            p.photo = bild_url
+                            db.session.commit()
 
     def add_vip_users(self):
-        for u in VIP:
-            if not User.query.filter_by(username=u[0]).first():
-                self.dbs.add(User(username=u[0], e_mail=u[1], changes=0, finished=0, hash=u[2], time=self.t))
+        with open('Data/usr.txt') as in_file:
+            for line in in_file:
+                line = line.strip()
+                if line:
+                    u = line.split(' - ')
+                    if not User.query.filter_by(username=u[0]).first():
+                        self.dbs.add(User(username=u[0], e_mail=u[1], changes=0, finished=0, hash=u[2], time=self.t))
         self.dbs.commit()
 
     def add_bullinger(self):
@@ -318,11 +322,13 @@ class BullingerDB:
                 if evaluation[0][0] > 0.74 and evaluation[0][0] != 1.0:
                     corr.write("#"+str(card_nr) + " " + nn + " " + vn + "\t--->\t" + str(evaluation[0][1]) + " " + str(evaluation[0][2]) + "\t("+str(round(evaluation[0][0]*100,3))+"%)\n")
                     return evaluation[0][1], evaluation[0][2]
+            '''
             log_length = 3
             with open("Data/p_all_persons.txt", 'a') as log:
                 for e in evaluation[:log_length]:
                     if e[1] and e[2] and nn and vn:
                         log.write("#"+str(card_nr) + " " + nn + ", " + vn + " vs. " + str(e[1]) + ", " + str(e[2]) + "\t(" +str(round(e[0]*100,3))+ "%)\n")
+            '''
         return nn, vn
 
     @staticmethod
@@ -341,11 +347,13 @@ class BullingerDB:
                     if evaluation[0][0] > 0.74 and evaluation[0][0] != 1.0:
                         corr.write("#"+str(card_nr) + " " + location + "\t--->\t" + evaluation[0][1] + "\t("+ str(round(evaluation[0][0]*100, 3)) + "%)\n")
                         return evaluation[0][1]
+            '''
             log_length = 3
             with open("Data/p_all_locations.txt", 'a') as log:
                 for e in evaluation[:log_length]:
                     if e[1] and location:
                         log.write("#"+str(card_nr) + " " + location + " vs. " + str(e[1]) + "\t(" + str(round(e[0]*100,3)) + "%)\n")
+            '''
         return location
 
     def add_correspondents(self, card_nr, id_bullinger):

@@ -65,17 +65,18 @@ def index():
         "date": date,
     })
 
+"""
 @app.route('/admin', methods=['POST', 'GET'])
 @login_required
 def admin():
     return redirect(url_for('index'))
-
-@app.route('/admin/setup', methods=['POST', 'GET'])
+"""
 @login_required
+@app.route('/admin/setup', methods=['POST', 'GET'])
 def setup():
     if is_admin():
         BullingerDB(db.session).setup("Karteikarten/OCR")  # ~1h
-        return redirect(url_for('admin'))
+        return redirect(url_for('index'))
     logout_user()
     return redirect(url_for('login', next=request.url))
 
@@ -386,6 +387,29 @@ def assignment(id_brief):
         card_index=id_brief,
         html_content=html_content)
 
+@app.route('/api/wiki_data/<id_brief>', methods=['GET'])
+def send_wiki_data(id_brief):
+    r = Empfaenger.query.filter_by(id_brief=id_brief).order_by(desc(Empfaenger.zeit)).first()
+    receiver = Person.query.get(r.id_person) if r else None
+    r_wiki_url, r_photo = "", ""
+    if receiver:
+        p = Person.query.filter_by(name=receiver.name, vorname=receiver.vorname, ort=receiver.ort).first()
+        r_wiki_url, r_photo = p.wiki_url, p.photo
+    s = Absender.query.filter_by(id_brief=id_brief).order_by(desc(Absender.zeit)).first()
+    sender = Person.query.get(s.id_person) if s else None
+    s_wiki_url, s_photo = "", ""
+    if sender:
+        p = Person.query.filter_by(name=sender.name, vorname=sender.vorname, ort=sender.ort).first()
+        s_wiki_url, s_photo = p.wiki_url, p.photo
+    link = sender.name if sender.name != 'Bullinger' else receiver.name
+    return jsonify({
+        "s_wiki_url": s_wiki_url,
+        "s_photo_url": s_photo,
+        "r_wiki_url": r_wiki_url,
+        "r_photo_url": r_photo,
+        "url_person_overview": "/overview/person_by_name/" + link if link else 's.n.'
+    })
+
 @app.route('/api/assignments/<id_brief>', methods=['GET'])
 @login_required
 def send_data(id_brief):
@@ -435,8 +459,8 @@ def send_data(id_brief):
                 "location": sender.ort if sender else '',
                 "remarks": s.bemerkung if s else '',
                 "not_verified": s.nicht_verifiziert if s and s.nicht_verifiziert else False,
-                "wiki_url": s_wiki_url,
-                "photo": s_photo,
+                "s_wiki_url": s_wiki_url,
+                "s_photo_url": s_photo,
             },
             "receiver": {
                 "firstname": receiver.vorname if receiver else '',
@@ -444,8 +468,8 @@ def send_data(id_brief):
                 "location": receiver.ort if receiver else '',
                 "remarks": r.bemerkung if r else '',
                 "not_verified": r.nicht_verifiziert if r and r.nicht_verifiziert else False,
-                "wiki_url": r_wiki_url,
-                "photo": r_photo,
+                "r_wiki_url": r_wiki_url,
+                "r_photo_url": r_photo,
             },
             "autograph": {
                 "location": autograph.standort if autograph else '',

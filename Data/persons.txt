@@ -3,9 +3,13 @@
 # Bullinger	Heinrich jun
 Haller	Johannes
 Fabricius	Johannes
+Fabricius	Karl
+Fabricius	Carolus
 Beza	Theodor
-Egli	Tobias
 Blarer	Ambrosius
+Blarer	Johann Jakob
+Blarer	Jörg
+Egli	Tobias
 Gast	Johannes
 Sulzer	Simon
 Liner	Hans
@@ -21,6 +25,7 @@ Jung	Johannes
 Hugo	Johannes
 Coignet	Matthieu
 Vergerius	Petrus Paulus
+Vergerius	Pietro Paolo
 Schlüsselberger	Gabriel
 Ulmer	Johann Konrad
 Oporin	Johannes
@@ -30,10 +35,11 @@ Finsler	Josua
 Wissenburg	Wolfgang
 Sailer	Gereon
 Waidner	Wolfgang
+Waidnerus	Wolfgang
 Burcher	John
 Comander	Johannes
 Lycosthenes	Konrad
-Schüler	Gervasius
+Schuler	Gervasius
 Vogt	Simprecht
 du Fraisse	Jean
 Blasius	Johannes
@@ -52,7 +58,6 @@ Mont	Christoph
 Schertlin	Sebastian
 Bochetel	Bernardin
 Hotomannus	Franciscus
-Zanchi	Hieronymus
 Borrhaus	Martin
 Parkhurst	John
 Travers	Johannes
@@ -92,7 +97,6 @@ de Cambray	Jean Jacques
 Bullinger	Hans Rudolf
 Gratarolus	Wilhelm
 Haddon	James
-Hotman	François
 Dürnhofer	Laurenz
 Ehem	Christoph
 Chaillet    David
@@ -104,7 +108,6 @@ Zanchi	Girolamo
 Zanchi	Hieronymus
 Altieri	Balthasar
 Besozzo	Antonio Mario
-Brunner	Fridolin
 Fonteius    Fridolin
 Frey	Johann Leopold
 Jaske	Johannes
@@ -116,6 +119,7 @@ Volmar	Melchior
 zum Lamb	Hieronymus
 Adelschwiler	Hans Jakob
 Aichinger	Christoph
+Aichinger	Christopherus
 # Bullinger	Johannes
 Dürnhofer	Laurentius
 # Ehinger	Johannes
@@ -142,81 +146,61 @@ Agricola	Laurentius
 Arnold	Gabriel
 Bertlin	Bartholomäus
 Bitter	Dietrich
-#	Blarer	Thomas
+Blarer	Thomas
 Brunner Fonteius    Fridolin
-#	Chytraeus	David
-#	Dathenus	Petrus
-#	Dunus	Thaddaeus
-#	Fabricius	Karl
-#	Girier	Stephan
-#	Goignet	Matthieu
-#	Grey	Jane
-#	Grindal	Edmund
-#	Haug	David
-#	Hooper	Anne
+Chytraeus	David
+Dathenus	Petrus
+Dathenus	Peter
+Dunus	Thaddaeus
+Zirler	Stephan
+Cirlerus    Stephan
+Grey	Jane
+Grey	Henry
+Grindal	Edmund
+Horn    Robert
+Haug	David
 Kilchmeyer	Jost
-#	Lever	Thomas
-#	Melanchthon	Philipp
-#	Niger	Franciscus
-#	Schenk	Matthias
-#	Sehenek	Mathias
-#	Seiler	Gereon
-#	Seiler	Raphael
-#	StGaller	Prediger
-#	Toxites	Michael
-#	Traheron	Bartholomäus
-#	Welser	Hans
-#	Wisseriburg	Wolfgang
-#	Wolf	Johannes
-#	Wunderlich	Hans
-#	Zirler	Stephan
-#	abrieius	Johannes
-#	de Bellièvre	Jean
-#	de Bellièvre	Pomponne
-#	du Moulin	Charles
-#	von Salis	Rudolf
-#	zum Camph	Gerhard
-#	Aberlin	Joachim
-#	Agricola	Laurenz
-#	Aichinger	Christopherus
-#	Bachofen	Mathias
-#	Bachofen	Matthias
-#	Backofen	Mathias
-#	Banks	John
-#	Bars	Adolf
-#	Beccaria	Johannes
-#	Brunner	Fonteius Fridoli
-#	Caraccioli	Galeazzo
-#	Chur	s.n.
-#	Cognatus	Gilbert
-#	Cognatus	Gilbertus
-#	Cruciger	Felix
-#	Dasypodius	Konrad
-#	Dürnhofer	Lorenz
-#	Einer	Hans
-#	Ewich	Johannes
-#	Fabrieins	Johannes
-#	Fabrieus	Johannes
-#	Friedrich	Pfalzgraf
-#	Grynaeus	Johann Jakob
-#	Haies	Christopher
-#	Heller	Johannes
-#	Horn	Robert
-#	Hoser	David
-#	Hotomanus	Franciscus
-#	Hugo	Johann
-#	Hugo	Johannes II
-#	Humphrey	Laurence
-#	Jeger	Isaak
-#	Johann	Konrad
-#	Kessler	Josua
-#	Languet	Hubert
-#	Limer	Hans
-#	Lydius	Martinus
-#	Maler	Josua
-#	Maler	Michael
-#	Marti	Ambrosius
-#	Martinengo	Ulisse
+Lever	Thomas
+Melanchthon	Philipp
+Niger	Franciscus
+Negri	Franciscus
+Schenck	Matthias
+Toxites	Michael
+Traheron	Bartholomäus
+Welser	Hans
+Wolf	Johannes
+Wunderlich	Hans
+de Bellièvre	Jean
+de Bellièvre	Pomponne
+du Moulin	Charles
+von Salis	Rudolf
+zum Camph	Gerhard
+Aberlin	Joachim
+Bachofen	Mathias
+Banks	John
+Bars	Adolf
+Beccaria	Johannes
+Caraccioli	Galeazzo
+Cognatus	Gilbert
+Cognatus	Gilbertus
+Cruciger	Felix
+Dasypodius	Konrad
+Dürnhofer	Laurent
+Ewich	Johannes
+Friedrich	Pfalzgraf
+Grynaeus	Johann Jakob
+Hales	Christopher
+Hoser	David
+Hugo	Johann
+Humphrey	Laurence
+Jäger	Isaak
+Kessler	Josua
+Languet	Hubert
+Lydius	Martinus
+Maler	Josua
+Maler	Michael
+Marti	Ambrosius
+Martinengo	Ulisse
 #	Martyr	Petrus
 #	Martyr	Vermigli Petrus
 #	Massurius	Hieronymus
@@ -235,8 +219,6 @@ Kilchmeyer	Jost
 #	Salier	Johannes
 #	Salkyns	William
 #	Sandys	Edwin
-#	Schenek	Mathias
-#	Schenk	s.n.
 #	Schneeberger	Antonius
 #	Semly	Konrad
 #	Simler	Josias
@@ -254,9 +236,6 @@ Steiger	Hans
 #	Tobias	s.n.
 #	Ulster	Johann Konrad
 #	Ungnad	Johann
-#	Utenhove	Jan
-#	Utenhove	Jan dJ
-#	Uterihove	Johannes
 #	Vadlan	Joachim
 #	Vergerio	Pietro Paolo
 #	Vermigli	Peter artyr
@@ -388,9 +367,6 @@ Bechlin	Johann
 #	BiuT	Theodor
 #	Biuntschil	Johannes
 #	Bizynski	Hieronymus
-Blarer	Johann Jakob
-Blarer	Jörg
-Blarer	Thomas
 #	Bleuler	Plüwler Ulrich
 #	Bluntfcschli	Johannes
 #	BluntschliBlunschly	s.n.
@@ -411,12 +387,7 @@ Bramburg	Paul
 #	Brenz	Johannes
 #	Brest	luuwju
 #	Breul	Tileaann
-#	Brummer	fridelim
-#	Brunner	Eonteius Eridolin
-#	Brunner	Font eins Fridolin
-#	Brunner	Fonteiue Fridolin
-#	Brunner	Johannes
-#	Brunner	ridelin
+Brunner	Johannes
 #	Btorrhaus	Martin
 #	Bucar	Martin
 #	Budny	Simon
@@ -449,7 +420,6 @@ Bramburg	Paul
 #	Bürgermeister	und Eat
 #	Bürgermeister	und Rat
 #	Bürnhofer	aurentius
-#	CVergerius	Petrus Paulus
 #	CaaSell	Ulrich
 #	CalVln	tifcSB
 #	Calvia	Johannes
@@ -457,14 +427,8 @@ Bramburg	Paul
 #	Campensis	Petrus
 #	Camph	Gerhard thom
 #	Camph	Petrus ten
-#	CanfMAr	s.n.
-#	Caraccioli	Galeatfus
 #	Carlo	Coollas Secandus
 #	Carnaria	Hieronymus
-#	Cbignet	Matthieu
-#	Ceignet	Mathieu
-#	Ceignet	Mattheus l
-#	Ceignet	Matthieu
 #	Cfarie	Coelius Secundus
 #	Cfikowski	Stanislaus
 #	Cflrin	Johannes
@@ -474,10 +438,8 @@ Bramburg	Paul
 #	Chipius	Johannes
 #	ChristophPfalzgraf	bRhSn
 #	Chyträus	David
-#	Cirlerus	Stephan
 #	Cleber	Eusebius
 #	Cnlpius	Johannes
-#	Cognatus	Cousin Gilbert
 #	Comander	Johannes und Gal
 #	Comander	Johannes und Galli
 #	Comander	SoChannes und
@@ -503,11 +465,8 @@ Bramburg	Paul
 #	Daaypodiu	Betrus
 #	Daius	Johannes IvUms
 #	Danmatter	bhristian
-#	Dasypodius	Gonrad
-#	Dasypodius	Petras
-#	Dasypodius	Petrus
-#	Dathenus	Peter
-#	Dathenus	Petras
+Dasypodius	Conrad
+Dasypodius	Petrus
 #	Dathezms	Petras
 #	DesGallara	Nicolas
 #	Diesbaeh	Nikelaus
@@ -520,8 +479,6 @@ Bramburg	Paul
 #	Dryander	Johannes
 #	Dsylpodius	Petrus
 #	DuMoulin	Charles da
-#	Dunus	Thäddaeus
-#	ELarer	Ambrosius
 #	Eamus	Petrus
 #	Eamus	Pierre
 #	Eanchl	Hlerooiao
@@ -550,28 +507,7 @@ Bramburg	Paul
 #	Faberius	Johannes
 #	Fabri	dis Johannes
 #	FabriLibertet	Christophe
-#	Fabricius	Carolus
-#	Fabricius	Earl
-#	Fabricius	J bannes
-#	Fabricius	JdapVnnes
-#	Fabricius	Jhhannes
-#	Fabricius	Johannes und
-#	Fabricius	Johannesy
-#	Fabricius	Jokaaaes
-#	Fabrieias	Johannes
-#	Fabrieiua	Johannes
-#	Fabrielms	Johannes
-#	Fabriflas	Jokannes
-#	Fabrihs	Johannes
-#	Fabriiius	Johannes
-#	Fabrisime	Johannes
-#	Fabrleims	Johannes
-#	Fabrtcius	Johannes
 #	Faceus	Valentinus
-#	Fafcricius	Johannes
-#	Fahrclus	Johannes
-#	Fahricius	Jognnes
-#	Fahrieius	Johannes
 #	Farisotus	Petrus
 #	Farkhurst	John
 #	Fauli	Gregor
@@ -652,16 +588,10 @@ Gerlach	Jörg
 #	Ghaillet	David
 #	Gheke	John
 #	GiXowski	Pawel
-#	GifaYarolusviilhelm	s.n.
-#	Giiomkl	Itel
-#	Gilbert	Cognatus
 #	Gilowski	Paul
 #	Gimper	Kaspar
 Gleim	Otto
 #	Gleim	Otto
-#	Goignet	Mathieu
-#	Goignet	Matthfeu
-#	Gomander	Johannes und
 #	Goodman	Christopher
 #	Gporin	Johannes
 #	Gracilis	s.n.
@@ -675,9 +605,6 @@ Gleim	Otto
 #	Grauarolus	Wilhelm
 #	Gremjy	usj Luoluji
 #	Gremp	s.n.
-#	Grindal	Edannd
-#	Grindal	Edaund
-#	Grindal	EdmuruE
 #	Grtaroluiihelm	s.n.
 #	Gruciger	Felix
 #	Grwalther	Rudolf
@@ -755,27 +682,12 @@ Gleim	Otto
 #	Hoffhalter	Katharina
 #	Hofjftiann	Marcus
 #	Hollerius	Blasius
-#	Horn	Robert und
-#	Horn	Robert und Chambers
 #	Hortinus	Michael
 #	Hospinian	Cannes
 #	Hospinian	Christian
 #	Hospinian	Wirth Johannes
 #	Hospinin	Johannes
 #	Hosplnian	Johannes
-#	Hotiman	François
-#	Hotmann	Frans
-#	Hotmann	François
-#	Hotmanr	François
-#	Hotoaannus	ranciscus
-#	Hotoaiannus	Franciscus
-#	Hotomamus	Franciscus
-#	Hotomann	Franz
-#	Hotomannus	Branziscus
-#	Hotomannus	Frameiscus
-#	Hotomannus	Francscue
-#	Hotomannus	Francscus
-#	Hotomanus	Franclscus
 #	Hubenscbaid	Kaspar
 #	Hubenschaid	Kaspar
 #	Hubenschmid	s.n.
@@ -872,7 +784,6 @@ Gleim	Otto
 #	Leipzig	s.n.
 #	Lening	Johannes
 #	Lentulus	Scipio Egli
-#	Lever	homas Langharn
 #	Lewald	Balthasar
 #	Lfvinus	Heinrich
 #	Lindauer	Bernhard
@@ -1091,10 +1002,6 @@ Gleim	Otto
 #	Rümlang	s.n.
 #	Rümlang	Eberhard v
 #	Rüssel	Francis
-#	Sailer	Eaphael
-#	Sailer	Ger
-#	Sailer	Gereo
-#	Sailer	ereon
 #	Sali	s Friedrieb von
 #	Salier	Gereon
 #	Salier	Simom
@@ -1117,15 +1024,6 @@ Gleim	Otto
 #	Schankwitz	Marcel Dietrich
 #	Schatter	Rajkdo
 #	Schatter	Rande
-#	Scheaek	Mathias
-#	Scheid	Matthias
-#	Schemck	Mathias
-#	Schenck	Mathais
-#	Schenckius	Mathias
-#	Schenek	Mathits
-#	Schenek	Matthias
-#	Schenk	Httkw
-#	Schenk	Mathias
 #	Scher	Peter
 #	Schertlin	ebaäbian
 #	Scheuch	Mathias
@@ -1267,7 +1165,6 @@ Gleim	Otto
 #	Tossanus	Daniel
 #	Toto	Trncc
 #	ToussaieJ	Daniel
-#	Toxites	hcCt
 #	Traber	Johannfes
 #	Traheron	Bartholomew
 #	Trüber	Brimus
@@ -1283,10 +1180,6 @@ Gleim	Otto
 #	Ulstetter	Johannes
 #	Uokx	s.n.
 #	Usteri	Heinrich
-#	Utenhove	s.n.
-#	Utenhove	Jan J
-#	Utenhove	Jan dH
-#	Uterihove	Jan
 #	VAübespine	Bassefontaine
 #	VTadian	Joachim
 #	VacLian	Joachim
@@ -1299,10 +1192,6 @@ Gleim	Otto
 #	Venetscher	Petrus
 #	Venetz	s.n.
 #	Vergeri	Aureli o
-#	Vergerio	Pietro P
-#	Vergerius	Petras Paulus
-#	Vergerius	Pietro Paolo
-#	Vergerlus	Petrus Paulus
 #	Vermigli	Feter Martyr
 #	Vermigli	Martyr Peter
 #	Vermigli	Petrus artyr
@@ -1333,7 +1222,6 @@ Gleim	Otto
 #	Völmar	Melchior
 #	WSüller	Jörg
 #	WaUs	Vlf
-#	Waidnerus	Wolfgang
 #	Walderykonrad	s.n.
 #	Warhaffte	äqgschrifft der
 #	Waydner	Wolfgang
@@ -1360,12 +1248,6 @@ Gleim	Otto
 #	Wisamer	Eapt Johannes
 #	Wisamer	Johann Baptist
 #	Wisanier	Bapt Johannes
-#	Wisseaburg	Wolfgang
-#	Wissembmrg	s.n.
-#	Wissemburg	Wolfgang
-#	Wissenburg	olfgang
-#	Wisseribmrg	Wolfgang
-#	Wissjlirg	Wolfgang
 #	WitgenSatein	Ludwig ron
 #	Witgensteih	Ludwig yea
 #	Withers	George
@@ -1396,25 +1278,6 @@ Gleim	Otto
 #	YmujU	s.n.
 #	Zabricius	Johannes
 #	Zacius	Simon
-#	Zanchi	GirolamoHieronymus
-#	Zanchi	Hiereaiae
-#	Zanchi	Hierenime
-#	Zanchi	Hieronimus
-#	Zanchi	Hieronino
-#	Zanchi	Hieronymo
-#	Zanchi	HieronymusGirolamo
-#	Zanchi	Hleronimo
-#	Zanchi	Hleronlmo
-#	Zanchijus	Hieronymus
-#	Zanchius	Hieronymus
-#	Zanchl	Hierenim
-#	ZanchlHleronymuis	s.n.
-#	Zanchus	Hieronymus
-#	Zanehi	Hieronimo
-#	Zanehi	Hieronimus
-#	ZanehiHieronim	s.n.
-#	ZanehiHieronymus	s.n.
-#	Zanehl	Hleroniao
 #	Zcius	Simon Zak
 #	Zehender	Eudwig
 #	Zehender	Hans
@@ -1428,9 +1291,6 @@ Gleim	Otto
 #	Ziegler	Ambrosius
 #	Ziegler	Hans
 #	Ziehender	Ludwig
-#	Zirler	Cirlerus Stephan
-#	Ztff	s.n.
-#	ZtrU	s.n.
 #	Zuleger	Wenzeslav
 #	ZurMuaden	Nikolaus
 #	Zurkinden	Nikolaus
@@ -1574,7 +1434,6 @@ de l'Aubespine	Jean Jacques
 #	itri	s.n.
 #	iäanchi	Hieronymus
 #	iülTer	Johannes
-#	jGoignet	Mathieu
 #	jTirler	Stephan
 #	jaieim	OtteJ
 #	jasfus	Johannes
@@ -1737,12 +1596,6 @@ de l'Aubespine	Jean Jacques
 #	von dessen	Philipp
 #	von eWen	Georg
 #	von f	Hessen Wilhelm
-#	von für	die Umdatierung
-#	von t	Salis Friedrich
-#	zSio	s.n.
-#	zSäiiS	s.n.
-#	zjSirler	Stephan
-#	ztoiSff	s.n.
 #	zum Lama	Hieronymus
 #	zum Lamm	Hieronymus
 #	älLer	Johannes
@@ -1750,9 +1603,6 @@ de l'Aubespine	Jean Jacques
 #	öleer	Johannes Kenrad
 #	öoignet	Mathieu
 #	üareuard	Halse
-#	üfjer	Jakob
-#	ülaer	Johann Conrad
-#	ülier	Johann Kenrad
 #	üontus	Chri stophoijusj
 #	ütenhove	Johannes
 #	ütfi	er Johannes
@@ -1778,17 +1628,8 @@ de l'Aubespine	Jean Jacques
 #	Botrhaus	Martin
 #	Bourbon	Louis
 #	Brandmüller	Johannes
-#	Brief	Doppelblatt fo
-#	Brunner	Frid und
 #	Bäldi	Michael
 #	BärET	Adolf S
-#	Bürgermeister	s.n.
-#	Bürgermeister	Georg Mülle
-#	Bürgermeister	UT flBT
-#	Bürgermeister	etc
-#	Bürgermeister	u Hab
-#	Bürgermeister	und Bat
-#	Bürgermeister	und Hat
 #	CLkewski	Stanislaus
 #	CZürcherSchweizer	s.n.
 #	Cambray	Jean Jacques dej
@@ -1799,7 +1640,6 @@ de l'Aubespine	Jean Jacques
 #	Churer	Synode
 #	Coverdale	Miles
 #	Crotus	Hieronymus Pesca
-#	Cruciger	Feli
 #	Ctottjfs	Iac v
 #	Cälyin	Johannes
 #	Dammatter	s.n.
@@ -1864,11 +1704,6 @@ des Gallars Nicolas
 #	Gleia	Otto
 #	Glelm	Otto
 #	Grais	Johann
-#	Grey	Henry
-#	Griadal	Edmund Cox Richard
-#	GrincEal	Edmund
-#	Grindali	Edmuntf
-#	Grindall	Edmund
 #	Grynaess	Johann Jakob
 #	Grübe	Sebastian
 #	Gutachten	über
@@ -1948,10 +1783,7 @@ des Gallars Nicolas
 #	Mieer	Hans Rudolf
 #	MlBSfccr	Hans Rudolf
 #	Moldau	und Walachei
-#	Mtmrn	jfr tr iN
-#	Myconius	Oswald Suizer
 #	Müller	Georg Jörg
-#	Neujahrsgeschenke	s.n.
 #	Nägeli	Schultheiss
 #	Oassander	Georg
 #	Oeistliche	iv k u
@@ -2030,8 +1862,6 @@ des Gallars Nicolas
 #	Verweiskarte	s.n.
 #	VitrelOinus	Alexander
 #	WWis	s.n.
-#	Waidner	s.n.
-#	WalderKonrad	s.n.
 #	Wbias	s.n.
 #	WblS	s.n.
 #	Weidner	Johannes
@@ -2048,12 +1878,6 @@ des Gallars Nicolas
 #	Wittgenstein	Ludwig ven
 #	Wittgenstein	Ludwig wen
 #	Wkowskl	Stanislaus
-#	Wohias	s.n.
-#	Wolfgang	Wissenburg
-#	ZUzHj	s.n.
-#	Zanchi	Hieronim
-#	Zanchi	Hieronlmo
-#	Zanchi	irolamo
 #	Zoller	Agatha
 #	Zurkinden	Zerchintest
 #	ahricius	Johannes
@@ -2067,11 +1891,6 @@ des Gallars Nicolas
 #	englische	Bischöfe
 #	etacr	Marfetteiln
 #	evLindauer	Bernhard
-#	fSfarer	Ambrosius
-#	fSger	Budol
-#	fWaidner	Wolfgang
-#	ffier	Hans Rudolf
-#	ffiier	Budolf
 #	ffius	Johannes
 #	fiamus	Pierre
 #	von Albrecht	Preussen
