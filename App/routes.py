@@ -12,9 +12,11 @@ from flask import render_template, flash, redirect, url_for, make_response, json
 from flask_login import current_user, login_user, login_required, logout_user
 from sqlalchemy import desc
 from Tools.BullingerDB import BullingerDB
+from Tools.Dictionaries import CountDict
 from collections import defaultdict
 from App.models import *
 from config import Config
+from Tools.NGrams import NGrams
 
 import requests
 import re
@@ -51,34 +53,30 @@ def admin():
 def index():
     """ start page """
     BullingerDB.track(current_user.username, '/home', datetime.now())
-    guest_book = GuestBookForm()
-    if guest_book.validate_on_submit() and guest_book.save.data:
-        BullingerDB.save_comment(guest_book.comment.data, current_user.username, datetime.now())
-    guest_book.process()
-    letters_sent, letters_received = BullingerDB.get_bullinger_number_of_letters()
+    # letters_sent, letters_received = BullingerDB.get_bullinger_number_of_letters()
     n, t0, date = BullingerDB.get_number_of_page_visits()
-    return render_template("index.html", title=APP_NAME, form=guest_book, vars={
+    return render_template("index.html", title=APP_NAME, vars={
         "username": current_user.username,
         "user_stats": BullingerDB.get_user_stats(current_user.username),
-        "comments": BullingerDB.get_comments(current_user.username),
-        "num_sent": letters_sent,
-        "num_received": letters_received,
+        # "num_sent": letters_sent,
+        # "num_received": letters_received,
         "num_page_visits": n,
         "since": t0,
         "date": date,
     })
 
+"""
 @app.route('/admin', methods=['POST', 'GET'])
-def admin():
-    print('executed')
-    return redirect(url_for('index'))
-
-@app.route('/admin/setup', methods=['POST', 'GET'])
 @login_required
+def admin():
+    return redirect(url_for('index'))
+"""
+@login_required
+@app.route('/admin/setup', methods=['POST', 'GET'])
 def setup():
     if is_admin():
         BullingerDB(db.session).setup("Karteikarten/OCR")  # ~1h
-        return redirect(url_for('admin'))
+        return redirect(url_for('index'))
     logout_user()
     return redirect(url_for('login', next=request.url))
 
@@ -132,7 +130,6 @@ def register():
 # Overviews
 # - year
 @app.route('/overview', methods=['POST', 'GET'])
-@login_required
 def overview():
     BullingerDB.track(current_user.username, '/overview', datetime.now())
     data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(None)
@@ -147,16 +144,28 @@ def overview():
             "persons": persons,
             "hits": len(persons),
             "table_language": BullingerDB.get_language_stats(),
-            # "url_plot": plot_url,
-            # "num_of_cards": num_of_cards,
-            # "stats": data_percentages,
-            # "status_description": ' '.join([str(num_of_cards), 'Karteikarten:'])
         }
     )
 
+
+@app.route('/persons', methods=['POST', 'GET'])
+def overview_persons():
+    BullingerDB.track(current_user.username, '/persons', datetime.now())
+    persons = BullingerDB.get_persons_by_var(None, None)
+    return render_template(
+        'overview_persons.html',
+        title="Übersicht",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "persons": persons,
+            "hits": len(persons),
+        }
+    )
+
+
 # - months
 @app.route('/overview_year/<year>', methods=['POST', 'GET'])
-@login_required
 def overview_year(year):
     BullingerDB.track(current_user.username, '/overview/'+year, datetime.now())
     data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(year)
@@ -173,7 +182,6 @@ def overview_year(year):
 
 # -days
 @app.route('/overview_month/<year>/<month>', methods=['POST', 'GET'])
-@login_required
 def overview_month(year, month):
     BullingerDB.track(current_user.username, '/'.join(['', str(month), str(year)]), datetime.now())
     if month == Config.SD: month = 0
@@ -233,7 +241,6 @@ def overview_languages(lang):
 
 @app.route('/stats', methods=['GET'])
 @app.route('/stats/<n_top>', methods=['GET'])
-@login_required
 def stats(n_top=50):
     BullingerDB.track(current_user.username, '/stats', datetime.now())
     n_top, id_file = int(n_top), str(int(time.time()))
@@ -251,14 +258,15 @@ def stats(n_top=50):
             "n_top": n_top,
             "file_id": id_file,
             "lang_stats": stats_languages,
-            "top_s": BullingerDB.get_top_n_sender(n_top),
-            "top_r": BullingerDB.get_top_n_receiver(n_top),
+            # "top_s": BullingerDB.get_top_n_sender(n_top),
+            # "top_r": BullingerDB.get_top_n_receiver(n_top),
             "top_s_gbp": BullingerDB.get_top_n_sender_ignoring_place(n_top),
             "top_r_gbp": BullingerDB.get_top_n_receiver_ignoring_place(n_top),
             "stats": data_percentages,
             "url_plot": plot_url,
             "url_changes_per_day": BullingerDB.get_changes_per_day_data(id_file),
-            "status_description": ' '.join([str(num_of_cards), 'Karteikarten:'])
+            "status_description": ' '.join([str(num_of_cards), 'Karteikarten:']),
+            "page_index": "stats"
         }
     )
 
@@ -327,7 +335,25 @@ def faq():
         title="FAQ",
         vars={
             "username": current_user.username,
-            "user_stats": BullingerDB.get_user_stats(current_user.username)
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+        }
+    )
+
+
+@app.route('/guestbook', methods=['POST', 'GET'])
+def guestbook():
+    guest_book = GuestBookForm()
+    if guest_book.validate_on_submit() and guest_book.save.data:
+        BullingerDB.save_comment(guest_book.comment.data, current_user.username, datetime.now())
+    guest_book.process()
+    return render_template(
+        'guestbook.html',
+        title="Gästebuch",
+        form=guest_book,
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "comments": BullingerDB.get_comments(current_user.username),
         }
     )
 
@@ -361,6 +387,29 @@ def assignment(id_brief):
         card_index=id_brief,
         html_content=html_content)
 
+@app.route('/api/wiki_data/<id_brief>', methods=['GET'])
+def send_wiki_data(id_brief):
+    r = Empfaenger.query.filter_by(id_brief=id_brief).order_by(desc(Empfaenger.zeit)).first()
+    receiver = Person.query.get(r.id_person) if r else None
+    r_wiki_url, r_photo = "", ""
+    if receiver:
+        p = Person.query.filter_by(name=receiver.name, vorname=receiver.vorname, ort=receiver.ort).first()
+        r_wiki_url, r_photo = p.wiki_url, p.photo
+    s = Absender.query.filter_by(id_brief=id_brief).order_by(desc(Absender.zeit)).first()
+    sender = Person.query.get(s.id_person) if s else None
+    s_wiki_url, s_photo = "", ""
+    if sender:
+        p = Person.query.filter_by(name=sender.name, vorname=sender.vorname, ort=sender.ort).first()
+        s_wiki_url, s_photo = p.wiki_url, p.photo
+    link = sender.name if sender.name != 'Bullinger' else receiver.name
+    return jsonify({
+        "s_wiki_url": s_wiki_url,
+        "s_photo_url": s_photo,
+        "r_wiki_url": r_wiki_url,
+        "r_photo_url": r_photo,
+        "url_person_overview": "/overview/person_by_name/" + link if link else 's.n.'
+    })
+
 @app.route('/api/assignments/<id_brief>', methods=['GET'])
 @login_required
 def send_data(id_brief):
@@ -369,8 +418,16 @@ def send_data(id_brief):
     date = Datum.query.filter_by(id_brief=id_brief).order_by(desc(Datum.zeit)).first()
     r = Empfaenger.query.filter_by(id_brief=id_brief).order_by(desc(Empfaenger.zeit)).first()
     receiver = Person.query.get(r.id_person) if r else None
+    r_wiki_url, r_photo = "", ""
+    if receiver:
+        p = Person.query.filter_by(name=receiver.name, vorname=receiver.vorname, ort=receiver.ort).first()
+        r_wiki_url, r_photo = p.wiki_url, p.photo
     s = Absender.query.filter_by(id_brief=id_brief).order_by(desc(Absender.zeit)).first()
     sender = Person.query.get(s.id_person) if s else None
+    s_wiki_url, s_photo = "", ""
+    if sender:
+        p = Person.query.filter_by(name=sender.name, vorname=sender.vorname, ort=sender.ort).first()
+        s_wiki_url, s_photo = p.wiki_url, p.photo
     autograph = Autograph.query.filter_by(id_brief=id_brief).order_by(desc(Autograph.zeit)).first()
     copy = Kopie.query.filter_by(id_brief=id_brief).order_by(desc(Kopie.zeit)).first()
     literatur = Literatur.query.filter_by(id_brief=id_brief).order_by(desc(Literatur.zeit)).first()
@@ -379,8 +436,8 @@ def send_data(id_brief):
     gedruckt = Gedruckt.query.filter_by(id_brief=id_brief).order_by(desc(Gedruckt.zeit)).first()
     satz = Bemerkung.query.filter_by(id_brief=id_brief).order_by(desc(Bemerkung.zeit)).first()
     notiz = Notiz.query.filter_by(id_brief=id_brief).order_by(desc(Notiz.zeit)).first()
-    prev_assignent = BullingerDB.get_prev_card_number(id_brief)
-    next_assignent = BullingerDB.get_prev_assignment(id_brief)
+    prev_card_nr, next_card_nr = BullingerDB.get_prev_card_number(id_brief), BullingerDB.get_next_card_number(id_brief)
+    prev_assignment, next_assignment = BullingerDB.get_prev_assignment(id_brief), BullingerDB.get_next_assignment(id_brief)
     data = {
         "id": id_brief,
         "state": kartei.status,
@@ -401,14 +458,18 @@ def send_data(id_brief):
                 "lastname": sender.name if sender else '',
                 "location": sender.ort if sender else '',
                 "remarks": s.bemerkung if s else '',
-                "not_verified": s.nicht_verifiziert if s else False
+                "not_verified": s.nicht_verifiziert if s and s.nicht_verifiziert else False,
+                "s_wiki_url": s_wiki_url,
+                "s_photo_url": s_photo,
             },
             "receiver": {
                 "firstname": receiver.vorname if receiver else '',
                 "lastname": receiver.name if receiver else '',
                 "location": receiver.ort if receiver else '',
                 "remarks": r.bemerkung if r else '',
-                "not_verified": r.nicht_verifiziert if r else False
+                "not_verified": r.nicht_verifiziert if r and r.nicht_verifiziert else False,
+                "r_wiki_url": r_wiki_url,
+                "r_photo_url": r_photo,
             },
             "autograph": {
                 "location": autograph.standort if autograph else '',
@@ -427,10 +488,10 @@ def send_data(id_brief):
             "remarks": notiz.notiz if notiz else ''
         },
         "navigation": {
-            "next": "/assignment/"+str(BullingerDB.get_next_card_number(id_brief)),
-            "next_unedited": "/assignment/"+str(BullingerDB.get_next_assignment(id_brief)),
-            "previous": "/assignment/"+(str(prev_assignent) if prev_assignent else 'stats'),
-            "previous_unedited": "/assignment/"+(str(next_assignent) if next_assignent else 'stats')
+            "next": "/assignment/"+str(next_card_nr),
+            "next_unedited": ("/assignment/"+str(next_assignment)) if next_assignment else '/stats',
+            "previous": "/assignment/"+str(prev_card_nr),
+            "previous_unedited": ("/assignment/"+str(prev_assignment)) if prev_assignment else '/stats'
         }
     }
     return jsonify(data)
@@ -458,6 +519,7 @@ def _normalize_input(data):
 def save_data(id_brief):
     bdb = BullingerDB(db.session)
     data, user, number_of_changes, t = _normalize_input(request.get_json()), current_user.username, 0, datetime.now()
+    old_state = BullingerDB.get_most_recent_only(db.session, Kartei).filter_by(id_brief=id_brief).first().status
     number_of_changes += bdb.save_date(id_brief, data["card"]["date"], user, t)
     number_of_changes += bdb.save_autograph(id_brief, data["card"]["autograph"], user, t)
     number_of_changes += bdb.save_the_sender(id_brief, data["card"]["sender"], user, t)
@@ -469,20 +531,26 @@ def save_data(id_brief):
     number_of_changes += bdb.save_remark(id_brief, data["card"]["first_sentence"], user, t)
     bdb.save_comment_card(id_brief, data["card"]["remarks"], user, t)
     Kartei.update_file_status(db.session, id_brief, data["state"], user, t)
-    old_state = BullingerDB.get_most_recent_only(db.session, Kartei).filter_by(id_brief=id_brief).first().rezensionen
     User.update_user(db.session, user, number_of_changes, data["state"], old_state)
     return redirect(url_for('assignment', id_brief=id_brief))
 
 @app.route('/api/persons', methods=['GET'])
-@login_required
 def get_persons():  # verified persons only
+    """ TODO: introduction of a separate relation for verified addresses?
+    DON'T !
     recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
     recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
     p1 = db.session.query(Person.id, recent_sender.c.id_person, Person.name, Person.vorname, Person.ort)\
-        .filter(recent_sender.c.nicht_verifiziert is None).join(recent_sender, recent_sender.c.id_person == Person.id)
+        .filter(recent_sender.c.anwender != Config.ADMIN)\
+        .filter(recent_sender.c.nicht_verifiziert == None)\
+        .join(recent_sender, recent_sender.c.id_person == Person.id)
+    # cation: "== None" may not be replaced with "is None" here!
     p2 = db.session.query(Person.id, recent_receiver.c.id_person, Person.name, Person.vorname, Person.ort)\
-        .filter(recent_receiver.c.nicht_verifiziert is None).join(recent_receiver, recent_receiver.c.id_person == Person.id)
+        .filter(recent_sender.c.anwender != Config.ADMIN)\
+        .filter(recent_receiver.c.nicht_verifiziert == None)\
+        .join(recent_receiver, recent_receiver.c.id_person == Person.id)
     data, d = [], defaultdict(lambda: False)
+    # this is shit
     for p in p1:
         if not d[p.id_person]: data.append({"lastname": p.name, "firstname": p.vorname, "location": p.ort})
         d[p.id_person] = True
@@ -490,3 +558,91 @@ def get_persons():  # verified persons only
         if not d[p.id_person]: data.append({"lastname": p.name, "firstname": p.vorname, "location": p.ort})
         d[p.id_person] = True
     return jsonify(data)
+    """
+    return jsonify([])
+
+
+# 4 Steven
+@app.route('/api/get_correspondence/<name>/<forename>/<location>', methods=['GET'])
+def get_correspondences_all(name, forename, location):
+    BullingerDB.track(current_user.username, '/api/correspondences', datetime.now())
+    name = name if name and name != '0' and name != 'None' else None
+    forename = forename if forename and forename != '0' and forename != 'None' else None
+    location = location if location and location != '0' and location != 'None' else None
+    return jsonify(BullingerDB.get_timeline_data_all(name=name, forename=forename, location=location))
+
+
+@app.route('/api/get_persons', methods=['GET'])
+def get_persons_all():
+    BullingerDB.track(current_user.username, '/api/get_persons', datetime.now())
+    return jsonify(BullingerDB.get_persons_by_var(None, None))
+
+
+@app.route('/api/post_process', methods=['GET'])
+def post_process():
+    BullingerDB.post_process_db()
+    return jsonify(BullingerDB.get_persons_by_var(None, None))
+
+
+
+
+'''
+@app.route('/api/print_nn_vn_pairs', methods=['GET'])
+def print_persons():
+    persons = BullingerDB.get_persons_by_var(None, None)
+    with open("Data/persons.txt", 'a') as out:
+        pairs = set()
+        for p in persons:
+            if (p[0], p[1]) not in pairs:
+                pairs.add((p[0], p[1]))
+        for p in persons:
+            if (p[0], p[1]) in pairs:
+                out.write("#\t" + p[0] + '\t' + p[1] + '\n')
+                pairs.remove((p[0], p[1]))
+    return jsonify([])
+
+
+@app.route('/api/print_locations', methods=['GET'])
+def print_locations():
+    with open("Data/locations.txt", 'w') as out:
+        locs = set()
+        d = CountDict()
+        for p in Person.query.all():
+            if p.ort:
+                d.add(p.ort)
+        print(d.get_pairs_sorted(by_value=True, reverse=True))
+        for loc in d.get_pairs_sorted(by_value=True, reverse=True):
+            if loc[0]:
+                out.write("#\t" + loc[0] + '\n')
+    return jsonify([])
+
+
+@app.route('/api/compute_similarities', methods=['GET'])
+def print_similarities():
+    precisio = 4
+    with open("Data/persons_corr.txt", 'w') as corr:
+        with open("Data/persons.txt", 'r') as in_file:
+            for line in in_file.readlines():
+                if line.strip('\n') and line[0] != '#' and '\t' in line:
+                    nn, vn = line.strip('\n').split('\t')
+                    for p in Person.query.all():
+                        s = (NGrams.compute_similarity(nn, p.name, precisio)+NGrams.compute_similarity(vn, p.vorname, precisio))/2
+                        if s > 0.74 and s != 1.0:
+                            corr.write(p.name + " " + p.vorname + "\t--->\t" + nn + " " + vn + "\n")
+                            p.name, p.vorname = nn, vn
+                            db.session.commit()
+    with open("Data/locations_corr.txt", 'w') as corr:
+        with open("Data/locations.txt", 'r') as in_file:
+            for line in in_file.readlines():
+                if line.strip('\n') and line[0] != '#':
+                    loc = line.strip()
+                    for p in Person.query.all():
+                        if p.ort:
+                            s = NGrams.compute_similarity(loc, p.ort, precisio)
+                            if s > 0.74 and s != 1.0:
+                                print(p.ort + "\t--->\t" + loc, s)
+                                corr.write(p.ort + "\t--->\t" + loc + "\n")
+                                p.ort = loc
+                                db.session.commit()
+    return jsonify([])
+'''

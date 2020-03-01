@@ -45,6 +45,39 @@
                             <p>Alle anderen Adressen werden als verifizierte Adressen gespeichert und stehen umgehend systemweit zur automatischen Vervollständigung zu Verfügung.</p>
                         </div>
                     </div>
+                    <div class="h4_box">
+                        <h4>Was mache ich, wenn die Karteikarten Schreibvarianten für Namen oder Orte enthalten
+                            (z.B. "Ambrosius Blarer" vs. "Ambrosius Blaurer”; oder “Petrus Paulus Vergerius” vs.
+                            “Pietro Paolo Vergerius”)?</h4>
+                        <div class="rule"></div>
+                        <div class="h4_section">
+                            <p>Bitte übertragen Sie die Schreibung von der Karteikarte in die Datenbank, ausser bei
+                                offensichtlichen Schreibfehlern. Bitte vermerken Sie zusätzlich in den Bemerkungen zum
+                                Namen oder im Feld unten “Anmerkungen zu dieser Karte", dass Sie eine Schreibvariante
+                                bemerkt haben. Wir werden dann im Nachgang Verweise zwischen den Varianten einfügen.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="h4_box">
+                        <h4>Was mache ich, wenn die Karteikarten Schreibfehler (z.B. “Tubingen” statt “Tübingen”)
+                            oder Namens-Abkürzungen (z.B. “Ger.” für “Gereon”) enthalten?</h4>
+                        <div class="rule"></div>
+                        <div class="h4_section">
+                            <p>Bitte tragen Sie die korrekte und vollständige Variante in die Datenbank ein. Wenn Sie
+                                unsicher sind, fügen Sie eine Bemerkung hinzu.
+                            </p>
+                        </div>
+                    </div>
+                    <!--
+                    <div class="h4_box">
+                        <h4></h4>
+                        <div class="rule"></div>
+                        <div class="h4_section">
+                            <p></p>
+
+                        </div>
+                    </div>
+                    -->
                 </div>
             </div>
             <div class="h3_separator"></div>
@@ -116,6 +149,13 @@
                         <div class="rule"></div>
                         <div class="h4_section">
                             <p><a href="https://www.zb.uzh.ch/">Zentralbibliothek Zürich</a> (= die Bibliothek von Stadt und Kanton Zürich)</p>
+                        </div>
+                    </div>
+                    <div class="h4_box">
+                        <h4>Wofür steht “ZZB“?</h4>
+                        <div class="rule"></div>
+                        <div class="h4_section">
+                            <p>ZZB steht für Zentralbibliothek Zürich. Wenn es sich um den Standort "ZZB" handelt, geben Sie die Angabe bitte immer als "Zürich ZB" ein (ohne Komma und ohne andere Zeichen).</p>
                         </div>
                     </div>
                     <div class="h4_box">
@@ -234,34 +274,38 @@
                         </div>
                     </div>
                     <div class="h4_box">
-                        <h4>Warum sind die Felder “Photokopie” und “Abschrift” grau?</h4>
-                        <div class="rule"></div>
-                        <div class="h4_section">
-                            <p>Diese Informationen zu “Photokopie” und “Abschrift” auf den Karteikarten sind nicht mehr aktuell und werden deshalb nicht in die Datenbank übertragen.</p>
-                        </div>
-                    </div>
-                    <div class="h4_box">
                         <h4>Warum ist in der Datenbank manchmal bereits mehr Information als auf der Karteikarte?</h4>
                         <div class="rule"></div>
                         <div class="h4_section">
-                            <p> Die automatisierte Texterkennung trifft bei der Vorverarbeitung der Rohdaten
-                                einige Annahmen, was einen Teil der Fehler bereits im Voroaus eliminiert. Wir nutzen beispielsweise aus,
-                                dass die Karteikarten (mehrheitlich) nach Datum geordnet vorliegen, dass der erste
-                                Satz eines Briefes Aufschluss über dessen Sprache gibt, oder dass "Heinrich Bullinger
-                                (Zürich)" auf fast jeder Karteikarte vorzufinden ist.
+                            <p>Erfassen Sie bitte im Allgemeinen nur das, was auf einer Karteikarte wirklich
+                                enthalten ist. Eine Ausnahme bildet die Sprache, sofern diese mit dem ersten Satz übereinstimmt.
                             </p>
-                            <p>Erfassen Sie bitte nur, was auf einer Karteikarte wirklich enthalten ist - mit
-                                Ausnahme der Sprache, sofern diese gemäss des ersten Satzes des Briefes als plausibel
-                                erscheint.
+                            <p> Die automatisierte Texterkennung trifft bei der Vorverarbeitung der Rohdaten jeweils
+                                einige Annahmen, was bei der (automatischen) Erkennung und Korrektur von Fehlern sehr
+                                hilfreich ist. Annahmen, Eigenschaften und Techniken:
                             </p>
+                            <ul>
+                                <li>Wir benutzen die OCR-Software
+                                <a class="text_link" href="https://www.abbyy.com/de-de/finereader/">"FineReader"</a>.
+                                </li>
+                                <li>Datum: Die Karteikarten liegen nach Jahr, Monat und Tag sortiert vor.</li>
+                                <li>Absender/Empfänger: Einer der beiden ist Heinrich Bullinger (Zürich).</li>
+                                <li>Photokopie/Abschrift: "Zürich StA"/"Zürich ZB" handschriftlich notiert enthält charakteristische Zeichenketten.
+                                    Typische, korrekt eingelesene Begriffe deuten auf die Schrift einer Schreibmaschine hin. </li>
+                                <li>Sprache: Wir analysieren den ersten Satz mit dem Tool
+                                    <a class="text_link" href="https://github.com/saffsd/langid.py">"LangId"</a>.
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-
             </div>
             <div class="h3_separator"></div>
         </div>
     </div>
+    <div class="clearing"></div>
+    <div class="h2_separator"></div>
+
 </div>
 
 {% endblock %}

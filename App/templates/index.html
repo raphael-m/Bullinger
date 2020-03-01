@@ -36,12 +36,11 @@
                     <p></p>
                     <p>
                         &#8594; <a class="text_link" href="{{url_for('quick_start')}}">Start</a>
-                        <span class="kw_warning">(Testversion v1.3)</span>
-                    </p>
+                        <span class="kw_warning">(Testversion 1.6.4)</span>
+                    </p>.
                     <p>
                         <span class="kw_warning">
-                            HINWEIS: Jetzt erfasste Änderungen gehen garantiert wieder verloren.
-                            Sie können daher alle Einträge nach Belieben editieren.
+                            Achtung, jetzt erfasste Änderungen gehen wieder verloren.
                         </span>
                     </p>
                 </div>
@@ -83,77 +82,59 @@
     <div class="h2_box">
         <h2>Kontakt</h2>
         <div class="h2_section">
-            <ul>
-                <li>
-                    <a href="mailto:bodenmann.reinhard@theol.uzh.ch">Reinhard Bodenmann</a>
-                    (Leiter Bullinger-Briefwechsel-Edition),
-                    Institut für Schweizerische Reformationsgeschichte,
-                    Kirchgasse 9,
-                    Zürich
-                </li>
-                <li>
-                    <a href="mailto:volk@cl.uzh.ch">Prof. Dr. Martin Volk</a>
-                    (Projektleiter),
-                    Institut für Computerlinguistik,
-                    Andreasstrasse 15,
-                    Zürich
-                </li>
-                <li>
-                    <a href="mailto:bernard.schroffenegger@uzh.ch">Bernard Schroffenegger</a>
-                    (Admin/Programmierer),
-                    Institut für Computerlinguistik,
-                    Andreasstrasse 15,
-                    Zürich
-                </li>
-                <li>
-                    <a href="mailto:raaphii@gmail.com">Raphael Müller</a>
-                    (Webdesigner),
-                    externer Mitarbeiter
-                </li>
-            </ul>
+            <p>
+                <span class="kw">Institut für Schweizerische Reformationsgeschichte</span>
+                (Theologische Fakultät der Universität Zürich),
+                Kirchgasse 9,
+                Zürich
+                <ul>
+                    <li>
+                        <a href="mailto:bodenmann.reinhard@theol.uzh.ch">Dr. habil. Reinhard Bodenmann</a>
+                        (Leiter der Heinrich Bullinger-Briefwechseledition)
+                    </li>
+                    <li>
+                        <a href="mailto:steiniger@theol.uzh.ch">Dr. phil. Judith Steiniger</a>
+                        (Wissenschaftliche Mitarbeiterin an der Heinrich-Bullinger-Briefwechseledition)
+                    </li>
+                </ul>
+            </p>
+            <p>
+                <span class="kw">Institut für Computerlinguistik</span>
+                (Philosophische Fakultät der Universität Zürich),
+                Andreasstrasse 15,
+                Zürich
+                <ul>
+                    <li>
+                        <a href="mailto:volk@cl.uzh.ch">Prof. Dr. Martin Volk</a>
+                        (Projektleiter)
+                    </li>
+                    <li>
+                        <a href="mailto:pscheurer@orthographix.ch">Patricia Scheurer</a>
+                        (Projektkoordinatorin)
+                    </li>
+                    <li>
+                        <a href="mailto:bernard.schroffenegger@uzh.ch">Bernard Schroffenegger</a>
+                        (Admin/Programmierer)
+                    </li>
+                    <li>
+                        <a href="mailto:raaphii@gmail.com">Raphael Müller</a>
+                        (Webdesigner)
+                    </li>
+                </ul>
+            </p>
+            <p>
+                Bei inhaltlichen Fragen oder Unklarheiten beim Kontrollieren der Datenbank-Einträge
+                kontaktieren Sie bitte
+                <a href="mailto:koordination@bullinger-digital.ch">koordination@bullinger-digital.ch</a>.
+                Bei technischen Fragen zum Korrektur-System kontaktieren Sie bitte
+                <a href="mailto:technik@bullinger-digital.ch">technik@bullinger-digital.ch</a>.
+                Für allgemeine Bemerkungen und Hinweise steht auch ein
+                <a href="/guestbook">Gästebuch</a>
+                zur Verfügung.
+            </p>
         </div>
     </div>
     <div class="h2_separator"></div>
-
-    <div class="h2_box">
-        <h2>Gästebuch</h2>
-        <div class="h2_section">
-            <p>Hier können Sie (für alle Besucher und Mitarbeiter sichtbar) einen Kommentar verfassen.</p>
-            <table>
-                <!--
-                <thead>
-                    <tr>
-                        <th>Benutzer</th>
-                        <th>Kommentar</th>
-                    </tr>
-                </thead>
-                -->
-                <tbody>
-                {% for c in vars["comments"] %}
-                    <tr>
-                        <td class="comment_user">{{ c[0] }}</td>
-                        <td class="comment_text" rowspan="3">{{ c[3] }}</td>
-                    </tr>
-                    <tr>
-                        <td class="comment_date">{{ c[1] }}</td>
-                    </tr>
-                    <tr>
-                        <td class="comment_time">{{ c[2] }}</td>
-                    </tr>
-                    <tr class="comment_break"></tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            <!-- new comments -->
-            <form method="post" novalidate>
-                {{ form.csrf_token }}
-                {{ form.hidden_tag() }}
-                <div>{{ form.comment(class="note", placeholder="Bemerkung zum Projekt") }}</div>
-                <div>{{ form.save(class="buttonX button_frills") }}</div>
-            </form>
-        </div>
-    </div>
-    <div class="clearing"></div>
 </div>
 
 <div class="page_views">

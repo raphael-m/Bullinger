@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>
+	>
+	Kartei
+	{% include "user_status.html" %}
+</h1>
+
+<div class="main_box">
+
+	<div class="h2_box">
+	<h2>Korrespondenten</h2>
+		<div class="h2_section">
+			<p>
+				In der Kartei können wir aktuell
+				<span class="kw_important">{{ vars["hits"] }} Korrespondenten</span>
+				identifizieren.
+				Dass viele Personen mehrfach darin enthalten sind, liegt zum einen an den bei der automatischen
+				Texterkennung enstandenen Fehlern, und zum anderen an unterschiedlichen Anschriften (Ortschaften)
+				für dieselbe Person.
+			</p>
+			<p>
+				Eine Tabelle, welche Ortschaften ignoriert und Personen mit identischen Namen zusammenfasst
+				und so etwas besser Aufschluss über die jeweiligen Anzahlen gesendeter und geschriebener
+				Briefe pro Person gibt, finden Sie
+				<a class="text_link" href="{{url_for('stats')}}">hier</a>.
+			</p>
+			<p>
+				Bei der automatischen Erfassung der Karteikartendaten sind wir davon ausgegangen,
+				dass Heinrich Bullinger (Zürich) in jedem der Briefwechsel - als Absender oder Empfänger - involviert war.
+			</p>
+			<p></p>
+
+			Null-Werte:
+			<ul>
+				<li>lat. "s.n. = sine nomine" (ohne Namen)</li>
+				<li>lat. "s.l. = sine loco" (ohne Ort)</li>
+			</ul>
+
+			<table class="js-sort-table paleBlueRows">
+				<thead class="my_table_head">
+					<tr class="my_table_head_row">
+						<th class="js-sort-string my_table_head_cell">Link</th>
+						<th class="js-sort-string my_table_head_cell">Name</th>
+						<th class="js-sort-string my_table_head_cell">Vorname</th>
+						<th class="js-sort-string my_table_head_cell">Ort</th>
+						<th class="js-sort-number my_table_head_cell">gesendet</th>
+						<th class="js-sort-number my_table_head_cell">empfangen</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for d in vars["persons"] %}
+					<tr class="my_table_row">
+						<td class="my_table_cell">
+							<a href="{{url_for('overview_cards_of_person', name=d[0], forename=d[1], place=d[2])}}">(alle)</a>
+						</td>
+						<td class="my_table_cell">
+							<a href="{{url_for('person_by_name', name=d[0])}}">{{ d[0] }}</a>
+						</td>
+						<td class="my_table_cell">
+							<a href="{{url_for('person_by_forename', forename=d[1])}}">{{ d[1] }}</a>
+						</td>
+						<td class="my_table_cell">
+							<a href="{{url_for('person_by_place', place=d[2])}}">{{ d[2] }}</a>
+						</td>
+						<td class="my_table_cell">{{ d[3] }}</td>
+						<td class="my_table_cell">{{ d[4] }}</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}

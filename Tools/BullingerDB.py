@@ -3,6 +3,7 @@
 # BullingerDB.py
 # Bernard Schroffenegger
 # 30th of November, 2019
+from collections import defaultdict
 
 from Tools.Dictionaries import CountDict
 from Tools.Plots import *
@@ -24,18 +25,6 @@ ADMIN = 'Admin'  # username (setup)
 L_PROGRESS = ["offen", "abgeschlossen", "unklar", "ungültig"]  # labels (plots)
 C_PROGRESS = ["navy", "forestgreen", "orange", "red"]
 
-
-VIP = [
-    ['Admin', 'bernard.schroffenegger@uzh.ch', 'pbkdf2:sha256:150000$1umhs15s$53a0112b531299deec3c9ceffb4e0bb2e437dd7fdd44da1c51798dbcd8c2e255'],
-    ['mvolk', 'volk@cl.uzh.ch', 'pbkdf2:sha256:150000$gks2YwDf$0eb9a44d24b9b71ed512ed78f4cfbfb987688681a6505440eac959923bdb6fde'],
-    ['pstroebel', 'pstroebel@cl.uzh.ch', 'pbkdf2:sha256:150000$Y0EJOIMN$d9e2fe42ddeed925fd3a603b56734634e5bd1fc39259903e375d88330d7a23ef'],
-    ['Annette', 'annette.kielholz@uzhfoundation.ch', 'pbkdf2:sha256:150000$sYuju3iL$91654867aa11d90236f91b06d893ed7dc01f55e375f1d3de14195e8141aa0804'],
-    ['raaphii', 'raaphii@gmail.com', 'pbkdf2:sha256:150000$mOb4XFy6$c77e92687410fb6d283267d44ff90fcf38c8fefb08b059c9d6df6e78f0780ea7'],
-    ['Patricia', 'patricia.scheurer@uzh.ch', 'pbkdf2:sha256:150000$YRgxPBWk$cf9d78f6a6f427ced80cc8906871cc78f3e12b62cc21f84ddc0ef032714fae84'],
-    ['Anne Goehring', 'goehring@cl.uzh.ch', 'pbkdf2:sha256:150000$Z6wpZK20$bcf9bbe87dc8dcb4df7130e6b8fd2ad751a5e10b0b49eae25949540edb28e1dc'],
-    ['Noah Bubenhofer', 'noah.bubenhofer@ds.uzh.ch', 'pbkdf2:sha256:150000$8JUmkNvJ$eb3837cf17b58cbceb497348f2f0f44f4f97e28bea72fb1893e4c9eb725c35f9'],
-    ['Judith Steiniger', 'steiniger@theol.uzh.ch', 'pbkdf2:sha256:150000$a6UPqVM4$bfc610cad1000169e73b44e84802d51661056a327cdd5ff7d312f1635a099671'],
-]
 
 class BullingerDB:
 
@@ -64,11 +53,20 @@ class BullingerDB:
         self.dbs.query(Tracker).delete()
         self.dbs.commit()
 
+    @staticmethod
+    def create_log_file(name):
+        if os.path.isfile(name): os.remove(name)
+        open(name, "w").close()
+
     def setup(self, dir_path):
         self.delete_all()
         self.add_vip_users()
         card_nr, num_ignored_cards, ignored_card_ids = 1, 0, []
         id_bullinger = self.add_bullinger()
+        BullingerDB.create_log_file("Data/persons_corr.txt")
+        BullingerDB.create_log_file("Data/locations_corr.txt")
+        # BullingerDB.create_log_file("Data/p_all_locations.txt")
+        # BullingerDB.create_log_file("Data/p_all_persons.txt")
         for path in FileSystem.get_file_paths(dir_path, recursively=False):
             print(card_nr, path)
             self.update_timestamp()
@@ -91,12 +89,190 @@ class BullingerDB:
             card_nr += 1
             self.dbs.commit()
         if num_ignored_cards: print("*** WARNING,", num_ignored_cards, "files ignored:", ignored_card_ids)
-        BullingerDB.count_correspondence()  # post-processing
+        # BullingerDB.count_correspondence()  # post-processing
+        BullingerDB.post_process_db()
+
+    @staticmethod
+    def post_process_db():
+        nn_adj = [  # n:1
+            [["Adelschwller", "Adetschwiler", "dlischwiler"], "Adlischwiler"],
+            [["AgritYa"], "Agricola"],
+            [["de Aubespine", "de lAubespine", "de lAübespine", "de lübespine", "de öambray", "de übespine", "de Aübespine"], "de l'Aubespine"],
+            [["Aiehinger", "Aichlnger"], "Aichinger"],
+            [["Ajrnold", "Armold"], "Arnold"],
+            [["eza", "Besä", "Baeza", "Bbxa", "Bbza", "Bfcsa", "Bfe"], "Beza"],
+            [["Bernrdin", "ernardin", "Bemardin"], "Bernardin"],
+            [["Bertiin"], "Bertlin"],
+            [["Blurer", "Bläurer", "Blrer", "Blazer", "Blaren", "Blanrer", "Klarer", "klarer", "Biarer", "Blaurer", "Blarsr", "Blaürer", "Marer"], "Blarer"],
+            [["Bureher"], "Burcher"],
+            [["Ooignet"], "Coignet"],
+            [["Erh"], "Erb"],
+            [["Ehern"], "Ehem"],
+            [["Hullinger", "ffullinger", "Suilinger", "Sufilnger", "Sullger", "Sullinger", "BUllinger", "BUlliuger", "Ballinfcer", "Ballinger", "Bhllinger", "Billinger", "Bmllinger", "Bnllinger", "Bulliger", "Bullimger", "Bullinfcer", "Sulnger", "lullinger", "Bulllnger"], "Bullinger"],
+            [["Campe", "Campeil", "Canpell", "Caspell", "Cmpell"], "Campell"],
+            [["Egll", "Egii", "EgXi", "Eii", "Eili", "Bgli", "Bgfl", "Sgli"], "Egli"],
+            [["rastas", "rastus", "Epastus"], "Erastus"],
+            [["FabriciCus", "Fabriciae", "Fabricias", "Eabricius", "Eabrieius", "fabricius", "Fabrlelus", "Fabrieius", "Babricius", "Fabricus", "Fabridis", "Fabrieims", "Fabrieius", "Fabritius", "Fabrüus", "Fahreins", "faEricfius", "fairius", "abricius"], "Fabricius"],
+            [["Finaler", "Pinsler"], "Finsler"],
+            [["Baller", "aller"], "Haller"],
+            [["Mycoaius", "Mysonius", "Mycpnius", ], "Myconius"],
+            [["Eüeger", "Büeger", "Hüeger", "Ruer"], "Rüeger"],
+            [["Ularer"], "Ulmer"],
+            [["von Bümlang"], "von Rümlang"],
+            [["Jonvillers", "Jonvllllers", ], "Jenvilliers"],
+            [["Sulser"], "Sulzer"],
+            [["de Bellievre", "de BelliSvre", "BelilSvre", "BelliSvreV", "Bellidvre", "Bellievre", "Bellifcvre", "Belliivre", "Bellive", "Bellivre"], "de Bellièvre"],
+            [["girier"], "Zirler"],
+        ]
+        for nn in nn_adj:
+            for err in nn[0]:
+                for p in Person.query.filter_by(name=err):
+                    p.name = nn[1]
+                    db.session.commit()
+        vn_adj = [
+            [["oachim", "Joachlm", "Joekinm", "J oachim"], "Joachim"],
+            [["Theoder"], "Theodor"],
+            [["Christophen", "Ohristopher"], "Christopher"],
+            [["hristoph"], "Christoph"],
+            [["Chrlstoplaorux"], "Christopherus"],
+            [["Kakob"], "Jakob"],
+            [["ams", "Harns", "Hais", "H ns", "Haas", "Hsoas", "Sans", "ans"], "Hans"],
+            [["ohann Konrad", "Johann lonrad", "Johann KonracL", "Johann Eonrad", "Johann lonrad", "Jehann Kenrad", ], "Johann Konrad"],
+            [["Hans Hudolf", "H Rudolf", "H Budolf", "Hans R dolf", "Hns Eudolf", "Haas Budolf", "HansRudolf", "ans Budolf", "Hns Eudolf", "ans Rudolf", "ans Budolf", "Sans Radelf", "", "HansEudolf", "Haas udolf", "Sans Rudolf", "Hans Budolf", "H ns Rudolf", "Haas Rudolf", "Haas Udolf", "Hans Eudolf", "Harns Rudolf",
+              "ans Eudolf", "Bans Rudolf", "Hans Badelf", "Hans Radelf", "Hans HttdClf", "Hans Bfcdolf", "Hans Bfcdolf",
+              "Hane BUdelf", "Hane Rudolf"], "Hans Rudolf"],  # 11x
+            [["Amhrosius", "Amtfrosius", "Aybroalus", "A brolsue", "AmbrcdLus", "A broslue", "A brosius", "Ambresius", "Ambrfcsius", "Ambrisius", "Ambrofcius", "Ambroim", "Umbrosius", "brosius", "mhrosius", "nbrosius", "A brosiua"], "Ambrosius"],
+            [["MyConius", "Myconlus", "Mycouius", "Mycqnius", "Myeonius", "MyConius", "Myconlus", "Mycouius", "Mycqnius", "Myeonius", ""], "Myconius"],
+            [["Mafcthieu", "Mathieu iun.", "Matt hi eu", "Mattheu", "Matthleu", "Mtthleu", "atthieu", "tthieu", "Matt hi eu", ], "Mathieu"],
+            [["Eivhard", "Bichard", "Eichard", "Eiehard"], "Richard"],
+            [["Frangois", "Erangois", "Franc ois", "Francois", "Franqois", "Frantjois", "rangois", "ranqois", "Frantjois"], "François"],
+            [["Tbi s", "Tebias", "Thobias", "Tobi s"], "Tobias"],
+            [["hristain"], "Christian"],
+            [["Je.", "ean"], "Jean"],
+            [["J hannes", "Jehamms", "Jehumes", "Jekaanes", "Johammes", "Johamnea", "Johan aes", "Johanne", "ohannes", "J ohanne s", "Johaaaes", "Hohannes", "Jeahnnes", "Jebannes", "Jhhann.es", "JoAhhanes v", "Joahames", "Johamaes", "Johannas", "Johannes", "Johanties", "Johhmmes", "Jonnes", "Johaaa.es", "Jobaaaes", "Johanne s", "JoWnnes", "Jehannes", "Hohannes", "Johannnes", "Johhnnes", "Jekannes"], "Johannes"],
+            [["Welfgang", "Wolf gang", "jfoifgang", "olfgsng", "W lfgang"], "Wolfgang"],
+            [["Sabriel", "abriel", "Gjäbriel", "Gabriel tS", "Gfabrie", "GjabrielJ", "Gjäbriel"], "Gabriel"],
+            [["Bernrdin", "Bernardin", "Bemardin", "Beraardia", "ernardin"], "Bernardin"],
+            [["Oswqld", "swald"], "Oswald"],
+            [["ebastien", "Sdbastien"], "Sebastien"],
+            [["Schiatter"], "Schlatter"],
+            [["ean Jacques"], "Jean Jacques"],
+            [["von Stettea"], "von Stetten"],
+            [["Laureat ins"], "Laurentius"],
+            [["Theeder", "Theodoer", "Theodoi"], "Theodor"],
+            [["Jokaames", "Johames", "J ohannes", "Johannss", "Johanoes", "Johamm", "Johahnes", "Johaaaec", "Joahnnes", "Joahhnes", "Joahannes", "Jehammes", " 	Jehamaes"], "Johannes"],
+            [["Dobias", "Tobias C", "Zobias", "fobias", "loblas"], "Tobias"]
+        ]
+        for vn in vn_adj:
+            for err in vn[0]:
+                for p in Person.query.filter_by(vorname=err):
+                    p.vorname = vn[1]
+                    db.session.commit()
+        loc_adj = [
+            [["Bäsel", "Fasel", "Basels", "Ba sei", "Bpsel"], "Basel"],
+            [["StBallen", "St Galle", "St Gllen", "St Gallea", "St Gallem", "St GAllea", "St Galln", "St Gllen", "St Sailen", "St Sallen", "St alleh", "StSailen", "t Ballen", "t Sailen", "t fallen", "St allen", "St G llen", "St. allen", "St Gallen", "St fallen", "StGallen", "St.Gallen", "St. allen", "St.G llen", "st. Galle", "St. allen", "St. GAllea", "Sta Gallen", "St. Gllen", "St. Galln", "St. Sailen", "St. alleh", "Sf. alLev", "t. Sailen", "t . Ballen", "Sf Saliern", "St. allen", "St. Galle", "St. Salieh", "St. Ggllen"], "St. Gallen"],
+            [["Geenf", "Gefif", "enf", "Senf", "G nf", "Gef", "Genf u", "ehf", "en f", "Genfi", "s. l. Genf", "Gemf", "Gen", "Geaf", "Gnf", "Genfn"], "Genf"],
+            [["ern", "lern", "lerm", "Barn", "BernJ", "Berm", "Berh", "Bera", "Ber n", "B ra", "Hera"], "Bern"],
+            [["Bheinfelden", "Birg Bheinfelden"], "Rheinfelden"],
+            [["RappolUsweiler", "Happeltsweiler", "Rappaltsweiler", "Happoltsweller", "Happolt sweiler", "Eappoltsweilsr", "EappeltsweilerV", "Bappoltsweilmr", "Bappeltwweiler", "Bappeltsweiler", "Beichemreier", "Happoltsweiler", "Happoldsweiler", "Bappoltsweiler", "Rapolisweiler", "Rappoläsweiler", "Rappolt sweier", ], "Rappoltsweiler"],
+            [["Hochheizer", "Hochhelxer", "Hoehholzer"], "Hochholzer"],
+            [["Schaphausen", "schaffhausen", "Schaffhausea", "Schaffhau sen", "Sehaffhausen", "Schaff hausen", "SchafIhausen", "Schaffheyuen", "Sekaffkamsem", "Schaffhuttsen", "Schaffhansen", "Schaffhauscn"], "Schaffhausen"],
+            [["Ghur", "Chnr", "Cbur", "Cfrur", "ChAr", "Chub", "hur", "Chor", "Gaur", "iChur", "Ohur", "Char", "Cher", "Chu r", "Ckur", "Ckor", "Ckmr", "Chur f j"], "Chur"],  # 8x
+            [["Strasshurg", "Straburg", "Strahurg", "Strasburg", "Straassburg"], "Straassburg"],
+            [["fKöln"], "Köln"],
+            [["Konstant", "Konstanzj", "Konst an zj"], "Konstanz"],
+            [["Gri essenberg", "F Griessenberg"], "Griessenberg"],
+            [["Leadea"], "London"],
+            [["Heideberg", "Heiedelberg", "Heidelberf", "s l Heidelberg", "Haideiberg"], "Heidelberg"],
+            [["Lensburg", "Lenzhurg", ], "Lenzburg"],
+            [["Ghiavenna", "Ohiavenna", "Chiavenmla", "Chiavenm", "Chiaveana", "Chiavenna J", "Chivenna", "Chlavenna", "CMavenna"], "Chiavenna"],
+            [["St Germain"], "St. Germain"],
+            [["Wissehburg", "Wssehburg"], "Wissenburg"],
+            [["iTreiburg", "reiburg"], "Freiburg"],
+            [["Hisox"], "Misox"],
+            [["Winterktur", "nterthur"], "Winterthur"],
+            [["glarus", "Glaru", "Giarus", "Qlarus"], "Glarus"],
+            [["Selothum"], "Solothurn"]
+        ]
+        for loc in loc_adj:
+            for err in loc[0]:
+                for p in Person.query.filter_by(ort=err):
+                    p.ort = loc[1]
+                    db.session.commit()
+        for p in Person.query.filter_by(name="Von", vorname="Stetten Georg"):
+            p.name, p.vorname = "von Stetten", "Georg"
+            db.session.commit()
+        for p in Person.query.filter_by(name="von", vorname="Stetten Georg"):
+            p.name, p.vorname = "von Stetten", "Georg"
+            db.session.commit()
+        for p in Person.query.filter_by(name="von", vorname="Stetten Georg dJ"):
+            p.name, p.vorname = "von Stetten", "Georg"
+            db.session.commit()
+        for p in Person.query.filter_by(name="Stetten", vorname="Georg ron"):
+            p.name, p.vorname = "von Stetten", "Georg"
+            db.session.commit()
+        for p in Person.query.filter_by(name="Von Georg", vorname="Württemberg"):
+            p.name, p.vorname = "von Württemberg", "Georg"
+            db.session.commit()
+        for p in Person.query.filter_by(name="von Georg", vorname="Württemberg"):
+            p.name, p.vorname = "von Württemberg", "Georg"
+            db.session.commit()
+        for p in Person.query.filter_by(name="de", vorname="Bellievre Jean"):
+            p.name, p.vorname = "de Bellievre", "Jean"
+            db.session.commit()
+        for p in Person.query.filter_by(name="von Philipp", vorname="Landgraf"):
+            p.name, p.vorname = "von Landgraf", "Philipp"
+            db.session.commit()
+        for fj in Person.query.filter_by(name="Fabrizius", vorname=None, ort='Johannes'):
+            fj.vorname, fj.ort = 'Johannes', None
+            db.session.commit()
+        for fj in Person.query.filter_by(name="Fabricius", vorname=None, ort='Johannes'):
+            fj.vorname, fj.ort = 'Johannes', None
+            db.session.commit()
+        for p in Person.query.filter_by(name="a", vorname="Lasco Johannes"):
+            p.name, p.vorname = "a Lasco", "Johannes"
+            db.session.commit()
+        for p in Person.query.filter_by(vorname=None, ort="Oswald"):
+            p.vorname, p.ort = "Oswald", None
+            db.session.commit()
+        for p in Person.query.filter_by(vorname=None, ort="Gabriel"):
+            p.vorname, p.ort = "Gabriel", None
+            db.session.commit()
+        for p in Person.query.filter_by(vorname="BelliSvre Jean"):
+            p.name, p.vorname = "de Bellièvre", "Jean"
+            db.session.commit()
+        for p in Person.query.filter_by(ort="Johannes", vorname=None):
+            p.vorname, p.ort = "Johannes", None
+            db.session.commit()
+        BullingerDB.add_wiki_links()
+
+    @staticmethod
+    def add_wiki_links():
+        with open('Data/wiki_links.txt') as in_file:
+            for line in in_file:
+                line = line.strip()
+                if line:
+                    print(line)
+                    data, nn, vn, wiki_url, bild_url = line.split(', '), '', '', '', ''
+                    print(data)
+                    if len(data) == 4: nn, vn, wiki_url, bild_url = data[0], data[1], data[2], data[3]
+                    if len(data) == 3: nn, vn, wiki_url = data[0], data[1], data[2]
+                    if len(data) == 2: nn, vn = data[0], data[1]
+                    if nn and vn:
+                        per = Person.query.filter_by(name=nn, vorname=vn).all()
+                        for p in per:
+                            p.wiki_url = wiki_url
+                            p.photo = bild_url
+                            db.session.commit()
 
     def add_vip_users(self):
-        for u in VIP:
-            if not User.query.filter_by(username=u[0]).first():
-                self.dbs.add(User(username=u[0], e_mail=u[1], changes=0, finished=0, hash=u[2], time=self.t))
+        with open('Data/usr.txt') as in_file:
+            for line in in_file:
+                line = line.strip()
+                if line:
+                    u = line.split(' - ')
+                    if not User.query.filter_by(username=u[0]).first():
+                        self.dbs.add(User(username=u[0], e_mail=u[1], changes=0, finished=0, hash=u[2], time=self.t))
         self.dbs.commit()
 
     def add_bullinger(self):
@@ -131,10 +307,62 @@ class BullingerDB:
         date = Datum(year_a=y, month_a=m, day_a=d)
         self.push2db(date, card_nr, ADMIN, self.t)
 
+    @staticmethod
+    def name_correction(card_nr, nn, vn, precision):
+        with open("Data/persons_corr.txt", 'a') as corr:
+            evaluation = []
+            with open("Data/persons.txt", 'r') as in_file:
+                for line in in_file.readlines():
+                    if line.strip('\n') and line[0] != '#' and '\t' in line:
+                        nn_, vn_ = line.strip('\n').split('\t')
+                        s = (NGrams.compute_similarity(nn, nn_, precision) + NGrams.compute_similarity(vn, vn_, precision)) / 2
+                        evaluation.append([s, nn_, vn_])
+            if len(evaluation) > 0:
+                evaluation.sort(key=lambda x: x[0], reverse=True)
+                if evaluation[0][0] > 0.74 and evaluation[0][0] != 1.0:
+                    corr.write("#"+str(card_nr) + " " + nn + " " + vn + "\t--->\t" + str(evaluation[0][1]) + " " + str(evaluation[0][2]) + "\t("+str(round(evaluation[0][0]*100,3))+"%)\n")
+                    return evaluation[0][1], evaluation[0][2]
+            '''
+            log_length = 3
+            with open("Data/p_all_persons.txt", 'a') as log:
+                for e in evaluation[:log_length]:
+                    if e[1] and e[2] and nn and vn:
+                        log.write("#"+str(card_nr) + " " + nn + ", " + vn + " vs. " + str(e[1]) + ", " + str(e[2]) + "\t(" +str(round(e[0]*100,3))+ "%)\n")
+            '''
+        return nn, vn
+
+    @staticmethod
+    def location_correction(card_nr, location, precision):
+        with open("Data/locations_corr.txt", 'a') as corr:
+            evaluation = []
+            location = "Bern" if location == "lern" else location
+            with open("Data/locations.txt", 'r') as in_file:
+                for line in in_file.readlines():
+                    if line.strip('\n') and line[0] != '#':
+                        loc = line.strip()
+                        s = NGrams.compute_similarity(loc, location, precision)
+                        evaluation.append([s, loc])
+                if len(evaluation) > 0:
+                    evaluation.sort(key=lambda x: x[0], reverse=True)
+                    if evaluation[0][0] > 0.74 and evaluation[0][0] != 1.0:
+                        corr.write("#"+str(card_nr) + " " + location + "\t--->\t" + evaluation[0][1] + "\t("+ str(round(evaluation[0][0]*100, 3)) + "%)\n")
+                        return evaluation[0][1]
+            '''
+            log_length = 3
+            with open("Data/p_all_locations.txt", 'a') as log:
+                for e in evaluation[:log_length]:
+                    if e[1] and location:
+                        log.write("#"+str(card_nr) + " " + location + " vs. " + str(e[1]) + "\t(" + str(round(e[0]*100,3)) + "%)\n")
+            '''
+        return location
+
     def add_correspondents(self, card_nr, id_bullinger):
         """ one has to be bullinger """
+        precision_names, precision_loc = 4, 2
         if self.bd.is_bullinger_sender():
             nn, vn, ort, bem = self.bd.get_receiver()
+            nn, vn = BullingerDB.name_correction(card_nr, nn, vn, precision_names)
+            ort = BullingerDB.location_correction(card_nr, ort, precision_loc)
             self.push2db(Absender(id_person=id_bullinger), card_nr, ADMIN, self.t)
             p = Person.query.filter_by(name=nn, vorname=vn, ort=ort).first()
             if not p: self.push2db(Person(name=nn, forename=vn, place=ort), card_nr, ADMIN, self.t)
@@ -143,6 +371,8 @@ class BullingerDB:
         else:
             self.push2db(Empfaenger(id_brief=card_nr, id_person=id_bullinger), card_nr, ADMIN, self.t)
             nn, vn, ort, bem = self.bd.get_sender()
+            nn, vn = BullingerDB.name_correction(card_nr, nn, vn, precision_names)
+            ort = BullingerDB.location_correction(card_nr, ort, precision_loc)
             p = Person.query.filter_by(name=nn, vorname=vn, ort=ort).first()
             if not p: self.push2db(Person(name=nn, forename=vn, place=ort), card_nr, ADMIN, self.t)
             p_id = Person.query.filter_by(name=nn, vorname=vn, ort=ort).first().id
@@ -175,6 +405,7 @@ class BullingerDB:
             db.session.add(Tracker(username=username, time=t, url=url))
             db.session.commit()
 
+    '''
     @staticmethod
     def count_correspondence():
         """ very inefficient, but doesn't matter """
@@ -185,6 +416,7 @@ class BullingerDB:
             p = Person.query.get(a.id_person)
             p.gesendet = p.gesendet + 1 if p.gesendet else 1
         db.session.commit()
+    '''
 
     def save_date(self, i, data_date, user, t):
         datum_old, n = Datum.query.filter_by(id_brief=i).order_by(desc(Datum.zeit)).first(), 0
@@ -257,7 +489,7 @@ class BullingerDB:
         return n
 
     def save_the_receiver(self, i, d, user, t):
-        d["not_verified"], n = True if not d["not_verified"] else None, 5
+        n = 5
         e_old = Empfaenger.query.filter_by(id_brief=i).order_by(desc(Empfaenger.zeit)).first()
         e_new = Empfaenger(not_verified=d["not_verified"], remark=d["remarks"])
         p_old = Person.query.filter_by(id=e_old.id_person).order_by(desc(Person.zeit)).first() if e_old else None
@@ -280,7 +512,7 @@ class BullingerDB:
         return n
 
     def save_the_sender(self, i, d, user, t):
-        d["not_verified"], n = True if not d["not_verified"] else None, 5
+        n = 5
         a_old = Absender.query.filter_by(id_brief=i).order_by(desc(Absender.zeit)).first()
         a_new = Absender(not_verified=d["not_verified"], remark=d["remarks"])
         p_old = Person.query.filter_by(id=a_old.id_person).order_by(desc(Person.zeit)).first() if a_old else None
@@ -734,6 +966,7 @@ class BullingerDB:
         fig.savefig('App/static/images/plots/user_stats_finished_' + file_name + '.png')
         plt.close()
 
+    """
     @staticmethod
     def get_top_n_sender(n):
         p = Person.query.order_by(desc(Person.gesendet)).all()
@@ -749,24 +982,55 @@ class BullingerDB:
         return [[x.name if x.name else Config.SN,
                  x.vorname if x.vorname else Config.SN,
                  x.ort if x.ort else Config.SL, x.empfangen] for x in p][0:n]
+    """
+
+    @staticmethod
+    def get_top_data(mode):
+        """ mode = 0: sender
+            mode = 1: empfänger """
+        recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
+        recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
+        # sender
+        p1 = db.session.query(
+                Person.id.label("p_id_a"),
+                Person.name.label("p_name"),
+                Person.vorname.label("p_forename"),
+                func.count(Person.id).label("s_count"),
+                literal(0).label("r_count"),
+                recent_sender.c.id_brief.label("id_a"),
+                recent_sender.c.id_person.label("p_id_b")
+            ).join(recent_sender, recent_sender.c.id_person == Person.id) \
+            .group_by(Person.name, Person.vorname, Person.ort)
+        # receiver
+        p2 = db.session.query(
+                Person.id.label("p_id_a"),
+                Person.name.label("p_name"),
+                Person.vorname.label("p_forename"),
+                literal(0).label("s_count"),
+                func.count(Person.id).label("r_count"),
+                recent_receiver.c.id_brief.label("id_a"),
+                recent_receiver.c.id_person.label("p_id_b")
+            ).join(recent_receiver, recent_receiver.c.id_person == Person.id)\
+            .group_by(Person.name, Person.vorname, Person.ort)
+        # full outer join and sum over groups
+        p_all = union_all(p1, p2).alias("united")
+        return db.session.query(
+                p_all.c.p_name,
+                p_all.c.p_forename,
+                func.sum(p_all.c.s_count),
+                func.sum(p_all.c.r_count)
+            ).group_by(
+                p_all.c.p_name,
+                p_all.c.p_forename,
+            ).order_by(desc(func.sum(p_all.c.s_count if not mode else p_all.c.r_count)))
 
     @staticmethod
     def get_top_n_sender_ignoring_place(n):
-        p = db.session.query(Person.name, Person.vorname, func.sum(Person.gesendet))\
-            .group_by(Person.name, Person.vorname)\
-            .order_by(desc(func.sum(Person.gesendet))).all()
-        if n > len(p): n = len(p)
-        return [[x[0] if x[0] else Config.SN,
-                 x[1] if x[1] else Config.SN, x[2]] for x in p][0:n]
+        return [[r[0] if r[0] else Config.SN, r[1] if r[1] else Config.SN, r[2]] for r in BullingerDB.get_top_data(0)][0:n]
 
     @staticmethod
     def get_top_n_receiver_ignoring_place(n):
-        p = db.session.query(Person.name, Person.vorname, func.sum(Person.empfangen))\
-            .group_by(Person.name, Person.vorname)\
-            .order_by(desc(func.sum(Person.empfangen))).all()
-        if n > len(p): n = len(p)
-        return [[x[0] if x[0] else Config.SN,
-                 x[1] if x[1] else Config.SN, x[2]] for x in p][0:n]
+        return [[r[0] if r[0] else Config.SN, r[1] if r[1] else Config.SN, r[3]] for r in BullingerDB.get_top_data(1)][0:n]
 
     @staticmethod
     def get_persons_by_var(variable, mode):
@@ -908,3 +1172,178 @@ class BullingerDB:
         fig.savefig('App/static/images/plots/changes_'+file_id+'.png')
         plt.close()
         return 'images/plots/overview_'+file_id+'.png'
+
+    @staticmethod
+    def get_timeline_data_all(name=None, forename=None, location=None):
+        recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
+        recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
+        # sender
+        p1 = db.session.query(
+                Person.id.label("p_id_a"),
+                Person.name.label("p_name"),
+                Person.vorname.label("p_forename"),
+                Person.ort.label("p_place"),
+                recent_sender.c.id_person.label("p_id_b"),
+                recent_sender.c.id_brief.label("id_a"),
+                literal(1).label("is_sender"))\
+            .filter(Person.name == name if name else (False if Person.name == 'Bullinger' else True))\
+            .filter(Person.vorname == forename if forename else (False if Person.vorname == 'Heinrich' else True))\
+            .filter(Person.ort == location if location else (False if Person.ort == 'Zürich' else True))\
+            .join(recent_sender, recent_sender.c.id_person == Person.id)
+        # receiver
+        p2 = db.session.query(
+                Person.id.label("p_id_a"),
+                Person.name.label("p_name"),
+                Person.vorname.label("p_forename"),
+                Person.ort.label("p_place"),
+                recent_receiver.c.id_person.label("p_id_b"),
+                recent_receiver.c.id_brief.label("id_a"),
+                literal(0).label("is_sender"))\
+            .filter(Person.name == name if name else (False if Person.name == 'Bullinger' else True))\
+            .filter(Person.vorname == forename if forename else (False if Person.vorname == 'Heinrich' else True))\
+            .filter(Person.ort == location if location else (False if Person.ort == 'Zürich' else True))\
+            .join(recent_receiver, recent_receiver.c.id_person == Person.id)
+        p_all = union_all(p1, p2).alias("united")
+        results = db.session.query(
+            Datum.id_brief,
+            Datum.jahr_a,  # 1
+            Datum.monat_a,
+            Datum.tag_a,
+            p_all.c.id_a,
+            p_all.c.p_name,  # 5
+            p_all.c.p_forename,
+            p_all.c.p_place,
+            p_all.c.is_sender,  # 8
+        ).join(p_all, p_all.c.id_a == Datum.id_brief)\
+            .order_by(asc(p_all.c.id_a))
+        data = dict()
+        for r in results:
+            data[r[0]] = dict()
+            data[r[0]]["year"] = r[1] if r[1] else 0,
+            data[r[0]]["month"] = r[2] if r[2] else 0,
+            data[r[0]]["day"] = r[3] if r[3] else 0,
+            data[r[0]]["name"] = r[5] if r[5] else Config.SN,
+            data[r[0]]["forename"] = r[6] if r[6] else Config.SN,
+            data[r[0]]["location"] = r[7] if r[7] else Config.SN,
+            data[r[0]]["is_sender"] = True
+        return data
+
+        """
+        print(name, prename, location)
+        recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
+        recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
+        # sender
+        p1 = db.session.query(
+                Person.id.label("p_id_a"),
+                Person.name.label("p_name"),
+                Person.vorname.label("p_forename"),
+                Person.ort.label("p_place"),
+                recent_sender.c.id_person.label("p_id_b"),
+                recent_sender.c.id_brief.label("id_a"))\
+            .join(recent_sender, recent_sender.c.id_person == Person.id)\
+            .filter(or_(Person.name == 'Bullinger', Person.name == name) if name else True)\
+            .filter(or_(Person.vorname == 'Heinrich', Person.vorname == prename) if prename else True)\
+            .filter(or_(Person.ort == 'Zürich', Person.ort == location) if location else True)\
+            .subquery().alias("p1")
+        # receiver
+        p2 = db.session.query(
+                Person.id.label("p_id_a"),
+                Person.name.label("p_name"),
+                Person.vorname.label("p_forename"),
+                Person.ort.label("p_place"),
+                recent_receiver.c.id_person.label("p_id_b"),
+                recent_receiver.c.id_brief.label("id_a"))\
+            .join(recent_receiver, recent_receiver.c.id_person == Person.id)\
+            .filter(or_(Person.name == 'Bullinger', Person.name == name) if name else True)\
+            .filter(or_(Person.vorname == 'Heinrich', Person.vorname == prename) if prename else True)\
+            .filter(or_(Person.ort == 'Zürich', Person.ort == location) if location else True)\
+            .subquery().alias("p2")
+        results = db.session.query(
+            Datum.id_brief,  # 0
+            Datum.jahr_a,
+            Datum.monat_a,
+            Datum.tag_a,
+            p1.c.id_a,
+            p1.c.p_id_b,
+            p1.c.p_name, # 6
+            p1.c.p_forename,
+            p1.c.p_place,
+            p2.c.id_a,
+            p2.c.p_id_b,
+            p2.c.p_name,  # 11
+            p2.c.p_forename,
+            p2.c.p_place)\
+        .join(p1, p1.c.id_a == Datum.id_brief)\
+        .join(p2, p2.c.id_a == Datum.id_brief)
+        data = dict()
+        for r in results:
+            data[r[0]] = dict()
+            data[r[0]]["year"] = r[1] if r[1] else 0,
+            data[r[0]]["month"] = r[2] if r[2] else 0,
+            data[r[0]]["day"] = r[3] if r[3] else 0,
+            if r[6] == "Bullinger" and r[7] == "Heinrich" and r[8] == "Zürich":
+                data[r[0]]["name"] = r[11] if r[11] else Config.SN,
+                data[r[0]]["forename"] = r[12] if r[12] else Config.SN,
+                data[r[0]]["location"] = r[13] if r[13] else Config.SN,
+                data[r[0]]["is_sender"] = True
+            else:
+                data[r[0]]["name"] = r[6] if r[6] else Config.SN,
+                data[r[0]]["forename"] = r[7] if r[7] else Config.SN,
+                data[r[0]]["place"] = r[8] if r[8] else Config.SN,
+                data[r[0]]["is_sender"] = False
+        return data
+        """
+
+
+    @staticmethod
+    def get_persons_as_autosuggestion():
+        pass
+        """
+        recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
+        recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
+        # sender
+        p1 = db.session.query(
+            Person.id.label("p_id_a"),
+            Person.name.label("p_name"),
+            Person.vorname.label("p_forename"),
+            Person.ort.label("p_place"),
+            func.count(Person.id).label("s_count"),
+            literal(0).label("r_count"),
+            recent_sender.c.id_brief.label("id_a"),
+            recent_sender.c.id_person.label("p_id_b")) \
+            .join(recent_sender, recent_sender.c.id_person == Person.id) \
+            .group_by(Person.name, Person.vorname, Person.ort)
+        # receiver
+        p2 = db.session.query(
+            Person.id.label("p_id_a"),
+            Person.name.label("p_name"),
+            Person.vorname.label("p_forename"),
+            Person.ort.label("p_place"),
+            literal(0).label("s_count"),
+            func.count(Person.id).label("r_count"),
+            recent_receiver.c.id_brief.label("id_a"),
+            recent_receiver.c.id_person.label("p_id_b")) \
+            .filter(
+            Person.name == variable if mode is 0
+            else Person.vorname == variable if mode is 1
+            else Person.ort == variable if mode is 2
+            else True) \
+            .join(recent_receiver, recent_receiver.c.id_person == Person.id) \
+            .group_by(Person.name, Person.vorname, Person.ort)
+        # full outer join and sum over groups
+        p_all = union_all(p1, p2).alias("united")
+        results = db.session.query(
+            p_all.c.p_name,
+            p_all.c.p_forename,
+            p_all.c.p_place,
+            func.sum(p_all.c.s_count),
+            func.sum(p_all.c.r_count)
+        ).group_by(
+            p_all.c.p_name,
+            p_all.c.p_forename,
+            p_all.c.p_place
+        ).order_by(desc(func.sum(p_all.c.s_count)))
+        return [[r[0] if r[0] else Config.SN,
+                 r[1] if r[1] else Config.SN,
+                 r[2] if r[2] else Config.SL, r[3], r[4]] for r in results]
+        """

@@ -103,7 +103,7 @@ class Absender(db.Model):
     anwender = db.Column(db.String(LENGTH_S))
     zeit = db.Column(db.String(LENGTH_S))
 
-    def __init__(self, id_brief=None, id_person=None, not_verified=True, remark=None, user=None, time=datetime.now()):
+    def __init__(self, id_brief=None, id_person=None, not_verified=None, remark=None, user=None, time=datetime.now()):
         self.id_brief = id_brief
         self.id_person = id_person
         self.nicht_verifiziert = not_verified
@@ -126,7 +126,7 @@ class Empfaenger(db.Model):
     anwender = db.Column(db.String(LENGTH_S))
     zeit = db.Column(db.String(LENGTH_S))
 
-    def __init__(self, id_brief=None, id_person=None, not_verified=True, remark=None, user=None, time=datetime.now()):
+    def __init__(self, id_brief=None, id_person=None, not_verified=None, remark=None, user=None, time=datetime.now()):
         self.id_brief = id_brief
         self.id_person = id_person
         self.nicht_verifiziert = not_verified
@@ -145,21 +145,20 @@ class Person(db.Model):
     name = db.Column(db.String(LENGTH_M))
     vorname = db.Column(db.String(LENGTH_M))
     ort = db.Column(db.String(LENGTH_M))
-    empfangen = db.Column(db.Integer)
-    gesendet = db.Column(db.Integer)
+    wiki_url = db.Column(db.String(LENGTH_M))
+    photo = db.Column(db.String(LENGTH_M))
     anwender = db.Column(db.String(LENGTH_S))
     zeit = db.Column(db.String(LENGTH_S))
 
     def __init__(
-        self, name=None, forename=None, place=None, remark=None,
-        received=0, sent=0, user=None, time=datetime.now()
+        self, name=None, forename=None, place=None, remark=None, wiki_url=None, photo=None, user=None, time=datetime.now()
     ):
         self.name = name
         self.vorname = forename
         self.ort = place
         self.bemerkung = remark
-        self.empfangen = received
-        self.gesendet = sent
+        self.wiki_url = wiki_url
+        self.photo = photo
         self.anwender = user
         self.zeit = time
 
@@ -335,9 +334,9 @@ class User(UserMixin, db.Model):
         user = User.query.filter_by(username=user).first()
         if user:
             user.changes += number_of_changes
-            if new_state == Config.S_FINISHED and new_state != old_state:
+            if old_state != Config.S_FINISHED and new_state == Config.S_FINISHED:
                 user.finished += 1
-        database.commit()
+            database.commit()
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
