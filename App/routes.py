@@ -89,6 +89,17 @@ def delete_user(username):
     logout_user()
     return redirect(url_for('login', next=request.url))
 
+@app.route('/admin/print_user', methods=['POST', 'GET'])
+@login_required
+def print_user():
+    if is_admin():
+        users = User.query.all()
+        with open("Data/usr.txt", 'w') as f:
+            for u in users:
+                f.write(" - ".join([u.username, u.e_mail, u.password_hash])+'\n')
+        return redirect(url_for('admin.index'))
+    return redirect(url_for('login', next=request.url))
+
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     BullingerDB.track(current_user.username, '/login', datetime.now())
@@ -387,26 +398,44 @@ def assignment(id_brief):
         card_index=id_brief,
         html_content=html_content)
 
+# 1
 @app.route('/api/wiki_data/<id_brief>', methods=['GET'])
-def send_wiki_data(id_brief):
+def send_wiki_data_by_id(id_brief):
+    link = None
     r = Empfaenger.query.filter_by(id_brief=id_brief).order_by(desc(Empfaenger.zeit)).first()
     receiver = Person.query.get(r.id_person) if r else None
     r_wiki_url, r_photo = "", ""
     if receiver:
         p = Person.query.filter_by(name=receiver.name, vorname=receiver.vorname, ort=receiver.ort).first()
         r_wiki_url, r_photo = p.wiki_url, p.photo
+        if receiver.name != 'Bullinger': link = receiver.name
     s = Absender.query.filter_by(id_brief=id_brief).order_by(desc(Absender.zeit)).first()
     sender = Person.query.get(s.id_person) if s else None
     s_wiki_url, s_photo = "", ""
     if sender:
         p = Person.query.filter_by(name=sender.name, vorname=sender.vorname, ort=sender.ort).first()
         s_wiki_url, s_photo = p.wiki_url, p.photo
-    link = sender.name if sender.name != 'Bullinger' else receiver.name
+        if sender.name != 'Bullinger': link = sender.name
     return jsonify({
         "s_wiki_url": s_wiki_url,
         "s_photo_url": s_photo,
         "r_wiki_url": r_wiki_url,
         "r_photo_url": r_photo,
+        "url_person_overview": "/overview/person_by_name/" + link if link else 's.n.'
+    })
+
+# 2
+@app.route('/api/wiki_data/<name>/<forename>/<location>', methods=['GET'])
+def send_wiki_data_by_address(name, forename, location):
+    link = None
+    wiki_url, photo_url = "", ""
+    r = Person.query.filter_by(name=name, vorname=forename, ort=location).first()
+    if r:
+        wiki_url, photo_url = r.wiki_url, r.photo
+        link = r.name
+    return jsonify({
+        "wiki_url": wiki_url,
+        "photo_url": photo_url,
         "url_person_overview": "/overview/person_by_name/" + link if link else 's.n.'
     })
 
