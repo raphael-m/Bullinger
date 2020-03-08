@@ -439,6 +439,25 @@ def send_wiki_data_by_address(name, forename, location):
         "url_person_overview": "/overview/person_by_name/" + link if link else 's.n.'
     })
 
+
+# 3
+@app.route('/api/wiki_data/<name>/<forename>', methods=['GET'])
+def send_wiki_data_by_address_3(name, forename):
+    link = None
+    wiki_url, photo_url = "", ""
+    pers = Person.query.filter_by(name=name, vorname=forename).all()
+    for r in pers:
+        link = r.name
+        if r.wiki_url or r.photo:
+            wiki_url, photo_url = r.wiki_url, r.photo
+            break
+    return jsonify({
+        "wiki_url": wiki_url,
+        "photo_url": photo_url,
+        "url_person_overview": "/overview/person_by_name/" + link if link else 's.n.'
+    })
+
+
 @app.route('/api/assignments/<id_brief>', methods=['GET'])
 @login_required
 def send_data(id_brief):
