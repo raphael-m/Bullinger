@@ -5,8 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6d2cb28e-bb45-42c9-b203-59c8af68dfbb" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/App/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/routes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/templates/faq.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/faq.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data/usr.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Data/usr.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Karteikarten/errors/31_1_4101_Karteikarten_HBBW 1547-10-01_1575.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Karteikarten/errors/31_1_4101_Karteikarten_HBBW 1547-10-01_1575.pdf" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,20 +20,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Data/wiki_links.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="576">
-              <caret line="163" column="4" selection-start-line="163" selection-start-column="4" selection-end-line="163" selection-end-column="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/App/routes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="96" column="36" selection-start-line="96" selection-start-column="36" selection-end-line="96" selection-end-column="36" />
+            <state relative-caret-position="337">
+              <caret line="444" column="30" selection-start-line="444" selection-start-column="30" selection-end-line="444" selection-end-column="30" />
               <folding>
                 <element signature="e#172#206#0" expanded="true" />
               </folding>
@@ -61,76 +53,18 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Data/usr.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/App/templates/faq.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="217" column="18" lean-forward="true" selection-start-line="217" selection-start-column="18" selection-end-line="217" selection-end-column="18" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Doku/DB/notes.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="354">
-              <caret line="136" column="24" lean-forward="true" selection-start-line="136" selection-start-column="24" selection-end-line="136" selection-end-column="24" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Doku/Signaturen/ZZB.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="18" column="20" lean-forward="true" selection-start-line="18" selection-start-column="20" selection-end-line="18" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Tools/BullingerData.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="103">
-              <caret line="265" column="37" selection-start-line="265" selection-start-column="37" selection-end-line="265" selection-end-column="37" />
-              <folding>
-                <element signature="e#170#194#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/templates/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="38" column="67" selection-start-line="38" selection-start-column="67" selection-end-line="38" selection-end-column="67" />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Rappoltstein</find>
       <find>Sulzer</find>
       <find>Ehinger</find>
       <find>Brunner</find>
@@ -159,6 +93,7 @@
       <find>bis er mit der</find>
       <find>Falls Sie das</find>
       <find>vo</find>
+      <find>Nachname</find>
       <find>ssh</find>
     </findStrings>
   </component>
@@ -168,7 +103,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/App/templates/quickstart.html" />
         <option value="$PROJECT_DIR$/App/templates/overview_languages.html" />
         <option value="$PROJECT_DIR$/App/forms.py" />
         <option value="$PROJECT_DIR$/App/static/css/form.css" />
@@ -214,17 +148,18 @@
         <option value="$PROJECT_DIR$/Tools/BullingerDB.py" />
         <option value="$PROJECT_DIR$/Data/persons.txt" />
         <option value="$PROJECT_DIR$/App/templates/index.html" />
-        <option value="$PROJECT_DIR$/App/routes.py" />
         <option value="$PROJECT_DIR$/setup.txt" />
         <option value="$PROJECT_DIR$/Doku/Signaturen/ZZB.txt" />
         <option value="$PROJECT_DIR$/Data/usr.txt" />
+        <option value="$PROJECT_DIR$/Tools/pdf_splitter.py" />
         <option value="$PROJECT_DIR$/App/templates/faq.html" />
+        <option value="$PROJECT_DIR$/App/routes.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds">
     <option name="y" value="23" />
-    <option name="width" value="868" />
+    <option name="width" value="1440" />
     <option name="height" value="828" />
   </component>
   <component name="ProjectLevelVcsManager">
@@ -250,17 +185,23 @@
             <path>
               <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
               <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
-              <item name="Data" type="462c0819:PsiDirectoryNode" />
+              <item name="Karteikarten" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
               <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
-              <item name="Doku" type="462c0819:PsiDirectoryNode" />
+              <item name="Karteikarten" type="462c0819:PsiDirectoryNode" />
+              <item name="errors" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
               <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
               <item name="Tools" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
+              <item name="Trash" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -279,11 +220,11 @@
       <recent name="$PROJECT_DIR$" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Karteikarten" />
       <recent name="$PROJECT_DIR$/Doku/Signaturen" />
       <recent name="$PROJECT_DIR$/Trash" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/Tools/ocr_models" />
-      <recent name="$PROJECT_DIR$/App/static/images/icons" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -344,17 +285,17 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="828" extended-state="6" />
+    <frame x="0" y="23" width="1440" height="828" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" sideWeight="0.38134432" side_tool="true" weight="0.32959852" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.6186557" visible="true" weight="0.26215646" />
+      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.6186557" visible="true" weight="0.22410148" />
       <window_info id="Structure" order="2" sideWeight="0.15205725" side_tool="true" weight="0.29495615" />
-      <window_info anchor="bottom" id="Terminal" order="0" visible="true" weight="0.20244566" />
+      <window_info anchor="bottom" id="Terminal" order="0" weight="0.20244566" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="2" weight="0.32967034" />
       <window_info anchor="bottom" id="Message" order="3" />
-      <window_info anchor="bottom" id="Find" order="4" weight="0.40952381" />
+      <window_info active="true" anchor="bottom" id="Find" order="4" visible="true" weight="0.11277174" />
       <window_info anchor="bottom" id="Version Control" order="5" weight="0.32967034" />
       <window_info anchor="bottom" id="Run" order="6" weight="0.31178162" />
       <window_info anchor="bottom" id="Debug" order="7" weight="0.4" />
@@ -367,14 +308,6 @@
     </layout>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Trash/assignment.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-24" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/static/js/package.json">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/Trash/load.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-256" />
@@ -614,16 +547,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/routes.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="96" column="36" selection-start-line="96" selection-start-column="36" selection-end-line="96" selection-end-column="36" />
-          <folding>
-            <element signature="e#172#206#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2086">
@@ -640,14 +563,14 @@
     <entry file="file://$PROJECT_DIR$/Doku/DB/notes.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="354">
-          <caret line="136" column="24" lean-forward="true" selection-start-line="136" selection-start-column="24" selection-end-line="136" selection-end-column="24" />
+          <caret line="136" column="24" selection-start-line="136" selection-start-column="24" selection-end-line="136" selection-end-column="24" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Doku/Signaturen/ZZB.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
-          <caret line="18" column="20" lean-forward="true" selection-start-line="18" selection-start-column="20" selection-end-line="18" selection-end-column="20" />
+          <caret line="18" column="20" selection-start-line="18" selection-start-column="20" selection-end-line="18" selection-end-column="20" />
         </state>
       </provider>
     </entry>
@@ -661,6 +584,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Data/usr.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="23" selection-start-line="23" selection-end-line="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tools/pdf_splitter.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tools/Pdf2jpg.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" column="58" selection-start-line="19" selection-start-column="30" selection-end-line="19" selection-end-column="58" />
+          <folding>
+            <element signature="e#116#155#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/faq.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="145">
+          <caret line="102" column="125" selection-start-line="102" selection-start-column="125" selection-end-line="102" selection-end-column="125" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/setup.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="750">
@@ -668,17 +622,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Data/usr.txt">
+    <entry file="file://$PROJECT_DIR$/App/routes.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/faq.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="217" column="18" lean-forward="true" selection-start-line="217" selection-start-column="18" selection-end-line="217" selection-end-column="18" />
+        <state relative-caret-position="337">
+          <caret line="444" column="30" selection-start-line="444" selection-start-column="30" selection-end-line="444" selection-end-column="30" />
+          <folding>
+            <element signature="e#172#206#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
