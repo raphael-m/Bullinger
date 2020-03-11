@@ -294,7 +294,8 @@ class BullingerDB:
                       Bemerkung, Notiz]:
                 self.dbs.query(t).filter_by(anwender=username).delete()
             self.dbs.query(Tracker).filter_by(username=username).delete()
-            self.dbs.query(User).filter_by(username=username).delete()
+            u = self.dbs.query(User).filter_by(username=username).first()
+            u.password_hash = 'invalid'
             self.dbs.commit()
 
     @staticmethod

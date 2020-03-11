@@ -631,8 +631,21 @@ def post_process():
     BullingerDB.post_process_db()
     return jsonify(BullingerDB.get_persons_by_var(None, None))
 
+"""
+@app.route('/admin/convert_images', methods=['GET'])
+def convert_to_images():
+    input_path = "Karteikarten/PDF_new"
+    output_path = "Karteikarten/PNG_new/HBBW_Karteikarte_"
+    # output_path = "App/static/cards/HBBW_Karteikarte_"
 
-
+    i = 1
+    for file in FileSystem.get_file_paths(input_path):
+        for page in convert_from_path(file, 600):
+            print(file)
+            path = output_path+(5-len(str(i)))*'0'+str(i)+'.png'
+            page.save(path, 'PNG')
+            i += 1
+"""
 
 '''
 @app.route('/api/print_nn_vn_pairs', methods=['GET'])
