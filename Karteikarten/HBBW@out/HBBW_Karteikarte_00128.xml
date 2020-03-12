@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<alto xmlns="http://www.loc.gov/standards/alto/ns-v2#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/standards/alto/ns-v2# http://www.loc.gov/standards/alto/alto-v2.0.xsd">
+<Description>
+<MeasurementUnit>pixel</MeasurementUnit>
+<OCRProcessing ID="IdOcr"><ocrProcessingStep><processingDateTime>2020-03-10</processingDateTime><processingSoftware><softwareCreator>ABBYY</softwareCreator><softwareName>ABBYY Recognition Server</softwareName><softwareVersion>4.0</softwareVersion></processingSoftware></ocrProcessingStep></OCRProcessing>
+</Description>
+<Styles>
+<ParagraphStyle ID="StyleId-FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0."/>
+<ParagraphStyle ID="StyleId-F923EBD3-F33E-437A-B793-70EC3A5F4B9F-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="13.60000038"/>
+</Styles>
+<Layout>
+<Page ID="Page1" PHYSICAL_IMG_NR="1" HEIGHT="7044" WIDTH="9932">
+<TopMargin HEIGHT="268" WIDTH="9932" VPOS="0" HPOS="0">
+</TopMargin>
+<LeftMargin HEIGHT="3828" WIDTH="536" VPOS="268" HPOS="0">
+</LeftMargin>
+<RightMargin HEIGHT="3828" WIDTH="632" VPOS="268" HPOS="9300">
+</RightMargin>
+<BottomMargin HEIGHT="2948" WIDTH="9932" VPOS="4096" HPOS="0">
+</BottomMargin>
+<PrintSpace HEIGHT="3828" WIDTH="8764" VPOS="268" HPOS="536">
+<TextBlock ID="Page1_Block1" HEIGHT="1340" WIDTH="7516" VPOS="268" HPOS="536" language="de" STYLEREFS="StyleId-F923EBD3-F33E-437A-B793-70EC3A5F4B9F-">
+<TextLine BASELINE="436" HEIGHT="160" WIDTH="1456" VPOS="294" HPOS="562"><String CONTENT="lirweiskarte" HEIGHT="160" WIDTH="1456" VPOS="294" HPOS="562"/></TextLine>
+<TextLine BASELINE="826" HEIGHT="228" WIDTH="7452" VPOS="654" HPOS="578"><String CONTENT="1548" HEIGHT="172" WIDTH="464" VPOS="706" HPOS="578"/><SP WIDTH="134" VPOS="706" HPOS="1043"/><String CONTENT="Mai" HEIGHT="152" WIDTH="356" VPOS="706" HPOS="1178"/><SP WIDTH="146" VPOS="706" HPOS="1535"/><String CONTENT="20.(Pfingsten)" HEIGHT="204" WIDTH="1672" VPOS="678" HPOS="1682"/><SP WIDTH="878" VPOS="678" HPOS="3355"/><String CONTENT="Vadian" HEIGHT="156" WIDTH="748" VPOS="682" HPOS="4234"/><SP WIDTH="1958" VPOS="666" HPOS="4983"/><String CONTENT="Büllinger" HEIGHT="184" WIDTH="1088" VPOS="654" HPOS="6942"/></TextLine>
+<TextLine BASELINE="1256" HEIGHT="152" WIDTH="680" VPOS="1114" HPOS="586"><String CONTENT="siehe:" HEIGHT="152" WIDTH="680" VPOS="1114" HPOS="586"/></TextLine>
+<TextLine BASELINE="1563" HEIGHT="176" WIDTH="2388" VPOS="1410" HPOS="582"><String CONTENT="1549" HEIGHT="176" WIDTH="476" VPOS="1410" HPOS="582"/><SP WIDTH="126" VPOS="1410" HPOS="1059"/><String CONTENT="Juni" HEIGHT="152" WIDTH="476" VPOS="1414" HPOS="1186"/><SP WIDTH="146" VPOS="1410" HPOS="1663"/><String CONTENT="9." HEIGHT="172" WIDTH="192" VPOS="1410" HPOS="1810"/><SP WIDTH="574" VPOS="1470" HPOS="2003"/><String CONTENT="&apos;." HEIGHT="100" WIDTH="392" VPOS="1470" HPOS="2578"/></TextLine>
+</TextBlock>
+<TextBlock ID="Page1_Block2" HEIGHT="472" WIDTH="5672" VPOS="3624" HPOS="3628" language="de" STYLEREFS="StyleId-F923EBD3-F33E-437A-B793-70EC3A5F4B9F-">
+<TextLine BASELINE="3822" HEIGHT="220" WIDTH="3496" VPOS="3650" HPOS="3666"><String CONTENT="erw.(mit" HEIGHT="192" WIDTH="948" VPOS="3678" HPOS="3666"/><SP WIDTH="150" VPOS="3690" HPOS="4615"/><String CONTENT="falscher" HEIGHT="148" WIDTH="964" VPOS="3686" HPOS="4766"/><SP WIDTH="134" VPOS="3682" HPOS="5731"/><String CONTENT="Datierung):" HEIGHT="200" WIDTH="1296" VPOS="3650" HPOS="5866"/></TextLine>
+<TextLine BASELINE="4015" HEIGHT="244" WIDTH="5624" VPOS="3830" HPOS="3654"><String CONTENT="Schieß," HEIGHT="172" WIDTH="824" VPOS="3902" HPOS="3654"/><SP WIDTH="154" VPOS="3902" HPOS="4479"/><String CONTENT="B&apos;sBW" HEIGHT="148" WIDTH="612" VPOS="3894" HPOS="4634"/><SP WIDTH="118" VPOS="3894" HPOS="5247"/><String CONTENT="mit" HEIGHT="148" WIDTH="356" VPOS="3882" HPOS="5366"/><SP WIDTH="126" VPOS="3886" HPOS="5723"/><String CONTENT="Vadian," HEIGHT="176" WIDTH="840" VPOS="3878" HPOS="5850"/><SP WIDTH="162" VPOS="3866" HPOS="6691"/><String CONTENT="in:" HEIGHT="144" WIDTH="312" VPOS="3866" HPOS="6854"/><SP WIDTH="162" VPOS="3870" HPOS="7167"/><String CONTENT="JSG" HEIGHT="152" WIDTH="356" VPOS="3862" HPOS="7330"/><SP WIDTH="146" VPOS="3854" HPOS="7687"/><String CONTENT="31,1906,S.56" HEIGHT="200" WIDTH="1444" VPOS="3830" HPOS="7834"/></TextLine>
+</TextBlock><GraphicalElement ID="Page1_Block3" HEIGHT="32" WIDTH="620" VPOS="1288" HPOS="560"/>
+</PrintSpace>
+</Page>
+</Layout>
+</alto>

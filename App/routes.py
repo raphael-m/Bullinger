@@ -75,7 +75,7 @@ def admin():
 @app.route('/admin/setup', methods=['POST', 'GET'])
 def setup():
     if is_admin():
-        BullingerDB(db.session).setup("Karteikarten/OCR")  # ~1h
+        BullingerDB(db.session).setup("Karteikarten/HBBW@out")  # ~1h
         return redirect(url_for('index'))
     logout_user()
     return redirect(url_for('login', next=request.url))

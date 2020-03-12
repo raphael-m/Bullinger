@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<alto xmlns="http://www.loc.gov/standards/alto/ns-v2#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/standards/alto/ns-v2# http://www.loc.gov/standards/alto/alto-v2.0.xsd">
+<Description>
+<MeasurementUnit>pixel</MeasurementUnit>
+<OCRProcessing ID="IdOcr"><ocrProcessingStep><processingDateTime>2020-03-10</processingDateTime><processingSoftware><softwareCreator>ABBYY</softwareCreator><softwareName>ABBYY Recognition Server</softwareName><softwareVersion>4.0</softwareVersion></processingSoftware></ocrProcessingStep></OCRProcessing>
+</Description>
+<Styles>
+<ParagraphStyle ID="StyleId-FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0."/>
+</Styles>
+<Layout>
+<Page ID="Page1" PHYSICAL_IMG_NR="1" HEIGHT="10161" WIDTH="7390">
+<BottomMargin HEIGHT="5" WIDTH="7390" VPOS="10156" HPOS="0">
+</BottomMargin>
+<PrintSpace HEIGHT="10156" WIDTH="7390" VPOS="0" HPOS="0">
+<Illustration ID="Page1_Block1" HEIGHT="10156" WIDTH="7390" VPOS="0" HPOS="0"><Shape><Polygon POINTS="0,0 7390,0 7390,8972 6964,8972 6964,9884 6968,9884 6968,10156 436,10156 436,8068 0,8068 0,0"/></Shape></Illustration><GraphicalElement ID="Page1_Block2" HEIGHT="1232" WIDTH="64" VPOS="7248" HPOS="4652"/><GraphicalElement ID="Page1_Block3" HEIGHT="836" WIDTH="44" VPOS="8860" HPOS="4652"/><GraphicalElement ID="Page1_Block4" HEIGHT="684" WIDTH="32" VPOS="2620" HPOS="5616"/><GraphicalElement ID="Page1_Block5" HEIGHT="796" WIDTH="32" VPOS="3028" HPOS="5820"/><GraphicalElement ID="Page1_Block6" HEIGHT="784" WIDTH="40" VPOS="5248" HPOS="6308"/>
+</PrintSpace>
+</Page>
+</Layout>
+</alto>
