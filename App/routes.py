@@ -94,9 +94,12 @@ def delete_user(username):
 def print_user():
     if is_admin():
         users = User.query.all()
-        with open("Data/usr.txt", 'w') as f:
+        with open("Data/user_data.txt", 'w') as f:
             for u in users:
                 f.write(" - ".join([u.username, u.e_mail, u.password_hash])+'\n')
+        with open("Data/user_addresses.txt", 'w') as f:
+            for u in users:
+                f.write(u.e_mail+'\n')
         return redirect(url_for('admin.index'))
     return redirect(url_for('login', next=request.url))
 
@@ -630,6 +633,202 @@ def get_persons_all():
 def post_process():
     BullingerDB.post_process_db()
     return jsonify(BullingerDB.get_persons_by_var(None, None))
+
+
+@app.route('/admin/run_corrections', methods=['GET'])
+@login_required
+def run_corrections():
+    if is_admin():
+        name_corrections_general = [
+            [[None, "Matthias", "Reichenweier"], ["Erb", "Matthias", "Reichenweier"]],
+            [[None, "Mathias", "Reichenweier"], ["Erb", "Mathias", "Reichenweier"]],
+            [[None, "Mathias", "Rappoltsweiler"], ["Erb", "Mathias", "Rappoltsweiler"]],
+            [[None, "Matthias", "Rappoltsweiler"], ["Erb", "Matthias", "Rappoltsweiler"]],
+            [[None, "Mathias", None], ["Erb", "Mathias", None]],
+            [[None, "Richard", "London"], ["Cox", "Richard", "London"]],
+            [[None, "Richard", "Westminster"], ["Cox", "Richard", "Westminster"]],
+            [[None, "Richard", None], ["Cox", "Richard", None]],
+            [["Chur", None, None], ["Egli", "Tobias", None]],
+            [["Schlüsselberger", None, "Girenbad"], ["Schlüsselberger", "Gabriel", "Girenbad"]],
+            [[None, "Stetten Georg", "Augsburg"], ["von Stetten", "Georg", "Augsburg"]],
+            [["Stetten", "Georg rem", "Augsburg"], ["von Stetten", "Georg", "Augsburg"]],
+            [["Stetten", "Georg vog", "Augsburg"], ["von Stetten", "Georg", "Augsburg"]],
+            [["Stetten", "Georg rem", "Augsburg"], ["von Stetten", "Georg", "Augsburg"]],
+            [["Stottern", "Georg vom", "Augsburg"], ["von Stetten", "Georg", "Augsburg"]],
+            [["Johannes", "Georgiern", "Bern"], ["Haller", "Johannes", "Bern"]],
+            [["", "Johannes", "Bern"], ["Haller", "Johannes", "Bern"]],
+            [[None, "Lasco Johannes", "London"], ["Lasco", "Johannes", "Bern"]],
+            [[None, "Lasco Johannes", "Emden"], ["Lasco", "Johannes", "Emden"]],
+            [["Stetten", "Georg Ton", "Augsburg"], ["von Stetten", "Georg", "Augsburg"]],
+            [[None, "Bellievre Jean", "Augsburg"], ["de Bellièvre", "Jean", "Solothurn"]],
+            [[None, "Antorff Antwerpen", "Neue Zeitung"], ["Uss", "Antorff (Antwerpen)", "(Neue Zeitung)"]],
+            [[None, "Chur", "Neue Zeitung"], ["Uss", "Chur", "Neue Zeitung"]],
+            [[None, "Stetten Georg dJ", "Augsburg"], ["von Stetten", "Georg der Jüngere", "Augsburg"]],
+            [[None, "Wittgenstein Ludwig", "Heidelberg"], ["Wittgenstein", "Ludwig", "Heidelberg"]],
+            [[None, "llicius Philipp", "Chur"], ["Gallicius", "Philipp", "Chur"]],
+            [[None, "lvin Johannes", "Genf"], ["Calvin", "Johannes", "Genf"]],
+            [["BlarerAmbrosius", None, "Winterthur"], ["Blarer", "Ambrosius", "Winterthur"]],
+            [["Schenk", None, "Augsburg"], ["Schenck", "Matthias", "Augsburg"]],
+            [["Sozin", None, "Basel"], ["Sozin", "Laelius", "Basel"]],
+            [["StGallen", "Prediger", "St. Gallen"], ["Prediger", None, "St. Gallen"]],
+            [["StGaller", "Prediger", "St. Gallen"], ["Prediger", None, "St. Gallen"]],
+            [["StGaller", "Geistliche", "St. Gallen"], ["Geistliche", None, "St. Gallen"]],
+            [["firner", "Johann Konrad", "Schaffhausen"], ["firner", "Johann Konrad", "Ulmer"]],
+            [["luSlnger", "Bs Rudolf", None], ["Bullinger", "Hans Rudolf", None]],
+            [["luiliier", "Hans Rudolf", None], ["Bullinger", "Hans Rudolf", None]],
+            [["lullInger", "Haus Rudelf", None], ["Bullinger", "Hans Rudolf", None]],
+            [["lullInger", "Sans Budelf", None], ["Bullinger", "Hans Rudolf", None]],
+            [["lullingr", "Harns Bmdelf", None], ["Bullinger", "Hans Rudolf", None]],
+            [["lulllager", "ams Rudolf", None], ["Bullinger", "Hans Rudolf", None]],
+        ]
+        name_corrections = [
+            [['Efll', 'feil'], ['Egli']],
+            [['Finok'], ['Finck']],
+            [['Schüler'], ['Schuler']],
+            [['Fabrieus', 'Fabriim', 'Fihbri', 'Fabrieins', 'Fabrieiu', 'Fabrlelms', 'Fafcrieius', 'Fahriims'], ['Fabricius']],
+            [['Beilvre', 'BeliiSvre', 'BelliSvre', 'Bellilve'], ['de Bellièvre']],
+            [['BircJmann', 'Bircftmann', 'Bircjpnann', 'Bircjtmann', 'Bircjtmann', 'Bircmann', 'Birermann', 'Bjfrrcmann'], ['Birckmann']]
+        ]
+        forename_corrections = [
+            [['Matblas', 'Mathfcls', 'Mattblas', 'Mehlas'], ['Mathias']],
+            [['Tkeoder', 'Hheodor'], ['Theodor']],
+            [['Tpbias'], ['Tobias']],
+            [['Victcr'], ['Victor']],
+            [['Jeharmes', 'Jekazmes', 'Jokajmes', 'Jokämme', 'Jokannee', 'Joknnss', 'Jokaaae', 'Jakaanea', 'Jekeaaes', 'Jeharmes', 'Jehaaaea', 'Jokanaes'], ['Johannes']],
+        ]
+        place_corrections = [
+            [['Cttujf', 'Cjbur', 'Gbur', 'tfhur', 'CL uv', 'CU w', 'Chfir', 'Chjpft', 'Ckar', 'Qiur', 'Cbra'], ['Chur']],
+            [['Saanen'], ['Samaden']],
+            [['Gi ef', 'Gjf', 's l Genf'], ['Genf']],
+            [['S l', 'S t Xe', 's'], [None]]
+        ]
+        with open("Data/name_corr.txt", 'w') as f:
+            for pair in name_corrections_general:
+                fp = Person.query.filter_by(name=pair[0][0], vorname=pair[0][1], ort=pair[0][2]).all()
+                if fp:
+                    np = Person.query.filter_by(name=pair[1][0], vorname=pair[1][1], ort=pair[1][2]).first()
+                    if not np:
+                        np = Person(name=pair[1][0], forename=pair[1][1], place=pair[1][2], user=Config.ADMIN, time=datetime.now())
+                        db.session.add(np)
+                        db.session.commit()
+                        np = Person.query.filter_by(name=pair[1][0], vorname=pair[1][1], ort=pair[1][2]).first()
+                        f.write('NEW: '+(pair[1][0] if pair[1][0] else 's.n.')+", "+(pair[1][1] if pair[1][1] else 's.n.')+", "+(pair[1][2] if pair[1][2] else 's.l.')+"\n")
+                    for p in fp:
+                        f.write((p.name if p.name else 's.n.')+', '+(p.vorname if p.vorname else 's.n.')+', '+(p.ort if p.ort else 's.l.')+'\t-->\t'+(np.name if np.name else 's.n.')+', '+(np.vorname if np.vorname else 's.n.')+', '+(np.ort if np.ort else 's.l.')+"\n")
+                        for e in Empfaenger.query.filter_by(id_person=p.id).all():
+                            e.id_person = np.id
+                            db.session.commit()
+                            f.write('changed Empfänger on #'+str(e.id_brief)+".\n")
+                        for a in Absender.query.filter_by(id_person=p.id).all():
+                            a.id_person = np.id
+                            db.session.commit()
+                            f.write('changed Absender on #' + str(a.id_brief)+".\n")
+
+            for pair in name_corrections:
+                for n in pair[0]:
+                    for p in Person.query.filter_by(name=n).all():
+                        np = Person.query.filter_by(name=pair[1][0], vorname=p.vorname, ort=p.ort).first()
+                        if not np:
+                            np = Person(name=pair[1][0], forename=p.vorname, place=p.ort, user=Config.ADMIN, time=datetime.now())
+                            db.session.add(np)
+                            db.session.commit()
+                            np = Person.query.filter_by(name=pair[1][0], vorname=p.vorname, ort=p.ort).first()
+                            f.write('NEW: '+pair[1][0]+", "+(np.vorname if np.vorname else 's.n.')+", "+(np.ort if np.ort else 's.l.')+"\n")
+                        f.write((p.name if p.name else 's.n.')+', '+(p.vorname if p.vorname else 's.n.')+', '+(p.ort if p.ort else 's.l.')+'\t-->\t'+pair[1][0]+", "+(p.vorname if p.vorname else 's.n.')+", "+(p.ort if p.ort else 's.l.')+"\n")
+                        for e in Empfaenger.query.filter_by(id_person=p.id).all():
+                            e.id_person = np.id
+                            db.session.commit()
+                            f.write('changed Empfänger on #'+str(e.id_brief)+".\n")
+                        for a in Absender.query.filter_by(id_person=p.id).all():
+                            a.id_person = np.id
+                            db.session.commit()
+                            f.write('changed Absender on #' + str(a.id_brief)+".\n")
+
+            for pair in forename_corrections:
+                for n in pair[0]:
+                    for p in Person.query.filter_by(vorname=n).all():
+                        np = Person.query.filter_by(name=p.name, vorname=pair[1][0], ort=p.ort).first()
+                        if not np:
+                            np = Person(name=p.name, forename=pair[1][0], place=p.ort, user=Config.ADMIN, time=datetime.now())
+                            db.session.add(np)
+                            db.session.commit()
+                            np = Person.query.filter_by(name=p.name, vorname=pair[1][0], ort=p.ort).first()
+                            f.write('NEW: '+(p.name if p.name else 's.n.')+", "+pair[1][0]+", "+(np.ort if p.ort else 's.l.')+"\n")
+                        f.write((p.name if p.name else 's.n.')+', '+(p.vorname if p.vorname else 's.n.')+', '+(p.ort if p.ort else 's.l.')+'\t-->\t'+(p.name if p.name else 's.n.')+", "+pair[1][0]+", "+(p.ort if p.ort else 's.l.')+"\n")
+                        for e in Empfaenger.query.filter_by(id_person=p.id).all():
+                            e.id_person = np.id
+                            db.session.commit()
+                            f.write('changed Empfänger on card #'+str(e.id_brief)+".\n")
+                        for a in Absender.query.filter_by(id_person=p.id).all():
+                            a.id_person = np.id
+                            db.session.commit()
+                            f.write('changed Absender on card #' + str(a.id_brief)+".\n")
+
+            for pair in place_corrections:
+                for n in pair[0]:
+                    for p in Person.query.filter_by(ort=n).all():
+                        np = Person.query.filter_by(name=p.name, vorname=p.vorname, ort=pair[1][0]).first()
+                        if not np:
+                            np = Person(name=p.name, forename=p.vorname, place=pair[1][0], user=Config.ADMIN, time=datetime.now())
+                            db.session.add(np)
+                            db.session.commit()
+                            np = Person.query.filter_by(name=p.name, vorname=p.vorname, ort=pair[1][0]).first()
+                            f.write('NEW: '+(p.name if p.name else 's.n.')+", "+(p.vorname if p.vorname else 's.n.')+", "+pair[1][0]+"\n")
+                        f.write((p.name if p.name else 's.n.')+', '+(p.vorname if p.vorname else 's.n.')+', '+(p.ort if p.ort else 's.l.')+'\t-->\t'+(p.name if p.name else 's.n.')+", "+(p.vorname if p.vorname else 's.n.')+", "+(pair[1][0] if pair[1][0] else 's.l.')+"\n")
+                        for e in Empfaenger.query.filter_by(id_person=p.id).all():
+                            e.id_person = np.id
+                            db.session.commit()
+                            f.write('changed Empfänger on #'+str(e.id_brief)+".\n")
+                        for a in Absender.query.filter_by(id_person=p.id).all():
+                            a.id_person = np.id
+                            db.session.commit()
+                            f.write('changed Absender on #' + str(a.id_brief)+".\n")
+
+        with open("Data/sign_corr.txt", 'w') as f:
+            f.write("AUTOGRAPH\n\n")
+            for a in Autograph.query.filter_by(standort="Zürich StA").all():
+                start = a.signatur
+                if a.signatur:
+                    for s in ["E ii", "E il", "E li", "E ll", "Eii", "Eil", "Eli", "Ell", "EU", "E U", "EII2", "II", "EIX"]:
+                        if a.signatur[:len(s)] == s:
+                            a.signatur = a.signatur.replace(s, '')
+                            a.signatur = 'E II '+a.signatur.strip()
+                            db.session.commit()
+                    if 'f' in a.signatur:
+                        new = a.signatur.replace('f', '').strip() + ' f'
+                        if new != a.signatur:
+                            a.signatur = new
+                            db.session.commit()
+                    for s in [' ,,,,', ',,,, ', ',,, ', ' ,,,', ' ,,', ',, ', ' ,',  ', ']:
+                        a.signatur = a.signatur.replace(s, ' ')
+                    for s in [',,,,,', ',,,,', ',,,', ',,']:
+                        a.signatur = a.signatur.replace(s, ' ')
+                    if a.signatur != start:
+                        f.write('#'+str(a.id_brief)+':\t'+start + "\t-->\t" + a.signatur + "\n")
+            f.write("\n\nKOPIE\n\n")
+            for a in Kopie.query.filter_by(standort="Zürich StA").all():
+                start = a.signatur
+                if a.signatur:
+                    for s in ["E ii", "E il", "E li", "E ll", "Eii", "Eil", "Eli", "Ell", "EU", "E U", "EII2", "II", "EIX"]:
+                        if a.signatur[:len(s)] == s:
+                            a.signatur = a.signatur.replace(s, '')
+                            a.signatur = 'E II '+a.signatur.strip()
+                            db.session.commit()
+                    if 'f' in a.signatur:
+                        new = a.signatur.replace('f', '').strip() + ' f'
+                        if new != a.signatur:
+                            a.signatur = new
+                            db.session.commit()
+                    for s in [' ,,,,', ',,,, ', ',,, ', ' ,,,', ' ,,', ',, ', ' ,',  ', ']:
+                        a.signatur = a.signatur.replace(s, ' ')
+                    for s in [',,,,,', ',,,,', ',,,', ',,']:
+                        a.signatur = a.signatur.replace(s, ' ')
+                    if a.signatur != start:
+                        f.write('#'+str(a.id_brief)+':\t'+start + "\t-->\t" + a.signatur + "\n")
+
+        return redirect(url_for('index'))
+    return redirect(url_for('login', next=request.url))
+
 
 """
 @app.route('/admin/convert_images', methods=['GET'])
