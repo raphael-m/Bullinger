@@ -99,7 +99,7 @@ def print_user():
                 f.write(" - ".join([u.username, u.e_mail, u.password_hash])+'\n')
         with open("Data/user_addresses.txt", 'w') as f:
             for u in users:
-                f.write(u.e_mail+'\n')
+                f.write(u.e_mail+', ')
         return redirect(url_for('admin.index'))
     return redirect(url_for('login', next=request.url))
 
@@ -830,6 +830,101 @@ def run_corrections():
     return redirect(url_for('login', next=request.url))
 
 
+@app.route('/admin/run_corrections2', methods=['GET'])
+@login_required
+def run_corrections2():
+    if is_admin():
+
+        zsta = "Zürich StA"
+        with open("Data/zsta_corr2.txt", 'w') as f:
+            f.write("AUTOGRAPH\n\n")
+            for a in Autograph.query.all():
+                p = NGrams.compute_similarity(zsta, a.standort, 3)
+                if p > 0.8 and a.standort != zsta:
+                    f.write('#' + str(a.id_brief) + ':\t' + a.standort + "\t-->\t" + zsta + "\n")
+                    a.standort = zsta
+                    db.session.commit()
+            f.write("\n\nKOPIE\n\n")
+            for a in Kopie.query.all():
+                p = NGrams.compute_similarity(zsta, a.standort, 3)
+                if p > 0.8 and a.standort != zsta:
+                    f.write('#' + str(a.id_brief) + ':\t' + a.standort + "\t-->\t" + zsta + "\n")
+                    a.standort = zsta
+                    db.session.commit()
+
+        zzb = "Zürich ZB"
+        with open("Data/zb_corr2.txt", 'w') as f:
+            f.write("AUTOGRAPH\n\n")
+            for a in Autograph.query.all():
+                p = NGrams.compute_similarity(zzb, a.standort, 3)
+                if p > 0.8 and a.standort != zzb:
+                    f.write('#' + str(a.id_brief) + ':\t' + a.standort + "\t-->\t" + zzb + "\n")
+                    a.standort = zzb
+                    db.session.commit()
+            f.write("\n\nKOPIE\n\n")
+            for a in Kopie.query.all():
+                p = NGrams.compute_similarity(zzb, a.standort, 3)
+                if p > 0.8 and a.standort != zzb:
+                    f.write('#' + str(a.id_brief) + ':\t' + a.standort + "\t-->\t" + zzb + "\n")
+                    a.standort = zzb
+                    db.session.commit()
+
+        with open("Data/sign_corr2.txt", 'w') as f:
+            f.write("AUTOGRAPH\n\n")
+            for a in Autograph.query.filter_by(standort="Zürich StA").all():
+                start = a.signatur
+                if a.signatur:
+                    for s in ["E ii", "E il", "E li", "E ll", "Eii", "Eil", "Eli", "Ell", "EU", "E U", "EII2", "II", "EIX"]:
+                        if a.signatur[:len(s)] == s:
+                            a.signatur = a.signatur.replace(s, '')
+                            a.signatur = 'E II '+a.signatur.strip()
+                            db.session.commit()
+                    m = re.match(r".*[^\W\d]{4,}.*", a.signatur)
+                    if not m:
+                        if 'f' in a.signatur:
+                            new = a.signatur.replace('f', '').strip() + ' f'
+                            if new != a.signatur:
+                                a.signatur = new
+                                db.session.commit()
+                    m = re.match(r".*(\s*\,\,+\s*).*", a.signatur)
+                    if m:
+                        a.signatur = a.signatur.replace(m.group(1), ', ')
+                        db.session.commit()
+                    m = re.match(r".*\d(\s*\,\s*)\d.*", a.signatur)
+                    if m and m.group(0):
+                        a.signatur = a.signatur.replace(m.group(1), ',')
+                        db.session.commit()
+                    if a.signatur != start:
+                        f.write('#'+str(a.id_brief)+':\t'+start + "\t-->\t" + a.signatur + "\n")
+            f.write("\n\nKOPIE\n\n")
+            for a in Kopie.query.filter_by(standort="Zürich StA").all():
+                start = a.signatur
+                if a.signatur:
+                    for s in ["E ii", "E il", "E li", "E ll", "Eii", "Eil", "Eli", "Ell", "EU", "E U", "EII2", "II", "EIX"]:
+                        if a.signatur[:len(s)] == s:
+                            a.signatur = a.signatur.replace(s, '')
+                            a.signatur = 'E II '+a.signatur.strip()
+                            db.session.commit()
+                    m = re.match(r".*[^\W\d]{4,}.*", a.signatur)
+                    if not m:
+                        if 'f' in a.signatur:
+                            new = a.signatur.replace('f', '').strip() + ' f'
+                            if new != a.signatur:
+                                a.signatur = new
+                                db.session.commit()
+                    m = re.match(r".*(\s*\,\,+\s*).*", a.signatur)
+                    if m:
+                        a.signatur = a.signatur.replace(m.group(1), ', ')
+                        db.session.commit()
+                    m = re.match(r".*\d(\s*\,\s*)\d.*", a.signatur)
+                    if m:
+                        a.signatur = a.signatur.replace(m.group(1), ',')
+                        db.session.commit()
+                    if a.signatur != start:
+                        f.write('#'+str(a.id_brief)+':\t'+start + "\t-->\t" + a.signatur + "\n")
+
+        return redirect(url_for('index'))
+    return redirect(url_for('login', next=request.url))
 """
 @app.route('/admin/convert_images', methods=['GET'])
 def convert_to_images():
