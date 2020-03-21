@@ -143,12 +143,12 @@ With the settings described, FineReader needed 3h and 49m to process our 10'012 
 
 \section{Kraken}
 
-The OCR-Tool \quotes{Kraken} needs to be downloaded and installed as described on the \href{http://kraken.re/}{official website} or on \href{https://github.com/mittagessen/kraken}{GitHub}. Since Kraken runs on images, our pdf files had to be transformed:
+The OCR-Tool \quotes{Kraken} needs to be downloaded and installed as described on the \href{http://kraken.re/}{official website} or on \href{https://github.com/mittagessen/kraken}{GitHub}. Since Kraken runs on images, our pdf files had to be transformed first:
 
 \begin{quote}
 \begin{lstlisting}
 from pdf2image import convert_from_path
-for page in convert_from_path("path/to/input_file.pdf", 600):  # dpi
+for page in convert_from_path("path/to/input_file.pdf", 300):  # dpi
 	  page.save("path/to/output_file.png", 'PNG')
 \end{lstlisting}
 \vspace{-1.cm}
@@ -175,142 +175,142 @@ Code Snipped (Python): png $\rightarrow$ xml (alto)
 \end{quote}
 
 
-\section{Postprocessing}
-
-\subsection{Scaling}
-
-The size of a page (length times width [px]) differs from file to file. Consequently, a reliable detection of contents based on absolute positions requires to normalize all coordinates.
-
-
-\begin{itemize}
-\item width $B_i$ $\propto$ $S_{i\alpha x}$(WIDTH$_{i\alpha x}$, HPOS$_{i\alpha x})$
-\item height $H_i$ $\propto$ $S_{i\alpha y}$(HEIGHT$_{i\alpha y}$, VPOS$_{i\alpha y}$)
-\end{itemize}
-
-\vspace*{-0.5cm}
-\begin{center}
-\begin{tikzpicture}[fill=blue!20, scale=0.8]
-% Koordinaten/Beschriftungen
-\draw[line width=2pt] (0,-5) -- (0,0) -- (10,0);
-% \draw (-2,0) node[anchor=south]{\scriptsize \code{page}};
-
-% Element
-\fill (2,-2) -- (6,-2) -- (6,-3) -- (2,-3) -- (2,-2);
-
-\draw[>=latex,<->] (2,0) -- (2,-2);
-\draw (2,-1) node[anchor=west]{{\tiny $VPOS_\alpha$}};
-\draw[>=latex,<->] (0,-2) -- (2,-2);
-\draw (1,-2) node[anchor=south]{{\tiny $HPOS_\alpha$}};
-\draw[>=latex,<->] (2,-3.3) -- (6,-3.3);
-\draw (4,-3.3) node[anchor=north]{{\tiny $WIDTH_\alpha$}};
-\draw[>=latex,<->] (6.3,-2) -- (6.3,-3);
-\draw (6.3,-2.5) node[anchor=west]{{\tiny $HEIGH_\alpha$}};
-
-\draw[red, densely dotted] (2,-3)--(2,-3.5);
-\draw[red, densely dotted] (6,-3)--(6,-3.5);
-\draw[red, densely dotted] (6,-3)--(6.5,-3);
-\draw[red, densely dotted] (6,-2)--(6.5,-2);
-
-\draw[dashed] (4,0)--(4,-2.5);
-\draw[dashed] (0,-2.5)--(4,-2.5);
-
-\draw (4,0) circle (2pt);
-\draw (4,-2.5) circle (2pt);
-\draw (0,-2.5) circle (2pt);
-
-\draw (4,0) node[anchor=south]{$S_{\alpha x}$};
-\draw (4,-2.5) node[anchor=west]{$S_\alpha $};
-\draw (0,-2.5) node[anchor=east]{$S_{\alpha y}$};
-
-\end{tikzpicture}
-\end{center}
-
-\vspace*{-0.9cm}
-\begin{footnotesize}
-\begin{equation*}
-\text{Scaling factors:}\quad
-x_s (B_i) = \frac{\hat{B}}{B_i},\quad
-y_s (H_i) = \frac{\hat{H}}{H_i}\quad
-(\hat{B}:=\text{norm width},\,
-\hat{H}:=\text{norm height}).
-\end{equation*}
-\end{footnotesize}
-
-
-\subsection{Parsing}
-
-\begin{lstlisting}
-import xml.sax
-import pandas as pd
-from xml.sax.handler import ContentHandler
-
-class AltoParser(ContentHandler):
-
-    """ [String, HPOS, VPOS, HEIGHT, WIDTH] --> [str, x, y, baseline] """
-
-    # filter
-    NAMES = ["Datum", "Absender", "Empfaenger", "Autograph", "Kopie", "Photokopie",
-             "Standort", "Bull.", "Corr.", "Sign.", "Abschrift", "Umfang", "Sprache",
-             "Literatur", "Gedruckt", "Bemerkungen"]s
-
-    def __init__(self, scaling, inverse=False):
-        super(AltoParser, self).__init__()
-        self.data = pd.DataFrame({'Value': [], 'x': [], 'y': [], "Baseline": []})
-        self.current_baseline = 0
-        self.scaling = scaling
-        self.inverse = inverse
-
-    def startElement(self, name, attributes):
-        if name == "TextLine":
-            for a in attributes.getNames():
-                if a == "BASELINE":
-                    self.current_baseline = attributes.getValue(a)
-
-        if name == "String" and "STYLE" not in attributes.getNames():
-            d = dict()
-            d["BASELINE"] = self.current_baseline
-            for a in attributes.getNames():
-                d[a] = attributes.getValue(a)
-            if self.inverse:
-                if d["CONTENT"] not in AltoParser.NAMES:
-                    self.append(d)
-            else:
-                if d["CONTENT"] in AltoParser.NAMES:
-                    self.append(d)
-
-    def append(self, d):
-        hpos, vpos = int(d["HPOS"]), int(d["VPOS"])
-        width, height = int(d["WIDTH"]), int(d["HEIGHT"])
-        x, y = AltoParser.get_mass_point(hpos, vpos, width, height, self.scaling)
-        value = ''
-        if ("SUBS_TYPE" in d) and ("SUBS_CONTENT" in d):
-            if d["SUBS_TYPE"] == "HypPart1":
-                value = d["SUBS_CONTENT"]
-        else: value = d["CONTENT"]
-        df = pd.DataFrame({
-            'Value': [value],
-            'x': [x], 'y': [y],
-            'Baseline': [self.current_baseline]
-        })
-        self.data = pd.concat([self.data, df])
-
-    @staticmethod
-    def get_mass_point(hpos, vpos, width, height, scaling):
-        """ text center coordinates """
-        x, y = hpos + 0.5 * width, vpos + 0.5 * height
-        return int(scaling[0]*x), int(scaling[1]*y)
-
-    @staticmethod
-    def extract_data(path, scaling, inverse=False):
-        try:
-            parser = xml.sax.make_parser()
-            counter = AltoParser(scaling, inverse=inverse)
-            parser.setContentHandler(counter)
-            parser.parse(path)
-            return counter.data
-        except:
-            print("*** Warning: alto-parser failed on", path)
-            return pd.DataFrame({'Value': [], 'x': [], 'y': [], "Baseline": []})
-\end{lstlisting}
+%\section{Postprocessing}
+%
+%\subsection{Scaling}
+%
+%The size of a page (length times width [px]) differs from file to file. Consequently, a reliable detection of contents based on absolute positions requires to normalize all coordinates.
+%
+%
+%\begin{itemize}
+%\item width $B_i$ $\propto$ $S_{i\alpha x}$(WIDTH$_{i\alpha x}$, HPOS$_{i\alpha x})$
+%\item height $H_i$ $\propto$ $S_{i\alpha y}$(HEIGHT$_{i\alpha y}$, VPOS$_{i\alpha y}$)
+%\end{itemize}
+%
+%\vspace*{-0.5cm}
+%\begin{center}
+%\begin{tikzpicture}[fill=blue!20, scale=0.8]
+%% Koordinaten/Beschriftungen
+%\draw[line width=2pt] (0,-5) -- (0,0) -- (10,0);
+%% \draw (-2,0) node[anchor=south]{\scriptsize \code{page}};
+%
+%% Element
+%\fill (2,-2) -- (6,-2) -- (6,-3) -- (2,-3) -- (2,-2);
+%
+%\draw[>=latex,<->] (2,0) -- (2,-2);
+%\draw (2,-1) node[anchor=west]{{\tiny $VPOS_\alpha$}};
+%\draw[>=latex,<->] (0,-2) -- (2,-2);
+%\draw (1,-2) node[anchor=south]{{\tiny $HPOS_\alpha$}};
+%\draw[>=latex,<->] (2,-3.3) -- (6,-3.3);
+%\draw (4,-3.3) node[anchor=north]{{\tiny $WIDTH_\alpha$}};
+%\draw[>=latex,<->] (6.3,-2) -- (6.3,-3);
+%\draw (6.3,-2.5) node[anchor=west]{{\tiny $HEIGH_\alpha$}};
+%
+%\draw[red, densely dotted] (2,-3)--(2,-3.5);
+%\draw[red, densely dotted] (6,-3)--(6,-3.5);
+%\draw[red, densely dotted] (6,-3)--(6.5,-3);
+%\draw[red, densely dotted] (6,-2)--(6.5,-2);
+%
+%\draw[dashed] (4,0)--(4,-2.5);
+%\draw[dashed] (0,-2.5)--(4,-2.5);
+%
+%\draw (4,0) circle (2pt);
+%\draw (4,-2.5) circle (2pt);
+%\draw (0,-2.5) circle (2pt);
+%
+%\draw (4,0) node[anchor=south]{$S_{\alpha x}$};
+%\draw (4,-2.5) node[anchor=west]{$S_\alpha $};
+%\draw (0,-2.5) node[anchor=east]{$S_{\alpha y}$};
+%
+%\end{tikzpicture}
+%\end{center}
+%
+%\vspace*{-0.9cm}
+%\begin{footnotesize}
+%\begin{equation*}
+%\text{Scaling factors:}\quad
+%x_s (B_i) = \frac{\hat{B}}{B_i},\quad
+%y_s (H_i) = \frac{\hat{H}}{H_i}\quad
+%(\hat{B}:=\text{norm width},\,
+%\hat{H}:=\text{norm height}).
+%\end{equation*}
+%\end{footnotesize}
+%
+%
+%\subsection{Parsing}
+%
+%\begin{lstlisting}
+%import xml.sax
+%import pandas as pd
+%from xml.sax.handler import ContentHandler
+%
+%class AltoParser(ContentHandler):
+%
+%    """ [String, HPOS, VPOS, HEIGHT, WIDTH] --> [str, x, y, baseline] """
+%
+%    # filter
+%    NAMES = ["Datum", "Absender", "Empfaenger", "Autograph", "Kopie", "Photokopie",
+%             "Standort", "Bull.", "Corr.", "Sign.", "Abschrift", "Umfang", "Sprache",
+%             "Literatur", "Gedruckt", "Bemerkungen"]s
+%
+%    def __init__(self, scaling, inverse=False):
+%        super(AltoParser, self).__init__()
+%        self.data = pd.DataFrame({'Value': [], 'x': [], 'y': [], "Baseline": []})
+%        self.current_baseline = 0
+%        self.scaling = scaling
+%        self.inverse = inverse
+%
+%    def startElement(self, name, attributes):
+%        if name == "TextLine":
+%            for a in attributes.getNames():
+%                if a == "BASELINE":
+%                    self.current_baseline = attributes.getValue(a)
+%
+%        if name == "String" and "STYLE" not in attributes.getNames():
+%            d = dict()
+%            d["BASELINE"] = self.current_baseline
+%            for a in attributes.getNames():
+%                d[a] = attributes.getValue(a)
+%            if self.inverse:
+%                if d["CONTENT"] not in AltoParser.NAMES:
+%                    self.append(d)
+%            else:
+%                if d["CONTENT"] in AltoParser.NAMES:
+%                    self.append(d)
+%
+%    def append(self, d):
+%        hpos, vpos = int(d["HPOS"]), int(d["VPOS"])
+%        width, height = int(d["WIDTH"]), int(d["HEIGHT"])
+%        x, y = AltoParser.get_mass_point(hpos, vpos, width, height, self.scaling)
+%        value = ''
+%        if ("SUBS_TYPE" in d) and ("SUBS_CONTENT" in d):
+%            if d["SUBS_TYPE"] == "HypPart1":
+%                value = d["SUBS_CONTENT"]
+%        else: value = d["CONTENT"]
+%        df = pd.DataFrame({
+%            'Value': [value],
+%            'x': [x], 'y': [y],
+%            'Baseline': [self.current_baseline]
+%        })
+%        self.data = pd.concat([self.data, df])
+%
+%    @staticmethod
+%    def get_mass_point(hpos, vpos, width, height, scaling):
+%        """ text center coordinates """
+%        x, y = hpos + 0.5 * width, vpos + 0.5 * height
+%        return int(scaling[0]*x), int(scaling[1]*y)
+%
+%    @staticmethod
+%    def extract_data(path, scaling, inverse=False):
+%        try:
+%            parser = xml.sax.make_parser()
+%            counter = AltoParser(scaling, inverse=inverse)
+%            parser.setContentHandler(counter)
+%            parser.parse(path)
+%            return counter.data
+%        except:
+%            print("*** Warning: alto-parser failed on", path)
+%            return pd.DataFrame({'Value': [], 'x': [], 'y': [], "Baseline": []})
+%\end{lstlisting}
 
 \end{document}

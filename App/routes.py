@@ -27,8 +27,8 @@ ADMINS = []
 
 @app.errorhandler(404)
 def not_found(error):
-    BullingerDB.track(current_user.username, '/not_found', datetime.now())
-    print(error)
+    # BullingerDB.track(current_user.username, '/not_found', datetime.now())
+    # print(error)
     return make_response(jsonify({'error': 'Not found'}), 404)
 
 def is_admin():
@@ -75,9 +75,9 @@ def admin():
 @app.route('/admin/setup', methods=['POST', 'GET'])
 def setup():
     if is_admin():
-        BullingerDB(db.session).setup("Karteikarten/HBBW@out")  # ~1h
+        # BullingerDB(db.session).setup("Karteikarten/HBBW@out")  # ~1h
         return redirect(url_for('index'))
-    logout_user()
+    # logout_user()
     return redirect(url_for('login', next=request.url))
 
 @app.route('/admin/delete_user/<username>', methods=['POST', 'GET'])
@@ -356,6 +356,7 @@ def faq():
 
 @app.route('/guestbook', methods=['POST', 'GET'])
 def guestbook():
+    BullingerDB.track(current_user.username, '/gästebuch', datetime.now())
     guest_book = GuestBookForm()
     if guest_book.validate_on_submit() and guest_book.save.data:
         BullingerDB.save_comment(guest_book.comment.data, current_user.username, datetime.now())
@@ -629,6 +630,13 @@ def get_persons_all():
     return jsonify(BullingerDB.get_persons_by_var(None, None))
 
 
+@app.route('/api/clear/not_found', methods=['GET'])
+def clear_not_found():
+    Tracker.query.filter_by(url="/not_found").delete()
+    db.session.commit()
+    return redirect(url_for('index'))
+
+'''
 @app.route('/api/post_process', methods=['GET'])
 def post_process():
     BullingerDB.post_process_db()
@@ -925,7 +933,7 @@ def run_corrections2():
 
         return redirect(url_for('index'))
     return redirect(url_for('login', next=request.url))
-"""
+
 @app.route('/admin/convert_images', methods=['GET'])
 def convert_to_images():
     input_path = "Karteikarten/PDF_new"
@@ -939,7 +947,7 @@ def convert_to_images():
             path = output_path+(5-len(str(i)))*'0'+str(i)+'.png'
             page.save(path, 'PNG')
             i += 1
-"""
+'''
 
 '''
 @app.route('/api/print_nn_vn_pairs', methods=['GET'])

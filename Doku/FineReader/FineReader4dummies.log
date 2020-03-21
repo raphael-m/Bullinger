@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.2.8)  13 MAR 2020 03:03
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.2.8)  20 MAR 2020 03:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1960,12 +1960,12 @@ Package babel Info: Redefining german shorthand "|
 (babel)             in language  on input line 81.
 Package babel Info: Redefining german shorthand "~
 (babel)             in language  on input line 81.
-<main.png, id=43, 192.72pt x 214.55156pt>
+<main.png, id=31, 192.72pt x 214.55156pt>
 File: main.png Graphic file (type png)
 <use main.png>
 Package pdftex.def Info: main.png  used on input line 88.
 (pdftex.def)             Requested size: 134.90306pt x 150.18506pt.
-<0_allgemein.png, id=45, 444.15938pt x 392.96812pt>
+<0_allgemein.png, id=33, 444.15938pt x 392.96812pt>
 File: 0_allgemein.png Graphic file (type png)
 <use 0_allgemein.png>
 Package pdftex.def Info: 0_allgemein.png  used on input line 93.
@@ -1985,32 +1985,32 @@ Package babel Info: Redefining german shorthand "~
  [1
 
 {/usr/local/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-<1_eingabe.png, id=68, 443.40656pt x 393.72093pt>
+<1_eingabe.png, id=56, 443.40656pt x 393.72093pt>
 File: 1_eingabe.png Graphic file (type png)
 <use 1_eingabe.png>
 Package pdftex.def Info: 1_eingabe.png  used on input line 100.
 (pdftex.def)             Requested size: 186.22948pt x 165.36166pt.
-<2_verarbeitung.png, id=69, 441.90094pt x 393.72093pt>
+<2_verarbeitung.png, id=57, 441.90094pt x 393.72093pt>
 File: 2_verarbeitung.png Graphic file (type png)
 <use 2_verarbeitung.png>
 Package pdftex.def Info: 2_verarbeitung.png  used on input line 105.
 (pdftex.def)             Requested size: 185.59712pt x 165.36166pt.
-<3_dokumententrennung.png, id=70, 443.40656pt x 392.96812pt>
+<3_dokumententrennung.png, id=58, 443.40656pt x 392.96812pt>
 File: 3_dokumententrennung.png Graphic file (type png)
 <use 3_dokumententrennung.png>
 Package pdftex.def Info: 3_dokumententrennung.png  used on input line 112.
 (pdftex.def)             Requested size: 186.22948pt x 165.04547pt.
-<4_qualitaetskontrolle.png, id=71, 442.65375pt x 393.72093pt>
+<4_qualitaetskontrolle.png, id=59, 442.65375pt x 393.72093pt>
 File: 4_qualitaetskontrolle.png Graphic file (type png)
 <use 4_qualitaetskontrolle.png>
 Package pdftex.def Info: 4_qualitaetskontrolle.png  used on input line 117.
 (pdftex.def)             Requested size: 185.9133pt x 165.36166pt.
-<5_indexierung.png, id=72, 442.65375pt x 391.4625pt>
+<5_indexierung.png, id=60, 442.65375pt x 391.4625pt>
 File: 5_indexierung.png Graphic file (type png)
 <use 5_indexierung.png>
 Package pdftex.def Info: 5_indexierung.png  used on input line 124.
 (pdftex.def)             Requested size: 185.9133pt x 164.41312pt.
-<6_ausgabe.png, id=73, 441.14813pt x 393.72093pt>
+<6_ausgabe.png, id=61, 441.14813pt x 393.72093pt>
 File: 6_ausgabe.png Graphic file (type png)
 <use 6_ausgabe.png>
 Package pdftex.def Info: 6_ausgabe.png  used on input line 129.
@@ -2043,104 +2043,52 @@ Package babel Info: Redefining german shorthand "|
 Package babel Info: Redefining german shorthand "~
 (babel)             in language  on input line 144.
 Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 178.
+(babel)             in language  on input line 316.
 Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 178.
+(babel)             in language  on input line 316.
 Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 178.
+(babel)             in language  on input line 316.
 Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 180.
+(babel)             in language  on input line 316.
 Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 180.
+(babel)             in language  on input line 316.
 Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 180.
-Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 240.
-Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 240.
-Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 240.
-Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 240.
-Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 240.
-Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 240.
+(babel)             in language  on input line 316.
 
 [3]
-Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 240.
-Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 240.
-Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 240.
-Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 289.
-Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 289.
-Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 289.
-Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 289.
-Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 289.
-Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 289.
- [4]
-Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 316.
-Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 316.
-Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 316.
-Package babel Info: Redefining german shorthand "f
-(babel)             in language  on input line 316.
-Package babel Info: Redefining german shorthand "|
-(babel)             in language  on input line 316.
-Package babel Info: Redefining german shorthand "~
-(babel)             in language  on input line 316.
- [5]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 316.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 316.
  (./FineReader4dummies.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 316.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 316.
 Package rerunfilecheck Info: File `FineReader4dummies.out' has not changed.
-(rerunfilecheck)             Checksum: 77B3AAF0B7031CF1910DFE64ED220458;498.
+(rerunfilecheck)             Checksum: 6F8292919F37CB6F4D08F035396EE191;337.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 316.
  ) 
 Here is how much of TeX's memory you used:
- 36712 strings out of 492649
- 689198 string characters out of 6129623
- 1045960 words of memory out of 5000000
- 39864 multiletter control sequences out of 15000+600000
- 555798 words of font info for 91 fonts, out of 8000000 for 9000
+ 36448 strings out of 492649
+ 685250 string characters out of 6129623
+ 864957 words of memory out of 5000000
+ 39690 multiletter control sequences out of 15000+600000
+ 548023 words of font info for 68 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,7n,92p,10475b,1899s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 57i,7n,92p,10475b,1505s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}
 {/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}<
-/usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></
-usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></u
-sr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr
-/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/l
-ocal/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/loc
-al/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local
-/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/t
-exlive/2018/texmf-dist/fonts/type1/public/mathabx-type1/matha10.pfb></usr/local
-/texlive/2018/texmf-dist/fonts/type1/public/mathabx-type1/matha12.pfb></usr/loc
-al/texlive/2018/texmf-dist/fonts/type1/public/mathabx-type1/mathb12.pfb></usr/l
-ocal/texlive/2018/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/loc
-al/texlive/2018/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/local
-/texlive/2018/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/local/t
-exlive/2018/texmf-dist/fonts/type1/public/cm-super/sfrm0600.pfb></usr/local/tex
-live/2018/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texli
-ve/2018/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/texlive
-/2018/texmf-dist/fonts/type1/public/cm-super/sfxc2074.pfb></usr/local/texlive/2
-018/texmf-dist/fonts/type1/public/txfonts/t1xtt.pfb>
-Output written on FineReader4dummies.pdf (5 pages, 326550 bytes).
+/usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></
+usr/local/texlive/2018/texmf-dist/fonts/type1/public/mathabx-type1/matha12.pfb>
+</usr/local/texlive/2018/texmf-dist/fonts/type1/public/mathabx-type1/mathb12.pf
+b></usr/local/texlive/2018/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb>
+</usr/local/texlive/2018/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></
+usr/local/texlive/2018/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></us
+r/local/texlive/2018/texmf-dist/fonts/type1/public/cm-super/sfrm0600.pfb></usr/
+local/texlive/2018/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/lo
+cal/texlive/2018/texmf-dist/fonts/type1/public/cm-super/sfxc2074.pfb></usr/loca
+l/texlive/2018/texmf-dist/fonts/type1/public/txfonts/t1xtt.pfb>
+Output written on FineReader4dummies.pdf (3 pages, 243225 bytes).
 PDF statistics:
- 279 PDF objects out of 1000 (max. 8388607)
- 235 compressed objects within 3 object streams
- 106 named destinations out of 1000 (max. 500000)
- 125 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 138 PDF objects out of 1000 (max. 8388607)
+ 105 compressed objects within 2 object streams
+ 29 named destinations out of 1000 (max. 500000)
+ 101 words of extra memory for PDF output out of 10000 (max. 10000000)
 

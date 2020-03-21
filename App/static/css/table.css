@@ -41,3 +41,17 @@ table.paleBlueRows tfoot {
 table.paleBlueRows tfoot td {
     font-size: 14px;
 }
+
+.comment_user,
+.comment_date,
+.comment_time {
+    text-align: center;
+    padding: 0px 8px;
+    font-weight: bold;
+}
+
+.comment_text {
+    padding: 5px 8px;
+    font-size: 0.9em;
+    font-style: italic;
+}
