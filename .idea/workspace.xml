@@ -1,20 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/Tools/BullingerDB.py" line="1051" mnemonic="7" />
+    <bookmark url="file://$PROJECT_DIR$/Tools/BullingerDB.py" line="1048" mnemonic="7" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6d2cb28e-bb45-42c9-b203-59c8af68dfbb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/App/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/css/table.css" beforeDir="false" afterPath="$PROJECT_DIR$/App/static/css/table.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/guestbook.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/guestbook.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Doku/FineReader/FineReader4dummies.aux" beforeDir="false" afterPath="$PROJECT_DIR$/Doku/FineReader/FineReader4dummies.aux" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Doku/FineReader/FineReader4dummies.log" beforeDir="false" afterPath="$PROJECT_DIR$/Doku/FineReader/FineReader4dummies.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Doku/FineReader/FineReader4dummies.out" beforeDir="false" afterPath="$PROJECT_DIR$/Doku/FineReader/FineReader4dummies.out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Doku/FineReader/FineReader4dummies.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Doku/FineReader/FineReader4dummies.synctex.gz" beforeDir="false" afterPath="$PROJECT_DIR$/Doku/FineReader/FineReader4dummies.synctex.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Doku/FineReader/FineReader4dummies.tex" beforeDir="false" afterPath="$PROJECT_DIR$/Doku/FineReader/FineReader4dummies.tex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tools/BullingerDB.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tools/BullingerDB.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/app.db" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -28,11 +20,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="219">
+              <caret line="603" column="58" selection-start-line="603" selection-start-column="31" selection-end-line="603" selection-end-column="58" />
+              <folding>
+                <element signature="e#118#153#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/routes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="145">
-              <caret line="636" column="37" selection-start-line="636" selection-start-column="37" selection-end-line="636" selection-end-column="37" />
+            <state relative-caret-position="9480">
+              <caret line="632" column="32" selection-start-line="632" selection-start-column="12" selection-end-line="632" selection-end-column="32" />
               <folding>
                 <element signature="e#172#206#0" expanded="true" />
               </folding>
@@ -40,19 +44,21 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/templates/guestbook.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="240">
-              <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+              <caret line="16" selection-start-line="16" selection-end-line="16" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/static/css/boxes.css">
+        <entry file="file://$PROJECT_DIR$/Scripts/localhost_db_fetch.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-587" />
+            <state relative-caret-position="90">
+              <caret line="6" selection-start-line="6" selection-end-line="6" />
+            </state>
           </provider>
         </entry>
       </file>
@@ -106,7 +112,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>zum Camph</find>
       <find>Emde</find>
       <find>Aberlin</find>
       <find>Heinin</find>
@@ -136,6 +141,7 @@
       <find>Was bedeutet &quot;Liter</find>
       <find>delete$</find>
       <find>Tracker</find>
+      <find>language</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -166,7 +172,6 @@
         <option value="$PROJECT_DIR$/Tools/Octopus.py" />
         <option value="$PROJECT_DIR$/Tools/Pdf2jpg.py" />
         <option value="$PROJECT_DIR$/convert_images.py" />
-        <option value="$PROJECT_DIR$/Tools/BullingerDB.py" />
         <option value="$PROJECT_DIR$/Data/usr.txt" />
         <option value="$PROJECT_DIR$/Tools/BullingerData.py" />
         <option value="$PROJECT_DIR$/App/templates/stats.html" />
@@ -195,6 +200,7 @@
         <option value="$PROJECT_DIR$/App/routes.py" />
         <option value="$PROJECT_DIR$/App/static/css/table.css" />
         <option value="$PROJECT_DIR$/App/templates/guestbook.html" />
+        <option value="$PROJECT_DIR$/Tools/BullingerDB.py" />
       </list>
     </option>
   </component>
@@ -217,30 +223,6 @@
             <path>
               <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
               <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
-              <item name="App" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
-              <item name="App" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
-              <item name="App" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="css" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
-              <item name="App" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
@@ -337,7 +319,7 @@
       <window_info id="Favorites" order="0" sideWeight="0.38134432" side_tool="true" weight="0.32959852" />
       <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.6186557" visible="true" weight="0.2473573" />
       <window_info id="Structure" order="2" sideWeight="0.15205725" side_tool="true" weight="0.29495615" />
-      <window_info anchor="bottom" id="Terminal" order="0" visible="true" weight="0.11277174" />
+      <window_info anchor="bottom" id="Terminal" order="0" visible="true" weight="0.066576086" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="2" weight="0.32967034" />
       <window_info anchor="bottom" id="Message" order="3" />
@@ -590,37 +572,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Scripts/localhost_db_fetch.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" selection-start-line="6" selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/templates/faq.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="326">
           <caret line="442" column="33" selection-start-line="442" selection-start-column="33" selection-end-line="442" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
-          <caret line="289" column="8" selection-start-line="289" selection-start-column="8" selection-end-line="289" selection-end-column="8" />
-          <folding>
-            <element signature="e#118#153#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/routes.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="636" column="37" selection-start-line="636" selection-start-column="37" selection-end-line="636" selection-end-column="37" />
-          <folding>
-            <element signature="e#172#206#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -665,7 +620,34 @@
     <entry file="file://$PROJECT_DIR$/App/templates/guestbook.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
-          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scripts/localhost_db_fetch.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/routes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="9480">
+          <caret line="632" column="32" selection-start-line="632" selection-start-column="12" selection-end-line="632" selection-end-column="32" />
+          <folding>
+            <element signature="e#172#206#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="219">
+          <caret line="603" column="58" selection-start-line="603" selection-start-column="31" selection-end-line="603" selection-end-column="58" />
+          <folding>
+            <element signature="e#118#153#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

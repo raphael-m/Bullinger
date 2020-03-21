@@ -601,10 +601,7 @@ class BullingerDB:
 
     @staticmethod
     def split_lang(form_entry):
-        if form_entry:
-            if ";" in form_entry: langs = form_entry.split(";")
-            elif "," in form_entry: langs = form_entry.split(",")
-            else: langs = form_entry.split("/")
+        if form_entry: langs = re.split('\W+', form_entry)
         else: langs = []
         return [l.strip() for l in langs]
 
