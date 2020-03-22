@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/Tools/BullingerDB.py" line="1048" mnemonic="7" />
+    <bookmark url="file://$PROJECT_DIR$/Tools/BullingerDB.py" line="1049" mnemonic="7" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6d2cb28e-bb45-42c9-b203-59c8af68dfbb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Tools/BullingerDB.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tools/BullingerDB.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/app.db" afterDir="false" />
     </list>
@@ -23,8 +22,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="219">
-              <caret line="603" column="58" selection-start-line="603" selection-start-column="31" selection-end-line="603" selection-end-column="58" />
+            <state relative-caret-position="106">
+              <caret line="918" column="75" selection-start-line="918" selection-start-column="75" selection-end-line="918" selection-end-column="75" />
               <folding>
                 <element signature="e#118#153#0" expanded="true" />
               </folding>
@@ -35,68 +34,12 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/routes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="9480">
-              <caret line="632" column="32" selection-start-line="632" selection-start-column="12" selection-end-line="632" selection-end-column="32" />
+            <state relative-caret-position="210">
+              <caret line="260" column="46" selection-start-line="260" selection-start-column="46" selection-end-line="260" selection-end-column="46" />
               <folding>
                 <element signature="e#172#206#0" expanded="true" />
               </folding>
             </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/templates/guestbook.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" selection-start-line="16" selection-end-line="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Scripts/localhost_db_fetch.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="6" selection-start-line="6" selection-end-line="6" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/static/css/form.css">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/static/css/header.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1097" />
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/static/css/links.css">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/static/css/main.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-332" />
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/static/css/reset.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-182" />
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/static/css/std.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-467" />
           </provider>
         </entry>
       </file>
@@ -112,9 +55,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Emde</find>
-      <find>Aberlin</find>
-      <find>Heinin</find>
       <find>Wesel</find>
       <find>Bachofen</find>
       <find>Miso</find>
@@ -140,8 +80,11 @@
       <find>Geben Sie als Nachnam</find>
       <find>Was bedeutet &quot;Liter</find>
       <find>delete$</find>
-      <find>Tracker</find>
       <find>language</find>
+      <find>Tracker</find>
+      <find>stats</find>
+      <find>/stats</find>
+      <find>get_most</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -319,7 +262,7 @@
       <window_info id="Favorites" order="0" sideWeight="0.38134432" side_tool="true" weight="0.32959852" />
       <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.6186557" visible="true" weight="0.2473573" />
       <window_info id="Structure" order="2" sideWeight="0.15205725" side_tool="true" weight="0.29495615" />
-      <window_info anchor="bottom" id="Terminal" order="0" visible="true" weight="0.066576086" />
+      <window_info anchor="bottom" id="Terminal" order="0" visible="true" weight="0.04076087" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="2" weight="0.32967034" />
       <window_info anchor="bottom" id="Message" order="3" />
@@ -617,13 +560,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/guestbook.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" selection-start-line="16" selection-end-line="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Scripts/localhost_db_fetch.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
@@ -631,10 +567,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/guestbook.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/App/routes.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9480">
-          <caret line="632" column="32" selection-start-line="632" selection-start-column="12" selection-end-line="632" selection-end-column="32" />
+        <state relative-caret-position="210">
+          <caret line="260" column="46" selection-start-line="260" selection-start-column="46" selection-end-line="260" selection-end-column="46" />
           <folding>
             <element signature="e#172#206#0" expanded="true" />
           </folding>
@@ -643,8 +586,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="603" column="58" selection-start-line="603" selection-start-column="31" selection-end-line="603" selection-end-column="58" />
+        <state relative-caret-position="106">
+          <caret line="918" column="75" selection-start-line="918" selection-start-column="75" selection-end-line="918" selection-end-column="75" />
           <folding>
             <element signature="e#118#153#0" expanded="true" />
           </folding>

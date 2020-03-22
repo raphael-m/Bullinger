@@ -916,7 +916,8 @@ class BullingerDB:
     @staticmethod
     def get_language_stats():
         cd, data, no_lang = CountDict(), [], 0
-        for s in Sprache.query.all(): cd.add(s.sprache)
+        langs = BullingerDB.get_most_recent_only(db.session, Sprache).all()
+        for s in langs: cd.add(s.sprache)
         n = BullingerDB.get_number_of_cards()
         data = [[s if s else Config.NONE, cd[s], round(cd[s] / n * 100, 3)] for s in cd]
         return sorted(data, key=itemgetter(1), reverse=True)
