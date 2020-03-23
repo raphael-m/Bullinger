@@ -34,7 +34,7 @@ class BullingerData:
                   "Cambridge", "Winterthur", "Hamburg", "Bern", "Chur", "Weimar", "Paris", "Utrecht", "Dresden",
                   "Kopenhagen", "Dublin", "Prag", "Oxford", "Nr.", "Ms.", "Hr."] + TYPEWRITER_ABBREV + TYPEWRITER_
 
-    PTH_OCR_KRAKEN = "Karteikarten/OCR_Kraken/"
+    PTH_OCR_KRAKEN = "Karteikarten/OCR_new/"
 
     def __init__(self, path, card_nr):
         self.path = path

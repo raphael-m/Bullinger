@@ -27,7 +27,7 @@
                         </div>
                     </div>
                     <div class="h4_box">
-                        <h4>Wie gebe ich einen Namen mit "von" ein (z.B. "Stetten Georg von")?</h4>
+                        <h4>Wie gebe ich einen Namen mit einem Namenszusatz ein (z.B. "Georg von Stetten")?</h4>
                         <div class="rule"></div>
                         <div class="h4_section">
                             <p>Geben Sie als Nachname "von Stetten" und als Vorname "Georg" ein.</p>
@@ -44,14 +44,14 @@
                         <h4>Wie gebe ich einen Namen für eine Gruppe ein (z.B. "Pfarrherren von Schaffhausen")?</h4>
                         <div class="rule"></div>
                         <div class="h4_section">
-                            <p>Geben Sie als Nachname "Pfarrherren" ein, lassen Sie das Feld Vorname leer. Und tragen Sie "Schaffhausen" als Ort ein.</p>
+                            <p>Geben Sie als Nachname "Pfarrherren" ein, lassen Sie das Feld "Vorname" leer. Und tragen Sie "Schaffhausen" als Ort ein.</p>
                         </div>
                     </div>
                     <div class="h4_box">
                         <h4>Was bedeutet "Nicht verifiziert" bei der Absender- bzw. Empfänger-Angabe?</h4>
                         <div class="rule"></div>
                         <div class="h4_section">
-                            <p>Markieren Sie einen Empfänger oder Schreiber als "Nicht verifiziert", wenn der Name oder der Ort auf der Karteikarte in runden oder eckigen Klammern stehen.</p>
+                            <p>Markieren Sie einen Empfänger oder Absender als "Nicht verifiziert", wenn der Name oder der Ort auf der Karteikarte in runden oder eckigen Klammern stehen.</p>
                             <p>Bitte geben Sie die Klammern NICHT ein.</p>
                             <p>Alle anderen Adressen werden als verifizierte Adressen gespeichert und stehen umgehend systemweit zur automatischen Vervollständigung zu Verfügung.</p>
                         </div>
@@ -76,7 +76,7 @@
                         <div class="rule"></div>
                         <div class="h4_section">
                             <p>Bitte tragen Sie die korrekte und vollständige Variante in die Datenbank ein. Wenn Sie
-                                unsicher sind, fügen Sie eine Bemerkung hinzu.
+                                unsicher sind, fügen Sie eine Bemerkung hinzu und setzen den Status auf "Unklar".
                             </p>
                         </div>
                     </div>
@@ -100,8 +100,11 @@
                         <h4>Was bedeutet "Jahr B, Monat B, Tag B" bei <b>Datum</b>?</h4>
                         <div class="rule"></div>
                         <div class="h4_section">
-                            <p>Sofern Anfangs- und Enddatum angegeben sind, tragen Sie das Startdatum bitte unter "Jahr, Monat, Tag" und das Enddatum unter "Jahr B, Monat B, Tag B" ein.</p>
-                            <p>Wenn weitere oder andere Angaben zum Datum auf der Karteikarte vermerkt sind, tragen Sie diese als Bemerkung zum Datum ein.
+                            <p>
+                                Sofern Anfangs- und Enddaten angegeben sind, tragen Sie das Anfangsdatum bitte unter
+                                "Jahr, Monat, Tag" und das Enddatum unter "Jahr B, Monat B, Tag B" ein. Sind nur zum
+                                Jahr zwei Daten angeben, tragen Sie die zweite Jahreszahl bei Jahr B ein und übernehmen
+                                Datum und Monat vom Anfangsdatum.
                             </p>
                         </div>
                     </div>
@@ -110,15 +113,59 @@
                         <div class="rule"></div>
                         <div class="h4_section">
                             <p>"s.d." steht für "sine die", das ist lateinisch für "ohne Datum".</p>
-                            <p>Weitere lateinische Abkürzungen sind "s.n. = sine nomine" (ohne Namen), "s.l. = sine loco" (ohne Ort) oder "s.a. = sine annum".</p>
-                            <p>Diese "Null-Werte" werden von unserem System ignoriert und finden keinen Einzug in die Datenbank.</p>
+                            <p>
+                                Dieser Eintrag wird automatisch generiert. Sofern auf der Karteikarte nur ein Datum
+                                vermerkt ist, können Sie diesen Eintrag ignorieren. Sind Anfangs- und Enddatum angegeben,
+                                ersetzen Sie den Eintrag bitte mit den entsprechenden Angaben zum Enddatum.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="h4_box">
+                        <h4>Was bedeuten "s.d.", "s.n." "s.l." oder "s.a." auf den Karteikarten und wie muss ich diese
+                            Einträge in die Datenbank übertragen?</h4>
+                        <div class="rule"></div>
+                        <div class="h4_section">
+                            <p>
+                                Diese lateinischen Abkürzungen stehen für "sine datum" (ohne Datum) sind "s.n. = sine
+                                nomine" (ohne Namen), "s.l. = sine loco" (ohne Ort) oder "s.a. = sine annum" (ohne Jahr).
+                                Die Einträge auf der Karteikarte signalisieren, dass die Angaben nicht einfach vergessen
+                                wurden, sondern im jeweiligen Brief tatsächlich fehlen. Damit diese Information auch in
+                                der Datenbank ersichtlich ist, tragen Sie bitte die jeweilige Abkürzung ohne Klammern
+                                ins entsprechende Bemerkungsfeld ein. Der fehlende Eintrag hat keinen Einfluss auf den
+                                Status; d.h. sofern keine andern Unklarheiten bestehen, können Sie den Status auf
+                                "Abgeschlossen" setzen.
+                            </p>
                         </div>
                     </div>
                     <div class="h4_box">
-                        <h4>Was soll ich machen, wenn beim Datum die Jahreszahl in Klammern steht?</h4>
+                        <h4>Was soll ich machen, wenn die Datumsangabe (teilweise) in Klammern steht?</h4>
                         <div class="rule"></div>
                         <div class="h4_section">
-                            <p>Wenn die Jahreszahl auf der Karteikarte in Klammern steht, tragen Sie die Jahreszahl ohne Klammer ins Feld "Jahr" ein und tragen Sie als Bemerkung zum Datum ein: "Jahr unsicher"</p>
+                            <p>
+                                Wenn die Jahreszahl auf der Karteikarte in Klammern steht, tragen Sie die Jahreszahl ohne
+                                Klammer ins Feld "Jahr" ein und tragen Sie als Bemerkung zum Datum ein: "Jahr unsicher".
+                                Steht das gesamte Datum in Klammern, übertragen Sie alle Angaben ohne Klammern ins jeweilige
+                                Feld und notieren als Bemerkung zum Datum "Datum unsicher". Auf den Status hat das keinen
+                                Einfluss.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="h4_box">
+                        <h4>Was soll ich machen, wenn weitere Angaben zum Datum auf der Karteikarte vermerkt sind?</h4>
+                        <div class="rule"></div>
+                        <div class="h4_section">
+                            <p>Tragen Sie diese bitte als Bemerkung zum Datum ein.</p>
+                        </div>
+                    </div>
+                    <div class="h4_box">
+                        <h4>Wie soll ich eine Verweiskarte in die Datenbank eintragen?</h4>
+                        <div class="rule"></div>
+                        <div class="h4_section">
+                            <p> Tragen Sie alle Informationen der Verweiskarte in die entsprechenden Datenbank-Felder ein.
+                                Bei "Bemerkungen (Datum)" tragen Sie bitte zusätzlich "Verweiskarte" und den angegebenen Querverweis ein. Also zum Beispiel:
+                                Verweiskarte. Siehe: 1567 Januar 02
+                            </p>
                         </div>
                     </div>
                     <div class="h4_box">
@@ -138,7 +185,10 @@
                         <h4>Was bedeutet "Autograph"?</h4>
                         <div class="rule"></div>
                         <div class="h4_section">
-                            <p>Beim Autograph handelt es sich um das handschriftliche Original des Briefes. Oft lagert dieses Original im Staatsarchiv Zürich (StA) oder in der Zentralbibliothek Zürich (ZB).</p>
+                            <p>Beim Autograph handelt es sich um das handschriftliche Original des Briefes. Oft lagert
+                                dieses Original im Staatsarchiv Zürich (StA) oder in der Zentralbibliothek Zürich (ZB).
+                                Aber auch andere Standorte sind möglich.
+                            </p>
                         </div>
                     </div>
                     <div class="h4_box">
@@ -246,20 +296,82 @@
                         </div>
                     </div>
                     <div class="h4_box">
+                        <h4>Was bedeutet "BW" im Feld "Gedruckt"?</h4>
+                        <div class="rule"></div>
+                        <div class="h4_section">
+                            <p> "BW" steht für "Briefwechsel"; "Blarer BW III" steht also eigentlich für "Blarer Briefwechsel III".
+                                In die Datenbank können Sie die Abkürzung von der Karteikarte übernehmen.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="h4_box">
                         <h4>Was bedeutet "Literatur" in der Datenbank?</h4>
                         <div class="rule"></div>
                         <div class="h4_section">
-                            <p>Der entsprechende Brief ist in einer Publikation erwähnt. Tragen Sie die entsprechende Literaturangabe in das Feld ein. Wenn Sie die Literaturangabe nicht entziffern können, tragen Sie eine entsprechende Bemerkung in das Feld "Anmerkungen / Notiz zu dieser Karteikarte" ein und setzen den Status "unklar".</p>
+                            <p>Der entsprechende Brief ist in einer Publikation erwähnt. Tragen Sie die entsprechende Literaturangabe in das Feld ein. Wenn Sie die Literaturangabe nicht entziffern können, tragen Sie eine entsprechende Bemerkung in das Feld "Anmerkungen / Notiz zu dieser Karteikarte" ein und setzen den Status "Unklar".</p>
                         </div>
                     </div>
+
+                    <div class="h4_box">
+                        <h4>Was bedeuten hochgestellte Zeichen bei der Literaturangabe auf der Karteikarte?</h4>
+                        <div class="rule"></div>
+                        <div class="h4_section">
+                            <p> Die hochgestellten Zeichen bei Literaturangaben geben an, dass es sich um eine weitere
+                                Auflage handelt. Steht z.B. 19682, bedeutet dies, dass sich die Literaturangabe auf die
+                                2. Auflage bezieht. Bitte übertragen Sie diese Information in folgender Form in die
+                                Datenbank: "1968, 2. Auflage".
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="h4_box">
+                        <h4>Was bedeutet "Ü" bei der Literaturangabe auf der Karteikarte?</h4>
+                        <div class="rule"></div>
+                        <div class="h4_section">
+                            <p>
+                                Ü steht als Abkürzung für "Übersetzung"; in der entsprechenden Literatur ist also eine
+                                Übersetzung des Briefes abgedruckt. In einem solchen Fall fügen Sie bitte am Ende der
+                                Literaturangabe das Wort "Übersetzung" hinzu.
+                            </p>
+                        </div>
+                    </div>
+
                     <div class="h4_box">
                         <h4>Was bedeutet "Erster Satz" in der Datenbank?</h4>
                         <div class="rule"></div>
                         <div class="h4_section">
-                            <p>Im Feld "Bemerkung" auf der Karteikarte steht meist der Anfang des Briefes (= der erste Satz). Wir übernehmen diesen Briefanfang in die Datenbank, um später eine eindeutige Identifikation des Briefes zu ermöglichen.</p>
-                            <p>Bitte korrigieren Sie den automatisch erkannten Text, bis er mit der Karteikarte übereinstimmt. Übernehmen Sie die Schreibweisen aus der Karteikarten. Wenn es Ihnen nicht möglich ist, den Text zu entziffern, tragen Sie dies bitte unter "Anmerkungen / Notiz zu dieser Karteikarte" ein und setzen den Status "unklar".</p>
-                            <p>Häufig ist die Zeichensetzung auf der Karteikarte fehlerhaft. Korrigieren Sie die Satzzeichen. Fügen Sie Leerschläge hinter Kommas ein.</p>
-                            <p>Wenn auf der Karteikarte im Feld "Bemerkungen" zusätzlich zum Anfangssatz weitere Informationen stehen, tragen Sie diese bitte unter "Anmerkungen / Notiz zu dieser Karteikarte" ein.</p>
+                            <p>Im Feld "Bemerkung" auf der Karteikarte steht meist der Anfang des Briefes (= der erste Satz).
+                                Wir übernehmen diesen Briefanfang in die Datenbank, um später eine eindeutige Identifikation
+                                des Briefes zu ermöglichen.</p>
+                        </div>
+                    </div>
+
+                    <div class="h4_box">
+                        <h4>Was muss ich beim Feld "Erster Satz" beachten?</h4>
+                        <div class="rule"></div>
+                        <div class="h4_section">
+                            <p>
+                                Bitte korrigieren Sie den automatisch erkannten Text, bis er mit der Karteikarte übereinstimmt.
+                                Übernehmen Sie die Schreibweisen aus der Karteikarten. Wenn es Ihnen nicht möglich ist, den Text
+                                zu entziffern, tragen Sie dies bitte unter "Anmerkungen / Notiz zu dieser Karteikarte" ein und
+                                setzen den Status auf "Unklar".
+                            </p>
+                            <p>
+                                Häufig ist die Zeichensetzung auf der Karteikarte fehlerhaft. Korrigieren Sie die Satzzeichen.
+                                Fügen Sie Leerschläge hinter Kommas ein.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="h4_box">
+                        <h4>Muss ich den ersten Satz übersetzen?</h4>
+                        <div class="rule"></div>
+                        <div class="h4_section">
+                            <p>
+                                Wenn es Ihnen möglich ist, den Satz vollständig auf Deutsch zu übersetzen, notieren Sie
+                                Ihre Übersetzung bitte in eckigen Klammern [ ] im Anschluss an das Original. Ob Sie eine
+                                Übersetzung angeben oder nicht, hat keinen Einfluss auf den Status.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -272,10 +384,19 @@
                         <h4>Wann soll ich "Anmerkungen / Notiz zu dieser Karteikarte" eintragen?</h4>
                         <div class="rule"></div>
                         <div class="h4_section">
-                            <p>Falls Sie das Erfassen einer Karteikarte nicht oder nur schwer abschliessen können (bspw. wenn eine Handschrift nur schwer zu entziffern ist), dann tragen Sie in dieses Feld ihre Beobachtungen ein, um anderen Projektmitarbeitern Hinweise zu hinterlassen und setzen den Status auf "unklar".
+                            <p> Falls Sie das Erfassen einer Karteikarte nicht oder nur schwer abschliessen können
+                                (bspw. wenn eine Handschrift nur schwer zu entziffern ist), dann tragen Sie in dieses
+                                Feld ihre Beobachtungen ein, um anderen Projektmitarbeitern Hinweise zu hinterlassen
+                                und setzen den Status auf "Unklar".
                             </p>
-                            <p>Bitte hinterlassen Sie auch für ungültige Karteikarten (also typischerweise Karten, die keine Karteikarten sind), einen entsprechenden Hinweis und setzen den Status auf "ungültig".</p>
-                            <p>Auch wenn auf der Karteikarte im Feld "Bemerkungen" zusätzlich zum Anfangssatz weitere Informationen stehen, tragen Sie diese bitte hier ein.</p>
+                            <p>
+                                Bitte hinterlassen Sie auch für ungültige Karteikarten (also typischerweise Karten,
+                                die keine Karteikarten sind), einen entsprechenden Hinweis und setzen den Status auf
+                                "Ungültig".
+                            </p>
+                            <p> Auch wenn auf der Karteikarte im Feld "Bemerkungen" zusätzlich zum Anfangssatz weitere
+                                Informationen stehen, tragen Sie diese bitte hier ein.
+                            </p>
                         </div>
                     </div>
                     <div class="h4_box">
@@ -317,10 +438,9 @@
                         <div class="h4_section">
                             <p>Da ist bei der automatischen Übertragung ein Fehler passiert. Grundsätzlich sollte in der Datenbank nur das stehen, was auf einer Karteikarte wirklich enthalten ist. Es gibt zwei Ausnahmen:</p>
                             <ul>
-                                <li>Der Eintrag zur Sprache wird automatisch aus dem ersten Satz abgeleitet. Bitte stellen Sie sicher, dass der Eintrag auch tatsächlich mit der Sprache des ersten Satzes übereinstimmt.</li>
+                                <li>Der Eintrag zur Sprache wird automatisch aus dem ersten Satz abgeleitet. Bitte stellen Sie sicher, dass der Eintrag auch tatsächlich mit der Sprache des ersten Satzes übereinstimmt. Ist bereits auf der Karteikarte eine Sprache vermerkt, tragen Sie bitte diese in die Datenbank ein.</li>
                                 <li>Der Eintrag "s.d." zum Monat B. Sofern auf der Karteikarte nur ein Datum angegeben ist, können Sie diesen Eintrag ignorieren.</li>
                             </ul>
-
                             <p> Die automatisierte Texterkennung trifft bei der Vorverarbeitung der Rohdaten jeweils
                                 einige Annahmen, was bei der (automatischen) Erkennung und Korrektur von Fehlern sehr
                                 hilfreich ist. Annahmen, Eigenschaften und Techniken:

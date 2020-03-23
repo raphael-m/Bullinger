@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<alto xmlns="http://www.loc.gov/standards/alto/ns-v2#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/standards/alto/ns-v2# http://www.loc.gov/standards/alto/alto-v2.0.xsd">
+<Description>
+<MeasurementUnit>pixel</MeasurementUnit>
+<OCRProcessing ID="IdOcr"><ocrProcessingStep><processingDateTime>2020-03-10</processingDateTime><processingSoftware><softwareCreator>ABBYY</softwareCreator><softwareName>ABBYY Recognition Server</softwareName><softwareVersion>4.0</softwareVersion></processingSoftware></ocrProcessingStep></OCRProcessing>
+</Description>
+<Styles>
+<ParagraphStyle ID="StyleId-FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0."/>
+<ParagraphStyle ID="StyleId-2104EA1D-C57B-4573-8665-8B27E6F071DB-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="12.96000004"/>
+<ParagraphStyle ID="StyleId-6C829BC0-B18D-424E-833C-835FC8E42E6C-" ALIGN="Block" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="13.60000038"/>
+</Styles>
+<Layout>
+<Page ID="Page1" PHYSICAL_IMG_NR="1" HEIGHT="6976" WIDTH="9837">
+<TopMargin HEIGHT="1132" WIDTH="9837" VPOS="0" HPOS="0">
+</TopMargin>
+<LeftMargin HEIGHT="836" WIDTH="1312" VPOS="1132" HPOS="0">
+</LeftMargin>
+<RightMargin HEIGHT="836" WIDTH="417" VPOS="1132" HPOS="9420">
+</RightMargin>
+<BottomMargin HEIGHT="5008" WIDTH="9837" VPOS="1968" HPOS="0">
+</BottomMargin>
+<PrintSpace HEIGHT="836" WIDTH="8108" VPOS="1132" HPOS="1312">
+<TextBlock ID="Page1_Block1" HEIGHT="836" WIDTH="8108" VPOS="1132" HPOS="1312" language="de" STYLEREFS="StyleId-2104EA1D-C57B-4573-8665-8B27E6F071DB-">
+<TextLine BASELINE="1365" HEIGHT="228" WIDTH="5272" VPOS="1182" HPOS="1338" STYLEREFS="StyleId-6C829BC0-B18D-424E-833C-835FC8E42E6C-"><String CONTENT="Weiterer" HEIGHT="192" WIDTH="988" VPOS="1182" HPOS="1338"/><SP WIDTH="122" VPOS="1194" HPOS="2327"/><String CONTENT="Datierungshinweis:" HEIGHT="216" WIDTH="2164" VPOS="1194" HPOS="2450"/><SP WIDTH="1978" VPOS="1266" HPOS="4615"/><String CONTENT="." HEIGHT="16" WIDTH="16" VPOS="1366" HPOS="6594"/></TextLine>
+<TextLine BASELINE="1688" HEIGHT="236" WIDTH="7224" VPOS="1482" HPOS="1594"><String CONTENT="Fürsten" HEIGHT="160" WIDTH="864" VPOS="1538" HPOS="1594"/><SP WIDTH="110" VPOS="1582" HPOS="2459"/><String CONTENT="wünschen" HEIGHT="152" WIDTH="980" VPOS="1542" HPOS="2570"/><SP WIDTH="138" VPOS="1586" HPOS="3551"/><String CONTENT="ein" HEIGHT="148" WIDTH="360" VPOS="1546" HPOS="3690"/><SP WIDTH="110" VPOS="1534" HPOS="4051"/><String CONTENT="Konzil:" HEIGHT="156" WIDTH="828" VPOS="1534" HPOS="4162"/><SP WIDTH="142" VPOS="1538" HPOS="4991"/><String CONTENT="Am" HEIGHT="152" WIDTH="256" VPOS="1538" HPOS="5134"/><SP WIDTH="138" VPOS="1546" HPOS="5391"/><String CONTENT="3»" HEIGHT="168" WIDTH="192" VPOS="1546" HPOS="5530"/><String STYLE="superscript" CONTENT="U" HEIGHT="92" WIDTH="84" VPOS="1482" HPOS="5758"/><String CONTENT="uni" HEIGHT="148" WIDTH="356" VPOS="1538" HPOS="5882"/><SP WIDTH="138" VPOS="1538" HPOS="6239"/><String CONTENT="1559" HEIGHT="188" WIDTH="476" VPOS="1530" HPOS="6378"/><SP WIDTH="118" VPOS="1534" HPOS="6855"/><String CONTENT="wird" HEIGHT="148" WIDTH="496" VPOS="1538" HPOS="6974"/><SP WIDTH="126" VPOS="1542" HPOS="7471"/><String CONTENT="dem" HEIGHT="144" WIDTH="364" VPOS="1542" HPOS="7598"/><SP WIDTH="114" VPOS="1538" HPOS="7963"/><String CONTENT="Kaiser" HEIGHT="152" WIDTH="740" VPOS="1538" HPOS="8078"/></TextLine>
+<TextLine BASELINE="1906" HEIGHT="208" WIDTH="7792" VPOS="1738" HPOS="1606"><String CONTENT="ei$e" HEIGHT="188" WIDTH="468" VPOS="1758" HPOS="1606"/><SP WIDTH="142" VPOS="1798" HPOS="2075"/><String CONTENT="entsprechende" HEIGHT="180" WIDTH="1564" VPOS="1766" HPOS="2218"/><SP WIDTH="138" VPOS="1758" HPOS="3783"/><String CONTENT="Forderun" HEIGHT="152" WIDTH="984" VPOS="1758" HPOS="3922"/><SP WIDTH="118" VPOS="1794" HPOS="4907"/><String CONTENT="unterbreitet" HEIGHT="148" WIDTH="1448" VPOS="1758" HPOS="5026"/><SP WIDTH="166" VPOS="1738" HPOS="6475"/><String CONTENT="(Graubünden" HEIGHT="200" WIDTH="1324" VPOS="1738" HPOS="6642"/><SP WIDTH="110" VPOS="1766" HPOS="7967"/><String CONTENT="BW" HEIGHT="144" WIDTH="256" VPOS="1766" HPOS="8078"/><SP WIDTH="122" VPOS="1766" HPOS="8335"/><String CONTENT="II" HEIGHT="144" WIDTH="224" VPOS="1766" HPOS="8458"/><SP WIDTH="142" VPOS="1762" HPOS="8683"/><String CONTENT="144)." HEIGHT="196" WIDTH="572" VPOS="1738" HPOS="8826"/></TextLine>
+</TextBlock>
+</PrintSpace>
+</Page>
+</Layout>
+</alto>

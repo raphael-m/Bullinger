@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<alto xmlns="http://www.loc.gov/standards/alto/ns-v2#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/standards/alto/ns-v2# http://www.loc.gov/standards/alto/alto-v2.0.xsd">
+<Description>
+<MeasurementUnit>pixel</MeasurementUnit>
+<OCRProcessing ID="IdOcr"><ocrProcessingStep><processingDateTime>2020-03-10</processingDateTime><processingSoftware><softwareCreator>ABBYY</softwareCreator><softwareName>ABBYY Recognition Server</softwareName><softwareVersion>4.0</softwareVersion></processingSoftware></ocrProcessingStep></OCRProcessing>
+</Description>
+<Styles>
+<ParagraphStyle ID="StyleId-FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0."/>
+<ParagraphStyle ID="StyleId-A96930DC-9D62-45B0-8CC8-8E72FA80E59A-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="13.60000038"/>
+</Styles>
+<Layout>
+<Page ID="Page1" PHYSICAL_IMG_NR="1" HEIGHT="6965" WIDTH="9847">
+<TopMargin HEIGHT="224" WIDTH="9847" VPOS="0" HPOS="0">
+</TopMargin>
+<LeftMargin HEIGHT="1772" WIDTH="1400" VPOS="224" HPOS="0">
+</LeftMargin>
+<RightMargin HEIGHT="1772" WIDTH="975" VPOS="224" HPOS="8872">
+</RightMargin>
+<BottomMargin HEIGHT="4969" WIDTH="9847" VPOS="1996" HPOS="0">
+</BottomMargin>
+<PrintSpace HEIGHT="1772" WIDTH="7472" VPOS="224" HPOS="1400">
+<TextBlock ID="Page1_Block1" HEIGHT="252" WIDTH="4208" VPOS="224" HPOS="1400" language="de" STYLEREFS="StyleId-A96930DC-9D62-45B0-8CC8-8E72FA80E59A-">
+<TextLine BASELINE="429" HEIGHT="204" WIDTH="4160" VPOS="250" HPOS="1426"><String CONTENT="1560" HEIGHT="180" WIDTH="476" VPOS="274" HPOS="1426"/><SP WIDTH="250" VPOS="250" HPOS="1903"/><String CONTENT="°uli" HEIGHT="184" WIDTH="476" VPOS="250" HPOS="2154"/><SP WIDTH="142" VPOS="278" HPOS="2631"/><String CONTENT="28." HEIGHT="160" WIDTH="324" VPOS="274" HPOS="2774"/><SP WIDTH="270" VPOS="274" HPOS="3099"/><String CONTENT="Pluna" HEIGHT="160" WIDTH="608" VPOS="274" HPOS="3370"/><SP WIDTH="138" VPOS="278" HPOS="3979"/><String CONTENT="Jakob" HEIGHT="156" WIDTH="596" VPOS="278" HPOS="4118"/><SP WIDTH="122" VPOS="274" HPOS="4715"/><String CONTENT="Martin" HEIGHT="156" WIDTH="748" VPOS="274" HPOS="4838"/></TextLine>
+</TextBlock>
+<TextBlock ID="Page1_Block2" HEIGHT="928" WIDTH="7472" VPOS="1068" HPOS="1400" language="de" STYLEREFS="StyleId-A96930DC-9D62-45B0-8CC8-8E72FA80E59A-">
+<TextLine BASELINE="1240" HEIGHT="148" WIDTH="684" VPOS="1094" HPOS="1426"><String CONTENT="siehe:" HEIGHT="148" WIDTH="684" VPOS="1094" HPOS="1426"/></TextLine>
+<TextLine BASELINE="1543" HEIGHT="196" WIDTH="4744" VPOS="1386" HPOS="2518"><String CONTENT="Fabricius" HEIGHT="160" WIDTH="1088" VPOS="1390" HPOS="2518"/><SP WIDTH="138" VPOS="1434" HPOS="3607"/><String CONTENT="an" HEIGHT="112" WIDTH="248" VPOS="1434" HPOS="3746"/><SP WIDTH="118" VPOS="1394" HPOS="3995"/><String CONTENT="Bullinger," HEIGHT="188" WIDTH="1192" VPOS="1394" HPOS="4114"/><SP WIDTH="162" VPOS="1394" HPOS="5307"/><String CONTENT="1560" HEIGHT="180" WIDTH="480" VPOS="1386" HPOS="5470"/><SP WIDTH="106" VPOS="1386" HPOS="5951"/><String CONTENT="August" HEIGHT="188" WIDTH="736" VPOS="1394" HPOS="6058"/><SP WIDTH="142" VPOS="1394" HPOS="6795"/><String CONTENT="19." HEIGHT="180" WIDTH="324" VPOS="1386" HPOS="6938"/></TextLine>
+<TextLine BASELINE="1942" HEIGHT="196" WIDTH="6316" VPOS="1778" HPOS="2534"><String CONTENT="zu" HEIGHT="112" WIDTH="220" VPOS="1838" HPOS="2534"/><SP WIDTH="126" VPOS="1838" HPOS="2755"/><String CONTENT="welchem" HEIGHT="160" WIDTH="860" VPOS="1802" HPOS="2882"/><SP WIDTH="122" VPOS="1802" HPOS="3743"/><String CONTENT="das" HEIGHT="148" WIDTH="356" VPOS="1802" HPOS="3866"/><SP WIDTH="130" VPOS="1794" HPOS="4223"/><String CONTENT="Schreiben" HEIGHT="156" WIDTH="1108" VPOS="1794" HPOS="4354"/><SP WIDTH="118" VPOS="1798" HPOS="5463"/><String CONTENT="des" HEIGHT="148" WIDTH="356" VPOS="1798" HPOS="5582"/><SP WIDTH="122" VPOS="1778" HPOS="5939"/><String CONTENT="Pluna" HEIGHT="172" WIDTH="616" VPOS="1778" HPOS="6062"/><SP WIDTH="138" VPOS="1834" HPOS="6679"/><String CONTENT="eine" HEIGHT="152" WIDTH="464" VPOS="1794" HPOS="6818"/><SP WIDTH="134" VPOS="1782" HPOS="7283"/><String CONTENT="Beilage" HEIGHT="192" WIDTH="848" VPOS="1782" HPOS="7418"/><SP WIDTH="134" VPOS="1790" HPOS="8267"/><String CONTENT="ist." HEIGHT="152" WIDTH="448" VPOS="1790" HPOS="8402"/></TextLine>
+</TextBlock><GraphicalElement ID="Page1_Block3" HEIGHT="32" WIDTH="620" VPOS="1252" HPOS="1404"/>
+</PrintSpace>
+</Page>
+</Layout>
+</alto>

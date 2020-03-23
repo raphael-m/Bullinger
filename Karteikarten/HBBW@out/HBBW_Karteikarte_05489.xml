@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<alto xmlns="http://www.loc.gov/standards/alto/ns-v2#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/standards/alto/ns-v2# http://www.loc.gov/standards/alto/alto-v2.0.xsd">
+<Description>
+<MeasurementUnit>pixel</MeasurementUnit>
+<OCRProcessing ID="IdOcr"><ocrProcessingStep><processingDateTime>2020-03-10</processingDateTime><processingSoftware><softwareCreator>ABBYY</softwareCreator><softwareName>ABBYY Recognition Server</softwareName><softwareVersion>4.0</softwareVersion></processingSoftware></ocrProcessingStep></OCRProcessing>
+</Description>
+<Styles>
+<ParagraphStyle ID="StyleId-FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0."/>
+<ParagraphStyle ID="StyleId-4EA770F7-CC97-4059-ACCA-B9923B514B07-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="18.10000038"/>
+</Styles>
+<Layout>
+<Page ID="Page1" PHYSICAL_IMG_NR="1" HEIGHT="9828" WIDTH="6932">
+<TopMargin HEIGHT="12" WIDTH="6932" VPOS="0" HPOS="0">
+</TopMargin>
+<LeftMargin HEIGHT="9456" WIDTH="196" VPOS="12" HPOS="0">
+</LeftMargin>
+<RightMargin HEIGHT="9456" WIDTH="8" VPOS="12" HPOS="6924">
+</RightMargin>
+<BottomMargin HEIGHT="360" WIDTH="6932" VPOS="9468" HPOS="0">
+</BottomMargin>
+<PrintSpace HEIGHT="9456" WIDTH="6728" VPOS="12" HPOS="196">
+<TextBlock ID="Page1_Block1" HEIGHT="5792" WIDTH="304" VPOS="968" HPOS="896" language="de" STYLEREFS="StyleId-4EA770F7-CC97-4059-ACCA-B9923B514B07-">
+<TextLine BASELINE="1135" HEIGHT="5740" WIDTH="252" VPOS="990" HPOS="926"><String CONTENT="eoclesl&amp;rua" HEIGHT="1352" WIDTH="176" VPOS="5378" HPOS="982"/><SP WIDTH="168" VPOS="5271" HPOS="982"/><String CONTENT="de" HEIGHT="248" WIDTH="164" VPOS="5022" HPOS="982"/><SP WIDTH="220" VPOS="4895" HPOS="926"/><String CONTENT="^v&amp;nltate" HEIGHT="1112" WIDTH="228" VPOS="3782" HPOS="926"/><SP WIDTH="216" VPOS="3659" HPOS="962"/><String CONTENT="(Consensus" HEIGHT="1208" WIDTH="216" VPOS="2450" HPOS="962"/><SP WIDTH="184" VPOS="2323" HPOS="962"/><String CONTENT="Catholioua)" HEIGHT="1332" WIDTH="212" VPOS="990" HPOS="962"/></TextLine>
+</TextBlock>
+<Illustration ID="Page1_Block2" HEIGHT="9456" WIDTH="6728" VPOS="12" HPOS="196"><Shape><Polygon POINTS="196,12 6924,12 6924,9468 772,9468 772,7004 196,7004 196,6740 1180,6740 1180,988 196,988 196,12"/></Shape></Illustration>
+</PrintSpace>
+</Page>
+</Layout>
+</alto>

@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<alto xmlns="http://www.loc.gov/standards/alto/ns-v2#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/standards/alto/ns-v2# http://www.loc.gov/standards/alto/alto-v2.0.xsd">
+<Description>
+<MeasurementUnit>pixel</MeasurementUnit>
+<OCRProcessing ID="IdOcr"><ocrProcessingStep><processingDateTime>2020-03-10</processingDateTime><processingSoftware><softwareCreator>ABBYY</softwareCreator><softwareName>ABBYY Recognition Server</softwareName><softwareVersion>4.0</softwareVersion></processingSoftware></ocrProcessingStep></OCRProcessing>
+</Description>
+<Styles>
+<ParagraphStyle ID="StyleId-FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0."/>
+<ParagraphStyle ID="StyleId-D061DFEF-86FE-479B-A301-C2D566CFAF7A-" ALIGN="Block" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="13.60000038"/>
+<ParagraphStyle ID="StyleId-5DBD5B4C-2D15-491C-B314-ACD9DB28728E-" ALIGN="Left" LEFT="0." RIGHT="0." FIRSTLINE="0." LINESPACE="10.60000038"/>
+</Styles>
+<Layout>
+<Page ID="Page1" PHYSICAL_IMG_NR="1" HEIGHT="6966" WIDTH="9840">
+<TopMargin HEIGHT="244" WIDTH="9840" VPOS="0" HPOS="0">
+</TopMargin>
+<LeftMargin HEIGHT="5556" WIDTH="3200" VPOS="244" HPOS="0">
+</LeftMargin>
+<RightMargin HEIGHT="5556" WIDTH="664" VPOS="244" HPOS="9176">
+</RightMargin>
+<BottomMargin HEIGHT="1166" WIDTH="9840" VPOS="5800" HPOS="0">
+</BottomMargin>
+<PrintSpace HEIGHT="5556" WIDTH="5976" VPOS="244" HPOS="3200">
+<TextBlock ID="Page1_Block1" HEIGHT="524" WIDTH="5960" VPOS="244" HPOS="3216" language="de" STYLEREFS="StyleId-D061DFEF-86FE-479B-A301-C2D566CFAF7A-">
+<TextLine BASELINE="451" HEIGHT="288" WIDTH="4992" VPOS="260" HPOS="4140"><String CONTENT="Johann" HEIGHT="160" WIDTH="736" VPOS="348" HPOS="4140"/><SP WIDTH="110" VPOS="332" HPOS="4877"/><String CONTENT="Konrad" HEIGHT="160" WIDTH="744" VPOS="332" HPOS="4988"/><SP WIDTH="982" VPOS="276" HPOS="5733"/><String CONTENT="EmpHng«" HEIGHT="168" WIDTH="808" VPOS="276" HPOS="6716"/><SP WIDTH="1408" VPOS="260" HPOS="7572"/><String CONTENT="^" HEIGHT="56" WIDTH="104" VPOS="492" HPOS="9028"/></TextLine>
+<TextLine BASELINE="670" HEIGHT="264" WIDTH="5728" VPOS="484" HPOS="3428"><String CONTENT="(Schaffhause»)" HEIGHT="232" WIDTH="1672" VPOS="516" HPOS="3428"/><SP WIDTH="1854" VPOS="516" HPOS="5101"/><String CONTENT="luXlinter" HEIGHT="160" WIDTH="1104" VPOS="516" HPOS="6956"/><SP WIDTH="110" VPOS="484" HPOS="8061"/><String CONTENT="Heinrich" HEIGHT="168" WIDTH="984" VPOS="484" HPOS="8172"/></TextLine>
+</TextBlock>
+<TextBlock ID="Page1_Block2" HEIGHT="208" WIDTH="472" VPOS="1812" HPOS="3216" language="de" STYLEREFS="StyleId-5DBD5B4C-2D15-491C-B314-ACD9DB28728E-">
+<TextLine BASELINE="1964" HEIGHT="160" WIDTH="424" VPOS="1838" HPOS="3242"><String CONTENT="Kopie" HEIGHT="160" WIDTH="424" VPOS="1838" HPOS="3242"/></TextLine>
+</TextBlock>
+<TextBlock ID="Page1_Block3" HEIGHT="432" WIDTH="1448" VPOS="1792" HPOS="6648" language="de" STYLEREFS="StyleId-5DBD5B4C-2D15-491C-B314-ACD9DB28728E-">
+<TextLine BASELINE="1968" HEIGHT="180" WIDTH="1400" VPOS="1818" HPOS="6674"><String CONTENT="Photokopie" HEIGHT="160" WIDTH="852" VPOS="1838" HPOS="6674"/><SP WIDTH="310" VPOS="1822" HPOS="7527"/><String CONTENT="ZB" HEIGHT="156" WIDTH="236" VPOS="1818" HPOS="7838"/></TextLine>
+<TextLine BASELINE="2168" HEIGHT="176" WIDTH="244" VPOS="2026" HPOS="7830"><String CONTENT="43" HEIGHT="176" WIDTH="244" VPOS="2026" HPOS="7830"/></TextLine>
+</TextBlock>
+<TextBlock ID="Page1_Block4" HEIGHT="1808" WIDTH="712" VPOS="2200" HPOS="3204" language="de" STYLEREFS="StyleId-5DBD5B4C-2D15-491C-B314-ACD9DB28728E-">
+<TextLine BASELINE="2356" HEIGHT="136" WIDTH="656" VPOS="2226" HPOS="3238"><String CONTENT="Standort" HEIGHT="136" WIDTH="656" VPOS="2226" HPOS="3238"/></TextLine>
+<TextLine BASELINE="2964" HEIGHT="160" WIDTH="380" VPOS="2834" HPOS="3242"><String CONTENT="Sign." HEIGHT="160" WIDTH="380" VPOS="2834" HPOS="3242"/></TextLine>
+<TextLine BASELINE="3356" HEIGHT="164" WIDTH="572" VPOS="3226" HPOS="3246"><String CONTENT="Umfang" HEIGHT="164" WIDTH="572" VPOS="3226" HPOS="3246"/></TextLine>
+<TextLine BASELINE="3972" HEIGHT="140" WIDTH="632" VPOS="3846" HPOS="3230"><String CONTENT="Literatur" HEIGHT="140" WIDTH="632" VPOS="3846" HPOS="3230"/></TextLine>
+</TextBlock>
+<TextBlock ID="Page1_Block5" HEIGHT="1180" WIDTH="808" VPOS="2204" HPOS="6644" language="de" STYLEREFS="StyleId-5DBD5B4C-2D15-491C-B314-ACD9DB28728E-">
+<TextLine BASELINE="2356" HEIGHT="132" WIDTH="752" VPOS="2230" HPOS="6674"><String CONTENT="Bull." HEIGHT="128" WIDTH="328" VPOS="2230" HPOS="6674"/><SP WIDTH="46" VPOS="2230" HPOS="7003"/><String CONTENT="Corr." HEIGHT="132" WIDTH="376" VPOS="2230" HPOS="7050"/></TextLine>
+<TextLine BASELINE="2964" HEIGHT="136" WIDTH="720" VPOS="2834" HPOS="6670"><String CONTENT="Abschrift" HEIGHT="136" WIDTH="720" VPOS="2834" HPOS="6670"/></TextLine>
+<TextLine BASELINE="3352" HEIGHT="136" WIDTH="756" VPOS="3226" HPOS="6674"><String CONTENT="Bull." HEIGHT="128" WIDTH="324" VPOS="3226" HPOS="6674"/><SP WIDTH="50" VPOS="3226" HPOS="6999"/><String CONTENT="Corr." HEIGHT="136" WIDTH="380" VPOS="3226" HPOS="7050"/></TextLine>
+</TextBlock>
+<TextBlock ID="Page1_Block6" HEIGHT="284" WIDTH="5800" VPOS="5516" HPOS="3200" STYLEREFS="StyleId-D061DFEF-86FE-479B-A301-C2D566CFAF7A-">
+<TextLine BASELINE="5730" HEIGHT="236" WIDTH="5752" VPOS="5542" HPOS="3226"><String CONTENT="Bemerkungen" HEIGHT="156" WIDTH="1024" VPOS="5614" HPOS="3226"/><SP WIDTH="90" VPOS="5626" HPOS="4251"/><String CONTENT="Biaaa" HEIGHT="152" WIDTH="600" VPOS="5626" HPOS="4342"/><SP WIDTH="134" VPOS="5650" HPOS="4943"/><String CONTENT="ab" HEIGHT="152" WIDTH="228" VPOS="5614" HPOS="5078"/><SP WIDTH="122" VPOS="5610" HPOS="5307"/><String CONTENT="k^eaaltate" HEIGHT="164" WIDTH="1224" VPOS="5594" HPOS="5430"/><SP WIDTH="138" VPOS="5586" HPOS="6655"/><String CONTENT="tua" HEIGHT="148" WIDTH="360" VPOS="5586" HPOS="6794"/><SP WIDTH="130" VPOS="5574" HPOS="7155"/><String CONTENT="liberas" HEIGHT="148" WIDTH="836" VPOS="5574" HPOS="7286"/><SP WIDTH="138" VPOS="5590" HPOS="8123"/><String CONTENT="accepi" HEIGHT="192" WIDTH="716" VPOS="5542" HPOS="8262"/></TextLine>
+</TextBlock><GraphicalElement ID="Page1_Block7" HEIGHT="36" WIDTH="5976" VPOS="1588" HPOS="3200"/><GraphicalElement ID="Page1_Block8" HEIGHT="32" WIDTH="2648" VPOS="2584" HPOS="6528"/><GraphicalElement ID="Page1_Block9" HEIGHT="36" WIDTH="5976" VPOS="3592" HPOS="3200"/><GraphicalElement ID="Page1_Block10" HEIGHT="40" WIDTH="5976" VPOS="5356" HPOS="3200"/><GraphicalElement ID="Page1_Block11" HEIGHT="3380" WIDTH="36" VPOS="244" HPOS="6528"/>
+</PrintSpace>
+</Page>
+</Layout>
+</alto>

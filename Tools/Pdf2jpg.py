@@ -10,8 +10,9 @@ from Tools.FileSystem import FileSystem
 
 def main():
 
-    input_path = "Karteikarten/PDF"
-    output_path = "App/static/cards/HBBW_Karteikarte_"
+    input_path = "Karteikarten/PDF_new"
+    output_path = "Karteikarten/PNG_new/HBBW_Karteikarte_"
+    # output_path = "App/static/cards/HBBW_Karteikarte_"
 
     i = 1
     for file in FileSystem.get_file_paths(input_path):
