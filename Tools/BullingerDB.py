@@ -638,7 +638,15 @@ class BullingerDB:
         return (new_sentence, c) if c > 0 else (None, 0)
 
     def save_comment_card(self, i, note, user, t):
-        if note: self.push2db(Notiz(note=note), i, user, t)
+        note_old, c = Notiz.query.filter_by(id_brief=i).order_by(desc(Notiz.zeit)).first(), 0
+        if note_old:
+            if note_old != note:
+                self.push2db(Notiz(note=note), i, user, t)
+                c += 1
+        elif note:
+            self.push2db(Notiz(note=note), i, user, t)
+            c += 1
+        return c
 
     @staticmethod
     def get_comments(user_name):
@@ -792,6 +800,29 @@ class BullingerDB:
         return switch_dict[m] if m in switch_dict else None
 
     @staticmethod
+    def get_overview_state(state):
+        data = []
+        recent_index = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
+        recent_dates = BullingerDB.get_most_recent_only(db.session, Datum).subquery()
+        base = db.session.query(
+            recent_index.c.id_brief,
+            recent_index.c.status,
+            recent_index.c.rezensionen,
+            recent_dates.c.jahr_a,
+            recent_dates.c.monat_a,
+            recent_dates.c.tag_a
+        ).join(recent_dates, recent_dates.c.id_brief == recent_index.c.id_brief)
+        for e in base.filter(recent_index.c.status == state).all():
+            y = e.jahr_a if e.jahr_a else Config.SD
+            m = BullingerDB.convert_month_to_str(e.monat_a)
+            m = Config.SD if not m else m
+            d = str(e.tag_a)+'.' if e.tag_a else Config.SD
+            print(y, m, d, e.rezensionen, e.status, e.id_brief)
+            data.append([e.id_brief, str(y), m, d, e.rezensionen, e.status])
+        data = sorted(data, key=itemgetter(0))
+        return data
+
+    @staticmethod
     def get_data_overview_month(year, month):
         year = BullingerDB.normalize_int_input(year)
         m_num = BullingerDB.convert_month_to_int(month)
@@ -937,15 +968,15 @@ class BullingerDB:
 
     @staticmethod
     def create_plot_user_stats(user_name, file_name):
+        color_private, color_public = "lime", "midnightblue"
         fig = plt.figure()
-        dc = [(u.changes, 1 if u.username == user_name else 0) for u in User.query.order_by(asc(User.changes)).all()]
-        co = ["darkgreen" if u.username == user_name else "dodgerblue" for u in
-              User.query.order_by(asc(User.changes)).all()]
+        dc = [(u.changes, 1 if u.username == user_name else 0) for u in User.query.order_by(asc(User.changes)).all() if u.changes > 0]
+        co = [color_private if t[1] else color_public for t in dc]
         # changes
         x = ('' if not c[1] else user_name for c in dc)
         x_pos = np.arange(len(dc))
         y = [c[0] for c in dc]
-        plt.barh(x_pos, y, align='center', alpha=0.5, color=co)
+        plt.barh(x_pos, y, align='center', alpha=0.8, color=co)
         plt.yticks(x_pos, x)
         plt.xlabel('Änderungen')
         fig.savefig('App/static/images/plots/user_stats_changes_' + file_name + '.png')
@@ -953,13 +984,12 @@ class BullingerDB:
 
         # finished
         fig = plt.figure()
-        dc = [(u.finished, 1 if u.username == user_name else 0) for u in User.query.order_by(asc(User.finished)).all()]
-        co = ["darkgreen" if u.username == user_name else "dodgerblue" for u in
-              User.query.order_by(asc(User.finished)).all()]
+        dc = [(u.finished, 1 if u.username == user_name else 0) for u in User.query.order_by(asc(User.finished)).all() if u.finished > 0]
+        co = [color_private if t[1] else color_public for t in dc]
         x = ('' if not c[1] else user_name for c in dc)
         x_pos = np.arange(len(dc))
         y = [c[0] for c in dc]
-        plt.barh(x_pos, y, align='center', alpha=0.5, color=co)
+        plt.barh(x_pos, y, align='center', alpha=0.8, color=co)
         plt.yticks(x_pos, x)
         plt.xlabel('abgeschlossen')
         fig.savefig('App/static/images/plots/user_stats_finished_' + file_name + '.png')
@@ -1132,11 +1162,12 @@ class BullingerDB:
 
     @staticmethod
     def get_overview_languages(lang):
+        recent_langs = BullingerDB.get_most_recent_only(db.session, Sprache).subquery()
         data = db.session.query(
-                Sprache.id_brief,
-                Sprache.sprache
-            ).filter(Sprache.sprache == lang)\
-            .order_by(asc(Sprache.id_brief))
+                recent_langs.c.id_brief.label("id_brief"),
+                recent_langs.c.sprache.label("sprache")
+            ).filter(recent_langs.c.sprache == lang)\
+            .order_by(asc(recent_langs.c.id_brief))
         return [[d.id_brief, d.sprache if d.sprache else Config.NONE] for d in data]
 
     @staticmethod
@@ -1164,13 +1195,101 @@ class BullingerDB:
         y_pos = np.arange(len(objects))
         performance = [t[1] for t in d]
         fig = plt.figure()
+        ax = plt.axes()
+        ax.yaxis.grid()  # horizontal lines
         plt.bar(y_pos, performance, align='center', alpha=0.5)
         plt.xticks(y_pos, objects)
         #plt.ylabel('')
         plt.title('Anzahl Änderungen pro Tag')
         fig.savefig('App/static/images/plots/changes_'+file_id+'.png')
         plt.close()
+
         return 'images/plots/overview_'+file_id+'.png'
+
+    @staticmethod
+    def get_progress_plot(file_id):
+        fig = plt.figure()
+
+        q = BullingerDB.get_most_recent_only(db.session, Kartei)
+        k = q.subquery()
+        tot = len(q.all())
+        a = db.session.query(k.c.status, func.strftime("%Y-%m-%d", k.c.zeit), func.count(k.c.zeit))\
+            .filter(k.c.status == "abgeschlossen")\
+            .group_by(func.strftime("%Y-%m-%d", k.c.zeit)).all()
+        xa, ca = [t[1] for t in a], [t[2] for t in a]
+        cac = [sum(ca[:i+1]) for i in range(len(ca))]
+        da = {xa[i]: (ca[i], cac[i]) for i in range(len(xa))}
+
+        u = db.session.query(k.c.status, func.strftime("%Y-%m-%d", k.c.zeit), func.count(k.c.zeit))\
+            .filter(k.c.status == "unklar")\
+            .group_by(func.strftime("%Y-%m-%d", k.c.zeit)).all()
+        xu, cu = [t[1] for t in u], [t[2] for t in u]
+        cuc = [sum(cu[:i+1]) for i in range(len(cu))]
+        du = {xu[i]: (cu[i], cuc[i]) for i in range(len(xu))}
+
+        e = db.session.query(k.c.status, func.strftime("%Y-%m-%d", k.c.zeit), func.count(k.c.zeit))\
+            .filter(k.c.status == "ungültig")\
+            .group_by(func.strftime("%Y-%m-%d", k.c.zeit)).all()
+        xe, ce = [t[1] for t in e], [t[2] for t in e]
+        cec = [sum(ce[:i+1]) for i in range(len(ce))]
+        de = {xe[i]: (ce[i], cec[i]) for i in range(len(xe))}
+
+        prev = None
+        data_a, data_u, data_e = [], [], []
+        data_ac, data_uc, data_ec, data_oc, data_noc = [], [], [], [], []
+        xx = sorted(list(set(xa+xu+xe)))
+        for x in xx:
+            data_a.append(da[x][0] if x in da else 0)
+            ac_ = da[x][1] if x in da else (da[prev][1] if prev in da else 0)
+            data_ac.append(ac_)
+
+            data_u.append(du[x][0] if x in du else 0)
+            uc_ = du[x][1] if x in du else (du[prev][1] if prev in du else 0)
+            data_uc.append(uc_)
+
+            data_e.append(de[x][0] if x in de else 0)
+            ec_ = de[x][1] if x in de else (de[prev][1] if prev in de else 0)
+            data_ec.append(ec_)
+
+            s = ac_ + uc_ + ec_
+            data_noc.append(s)
+            data_oc.append(tot - s)
+            prev = x
+
+        t1 = datetime.strptime(xx[0], "%Y-%m-%d")
+        t2 = datetime.strptime(xx[-1], "%Y-%m-%d")
+        days = (t2-t1).days
+        ppd = tot/data_noc[-1] * days - days
+
+        plt.subplot(2, 1, 1)
+        plt.rc('grid', linestyle=":", color='grey')
+        plt.rc('axes', axisbelow=True)
+        plt.plot(xx, data_e, "r-", label="ungültig")
+        plt.plot(xx, data_u, "y-", label="unklar")
+        plt.plot(xx, data_a, "g-", label="abgeschlossen")
+        plt.xticks([], [])
+        plt.grid()
+        plt.legend(bbox_to_anchor=(1.04, 1), loc="upper left")
+        plt.title("Statusänderungen pro Tag")
+
+        plt.subplot(2, 1, 2)
+        plt.rc('grid', linestyle=":", color='grey')
+        plt.rc('axes', axisbelow=True)
+        plt.plot(xx, data_ec, "r-", label="ungültig")
+        plt.plot(xx, data_uc, "y-", label="unklar")
+        plt.plot(xx, data_ac, "g-", label="abgeschlossen")
+        plt.plot(xx, data_noc, "k-", label="bearbeitet")
+        plt.plot(xx, data_oc, "b-", label="offen")
+        plt.xticks([], [])
+        plt.grid()
+        plt.legend(bbox_to_anchor=(1.04, 1), loc="upper left")
+        plt.title("kumuliert")
+
+        fig.tight_layout()
+        fig.savefig('App/static/images/plots/progress_' + file_id + '.png')
+        plt.close()
+
+        return int(ppd)
 
     @staticmethod
     def get_timeline_data_all(name=None, forename=None, location=None):

@@ -17,9 +17,6 @@
 
 	<h2>Mitarbeiter</h2>
 	<div class="h2_section">
-
-		<p>Ihr Benutzername ist nur für Sie sichtbar.</p>
-
 		<!--
 		<table class="js-sort-table paleBlueRows">
 			<thead class="my_table_head">
@@ -47,14 +44,24 @@
 			 src="{{url_for('static', filename='images/plots/user_stats_changes_'+vars['file_id']+'.png')}}"/>
 		<img class="parallel"
 			 src="{{url_for('static', filename='images/plots/user_stats_finished_'+vars['file_id']+'.png')}}"/>
+
+		<p>Ihr Benutzername ist nur für Sie sichtbar.</p>
+
 	</div>
 	<div class="clearing"></div>
 
 
 	<h2>Aktivitäten</h2>
 	<div class="h2_section">
-		<img src="{{url_for('static', filename='images/plots/changes_'+vars['file_id']+'.png')}}"/>
+		<img class="parallel"
+			 src="{{url_for('static', filename='images/plots/changes_'+vars['file_id']+'.png')}}"/>
+		<img class="parallel"
+			 src="{{url_for('static', filename='images/plots/progress_'+vars['file_id']+'.png')}}"/>
+		<div class="clearing"></div>
+		Wir brauchen voraussichtlich noch etwa {{vars['days_to_quit']}} Tage, bis alle Karteikarten
+		bearbeitet sind.
 	</div>
+	<div class="clearing"></div>
 
 
 	<h2>Sprachen</h2>

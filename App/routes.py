@@ -99,7 +99,7 @@ def print_user():
                 f.write(" - ".join([u.username, u.e_mail, u.password_hash])+'\n')
         with open("Data/user_addresses.txt", 'w') as f:
             for u in users:
-                f.write(u.e_mail+', ')
+                if "DELETED" not in u.e_mail: f.write(u.e_mail+', ')
         return redirect(url_for('admin.index'))
     return redirect(url_for('login', next=request.url))
 
@@ -217,6 +217,18 @@ def overview_month(year, month):
         ])
     })
 
+@app.route('/overview_state/<state>', methods=['POST', 'GET'])
+def overview_state(state):
+    BullingerDB.track(current_user.username, '/state/'+state, datetime.now())
+    data = BullingerDB.get_overview_state(state)
+    return render_template('overview_state.html', title="Statusübersicht ("+state+")", vars={
+        "username": current_user.username,
+        "user_stats": BullingerDB.get_user_stats(current_user.username),
+        "table": data,
+        "state": state,
+        "hits": len(data)
+    })
+
 @app.route('/overview/<name>/<forename>/<place>', methods=['GET'])
 def overview_cards_of_person(name, forename, place):
     BullingerDB.track(current_user.username, '/overview/'+name, datetime.now())
@@ -279,6 +291,7 @@ def stats(n_top=50):
             "stats": data_percentages,
             "url_plot": plot_url,
             "url_changes_per_day": BullingerDB.get_changes_per_day_data(id_file),
+            "days_to_quit": BullingerDB.get_progress_plot(id_file),
             "status_description": ' '.join([str(num_of_cards), 'Karteikarten:']),
             "page_index": "stats"
         }
