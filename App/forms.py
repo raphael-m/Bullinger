@@ -41,3 +41,12 @@ class GuestBookForm(FlaskForm):
 
     comment = StringField("Ihre Bemerkung")
     save = SubmitField('Speichern')
+
+
+class PersonNameForm(FlaskForm):
+
+    p_name = StringField('Name', validators=[DataRequired()])
+    p_forename = StringField('Vorname', validators=[DataRequired()])
+    a_name = StringField('Name', validators=[DataRequired()])
+    a_forename = StringField('Vorname', validators=[DataRequired()])
+    submit = SubmitField('Speichern')

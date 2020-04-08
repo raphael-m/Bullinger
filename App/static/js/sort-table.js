@@ -293,3 +293,33 @@ window.addEventListener
 if (typeof NodeList.prototype.forEach !== "function") {
     NodeList.prototype.forEach = Array.prototype.forEach;
 }
+
+
+$(document).ready(function () {
+    $(".name_selector").click( function (){
+        var vn = $(this).parent().prev().text();
+        var nn = $(this).parent().prev().prev().text();
+        $('#p_name').val(nn);
+        $('#p_forename').val(vn);
+
+    });
+});
+
+$(document).ready(function () {
+    $(".delete_selector").click( function (){
+        var v = getConfirmation();
+        if (v) {
+            var url = window.location.origin + $(this).attr('id');
+            $(location).attr('href', url);
+        }
+    });
+});
+
+function getConfirmation() {
+   var retVal = confirm("Sind Sie sicher, dass Sie diesen Eintrag löschen wollen?");
+   if( retVal == true ) {
+      return true;
+   } else {
+      return false;
+   }
+}

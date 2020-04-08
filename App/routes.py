@@ -10,7 +10,7 @@ from App import app, login_manager
 from App.forms import *
 from flask import render_template, flash, redirect, url_for, make_response, jsonify, request
 from flask_login import current_user, login_user, login_required, logout_user
-from sqlalchemy import desc
+from sqlalchemy import desc, func, asc
 from Tools.BullingerDB import BullingerDB
 from Tools.Dictionaries import CountDict
 from collections import defaultdict
@@ -642,6 +642,50 @@ def get_persons_all():
     BullingerDB.track(current_user.username, '/api/get_persons', datetime.now())
     return jsonify(BullingerDB.get_persons_by_var(None, None))
 
+
+@app.route('/persons/alias', methods=['POST', 'GET'])
+def alias():
+    p_data, form = [], PersonNameForm()
+    if form.validate_on_submit():
+        alias = Alias.query.filter_by(
+            p_name=form.p_name.data, p_vorname=form.p_forename.data,
+            a_name=form.a_name.data, a_vorname=form.a_forename.data).first()
+        if alias:
+            if not alias.is_active:
+                alias.is_active = 1
+                db.session.commit()
+            return redirect(url_for('alias'))
+        else:
+            db.session.add(Alias(
+                p_name=form.p_name.data, p_vorname=form.p_forename.data,
+                a_name =form.a_name.data, a_vorname=form.a_forename.data,
+                user=current_user.username, time=datetime.now()
+            )); db.session.commit()
+
+    for m in db.session.query(Alias.p_name, Alias.p_vorname).group_by(Alias.p_name, Alias.p_vorname).all():
+        data = []
+        for a in Alias.query.filter_by(p_name=m.p_name, p_vorname=m.p_vorname, is_active=1).all():
+            data.append([a.a_name, a.a_vorname])
+        if len(data): p_data.append([m.p_name, m.p_vorname, data])
+
+    form.process()
+    return render_template('person_aliases.html', title="Alias", form=form, vars={
+        "username": current_user.username,
+        "user_stats": BullingerDB.get_user_stats(current_user.username),
+        "primary_names": p_data
+    })
+
+@app.route('/delete_alias_1/<nn>/<vn>', methods=['POST', 'GET'])
+def delete_alias_1(nn, vn):
+    for a in Alias.query.filter_by(p_name=nn, p_vorname=vn, is_active=1).all(): a.is_active = 0
+    db.session.commit()
+    return redirect(url_for('alias'))
+
+@app.route('/delete_alias_2/<nn>/<vn>', methods=['POST', 'GET'])
+def delete_alias_2(nn, vn):
+    for a in Alias.query.filter_by(a_name=nn, a_vorname=vn, is_active=1).all(): a.is_active = 0
+    db.session.commit()
+    return redirect(url_for('alias'))
 
 @app.route('/api/clear/not_found', methods=['GET'])
 def clear_not_found():

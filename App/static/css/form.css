@@ -32,3 +32,30 @@
     line-height: 12px;
     text-align: left;
 }
+
+.person_name_input, .person_forename_input {
+    margin: 0px 0px;
+    padding: 0px; 0px;
+    height: 20px;
+    width: 300px;
+}
+
+.p_container {
+  overflow: hidden;
+}
+
+.p_inner {
+  overflow: hidden;
+}
+
+.p_child {
+    margin: 0px 3px;
+    float: left;
+    width: 300px;
+    height: 2em;
+    line-height: 2em;
+}
+
+.name_selector {
+    cursor: pointer;
+}

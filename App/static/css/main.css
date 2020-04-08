@@ -56,3 +56,7 @@ body {
 .kw_highlight {
     color: yellow;
 }
+
+.kw_italic {
+    font-style: italic;
+}

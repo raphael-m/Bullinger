@@ -5,86 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6d2cb28e-bb45-42c9-b203-59c8af68dfbb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/css/boxes.css" beforeDir="false" afterPath="$PROJECT_DIR$/App/static/css/boxes.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/changes_1584825774.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/changes_1584826210.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/changes_1584826323.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/changes_1584826374.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/changes_1584826423.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/changes_1584826446.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/changes_1584826464.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/changes_1584826615.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/changes_1584828052.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/changes_1584828097.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/changes_1584828119.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/changes_1584828149.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/changes_1584830403.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/changes_1584830450.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/lang_stats_1584825774.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/lang_stats_1584826210.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/lang_stats_1584826323.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/lang_stats_1584826374.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/lang_stats_1584826423.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/lang_stats_1584826446.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/lang_stats_1584826464.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/lang_stats_1584826615.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/lang_stats_1584828052.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/lang_stats_1584828097.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/lang_stats_1584828119.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/lang_stats_1584828149.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/lang_stats_1584830403.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/lang_stats_1584830450.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/overview_1584825774.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/overview_1584826210.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/overview_1584826324.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/overview_1584826374.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/overview_1584826423.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/overview_1584826447.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/overview_1584826464.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/overview_1584826615.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/overview_1584828052.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/overview_1584828097.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/overview_1584828119.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/overview_1584828149.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/overview_1584830404.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/overview_1584830450.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_changes_1584825774.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_changes_1584826210.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_changes_1584826323.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_changes_1584826374.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_changes_1584826423.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_changes_1584826446.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_changes_1584826464.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_changes_1584826615.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_changes_1584828052.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_changes_1584828097.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_changes_1584828119.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_changes_1584828149.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_changes_1584830403.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_changes_1584830450.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_finished_1584825774.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_finished_1584826210.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_finished_1584826323.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_finished_1584826374.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_finished_1584826423.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_finished_1584826446.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_finished_1584826464.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_finished_1584826615.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_finished_1584828052.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_finished_1584828097.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_finished_1584828119.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_finished_1584828149.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_finished_1584830403.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/images/plots/user_stats_finished_1584830450.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/account_login.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/account_login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/account_register.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/account_register.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/overview__status.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/overview__status.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/stats.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/stats.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data/user_addresses.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Data/user_addresses.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data/user_data.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Data/user_data.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tools/BullingerDB.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tools/BullingerDB.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/static/css/form.css" beforeDir="false" afterPath="$PROJECT_DIR$/App/static/css/form.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/static/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/App/static/css/main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/static/js/sort-table.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/static/js/sort-table.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/app.db" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -99,22 +27,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="218">
-              <caret line="820" column="51" selection-start-line="820" selection-start-column="51" selection-end-line="820" selection-end-column="51" />
-              <folding>
-                <element signature="e#118#153#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/routes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="142">
-              <caret line="91" column="25" selection-start-line="91" selection-start-column="18" selection-end-line="91" selection-end-column="25" />
+            <state relative-caret-position="489">
+              <caret line="684" column="17" selection-start-line="684" selection-start-column="17" selection-end-line="684" selection-end-column="17" />
               <folding>
                 <element signature="e#172#206#0" expanded="true" />
               </folding>
@@ -123,24 +39,66 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Data/user_addresses.txt">
+        <entry file="file://$PROJECT_DIR$/App/templates/user_status.html">
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Data/user_data.txt">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="136" selection-start-line="11" selection-start-column="136" selection-end-line="11" selection-end-column="136" />
+            <state relative-caret-position="235">
+              <caret line="182" column="103" selection-start-line="182" selection-start-column="23" selection-end-line="182" selection-end-column="103" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/templates/overview_state.html">
+        <entry file="file://$PROJECT_DIR$/App/templates/person_aliases.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="359">
-              <caret line="37" column="72" selection-start-line="37" selection-start-column="72" selection-end-line="37" selection-end-column="72" />
+            <state relative-caret-position="287">
+              <caret line="101" column="104" selection-start-line="101" selection-start-column="104" selection-end-line="101" selection-end-column="104" />
+              <folding>
+                <element signature="n#style#0;n#span#0;n#th#2;n#tr#0;n#thead#0;n#table#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/App/static/js/sort-table.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="257">
+              <caret line="311" column="66" selection-start-line="311" selection-start-column="66" selection-end-line="311" selection-end-column="66" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/static/css/form.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="885">
+              <caret line="59" column="20" selection-start-line="59" selection-start-column="20" selection-end-line="59" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/forms.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="340">
+              <caret line="48" column="67" selection-start-line="48" selection-start-column="67" selection-end-line="48" selection-end-column="67" />
+              <folding>
+                <element signature="e#165#196#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/templates/overview.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-206">
+              <caret line="34" selection-start-line="34" selection-end-line="45" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -157,16 +115,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Humphrey</find>
-      <find>ülhau</find>
-      <find>Lydius</find>
-      <find>“</find>
-      <find>”</find>
-      <find>bis er mit der</find>
-      <find>Falls Sie das</find>
-      <find>vo</find>
-      <find>Nachname</find>
-      <find>ssh</find>
       <find>delete</find>
       <find>setup</find>
       <find>print</find>
@@ -187,6 +135,16 @@
       <find>/stats</find>
       <find>month</find>
       <find>/print_</find>
+      <find>/register</find>
+      <find>.add(</find>
+      <find>count(</find>
+      <find>get_most_</find>
+      <find>/alias</find>
+      <find>alias</find>
+      <find>.name</find>
+      <find>blue</find>
+      <find>delete_a</find>
+      <find>Person</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -195,13 +153,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/config.py" />
-        <option value="$PROJECT_DIR$/App/static/css/std.css" />
-        <option value="$PROJECT_DIR$/restart_server.sh" />
-        <option value="$PROJECT_DIR$/App/templates/overview_persons.html" />
-        <option value="$PROJECT_DIR$/App/templates/overview.html" />
-        <option value="$PROJECT_DIR$/App/models.py" />
-        <option value="$PROJECT_DIR$/Data/persons" />
         <option value="$PROJECT_DIR$/Tools/NGrams.py" />
         <option value="$PROJECT_DIR$/Data/Corrections.txt" />
         <option value="$PROJECT_DIR$/Data/persons_corr.txt" />
@@ -231,7 +182,6 @@
         <option value="$PROJECT_DIR$/Data/name_corrections.txt" />
         <option value="$PROJECT_DIR$/Data/sign_corr.txt" />
         <option value="$PROJECT_DIR$/Data/wiki_links.txt" />
-        <option value="$PROJECT_DIR$/App/templates/index.html" />
         <option value="$PROJECT_DIR$/App/templates/faq.html" />
         <option value="$PROJECT_DIR$/Scripts/localhost_db_fetch.sh" />
         <option value="$PROJECT_DIR$/App/templates/base.html" />
@@ -241,15 +191,23 @@
         <option value="$PROJECT_DIR$/App/templates/account_register.html" />
         <option value="$PROJECT_DIR$/App/templates/account_login.html" />
         <option value="$PROJECT_DIR$/App/templates/stats.html" />
-        <option value="$PROJECT_DIR$/App/routes.py" />
         <option value="$PROJECT_DIR$/App/templates/overview__status.html" />
         <option value="$PROJECT_DIR$/Tools/BullingerDB.py" />
         <option value="$PROJECT_DIR$/App/templates/overview_state.html" />
         <option value="$PROJECT_DIR$/Data/user_data.txt" />
+        <option value="$PROJECT_DIR$/App/static/css/main.css" />
+        <option value="$PROJECT_DIR$/App/templates/index.html" />
+        <option value="$PROJECT_DIR$/App/__init__.py" />
+        <option value="$PROJECT_DIR$/App/models.py" />
+        <option value="$PROJECT_DIR$/App/routes.py" />
+        <option value="$PROJECT_DIR$/App/static/css/form.css" />
+        <option value="$PROJECT_DIR$/App/forms.py" />
+        <option value="$PROJECT_DIR$/App/templates/person_aliases.html" />
+        <option value="$PROJECT_DIR$/App/static/js/sort-table.js" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="23" />
     <option name="width" value="1440" />
     <option name="height" value="826" />
@@ -277,7 +235,33 @@
             <path>
               <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
               <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
-              <item name="Data" type="462c0819:PsiDirectoryNode" />
+              <item name="App" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
+              <item name="App" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="css" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
+              <item name="App" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
+              <item name="App" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
+              <item name="Tools" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
@@ -367,23 +351,23 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="826" extended-state="0" />
+    <frame x="0" y="23" width="1440" height="825" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" sideWeight="0.38134432" side_tool="true" weight="0.32959852" />
-      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.9125249" visible="true" weight="0.2769556" />
-      <window_info id="Structure" order="2" sideWeight="0.08747515" side_tool="true" visible="true" weight="0.2769556" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="0" visible="true" weight="0.3147139" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.9124767" visible="true" weight="0.28752643" />
+      <window_info id="Structure" order="2" sideWeight="0.087523274" side_tool="true" visible="true" weight="0.28752643" />
+      <window_info anchor="bottom" id="Terminal" order="0" visible="true" weight="0.26739427" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="2" weight="0.32967034" />
       <window_info anchor="bottom" id="Message" order="3" />
-      <window_info anchor="bottom" id="Find" order="4" weight="0.3152174" />
+      <window_info anchor="bottom" id="Find" order="4" weight="0.36562073" />
       <window_info anchor="bottom" id="Version Control" order="5" weight="0.32967034" />
       <window_info anchor="bottom" id="Run" order="6" weight="0.31178162" />
       <window_info anchor="bottom" id="Debug" order="7" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="10" weight="0.64305174" />
+      <window_info anchor="bottom" id="TODO" order="10" weight="0.17326057" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -409,48 +393,6 @@
     </layout-to-restore>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/App/templates/faq.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="326">
-          <caret line="442" column="33" selection-start-line="442" selection-start-column="33" selection-end-line="442" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/static/css/form.css">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/static/css/links.css">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/static/css/main.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-332" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/static/css/reset.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-182" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/static/css/std.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-467" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/static/css/table.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="825">
-          <caret line="55" column="23" selection-start-line="55" selection-start-column="23" selection-end-line="55" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/guestbook.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" selection-start-line="16" selection-end-line="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Scripts/localhost_db_fetch.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
@@ -468,24 +410,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/account_register.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="64" column="12" selection-start-line="64" selection-start-column="12" selection-end-line="64" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/templates/account_login.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="301">
           <caret line="52" column="12" selection-start-line="52" selection-start-column="12" selection-end-line="52" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="142">
-          <caret line="133" column="16" selection-start-line="133" selection-start-column="16" selection-end-line="135" selection-end-column="90" />
         </state>
       </provider>
     </entry>
@@ -515,13 +443,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/progress_1586206552.png">
       <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Doku/setup.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="557">
-          <caret line="48" column="6" lean-forward="true" selection-start-line="48" selection-start-column="6" selection-end-line="48" selection-end-column="6" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/progress_1586207943.png">
       <provider selected="true" editor-type-id="images" />
@@ -565,16 +486,6 @@
     <entry file="file://$PROJECT_DIR$/progress_1586212180.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/overview_month.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="21" column="41" lean-forward="true" selection-start-line="21" selection-start-column="41" selection-end-line="21" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/user_status.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/templates/overview__status.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="432">
@@ -588,11 +499,6 @@
     <entry file="file://$PROJECT_DIR$/App/templates/overview_general.html">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/overview_year.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-17" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/templates/stats.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="394">
@@ -600,47 +506,141 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/overview.html">
+    <entry file="file://$PROJECT_DIR$/Data/user_data.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="37" column="120" selection-start-line="37" selection-start-column="50" selection-end-line="37" selection-end-column="120" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/overview_state.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="359">
-          <caret line="37" column="72" selection-start-line="37" selection-start-column="72" selection-end-line="37" selection-end-column="72" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="820" column="51" selection-start-line="820" selection-start-column="51" selection-end-line="820" selection-end-column="51" />
-          <folding>
-            <element signature="e#118#153#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/routes.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="142">
-          <caret line="91" column="25" selection-start-line="91" selection-start-column="18" selection-end-line="91" selection-end-column="25" />
-          <folding>
-            <element signature="e#172#206#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="165">
+          <caret line="11" column="136" selection-start-line="11" selection-start-column="136" selection-end-line="11" selection-end-column="136" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Data/user_addresses.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/Data/user_data.txt">
+    <entry file="file://$PROJECT_DIR$/App/static/css/main.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="136" selection-start-line="11" selection-start-column="136" selection-end-line="11" selection-end-column="136" />
+        <state relative-caret-position="595">
+          <caret line="60" column="23" selection-start-line="60" selection-start-column="23" selection-end-line="60" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="401">
+          <caret line="104" column="84" selection-start-line="104" selection-start-column="84" selection-end-line="104" selection-end-column="84" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Doku/setup.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="21" column="25" selection-start-line="21" selection-start-column="9" selection-end-line="21" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="56">
+          <caret line="67" column="58" selection-start-line="67" selection-start-column="58" selection-end-line="67" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/update_localhost.sh">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/account_register.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" selection-start-line="17" selection-end-line="57" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="166">
+          <caret line="804" column="44" selection-start-line="804" selection-start-column="35" selection-end-line="804" selection-end-column="44" />
+          <folding>
+            <element signature="e#118#153#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/overview.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-206">
+          <caret line="34" selection-start-line="34" selection-end-line="45" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/overview_month.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="467">
+          <caret line="33" column="115" selection-start-line="33" selection-start-column="50" selection-end-line="33" selection-end-column="115" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/overview_year.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-246" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/overview_state.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="555">
+          <caret line="37" column="72" selection-start-line="37" selection-start-column="72" selection-end-line="37" selection-end-column="72" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/static/css/form.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="885">
+          <caret line="59" column="20" selection-start-line="59" selection-start-column="20" selection-end-line="59" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/user_status.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/routes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="489">
+          <caret line="684" column="17" selection-start-line="684" selection-start-column="17" selection-end-line="684" selection-end-column="17" />
+          <folding>
+            <element signature="e#172#206#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="235">
+          <caret line="182" column="103" selection-start-line="182" selection-start-column="23" selection-end-line="182" selection-end-column="103" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="48" column="67" selection-start-line="48" selection-start-column="67" selection-end-line="48" selection-end-column="67" />
+          <folding>
+            <element signature="e#165#196#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/person_aliases.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="287">
+          <caret line="101" column="104" selection-start-line="101" selection-start-column="104" selection-end-line="101" selection-end-column="104" />
+          <folding>
+            <element signature="n#style#0;n#span#0;n#th#2;n#tr#0;n#thead#0;n#table#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/static/js/sort-table.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="257">
+          <caret line="311" column="66" selection-start-line="311" selection-start-column="66" selection-end-line="311" selection-end-column="66" />
         </state>
       </provider>
     </entry>
