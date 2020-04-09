@@ -252,9 +252,7 @@ class BullingerDB:
             for line in in_file:
                 line = line.strip()
                 if line:
-                    print(line)
                     data, nn, vn, wiki_url, bild_url = line.split(', '), '', '', '', ''
-                    print(data)
                     if len(data) == 4: nn, vn, wiki_url, bild_url = data[0], data[1], data[2], data[3]
                     if len(data) == 3: nn, vn, wiki_url = data[0], data[1], data[2]
                     if len(data) == 2: nn, vn = data[0], data[1]
@@ -817,7 +815,6 @@ class BullingerDB:
             m = BullingerDB.convert_month_to_str(e.monat_a)
             m = Config.SD if not m else m
             d = str(e.tag_a)+'.' if e.tag_a else Config.SD
-            print(y, m, d, e.rezensionen, e.status, e.id_brief)
             data.append([e.id_brief, str(y), m, d, e.rezensionen, e.status])
         data = sorted(data, key=itemgetter(0))
         return data
@@ -870,7 +867,6 @@ class BullingerDB:
             data[Config.S_FINISHED] = [a, Config.NONE]
             data[Config.S_UNKNOWN] = [u, Config.NONE]
             data[Config.S_INVALID] = [i, Config.NONE]
-        print(data)
         return [number_of_cards, data]
 
     @staticmethod
@@ -1252,6 +1248,7 @@ class BullingerDB:
         ax.grid(b=True, which='minor', axis='both', color='#888888', linestyle=':', alpha=0.2)
         ax.grid(b=True, which='major', axis='both', color='#000000', linestyle=':', alpha=0.2)
         plt.plot(range(0, len(y)), y, 'b-', alpha=0.9)
+        plt.xticks([0, len(y) - 1], [a[0][0], a[-1][0]])
         plt.xlabel("Zeit (in Tagen)")
         plt.ylabel("Anzahl")
         plt.title("Seitenaufrufe")
@@ -1261,31 +1258,33 @@ class BullingerDB:
     @staticmethod
     def get_user_plot(file_id):
         fig = plt.figure()
-        qt = db.session.query(func.strftime("%Y-%m-%d", Tracker.time), func.count(Tracker.time))\
-            .group_by(func.strftime("%Y-%m-%d", Tracker.time)).all()
-        qu = db.session.query(func.strftime("%Y-%m-%d", User.time), func.count(User.time))\
+        time_rel = db.session.query(func.strftime("%Y-%m-%d", Tracker.time)).group_by(func.strftime("%Y-%m-%d", Tracker.time))
+        x = [t[0] for t in time_rel]
+
+        qu = db.session.query(func.strftime("%Y-%m-%d", User.time), func.count(User.username)) \
             .group_by(func.strftime("%Y-%m-%d", User.time)).all()
+        d, s = {}, 0
+        for q in qu:
+            s += q[1]
+            d[q[0]] = s
 
-        qa = Tracker.query.filter(Tracker.username != "Gast")\
-            .group_by(func.strftime("%Y-%m-%d", Tracker.time), Tracker.username)
-        d = {}
-        for t in qa:
-            dt = datetime.strptime(t.time, "%Y-%m-%d %H:%M:%S.%f")
-            tt = dt.strftime('%Y-%m-%d')
-            d[tt] = 1 if tt not in d else d[tt]+1
-
-        u_data = {q[0]: q[1] for q in qu}
-        x, xx = [t[0] for t in qt], [t[0] for t in qu]
-        z = sorted(list(set(x+xx)))
+        rel = Tracker.query.filter(Tracker.username != "Gast")\
+            .group_by(func.strftime("%Y-%m-%d", Tracker.time), Tracker.username).subquery()
+        rel = db.session.query(
+            func.count(rel.c.username).label("count"),
+            func.strftime("%Y-%m-%d", rel.c.time).label("time")
+        ).group_by(func.strftime("%Y-%m-%d", rel.c.time)).all()
+        dd = {r[1]:r[0] for r in rel}
+        a = 0
         new_users, all_users, active = [], [], []
-        for i in z:
-            new_users.append(0 if i not in u_data else u_data[i])
-            all_users.append(sum(new_users))
-            active.append(0 if i not in d else d[i])
+        for i in x:
+            a = d[i] if i in d else a
+            new_users.append(a)
+            active.append(0 if i not in dd else dd[i])
 
         plt.subplot(2, 1, 1)
-        plt.plot(z, all_users, "b-")
-        plt.xticks([0, len(z)-1], ['', ''])
+        plt.plot(x, new_users, "b-")
+        plt.xticks([0, len(x)-1], ['', ''])
         plt.title("Mitarbeiter")
         plt.ylabel("Gesamt")
         # plt.rc('axes', axisbelow=True)
@@ -1293,8 +1292,8 @@ class BullingerDB:
         plt.grid(True)
 
         plt.subplot(2, 1, 2)
-        plt.plot(z, active, "b-")
-        plt.xticks([0, len(z)-1], ['', ''])
+        plt.plot(x, active, "b-")
+        plt.xticks([0, len(x)-1], [x[0], x[-1]])
         plt.title("(aktive)")
         plt.xlabel("Zeit (in Tagen)")
         plt.ylabel("Anzahl")
