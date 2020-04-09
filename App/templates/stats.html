@@ -37,29 +37,49 @@
 			</tbody>
 		</table>
 		-->
+		<h3>Ranglisten</h3>
+		<div class="h3_section">
+		<p> In der Rangliste aufgeführt sind alle registrierten Benutzer (Mitarbeiter), die
+			<span class="kw"> mindestens einen Datenbankeintrag editiert </span>
+			("Korrigierte Datenbankeinträge") oder
+			<span class="kw"> mindestens eine Karteikarte als vollständig digitalisiert </span>
+			("Abgeschlossene Karteikarten") markiert haben.
+		</p>
+			<img class="parallel"
+				 src="{{url_for('static', filename='images/plots/user_stats_changes_'+vars['file_id']+'.png')}}"/>
+			<img class="parallel"
+				 src="{{url_for('static', filename='images/plots/user_stats_finished_'+vars['file_id']+'.png')}}"/>
+		</div>
+		<div class="clearing"></div>
 
-		<p>Ihr Anteil (ggf. grün) an allen bis dato vorgenommenen Änderungen:</p>
 
-		<img class="parallel"
-			 src="{{url_for('static', filename='images/plots/user_stats_changes_'+vars['file_id']+'.png')}}"/>
-		<img class="parallel"
-			 src="{{url_for('static', filename='images/plots/user_stats_finished_'+vars['file_id']+'.png')}}"/>
+		<h3>Arbeiten</h3>
+		<div class="h3_section">
 
-		<p>Ihr Benutzername ist nur für Sie sichtbar.</p>
+			<p> Für die Bearbeitung der restlichen
+				{{ vars["stats"]["offen"][0] + vars["stats"]["unklar"][0] }}
+				Karteikarten benötigen wir voraussichtlich noch
+				<span class="kw"> {{vars['days_to_quit']}} Tage</span>.
+			</p>
 
-	</div>
-	<div class="clearing"></div>
-
-
-	<h2>Aktivitäten</h2>
-	<div class="h2_section">
 		<img class="parallel"
 			 src="{{url_for('static', filename='images/plots/changes_'+vars['file_id']+'.png')}}"/>
 		<img class="parallel"
 			 src="{{url_for('static', filename='images/plots/progress_'+vars['file_id']+'.png')}}"/>
+		</div>
 		<div class="clearing"></div>
-		Wir brauchen voraussichtlich noch etwa {{vars['days_to_quit']}} Tage, bis alle Karteikarten
-		bearbeitet sind.
+
+		<h3>Aktivitäten</h3>
+		<div class="h3_section">
+
+		<img class="parallel"
+			 src="{{url_for('static', filename='images/plots/visites_'+vars['file_id']+'.png')}}"/>
+		<img class="parallel"
+			 src="{{url_for('static', filename='images/plots/users_'+vars['file_id']+'.png')}}"/>
+		</div>
+		<div class="clearing"></div>
+
+
 	</div>
 	<div class="clearing"></div>
 

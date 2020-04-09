@@ -274,6 +274,8 @@ def stats(n_top=50):
     data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(None)
     BullingerDB.create_plot_user_stats(current_user.username, id_file)
     BullingerDB.create_plot_lang(stats_languages, id_file)
+    BullingerDB.get_page_visits_plot(id_file)
+    BullingerDB.get_user_plot(id_file)
     return render_template(
         "stats.html",
         title="Statistiken",

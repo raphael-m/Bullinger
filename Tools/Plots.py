@@ -120,8 +120,9 @@ class PieChart:
     @staticmethod
     def create_plot_overview_stats(file_id, sizes, labels, colors):
         fig = plt.figure()
-        patches, texts = plt.pie(sizes, colors=colors, shadow=True, startangle=90)
-        plt.legend(patches, labels, loc="best")
+        explode = (0, 0.2, 0, 0)
+        patches, texts = plt.pie(sizes, explode=explode, colors=colors, shadow=True, startangle=90)
+        plt.legend(patches, labels, loc="top-right")
         plt.axis('equal')
         plt.tight_layout()
         fig.savefig('App/static/images/plots/overview_'+file_id+'.png')
