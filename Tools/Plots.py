@@ -122,7 +122,7 @@ class PieChart:
         fig = plt.figure()
         explode = (0, 0.2, 0, 0)
         patches, texts = plt.pie(sizes, explode=explode, colors=colors, shadow=True, startangle=90)
-        plt.legend(patches, labels, loc="top-right")
+        plt.legend(patches, labels, loc="upper right")
         plt.axis('equal')
         plt.tight_layout()
         fig.savefig('App/static/images/plots/overview_'+file_id+'.png')

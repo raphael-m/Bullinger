@@ -16,50 +16,62 @@
 	</div>
 
 	<h2>Mitarbeiter</h2>
+	<div class="h2_box">
+		<div class="h2_section">
+			<ul>
+				<li id="href_stats_rank" class="stats_toc">Ranglisten</li>
+				<li id="href_stats_changes" class="stats_toc">Korrekturen und Statusänderungen</li>
+				<li id="href_stats_activity" class="stats_toc">Allgemeine Aktivitäten</li>
+			</ul>
+		</div>
+	</div>
+
+
 	<div class="h2_section">
-		<!--
-		<table class="js-sort-table paleBlueRows">
-			<thead class="my_table_head">
-				<tr class="my_table_head_row">
-					<th class="js-sort-number my_table_head_cell">ID</th>
-					<th class="js-sort-number my_table_head_cell">Änderungen</th>
-					<th class="js-sort-number my_table_head_cell">abgeschlossen</th>
-				</tr>
-			</thead>
-			<tbody>
-			{% for r in vars["user_stats_all"] %}
-				<tr class="my_table_row">
-					<td class="my_table_cell">{{ r[0] }}</td>
-					<td class="my_table_cell">{{ r[1] }}</td>
-					<td class="my_table_cell">{{ r[2] }}</td>
-				</tr>
-			{% endfor %}
-			</tbody>
-		</table>
-		-->
-		<h3>Ranglisten</h3>
+
+		<h3 id="stats_rank">Ranglisten</h3>
 		<div class="h3_section">
-		<p> In der Rangliste aufgeführt sind alle registrierten Benutzer (Mitarbeiter), die
-			<span class="kw"> mindestens einen Datenbankeintrag editiert </span>
-			("Korrigierte Datenbankeinträge") oder
-			<span class="kw"> mindestens eine Karteikarte als vollständig digitalisiert </span>
-			("Abgeschlossene Karteikarten") markiert haben.
-		</p>
+
+			<p> Bis jetzt haben sich
+					<span class="kw">{{ vars["workers_corr"] }} Personen</span>
+					an den Korrekturen beteiligt, wovon
+					<span class="kw"> {{ vars["workers_quit"] }}</span>
+					mindestens eine Karteikarte abgeschlossen haben.
+			</p>
+			<p>Rekorde:
+				<span class="kw">{{ vars["corr_max"] }} Korrekturen</span>,
+				<span class="kw">{{ vars["quit_max"] }} Abschlüssen.</span>
+			</p>
+
 			<img class="parallel"
 				 src="{{url_for('static', filename='images/plots/user_stats_changes_'+vars['file_id']+'.png')}}"/>
 			<img class="parallel"
 				 src="{{url_for('static', filename='images/plots/user_stats_finished_'+vars['file_id']+'.png')}}"/>
+
+			<p>
+				In der Rangliste aufgeführt sind alle registrierten Benutzer (Mitarbeiter), die
+				<span class="kw"> mindestens einen Datenbankeintrag editiert </span>
+				("Korrigierte Datenbankeinträge") oder
+				<span class="kw"> mindestens eine Karteikarte als vollständig digitalisiert </span>
+				("Abgeschlossene Karteikarten") markiert haben.
+			</p>
 		</div>
 		<div class="clearing"></div>
 
 
-		<h3>Arbeiten</h3>
+		<h3 id="stats_changes">Korrekturen und Statusänderungen</h3>
 		<div class="h3_section">
 
-			<p> Für die Bearbeitung der restlichen
-				{{ vars["stats"]["offen"][0] + vars["stats"]["unklar"][0] }}
-				Karteikarten benötigen wir voraussichtlich noch
-				<span class="kw"> {{vars['days_to_quit']}} Tage</span>.
+			<p> Wir arbeiten seit
+				<span class="kw">{{vars['days_active']}} Tagen</span>
+				an der Digitalisierung der Karteikarten.
+				Das sind
+				{{(100*vars['days_active']/(vars['days_remaining']+vars['days_active']))|round(2)}}%
+				der geschätzten Gesamtzeit von {{vars['days_active']+vars['days_remaining']}} Tagen.
+			</p>
+			<p>
+				Prognostizierte Restzeit:
+				<span class="kw"> {{vars['days_remaining']}} Tage</span>.
 			</p>
 
 		<img class="parallel"
@@ -69,8 +81,14 @@
 		</div>
 		<div class="clearing"></div>
 
-		<h3>Aktivitäten</h3>
+		<h3 id="stats_activity">Allgemeine Aktivitäten</h3>
 		<div class="h3_section">
+			Wir verzeichnen
+			<span class="kw">{{ vars["visits"] }} Seitenaufrufe</span>
+			(seit dem 12. März 2020),
+			<span class="kw">{{ vars["registered_users"] }} registrierte Mitarbeiter</span>,
+			und durchschnittlich
+			<span class="kw">{{ vars["users_active_on_avg"]|round(1) }} aktive Mitarbeiter täglich.</span>
 
 		<img class="parallel"
 			 src="{{url_for('static', filename='images/plots/visites_'+vars['file_id']+'.png')}}"/>
@@ -79,101 +97,25 @@
 		</div>
 		<div class="clearing"></div>
 
+		<p>Aktivitäten des Administrators finden keinen Einzug in die oben stehenden Analysen.</p>
 
 	</div>
 	<div class="clearing"></div>
 
 
-	<h2>Sprachen</h2>
+	<h2>Daten</h2>
 	<div class="h2_section">
 
-		<p>Einige der Briefe sind mehrsprachig ...</p>
+		<p>Verfügbare Übersichten zu den Karteikarten:</p>
 
-		<img class="parallel"
-			 src="{{url_for('static', filename='images/plots/lang_stats_'+vars['file_id']+'.png')}}"/>
+		<ul>
+			<li><a href="{{url_for('overview')}}">Datum (nach Jahren/Monaten)</a></li>
+			<li><a href="{{url_for('overview_persons')}}">Personen (mit Ortschaften)</a></li>
+			<li><a href="{{url_for('correspondents')}}">Personen (ohne Ortschaften)</a></li>
+			<li><a href="{{url_for('languages')}}">Sprachen</a></li>
+		</ul>
 
-		<div class="parallel">
-            <table class="js-sort-table paleBlueRows">
-                <thead class="my_table_head">
-                    <tr class="my_table_head_row">
-                        <th class="js-sort-string my_table_head_cell">Sprache</th>
-                        <th class="js-sort-number my_table_head_cell">Frequenz</th>
-                        <th class="js-sort-number my_table_head_cell">[%]</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for l in vars["lang_stats"] %}
-                    <tr class="my_table_row">
-                        <td class="my_table_cell">
-                            <a href="{{url_for('overview_languages', lang=l[0])}}"> {{ l[0] }} </a>
-                        </td>
-                        <td class="my_table_cell">{{ l[1] }}</td>
-                        <td class="my_table_cell">{{ l[2] }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-		</div>
 
-	</div>
-	<div class="clearing"></div>
-
-	<h2>Top-{{ vars["n_top"] }}-Korrespondenten</h2>
-	<div class="h2_section">
-
-		<p>
-			Wer hat die meisten?
-			Ignorieren wir die Ortschaften und zählen alle Absender/Empfänger
-			mit identschen Namen (Vor-/Nachname), bietet sich folgendes Bild:
-		</p>
-
-		<!--
-		<p>http://130.60.24.72/stats/&#60;NUMMER_TOP_N&#62;</p>
-		-->
-		
-		<div class="parallel">
-			<table class="js-sort-table paleBlueRows">
-				<thead class="my_table_head">
-					<tr class="my_table_head_row">
-						<th class="js-sort-string my_table_head_cell">Name</th>
-						<th class="js-sort-string my_table_head_cell">Vorname</th>
-						<th class="js-sort-number my_table_head_cell">empfangen</th>
-					</tr>
-				</thead>
-				<tbody>
-				<!-- n top Empfänger -->
-				{% for e in vars["top_r_gbp"] %}
-					<tr class="my_table_row">
-						<td class="my_table_cell"><a href="{{url_for('person_by_name', name=e[0])}}"> {{ e[0] }} </a></td>
-						<td class="my_table_cell"><a href="{{url_for('person_by_forename', forename=e[1])}}"> {{ e[1] }} </a></td>
-						<td class="my_table_cell">{{ e[2] }}</td>
-					</tr>
-				{% endfor %}
-				</tbody>
-			</table>
-		</div>
-
-		<div class="parallel">
-			<table class="js-sort-table paleBlueRows">
-				<thead class="my_table_head">
-					<tr class="my_table_head_row">
-						<th class="js-sort-string my_table_head_cell">Name</th>
-						<th class="js-sort-string my_table_head_cell">Vorname</th>
-						<th class="js-sort-number my_table_head_cell">gesendet</th>
-					</tr>
-				</thead>
-				<tbody>
-				<!-- n top Absender -->
-				{% for s in vars["top_s_gbp"] %}
-					<tr class="my_table_row">
-						<td class="my_table_cell"><a href="{{url_for('person_by_name', name=s[0])}}"> {{ s[0] }} </a></td>
-						<td class="my_table_cell"><a href="{{url_for('person_by_forename', forename=s[1])}}"> {{ s[1] }} </a></td>
-						<td class="my_table_cell">{{ s[2] }}</td>
-					</tr>
-				{% endfor %}
-				</tbody>
-			</table>
-		</div>
 	</div>
 	<div class="clearing"></div>
 

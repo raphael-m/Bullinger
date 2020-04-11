@@ -12,7 +12,19 @@
         <h2>Karteikarten-Attribute</h2>
         <div class="h2_section">
             <div class="h3_box">
-                <h3>Absender/Empfänger</h3>
+                <div class="h3_section">
+                    <ul>
+                        <li id="href_faq_adress" class="faq_toc">Absender/Empfänger</li>
+                        <li id="href_faq_date" class="faq_toc">Datum</li>
+                        <li id="href_faq_copy" class="faq_toc">Autograph/Kopie</li>
+                        <li id="href_faq_lang" class="faq_toc">Sprache und erster Satz</li>
+                        <li id="href_faq_state" class="faq_toc">Status</li>
+                        <li id="href_faq_var" class="faq_toc">Allgemeines</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="h3_box">
+                <h3 id="faq_adress">Absender/Empfänger {% include "title_navigation.html" %}</h3>
                 <div class="h3_section">
                     <div class="h4_box">
                         <h4>Was soll ich machen, wenn mehrere Absender oder mehrere Empfänger
@@ -94,7 +106,7 @@
             </div>
             <div class="h3_separator"></div>
             <div class="h3_box">
-                <h3>Datum</h3>
+                <h3 id="faq_date">Datum {% include "title_navigation.html" %}</h3>
                 <div class="h3_section">
                     <div class="h4_box">
                         <h4>Was bedeutet "Jahr B, Monat B, Tag B" bei <b>Datum</b>?</h4>
@@ -179,7 +191,7 @@
             </div>
             <div class="h3_separator"></div>
             <div class="h3_box">
-                <h3>Autograph/Kopie</h3>
+                <h3 id="faq_copy">Autograph/Kopie {% include "title_navigation.html" %}</h3>
                 <div class="h3_section">
                     <div class="h4_box">
                         <h4>Was bedeutet "Autograph"?</h4>
@@ -268,7 +280,7 @@
             </div>
             <div class="h3_separator"></div>
             <div class="h3_box">
-                <h3>Sprache / 1. Satz</h3>
+                <h3 id="faq_lang">Sprache / 1. Satz {% include "title_navigation.html" %}</h3>
                 <div class="h3_section">
                     <div class="h4_box">
                         <h4>Warum ist das Feld "Sprache" in der Karteikarte leer?</h4>
@@ -378,7 +390,7 @@
             </div>
             <div class="h3_separator"></div>
             <div class="h3_box">
-                <h3>Status</h3>
+                <h3 id="faq_state">Status {% include "title_navigation.html" %}</h3>
                 <div class="h3_section">
                     <div class="h4_box">
                         <h4>Wann soll ich "Anmerkungen / Notiz zu dieser Karteikarte" eintragen?</h4>
@@ -416,7 +428,7 @@
             </div>
             <div class="h3_separator"></div>
             <div class="h3_box">
-                <h3>Allgemeines</h3>
+                <h3 id="faq_var">Allgemeines {% include "title_navigation.html" %}</h3>
                 <div class="h3_section">
                     <div class="h4_box">
                         <h4>Warum sind die Felder "Photokopie" und "Abschrift" grau?</h4>
@@ -440,22 +452,6 @@
                             <ul>
                                 <li>Der Eintrag zur Sprache wird automatisch aus dem ersten Satz abgeleitet. Bitte stellen Sie sicher, dass der Eintrag auch tatsächlich mit der Sprache des ersten Satzes übereinstimmt. Ist bereits auf der Karteikarte eine Sprache vermerkt, tragen Sie bitte diese in die Datenbank ein.</li>
                                 <li>Der Eintrag "s.d." zum Monat B. Sofern auf der Karteikarte nur ein Datum angegeben ist, können Sie diesen Eintrag ignorieren.</li>
-                            </ul>
-                            <p> Die automatisierte Texterkennung trifft bei der Vorverarbeitung der Rohdaten jeweils
-                                einige Annahmen, was bei der (automatischen) Erkennung und Korrektur von Fehlern sehr
-                                hilfreich ist. Annahmen, Eigenschaften und Techniken:
-                            </p>
-                            <ul>
-                                <li>Wir benutzen die OCR-Software
-                                <a class="text_link" href="https://www.abbyy.com/de-de/finereader/">"FineReader"</a>.
-                                </li>
-                                <li>Datum: Die Karteikarten liegen nach Jahr, Monat und Tag sortiert vor.</li>
-                                <li>Absender/Empfänger: Einer der beiden ist Heinrich Bullinger (Zürich).</li>
-                                <li>Photokopie/Abschrift: "Zürich StA"/"Zürich ZB" handschriftlich notiert enthält charakteristische Zeichenketten.
-                                    Typische, korrekt eingelesene Begriffe deuten auf die Schrift einer Schreibmaschine hin. </li>
-                                <li>Sprache: Wir analysieren den ersten Satz mit dem Tool
-                                    <a class="text_link" href="https://github.com/saffsd/langid.py">"LangId"</a>.
-                                </li>
                             </ul>
                         </div>
                     </div>

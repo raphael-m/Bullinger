@@ -37,6 +37,11 @@ body {
 
 #status_info { float: right; }
 
+.title_navigation {
+    float: right;
+    font-size: 1.1em;
+}
+
 /* key words */
 
 .kw {
@@ -59,4 +64,9 @@ body {
 
 .kw_italic {
     font-style: italic;
+}
+
+.navigate_l, .navigate_t, .navigate_b, .navigate_r {
+    float: left;
+    color: gray;
 }

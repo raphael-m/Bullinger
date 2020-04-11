@@ -14,7 +14,7 @@
 <p> &#8594; <a class="text_link" href="{{url_for('stats')}}">Statistiken</a></p>
 {% endif %}
 
-<img class="parallel" src="{{url_for('static', filename=vars['url_plot'])}}"/>
+<img class="parallel" src="{{url_for('static', filename='images/plots/overview_'+vars['file_id']+'.png')}}"/>
 
 <div class="parallel">
     <table class="js-sort-table paleBlueRows">
@@ -40,7 +40,6 @@
 
     <p><span class="kw">Beschreibung:</span></p>
     <ul>
-        <ul>
         <li>offen: un- oder nur teilweise bearbeitet</li>
         <li>unklar: Schwierigkeiten</li>
         <li>ungültig: Ausschuss</li>

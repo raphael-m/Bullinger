@@ -2,11 +2,7 @@
 
 {% block content %}
 
-<h1>
-	>
-	Kartei
-	{% include "user_status.html" %}
-</h1>
+<h1> > Kartei / Personen {% include "user_status.html" %} </h1>
 
 <div class="main_box">
 
@@ -25,7 +21,7 @@
 				Eine Tabelle, welche Ortschaften ignoriert und Personen mit identischen Namen zusammenfasst
 				und so etwas besser Aufschluss über die jeweiligen Anzahlen gesendeter und geschriebener
 				Briefe pro Person gibt, finden Sie
-				<a class="text_link" href="{{url_for('stats')}}">hier</a>.
+				<a class="text_link" href="{{url_for('correspondents')}}">hier</a>.
 			</p>
 			<p>
 				Bei der automatischen Erfassung der Karteikartendaten sind wir davon ausgegangen,
@@ -33,10 +29,10 @@
 			</p>
 			<p></p>
 
-			Null-Werte:
+			<span class="kw">Null-Werte:</span>
 			<ul>
-				<li>lat. "s.n. = sine nomine" (ohne Namen)</li>
-				<li>lat. "s.l. = sine loco" (ohne Ort)</li>
+				<li>lat. "s.n." = "sine nomine" (ohne Namen)</li>
+				<li>lat. "s.l." = "sine loco" (ohne Ort)</li>
 			</ul>
 
 			<table class="js-sort-table paleBlueRows">
@@ -71,6 +67,8 @@
 				{% endfor %}
 				</tbody>
 			</table>
+
+			<p>Treffer: {{ vars["hits"] }}</p>
 		</div>
 	</div>
 

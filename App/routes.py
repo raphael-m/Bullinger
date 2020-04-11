@@ -146,8 +146,7 @@ def register():
 @app.route('/overview', methods=['POST', 'GET'])
 def overview():
     BullingerDB.track(current_user.username, '/overview', datetime.now())
-    data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(None)
-    persons = BullingerDB.get_persons_by_var(None, None)
+    data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(None, str(int(time.time())))
     return render_template(
         'overview.html',
         title="Übersicht",
@@ -155,9 +154,7 @@ def overview():
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
             "table": data_overview,
-            "persons": persons,
-            "hits": len(persons),
-            "table_language": BullingerDB.get_language_stats(),
+            "hits": len(data_overview),
         }
     )
 
@@ -168,7 +165,7 @@ def overview_persons():
     persons = BullingerDB.get_persons_by_var(None, None)
     return render_template(
         'overview_persons.html',
-        title="Übersicht",
+        title="Korrespondenten",
         vars={
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
@@ -182,13 +179,14 @@ def overview_persons():
 @app.route('/overview_year/<year>', methods=['POST', 'GET'])
 def overview_year(year):
     BullingerDB.track(current_user.username, '/overview/'+year, datetime.now())
-    data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(year)
+    file_id = str(int(time.time()))
+    data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(year, file_id)
     return render_template('overview_year.html', title="Übersicht", vars={
         "username": current_user.username,
         "user_stats": BullingerDB.get_user_stats(current_user.username),
         "year": year,
         "table": data_overview,
-        "url_plot": plot_url,
+        "file_id": file_id,
         "num_of_cards": num_of_cards,
         "stats": data_percentages,
         "status_description": ' '.join([str(num_of_cards), 'Karteikarten vom Jahr', str(year)+':'])
@@ -199,7 +197,7 @@ def overview_year(year):
 def overview_month(year, month):
     BullingerDB.track(current_user.username, '/'.join(['', str(month), str(year)]), datetime.now())
     if month == Config.SD: month = 0
-    data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview_month(year, month)
+    data_overview, data_percentages, file_id, num_of_cards = BullingerDB.get_data_overview_month(year, month)
     month = BullingerDB.convert_month_to_str(month)
     return render_template('overview_month.html', title="Monatsübersicht", vars={
         "username": current_user.username,
@@ -207,7 +205,7 @@ def overview_month(year, month):
         "year": year,
         "month": month if month else Config.SD,
         "table": data_overview,
-        "url_plot": plot_url,
+        "file_id": file_id,
         "num_of_cards": num_of_cards,
         "stats": data_percentages,
         "status_description": ' '.join([
@@ -270,34 +268,66 @@ def overview_languages(lang):
 def stats(n_top=50):
     BullingerDB.track(current_user.username, '/stats', datetime.now())
     n_top, id_file = int(n_top), str(int(time.time()))
-    stats_languages = BullingerDB.get_language_stats()
-    data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(None)
-    BullingerDB.create_plot_user_stats(current_user.username, id_file)
-    BullingerDB.create_plot_lang(stats_languages, id_file)
+    data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(None, id_file)
+    w1, w2, m1, m2 = BullingerDB.create_plot_user_stats(current_user.username, id_file)
     BullingerDB.get_page_visits_plot(id_file)
-    BullingerDB.get_user_plot(id_file)
+    users, user_avg = BullingerDB.get_user_plot(id_file)
     return render_template(
         "stats.html",
         title="Statistiken",
         vars={
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
-            "user_stats_all": BullingerDB.get_user_stats_all(current_user.username),
-            "n_top": n_top,
             "file_id": id_file,
-            "lang_stats": stats_languages,
-            # "top_s": BullingerDB.get_top_n_sender(n_top),
-            # "top_r": BullingerDB.get_top_n_receiver(n_top),
-            "top_s_gbp": BullingerDB.get_top_n_sender_ignoring_place(n_top),
-            "top_r_gbp": BullingerDB.get_top_n_receiver_ignoring_place(n_top),
             "stats": data_percentages,
-            "url_plot": plot_url,
-            "url_changes_per_day": BullingerDB.get_changes_per_day_data(id_file),
-            "days_to_quit": BullingerDB.get_progress_plot(id_file),
+            "workers_corr": w1,
+            "workers_quit": w2,
+            "corr_max": m1,
+            "quit_max": m2,
+            "days_active": BullingerDB.get_changes_per_day_data(id_file, current_user.username),
+            "days_remaining": BullingerDB.get_progress_plot(id_file),
             "status_description": ' '.join([str(num_of_cards), 'Karteikarten:']),
-            "page_index": "stats"
+            "visits": BullingerDB.get_number_of_page_visits(visits_only=True),
+            "registered_users": users,
+            "users_active_on_avg": user_avg
         }
     )
+
+@app.route('/languages', methods=['GET'])
+def languages():
+    BullingerDB.track(current_user.username, '/languages', datetime.now())
+    id_file = str(int(time.time()))
+    stats_languages = BullingerDB.get_language_stats()
+    BullingerDB.create_plot_lang(stats_languages, id_file)
+    return render_template(
+        "overview_languages.html",
+        title="Sprachen",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "file_id": id_file,
+            "lang_stats": stats_languages,
+        }
+    )
+
+@app.route('/correspondents', methods=['GET'])
+def correspondents():
+    BullingerDB.track(current_user.username, '/correspondents', datetime.now())
+    data_sender = BullingerDB.get_top_n_sender_ignoring_place()
+    data_receiver = BullingerDB.get_top_n_receiver_ignoring_place()
+    return render_template(
+        "overview_person_no_loc.html",
+        title="Korrespondenten",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "top_s_gbp": data_sender,
+            "top_r_gbp": data_receiver,
+            "hits_s": len(data_sender),
+            "hits_r": len(data_receiver)
+        }
+    )
+
 
 @app.route('/overview/person_by_name/<name>', methods=['GET'])
 def person_by_name(name):

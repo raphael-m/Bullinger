@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/Tools/BullingerDB.py" line="1098" mnemonic="7" />
+    <bookmark url="file://$PROJECT_DIR$/Tools/BullingerDB.py" line="1099" mnemonic="7" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6d2cb28e-bb45-42c9-b203-59c8af68dfbb" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/App/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/static/css/links.css" beforeDir="false" afterPath="$PROJECT_DIR$/App/static/css/links.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/static/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/App/static/css/main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/static/js/sort-table.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/static/js/sort-table.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/templates/faq.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/faq.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/templates/overview.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/overview.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/templates/overview__status.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/overview__status.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/templates/overview_persons.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/overview_persons.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/templates/stats.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/stats.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Tools/BullingerDB.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tools/BullingerDB.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tools/Plots.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tools/Plots.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/app.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/update_server.sh" beforeDir="false" afterPath="$PROJECT_DIR$/update_server.sh" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,11 +32,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="214">
-              <caret line="1250" column="40" selection-start-line="1250" selection-start-column="40" selection-end-line="1250" selection-end-column="40" />
+            <state relative-caret-position="238">
+              <caret line="1343" column="25" selection-start-line="1343" selection-start-column="25" selection-end-line="1343" selection-end-column="25" />
               <folding>
                 <element signature="e#118#153#0" expanded="true" />
               </folding>
@@ -32,20 +44,29 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Tools/Plots.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/update_server.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1694">
-              <caret line="123" column="40" selection-start-line="123" selection-start-column="40" selection-end-line="123" selection-end-column="40" />
+            <state relative-caret-position="105">
+              <caret line="7" column="2" selection-start-line="7" selection-start-column="2" selection-end-line="7" selection-end-column="2" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/templates/faq.html">
+        <entry file="file://$PROJECT_DIR$/App/templates/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="181">
-              <caret line="406" selection-start-line="406" selection-end-line="411" selection-end-column="33" />
+            <state relative-caret-position="167">
+              <caret line="86" column="52" selection-start-line="86" selection-start-column="52" selection-end-line="86" selection-end-column="52" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/templates/overview_year.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="266">
+              <caret line="31" column="119" selection-start-line="31" selection-start-column="28" selection-end-line="31" selection-end-column="119" />
             </state>
           </provider>
         </entry>
@@ -53,8 +74,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/routes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="65">
-              <caret line="267" column="17" selection-start-line="267" selection-start-column="12" selection-end-line="267" selection-end-column="17" />
+            <state relative-caret-position="138">
+              <caret line="286" column="48" selection-start-line="286" selection-start-column="48" selection-end-line="286" selection-end-column="48" />
               <folding>
                 <element signature="e#172#206#0" expanded="true" />
               </folding>
@@ -65,8 +86,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/templates/stats.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="182">
-              <caret line="75" column="99" selection-start-line="75" selection-start-column="99" selection-end-line="75" selection-end-column="99" />
+            <state relative-caret-position="399">
+              <caret line="90" column="98" selection-start-line="90" selection-start-column="98" selection-end-line="90" selection-end-column="98" />
             </state>
           </provider>
         </entry>
@@ -74,8 +95,33 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/templates/overview__status.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="33" column="66" selection-start-line="33" selection-start-column="45" selection-end-line="33" selection-end-column="66" />
+            <state relative-caret-position="461">
+              <caret line="41" selection-start-line="41" selection-end-line="46" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/templates/overview_languages_cards.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-12" />
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/templates/overview_languages.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="482">
+              <caret line="39" column="14" selection-start-line="39" selection-start-column="14" selection-end-line="39" selection-end-column="14" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/templates/overview.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="435">
+              <caret line="32" column="57" selection-end-line="50" />
             </state>
           </provider>
         </entry>
@@ -92,36 +138,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Eli</find>
-      <find>print_u</find>
-      <find>Geben Sie als Nachnam</find>
-      <find>Was bedeutet &quot;Liter</find>
-      <find>delete$</find>
-      <find>language</find>
-      <find>Tracker</find>
-      <find>stats</find>
-      <find>get_most</find>
-      <find>/admin/print</find>
-      <find>Bei Fra</find>
-      <find>export</find>
-      <find>/overview</find>
-      <find>month</find>
-      <find>/print_</find>
-      <find>/register</find>
-      <find>.add(</find>
-      <find>count(</find>
-      <find>get_most_</find>
-      <find>/alias</find>
-      <find>alias</find>
-      <find>.name</find>
-      <find>blue</find>
-      <find>Person</find>
-      <find>delete_a</find>
-      <find>ax</find>
-      <find>/stats</find>
-      <find>print(</find>
       <find>join</find>
-      <find>/stat</find>
+      <find>top</find>
+      <find>Ubunt</find>
+      <find>status</find>
+      <find>ul&gt;</find>
+      <find>/overview'</find>
+      <find>&lt;h3</find>
+      <find>/persons</find>
+      <find>/overview</find>
+      <find>/stats</find>
+      <find>/overv</find>
+      <find>/overview_mon</find>
+      <find>/stats'</find>
+      <find>page_inde</find>
+      <find>Gesamt</find>
+      <find>abgeschlossene kar</find>
+      <find>days_</find>
+      <find>Durchs</find>
+      <find>unio</find>
+      <find>user</find>
+      <find>'/index</find>
+      <find>joi</find>
+      <find>asc(</find>
+      <find>Abgeschlos</find>
+      <find>Zeit</find>
+      <find>anzahl</find>
+      <find>fill_be</find>
+      <find>bar(</find>
+      <find>print(</find>
+      <find>Durchsch</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -130,14 +176,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Data/Corrections.txt" />
-        <option value="$PROJECT_DIR$/Data/persons_corr.txt" />
-        <option value="$PROJECT_DIR$/Data/locations.txt" />
-        <option value="$PROJECT_DIR$/Data/persons.txt" />
-        <option value="$PROJECT_DIR$/setup.txt" />
-        <option value="$PROJECT_DIR$/Doku/Signaturen/ZZB.txt" />
-        <option value="$PROJECT_DIR$/Tools/pdf_splitter.py" />
-        <option value="$PROJECT_DIR$/Tools/Octopus.py" />
         <option value="$PROJECT_DIR$/Tools/Pdf2jpg.py" />
         <option value="$PROJECT_DIR$/convert_images.py" />
         <option value="$PROJECT_DIR$/Data/usr.txt" />
@@ -153,14 +191,11 @@
         <option value="$PROJECT_DIR$/localhost_update.sh" />
         <option value="$PROJECT_DIR$/Scripts/localhost_usr_fetch.sh" />
         <option value="$PROJECT_DIR$/server_update.sh" />
-        <option value="$PROJECT_DIR$/update_server.sh" />
         <option value="$PROJECT_DIR$/Doku/setup.txt" />
         <option value="$PROJECT_DIR$/Data/name_corrections.txt" />
         <option value="$PROJECT_DIR$/Data/sign_corr.txt" />
         <option value="$PROJECT_DIR$/Data/wiki_links.txt" />
-        <option value="$PROJECT_DIR$/App/templates/faq.html" />
         <option value="$PROJECT_DIR$/Scripts/localhost_db_fetch.sh" />
-        <option value="$PROJECT_DIR$/App/templates/base.html" />
         <option value="$PROJECT_DIR$/App/static/css/table.css" />
         <option value="$PROJECT_DIR$/App/templates/guestbook.html" />
         <option value="$PROJECT_DIR$/App/static/css/boxes.css" />
@@ -168,26 +203,37 @@
         <option value="$PROJECT_DIR$/App/templates/account_login.html" />
         <option value="$PROJECT_DIR$/App/templates/overview_state.html" />
         <option value="$PROJECT_DIR$/Data/user_data.txt" />
-        <option value="$PROJECT_DIR$/App/static/css/main.css" />
-        <option value="$PROJECT_DIR$/App/templates/index.html" />
         <option value="$PROJECT_DIR$/App/__init__.py" />
         <option value="$PROJECT_DIR$/App/models.py" />
         <option value="$PROJECT_DIR$/App/static/css/form.css" />
         <option value="$PROJECT_DIR$/App/forms.py" />
         <option value="$PROJECT_DIR$/App/templates/person_aliases.html" />
-        <option value="$PROJECT_DIR$/App/static/js/sort-table.js" />
-        <option value="$PROJECT_DIR$/App/templates/overview__status.html" />
         <option value="$PROJECT_DIR$/Tools/Plots.py" />
+        <option value="$PROJECT_DIR$/App/static/js/sort-table.js" />
+        <option value="$PROJECT_DIR$/App/templates/base.html" />
+        <option value="$PROJECT_DIR$/App/static/css/std.css" />
+        <option value="$PROJECT_DIR$/App/static/css/main.css" />
+        <option value="$PROJECT_DIR$/App/templates/title_navigation.html" />
+        <option value="$PROJECT_DIR$/App/templates/faq.html" />
+        <option value="$PROJECT_DIR$/App/static/css/links.css" />
+        <option value="$PROJECT_DIR$/App/static/js/page_scroll.js" />
+        <option value="$PROJECT_DIR$/App/templates/overview.html" />
+        <option value="$PROJECT_DIR$/App/templates/overview_persons.html" />
+        <option value="$PROJECT_DIR$/App/templates/overview_person_no_loc.html" />
+        <option value="$PROJECT_DIR$/App/templates/index.html" />
+        <option value="$PROJECT_DIR$/App/templates/overview_languages.html" />
+        <option value="$PROJECT_DIR$/App/templates/overview__status.html" />
         <option value="$PROJECT_DIR$/App/routes.py" />
         <option value="$PROJECT_DIR$/App/templates/stats.html" />
         <option value="$PROJECT_DIR$/Tools/BullingerDB.py" />
+        <option value="$PROJECT_DIR$/update_server.sh" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="y" value="23" />
+    <option name="y" value="253" />
     <option name="width" value="1440" />
-    <option name="height" value="826" />
+    <option name="height" value="595" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
@@ -208,6 +254,12 @@
               <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
               <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
               <item name="App" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
+              <item name="App" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
@@ -317,19 +369,19 @@
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" sideWeight="0.38134432" side_tool="true" weight="0.32959852" />
-      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.875" visible="true" weight="0.21353066" />
-      <window_info id="Structure" order="2" sideWeight="0.125" side_tool="true" visible="true" weight="0.21353066" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="0" visible="true" weight="0.19236016" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.91322905" visible="true" weight="0.21353066" />
+      <window_info id="Structure" order="2" sideWeight="0.08677098" side_tool="true" visible="true" weight="0.21353066" />
+      <window_info anchor="bottom" id="Terminal" order="0" weight="0.19236016" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="2" weight="0.32967034" />
       <window_info anchor="bottom" id="Message" order="3" />
-      <window_info anchor="bottom" id="Find" order="4" weight="0.5184175" />
+      <window_info anchor="bottom" id="Find" order="4" visible="true" weight="0.040927693" />
       <window_info anchor="bottom" id="Version Control" order="5" weight="0.32967034" />
       <window_info anchor="bottom" id="Run" order="6" weight="0.31178162" />
       <window_info anchor="bottom" id="Debug" order="7" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="10" weight="0.17326057" />
+      <window_info anchor="bottom" id="TODO" order="10" weight="0.2690678" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -355,49 +407,6 @@
     </layout-to-restore>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/App/templates/account_login.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="301">
-          <caret line="52" column="12" selection-start-line="52" selection-start-column="12" selection-end-line="52" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/progress_1586205734.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/progress_1586206131.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/progress_1586206427.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/progress_1586206489.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/progress_1586206722.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/requirements.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/progress_1586206851.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/progress_1586206945.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/progress_1586206552.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/progress_1586207943.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/progress_1586209900.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/progress_1586209974.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/progress_1586210045.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
@@ -447,20 +456,6 @@
     <entry file="file://$PROJECT_DIR$/Data/user_addresses.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/static/css/main.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="595">
-          <caret line="60" column="23" selection-start-line="60" selection-start-column="23" selection-end-line="60" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="401">
-          <caret line="104" column="84" selection-start-line="104" selection-start-column="84" selection-end-line="104" selection-end-column="84" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Doku/setup.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="152">
@@ -502,20 +497,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/static/js/sort-table.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="311" column="66" selection-start-line="311" selection-start-column="66" selection-end-line="311" selection-end-column="66" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/static/css/form.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="885">
-          <caret line="59" column="20" selection-start-line="59" selection-start-column="20" selection-end-line="59" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/templates/person_aliases.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="299">
@@ -533,9 +514,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/user_status.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/templates/overview_state.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="555">
@@ -543,46 +521,159 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/overview.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-262">
-          <caret line="21" column="54" lean-forward="true" selection-start-line="21" selection-start-column="54" selection-end-line="21" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/faq.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="181">
-          <caret line="406" selection-start-line="406" selection-end-line="411" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../Bullinger/venv/lib/python3.7/site-packages/matplotlib/pyplot.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/overview_year.html">
+    <entry file="file://$PROJECT_DIR$/App/templates/base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-258" />
+        <state relative-caret-position="328">
+          <caret line="25" selection-start-line="25" selection-end-line="25" />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/overview__status.html">
+    <entry file="file://$PROJECT_DIR$/App/static/js/sort-table.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="33" column="66" selection-start-line="33" selection-start-column="45" selection-end-line="33" selection-end-column="66" />
+        <state relative-caret-position="618">
+          <caret line="325" selection-start-line="325" selection-end-line="325" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/static/css/boxes.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="47" column="11" selection-start-line="47" selection-start-column="11" selection-end-line="47" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/static/css/form.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="650">
+          <caret line="59" column="20" selection-start-line="59" selection-start-column="20" selection-end-line="59" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/static/css/std.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-357">
+          <caret column="20" selection-start-column="20" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/static/css/header.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1038" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/static/css/main.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="545">
+          <caret line="68" selection-start-line="68" selection-end-line="68" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/title_navigation.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="50" selection-start-line="6" selection-start-column="50" selection-end-line="6" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/elem_quickstart.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/faq.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" selection-start-line="13" selection-end-line="24" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/static/css/links.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="588">
+          <caret line="40" column="32" selection-start-line="40" selection-start-column="32" selection-end-line="40" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/static/js/page_scroll.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" selection-start-line="2" selection-end-line="2" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Tools/Plots.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1694">
-          <caret line="123" column="40" selection-start-line="123" selection-start-column="40" selection-end-line="123" selection-end-column="40" />
+        <state relative-caret-position="416">
+          <caret line="120" column="8" selection-start-line="120" selection-start-column="8" selection-end-line="120" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/user_status.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" selection-start-line="14" selection-end-line="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/overview_person_no_loc.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="4" column="44" selection-start-line="4" selection-start-column="44" selection-end-line="4" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/overview_persons.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="256">
+          <caret line="23" column="68" selection-start-line="23" selection-start-column="68" selection-end-line="23" selection-end-column="68" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/overview_languages_cards.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-12" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/overview.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="32" column="57" selection-end-line="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/overview__status.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="461">
+          <caret line="41" selection-start-line="41" selection-end-line="46" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/overview_languages.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="482">
+          <caret line="39" column="14" selection-start-line="39" selection-start-column="14" selection-end-line="39" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="167">
+          <caret line="86" column="52" selection-start-line="86" selection-start-column="52" selection-end-line="86" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/overview_year.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="31" column="119" selection-start-line="31" selection-start-column="28" selection-end-line="31" selection-end-column="119" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/App/routes.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="65">
-          <caret line="267" column="17" selection-start-line="267" selection-start-column="12" selection-end-line="267" selection-end-column="17" />
+        <state relative-caret-position="138">
+          <caret line="286" column="48" selection-start-line="286" selection-start-column="48" selection-end-line="286" selection-end-column="48" />
           <folding>
             <element signature="e#172#206#0" expanded="true" />
           </folding>
@@ -591,18 +682,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/App/templates/stats.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="75" column="99" selection-start-line="75" selection-start-column="99" selection-end-line="75" selection-end-column="99" />
+        <state relative-caret-position="399">
+          <caret line="90" column="98" selection-start-line="90" selection-start-column="98" selection-end-line="90" selection-end-column="98" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="214">
-          <caret line="1250" column="40" selection-start-line="1250" selection-start-column="40" selection-end-line="1250" selection-end-column="40" />
+        <state relative-caret-position="238">
+          <caret line="1343" column="25" selection-start-line="1343" selection-start-column="25" selection-end-line="1343" selection-end-column="25" />
           <folding>
             <element signature="e#118#153#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/update_server.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="2" selection-start-line="7" selection-start-column="2" selection-end-line="7" selection-end-column="2" />
         </state>
       </provider>
     </entry>

@@ -8,10 +8,10 @@ from collections import defaultdict
 from Tools.Dictionaries import CountDict
 from Tools.Plots import *
 from App.models import *
-from sqlalchemy import asc, desc, func, and_, or_, literal, union_all
+from sqlalchemy import asc, desc, func, and_, or_, literal, union_all, union
 from operator import itemgetter
 from random import sample, randrange
-
+from matplotlib.ticker import MaxNLocator
 import os, time
 import numpy as np
 import matplotlib
@@ -713,7 +713,7 @@ class BullingerDB:
         return data, null_count, count+null_count
 
     @staticmethod
-    def get_data_overview(year):
+    def get_data_overview(year, file_id):
         ya, y0, cy = BullingerDB._get_data_overview(year=year)
         do, do0, co = BullingerDB._get_data_overview(year=year, state='offen')
         da, da0, ca = BullingerDB._get_data_overview(year=year, state='abgeschlossen')
@@ -727,7 +727,7 @@ class BullingerDB:
             ni = di[x] if x in di else 0
             val = BullingerDB.convert_month_to_str(x) if year else x
             data_overview.append([[val, x], no, nu, na, ni])
-        plot_url = PieChart.create_plot_overview_stats(str(int(time.time())), [co, ca, cu, ci], L_PROGRESS, C_PROGRESS)
+        plot_url = PieChart.create_plot_overview_stats(file_id, [co, ca, cu, ci], L_PROGRESS, C_PROGRESS)
         num_of_cards, data_percentages = BullingerDB.get_status_evaluation(co, ca, cu, ci)
         return data_overview, data_percentages, plot_url, num_of_cards
 
@@ -850,8 +850,9 @@ class BullingerDB:
         cd = CountDict()
         for row in data+null: cd.add(row[3])
         num_of_cards, data_percentages = BullingerDB.get_status_evaluation(cd["offen"], cd["abgeschlossen"], cd["unklar"], cd["ungültig"])
-        plot_url = PieChart.create_plot_overview_stats(str(int(time.time())), [cd["offen"], cd["abgeschlossen"], cd["unklar"], cd["ungültig"]], L_PROGRESS, C_PROGRESS)
-        return data, data_percentages, plot_url, num_of_cards
+        file_id = str(int(time.time()))
+        PieChart.create_plot_overview_stats(file_id, [cd["offen"], cd["abgeschlossen"], cd["unklar"], cd["ungültig"]], L_PROGRESS, C_PROGRESS)
+        return data, data_percentages, file_id, num_of_cards
 
     @staticmethod
     def get_status_evaluation(o, a, u, i):
@@ -957,7 +958,7 @@ class BullingerDB:
         sizes = [d[1] for d in data]
         colors = sample(all_colors, len(sizes))
         patches, texts = plt.pie(sizes, colors=colors, shadow=True, startangle=90)
-        plt.legend(patches, labels, loc="top-right")
+        plt.legend(patches, labels, loc="upper right")
         plt.axis('equal')
         plt.tight_layout()
         fig.savefig('App/static/images/plots/lang_stats_' + file_name + '.png')
@@ -975,19 +976,19 @@ class BullingerDB:
         ax.grid(b=True, which='minor', axis='both', color='#888888', linestyle=':', alpha=0.2)
         ax.grid(b=True, which='major', axis='both', color='#000000', linestyle=':', alpha=0.2)
         x = ('' if not c[1] else user_name for c in dc)
-        x_pos = np.arange(len(dc))
-        y = [c[0] for c in dc]
-        avg = int(sum(y)/len(x_pos))
+        x1 = np.arange(len(dc))
+        y1 = [c[0] for c in dc]
+        avg = int(sum(y1)/len(x1))
         plt.axvline(x=avg, color='g', linestyle='--', alpha=0.4)
 
-        plt.text(avg+200, 2, str(avg)+" im Durchschnitt ("+str(len(x_pos))+' Mitarbeiter)', style='italic',
-                 fontsize=10, fontname='Ubuntu', bbox={'facecolor': 'green', 'alpha': 0.2, 'pad': 10})
+        plt.text(avg+200, 2, "≈ "+str(avg), style='italic',
+                 fontsize=10, bbox={'facecolor': 'green', 'alpha': 0.2, 'pad': 10})
 
-        plt.barh(x_pos, y, align='center', alpha=0.8, color=co)
-        plt.yticks(x_pos, x)
-        plt.xlabel('Anzahl Korrekturen')
+        plt.barh(x1, y1, align='center', alpha=0.8, color=co)
+        plt.yticks(x1, x)
+        plt.xlabel('#Korrekturen')
         plt.ylabel("Mitarbeiter")
-        plt.title("Korrigierte Datenbankeinträgen")
+        plt.title("Korrigierte Karteikarteneinträgen")
         fig.savefig('App/static/images/plots/user_stats_changes_' + file_name + '.png')
         plt.close()
 
@@ -999,21 +1000,21 @@ class BullingerDB:
         dc = [(u.finished, 1 if u.username == user_name else 0) for u in User.query.order_by(asc(User.finished)).all() if u.finished > 0]
         co = [color_private if t[1] else color_public for t in dc]
         x = ('' if not c[1] else user_name for c in dc)
-        x_pos = np.arange(len(dc))
-        y = [c[0] for c in dc]
-        avg = int(sum(y)/len(x_pos))
+        x2 = np.arange(len(dc))
+        y2 = [c[0] for c in dc]
+        avg = int(sum(y2)/len(x2))
         plt.axvline(x=avg, color='g', linestyle='--', alpha=0.4)
-        plt.barh(x_pos, y, align='center', alpha=0.8, color=co)
+        plt.barh(x2, y2, align='center', alpha=0.8, color=co)
 
-        plt.text(avg+20, 3, str(avg)+" ("+str(len(x_pos))+' Mitarbeiter)', style='italic',
-                 fontsize=10, fontname='Ubuntu', bbox={'facecolor': 'green', 'alpha': 0.2, 'pad': 10})
+        plt.text(avg+20, 3, "≈ "+str(avg), style='italic',
+                 fontsize=10, bbox={'facecolor': 'green', 'alpha': 0.2, 'pad': 10})
 
-        plt.yticks(x_pos, x)
-        plt.xlabel('Anzahl Abschlüsse')
+        plt.yticks(x2, x)
+        plt.xlabel('#Abschlüsse')
         plt.title("Abgeschlossene Karteikarten")
         fig.savefig('App/static/images/plots/user_stats_finished_' + file_name + '.png')
         plt.close()
-
+        return len(y1), len(y2), y1[-1], y2[-1]
     """
     @staticmethod
     def get_top_n_sender(n):
@@ -1073,12 +1074,12 @@ class BullingerDB:
             ).order_by(desc(func.sum(p_all.c.s_count if not mode else p_all.c.r_count)))
 
     @staticmethod
-    def get_top_n_sender_ignoring_place(n):
-        return [[r[0] if r[0] else Config.SN, r[1] if r[1] else Config.SN, r[2]] for r in BullingerDB.get_top_data(0)][0:n]
+    def get_top_n_sender_ignoring_place():
+        return [[r[0] if r[0] else Config.SN, r[1] if r[1] else Config.SN, r[2]] for r in BullingerDB.get_top_data(0) if r[2] > 0]
 
     @staticmethod
-    def get_top_n_receiver_ignoring_place(n):
-        return [[r[0] if r[0] else Config.SN, r[1] if r[1] else Config.SN, r[3]] for r in BullingerDB.get_top_data(1)][0:n]
+    def get_top_n_receiver_ignoring_place():
+        return [[r[0] if r[0] else Config.SN, r[1] if r[1] else Config.SN, r[3]] for r in BullingerDB.get_top_data(1) if r[3] > 0]
 
     @staticmethod
     def get_persons_by_var(variable, mode):
@@ -1190,10 +1191,11 @@ class BullingerDB:
         return [[d.id_brief, d.sprache if d.sprache else Config.NONE] for d in data]
 
     @staticmethod
-    def get_number_of_page_visits():
+    def get_number_of_page_visits(visits_only=False):
+        n = Tracker.query.count()
+        if visits_only: return n
         t_format = "%d.%m.%Y, %H:%M"  # '%Y-%m-%d %H:%M:%S'
         t_now = datetime.now().strftime(t_format)
-        n = Tracker.query.count()
         t0 = Tracker.query.order_by(asc(Tracker.time)).first()
         if t0:
             t0 = datetime.strptime(t0.time, "%Y-%m-%d %H:%M:%S.%f")
@@ -1202,56 +1204,100 @@ class BullingerDB:
         return n, '[kein Datum verfügbar]', t_now
 
     @staticmethod
-    def get_changes_per_day_data(file_id):
-        d = CountDict()
-        for r in [Kartei, Person, Datum, Absender, Empfaenger, Autograph, Kopie, Sprache, Literatur, Gedruckt, Bemerkung, Notiz]:
-            t = db.session.query(r.zeit).filter(r.anwender != ADMIN).all()
-            for x in t:
-                dt = datetime.strptime(x[0], "%Y-%m-%d %H:%M:%S.%f")
-                d.add(dt.strftime('%Y%m%d'))
-        d = d.get_pairs_sorted()
-        objects = ['' for _ in d]
-        y_pos = np.arange(len(objects))
-        performance = [t[1] for t in d]
-        avg = int(sum(performance)/len(y_pos))
+    def get_changes_per_day_data(file_id, user_name):
+        rel = db.session.query(Kartei.anwender.label("A"), Kartei.zeit.label("B"))
+        for r in [Person, Datum, Person, Alias, Absender, Empfaenger, Autograph, Kopie, Sprache, Literatur, Gedruckt, Bemerkung, Kopie]:
+            new = db.session.query(r.anwender.label("A"), r.zeit.label("B"))
+            rel = union_all(rel, new).alias("new")
+            rel = db.session.query(rel.c.A.label("A"), rel.c.B.label("B"))
+        rel = rel.subquery()
+        rel_all = db.session.query(
+            func.count(func.strftime("%Y-%m-%d", rel.c.B)).label("count"),
+            func.strftime("%Y-%m-%d", rel.c.B).label("date")
+        ).filter(rel.c.A != Config.ADMIN)\
+            .group_by(func.strftime("%Y-%m-%d", rel.c.B)) \
+            .order_by(asc(func.strftime("%Y-%m-%d", rel.c.B)))
+        rel_pers = db.session.query(
+            func.count(func.strftime("%Y-%m-%d", rel.c.B)).label("count"),
+            func.strftime("%Y-%m-%d", rel.c.B).label("date")
+        ).filter(rel.c.A != Config.ADMIN)\
+            .filter(rel.c.A == user_name)\
+            .group_by(func.strftime("%Y-%m-%d", rel.c.B))\
+            .order_by(asc(func.strftime("%Y-%m-%d", rel.c.B)))
+        pd = {k[1]: k[0] for k in rel_pers}
+        x, y_all, y_pers = [], [], []
+        for r in rel_all:
+            x.append(r[1])
+            if r[1] in pd:
+                y_all.append(r[0] - pd[r[1]])
+                y_pers.append(pd[r[1]])
+            else:
+                y_all.append(r[0])
+                y_pers.append(0)
+
+        # averaged data
+        avg = int(sum(y_all)/len(x))
+        frame, f = 7, 0
+        if frame % 2 == 0: frame += 1
+        f = int((frame-1)/2)
+        y_avg_base = y_all[1:f+1][::-1]+y_all+y_all[-f-1:-1][::-1]
+        y_avg = [sum(y_avg_base[k:k+frame])/frame for k in range(len(y_all))]
+
+        # plot
         fig = plt.figure()
         ax = plt.axes()
         ax.grid(b=True, which='minor', axis='both', color='#888888', linestyle=':', alpha=0.2)
         ax.grid(b=True, which='major', axis='both', color='#000000', linestyle=':', alpha=0.2)
-        plt.bar(y_pos, performance, align='center', alpha=0.5)
-        ax.axhline(y=avg, color='g', linestyle='--', alpha=0.23)
 
-        plt.text(3, avg+30, str(avg)+"/Tag", style='italic',
-                 fontsize=8, fontname='Ubuntu', bbox={'facecolor': 'green', 'alpha': 0.2, 'pad': 5})
+        plt.bar(x, y_pers, align='center', alpha=0.9, color="blue")
+        plt.bar(x, y_all, bottom=y_pers, align='center', alpha=0.5, color="dodgerblue")
+        plt.plot(x, y_avg, 'k', alpha=1, label="Wochendurchschnitt")
+        ax.axhline(y=avg, color='g', linestyle='--', alpha=0.8, label="Durchschnitt")
 
-        m, b = np.polyfit(y_pos, performance, 1)
-        plt.plot(y_pos, [b+m*i for i in range(len(y_pos))], 'b', linestyle=':', alpha=0.42)
+        plt.text(2.3, avg+70, str(avg)+" / Tag", style='italic', fontsize=10, bbox={'facecolor': 'green', 'alpha': 0.2, 'pad': 5})
 
-        ax.set_xticks([0, len(y_pos)-1])
-        ax.set_xticklabels([1, str(len(y_pos))], rotation=0)
+        # regression
+        # m, b = np.polyfit(x, y, 1)
+        # plt.plot(x, [b+m*i for i in range(len(x))], 'b', linestyle=':', alpha=0.42)
 
-        plt.xlabel("Zeit (in Tagen)")
-        plt.ylabel("Anzahl Korrekturen")
-        plt.title("Allgemeine Korrekturarbeiten")
+        ax.set_xticks([0, len(x)-1])
+        ax.set_xticklabels([1, str(len(x))], rotation=0)
+        plt.legend()
+        plt.xlabel("#Tage")
+        plt.ylabel("#Korrekturen")
+        plt.title("Allgemeine/Persönliche Korrekturen")
         fig.savefig('App/static/images/plots/changes_'+file_id+'.png')
         plt.close()
-
-        return 'images/plots/overview_'+file_id+'.png'
+        return len(x)
 
     @staticmethod
     def get_page_visits_plot(file_id):
         fig = plt.figure()
         a = db.session.query(func.strftime("%Y-%m-%d", Tracker.time), func.count(Tracker.time))\
             .group_by(func.strftime("%Y-%m-%d", Tracker.time)).all()
-        y = [t[1] for t in a]
+        a_m = db.session.query(func.strftime("%Y-%m-%d", Tracker.time), func.count(Tracker.time))\
+            .filter(Tracker.username != "Gast")\
+            .group_by(func.strftime("%Y-%m-%d", Tracker.time)).all()
+        a_m = {t[0]: t[1] for t in a_m}
+        y, y_m = [t[1] for t in a], [a_m[t[0]] if t[0] in a_m else 0 for t in a]
+
+        frame, f = 7, 0
+        if frame % 2 == 0: frame += 1
+        f = int((frame-1)/2)
+        y_avg_base = y[1:f+1][::-1]+y+y[-f-1:-1][::-1]
+        y_avg = [sum(y_avg_base[k:k+frame])/frame for k in range(len(y))]
+
         ax = plt.axes()
         ax.grid(b=True, which='minor', axis='both', color='#888888', linestyle=':', alpha=0.2)
         ax.grid(b=True, which='major', axis='both', color='#000000', linestyle=':', alpha=0.2)
-        plt.plot(range(0, len(y)), y, 'b-', alpha=0.9)
+        plt.fill_between(range(0, len(y)), y, color="green", alpha=0.42, label="allgemein")
+        plt.fill_between(range(0, len(y_m)), y_m, color="dodgerblue", alpha=0.3, label="Mitarbeiter")
+        plt.plot(range(0, len(y_m)), y_avg, 'b-', alpha=0.8, label="Wochendurchschnitt")
         plt.xticks([0, len(y) - 1], [a[0][0], a[-1][0]])
-        plt.xlabel("Zeit (in Tagen)")
-        plt.ylabel("Anzahl")
+        plt.xlabel("Datum [Tage]")
+        plt.ylabel("#Aufrufe")
         plt.title("Seitenaufrufe")
+        plt.legend(loc="upper left")
         fig.savefig('App/static/images/plots/visites_'+file_id+'.png')
         plt.close()
 
@@ -1285,24 +1331,32 @@ class BullingerDB:
         plt.subplot(2, 1, 1)
         plt.plot(x, new_users, "b-")
         plt.xticks([0, len(x)-1], ['', ''])
-        plt.title("Mitarbeiter")
-        plt.ylabel("Gesamt")
+        plt.title("Registrierte Mitarbeiter")
+        plt.ylabel("Anzahl")
         # plt.rc('axes', axisbelow=True)
         # plt.rc('grid', linestyle=":", color='gray')
         plt.grid(True)
 
         plt.subplot(2, 1, 2)
-        plt.plot(x, active, "b-")
+        plt.bar(range(len(x)), active, color="dodgerblue", alpha=0.42)
+        avg = sum(active)/len(x)
+        plt.plot(x, len(x)*[avg], "g--", alpha=0.8, label="Durchschnitt")
+        plt.text(1, avg+2, str(round(avg, 2))+" / Tag", style='italic', fontsize=10, bbox={'facecolor': 'green', 'alpha': 0.2, 'pad': 5})
         plt.xticks([0, len(x)-1], [x[0], x[-1]])
-        plt.title("(aktive)")
-        plt.xlabel("Zeit (in Tagen)")
+        plt.title("aktive Mitarbeiter")
+        plt.xlabel("Datum [Tage]")
         plt.ylabel("Anzahl")
+        locs, labels = plt.yticks()
+        plt.yticks([each for each in range(0, int(locs[-1]), int(locs[-1]/5))])
         plt.rc('grid', linestyle=":", color='grey')
         plt.rc('axes', axisbelow=True)
         plt.grid(True)
+        plt.legend()
         fig.tight_layout()
         fig.savefig('App/static/images/plots/users_' + file_id + '.png')
         plt.close()
+        return new_users[-1], avg
+
 
     @staticmethod
     def get_progress_plot(file_id):
@@ -1334,7 +1388,7 @@ class BullingerDB:
 
         prev = None
         data_a, data_u, data_e = [], [], []
-        data_ac, data_uc, data_ec, data_oc, data_noc = [], [], [], [], []
+        data_ac, data_uc, data_ec, data_oc, data_noc, data_tot = [], [], [], [], [], []
         xx = sorted(list(set(xa+xu+xe)))
         for x in xx:
             data_a.append(da[x][0] if x in da else 0)
@@ -1348,7 +1402,7 @@ class BullingerDB:
             data_e.append(de[x][0] if x in de else 0)
             ec_ = de[x][1] if x in de else (de[prev][1] if prev in de else 0)
             data_ec.append(ec_)
-
+            data_tot.append(data_a[-1]+data_u[-1]+data_e[-1])
             s = ac_ + uc_ + ec_
             data_noc.append(s)
             data_oc.append(tot - s)
@@ -1359,33 +1413,52 @@ class BullingerDB:
         days = (t2-t1).days
         ppd = tot/data_noc[-1] * days - days
 
-        plt.subplot(2, 1, 1)
-        plt.plot(xx, data_e, "r-", label="ungültig")
-        plt.plot(xx, data_u, "y-", label="unklar")
-        plt.plot(xx, data_a, "g-", label="abgeschlossen")
+        # averaged data
+        # avg = int(sum(y_tot)/len(x))
+        frame, f = 7, 0
+        if frame % 2 == 0: frame += 1
+        f = int((frame-1)/2)
+        y_avg_base = data_tot[1:f+1][::-1]+data_tot+data_tot[-f-1:-1][::-1]
+        y_avg = [sum(y_avg_base[k:k+frame])/frame for k in range(len(data_tot))]
 
-        m, b = np.polyfit(range(1, len(xx)+1), data_a, 1)
-        plt.plot(xx, [b+m*i for i in range(len(xx))], 'g', linestyle=':', alpha=0.42)
+        plt.subplot(2, 1, 1)
+        # plt.plot(xx, data_tot, "k-", label="total")
+        # plt.plot(xx, data_a, "g-", label="abgeschlossen")
+        # plt.plot(xx, data_u, "y-", label="unklar")
+        # plt.plot(xx, data_e, "r-", label="ungültig")
+        plt.plot(xx, y_avg, "k-", label="Durchschnitt")
+        plt.fill_between(xx, data_tot, alpha=0.3, color="dodgerblue", label="total")
+        plt.fill_between(xx, data_a, alpha=0.3, color="green", label="abgeschlossen")
+        plt.fill_between(xx, data_u, alpha=0.5, color="yellow", label="unklar")
+        plt.fill_between(xx, data_e, alpha=0.3, color="red", label="ungültig")
+
+        # m, b = np.polyfit(range(1, len(xx)+1), data_a, 1)
+        # plt.plot(xx, [b+m*i for i in range(len(xx))], 'g', linestyle=':', alpha=0.42)
 
         plt.legend(bbox_to_anchor=(1.04, 1), loc="upper left")
         plt.xticks([0, len(xx)-1], ['', ''])
         plt.title("Statusänderungen")
-        plt.ylabel("Anzahl")
+        plt.ylabel("#Änderungen")
         # plt.rc('axes', axisbelow=True)
         # plt.rc('grid', linestyle=":", color='gray')
         plt.grid(True)
 
         plt.subplot(2, 1, 2)
-        plt.plot(xx, data_ec, "r-", label="ungültig")
-        plt.plot(xx, data_uc, "y-", label="unklar")
-        plt.plot(xx, data_ac, "g-", label="abgeschlossen")
         plt.plot(xx, data_noc, "k-", label="bearbeitet")
-        plt.plot(xx, data_oc, "b-", label="offen")
+        # plt.plot(xx, data_ec, "r-", label="ungültig")
+        # plt.plot(xx, data_uc, "y-", label="unklar")
+        # plt.plot(xx, data_ac, "g-", label="abgeschlossen")
+        # plt.plot(xx, data_oc, "b-", label="offen")
+        plt.plot(xx, data_oc, "b-", alpha=0.6, label="offen")
+        plt.fill_between(xx, data_ac, alpha=0.3, color="green", label="abgeschlossen")
+        plt.fill_between(xx, data_uc, alpha=0.3, color="yellow", label="unklar")
+        plt.fill_between(xx, data_ec, alpha=0.3, color="red", label="ungültig")
+
         plt.legend(bbox_to_anchor=(1.04, 1), loc="upper left")
         plt.xticks([0, len(xx)-1], [1, len(xx)])
-        plt.title("(kumuliert)")
-        plt.xlabel("Zeit (in Tagen)")
-        plt.ylabel("Anzahl")
+        plt.title("kumulierte Statusänderungen")
+        plt.xlabel("#Tage")
+        plt.ylabel("total")
         plt.rc('grid', linestyle=":", color='grey')
         plt.rc('axes', axisbelow=True)
         plt.grid(True)
