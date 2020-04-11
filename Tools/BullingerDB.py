@@ -1205,6 +1205,37 @@ class BullingerDB:
 
     @staticmethod
     def get_changes_per_day_data(file_id, user_name):
+        user_name = "Patricia"
+        x, y_all, y_pers, d_a, d_p = [], [], [], CountDict(), CountDict()
+        for r in [Person, Datum, Person, Alias, Absender, Empfaenger, Autograph, Kopie, Sprache, Literatur, Gedruckt,
+                  Bemerkung, Kopie]:
+            q_a = db.session.query(
+                func.count(func.strftime("%Y-%m-%d", r.zeit)),
+                func.strftime("%Y-%m-%d", r.zeit)
+            ).filter(r.anwender != Config.ADMIN) \
+                .group_by(func.strftime("%Y-%m-%d", r.zeit)) \
+                .order_by(asc(func.strftime("%Y-%m-%d", r.zeit)))
+            q_b = db.session.query(
+                func.count(func.strftime("%Y-%m-%d", r.zeit)),
+                func.strftime("%Y-%m-%d", r.zeit)
+            ).filter(r.anwender != Config.ADMIN) \
+                .filter(r.anwender == user_name) \
+                .group_by(func.strftime("%Y-%m-%d", r.zeit)) \
+                .order_by(asc(func.strftime("%Y-%m-%d", r.zeit)))
+            for e in q_a:
+                d_a.append(e[1], e[0])
+            for e in q_b:
+                d_p.append(e[1], e[0])
+        y = d_a.get_pairs_sorted()
+        for e in y:
+            x.append(e[0])
+            if e[0] in d_p:
+                y_all.append(e[1]-d_p[e[0]])
+                y_pers.append(d_p[e[0]])
+            else:
+                y_all.append(e[1])
+                y_pers.append(0)
+        """
         rel = db.session.query(Kartei.anwender.label("A"), Kartei.zeit.label("B"))
         for r in [Person, Datum, Person, Alias, Absender, Empfaenger, Autograph, Kopie, Sprache, Literatur, Gedruckt, Bemerkung, Kopie]:
             new = db.session.query(r.anwender.label("A"), r.zeit.label("B"))
@@ -1234,9 +1265,11 @@ class BullingerDB:
             else:
                 y_all.append(r[0])
                 y_pers.append(0)
+        """
 
         # averaged data
         avg = int(sum(y_all)/len(x))
+
         frame, f = 7, 0
         if frame % 2 == 0: frame += 1
         f = int((frame-1)/2)

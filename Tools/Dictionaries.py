@@ -25,6 +25,10 @@ class CountDict(defaultdict):
         self[key] += 1
         self.tot += 1
 
+    def append(self, key, value):
+        self[key] += value
+        self.tot += value
+
     def remove(self, key):
         if key in self:
             if self[key] < 2:
