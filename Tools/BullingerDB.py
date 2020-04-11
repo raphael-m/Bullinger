@@ -1208,7 +1208,7 @@ class BullingerDB:
         rel = db.session.query(Kartei.anwender.label("A"), Kartei.zeit.label("B"))
         for r in [Person, Datum, Person, Alias, Absender, Empfaenger, Autograph, Kopie, Sprache, Literatur, Gedruckt, Bemerkung, Kopie]:
             new = db.session.query(r.anwender.label("A"), r.zeit.label("B"))
-            rel = union_all(rel, new).alias("new")
+            rel = union(rel, new).alias("new")
             rel = db.session.query(rel.c.A.label("A"), rel.c.B.label("B"))
         rel = rel.subquery()
         rel_all = db.session.query(

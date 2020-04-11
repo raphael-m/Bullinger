@@ -5,21 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6d2cb28e-bb45-42c9-b203-59c8af68dfbb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/App/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/css/links.css" beforeDir="false" afterPath="$PROJECT_DIR$/App/static/css/links.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/App/static/css/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/static/js/sort-table.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/static/js/sort-table.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/faq.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/faq.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/overview.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/overview.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/overview__status.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/overview__status.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/overview_persons.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/overview_persons.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/stats.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/stats.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Tools/BullingerDB.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tools/BullingerDB.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tools/Plots.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tools/Plots.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/app.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/update_server.sh" beforeDir="false" afterPath="$PROJECT_DIR$/update_server.sh" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -32,41 +18,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="1343" column="25" selection-start-line="1343" selection-start-column="25" selection-end-line="1343" selection-end-column="25" />
+            <state relative-caret-position="143">
+              <caret line="1210" column="23" lean-forward="true" selection-start-line="1210" selection-start-column="23" selection-end-line="1210" selection-end-column="23" />
               <folding>
                 <element signature="e#118#153#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/update_server.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="2" selection-start-line="7" selection-start-column="2" selection-end-line="7" selection-end-column="2" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/templates/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="167">
-              <caret line="86" column="52" selection-start-line="86" selection-start-column="52" selection-end-line="86" selection-end-column="52" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/templates/overview_year.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="31" column="119" selection-start-line="31" selection-start-column="28" selection-end-line="31" selection-end-column="119" />
             </state>
           </provider>
         </entry>
@@ -79,15 +38,6 @@
               <folding>
                 <element signature="e#172#206#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/templates/stats.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="399">
-              <caret line="90" column="98" selection-start-line="90" selection-start-column="98" selection-end-line="90" selection-end-column="98" />
             </state>
           </provider>
         </entry>
@@ -138,7 +88,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>join</find>
       <find>top</find>
       <find>Ubunt</find>
       <find>status</find>
@@ -168,6 +117,7 @@
       <find>bar(</find>
       <find>print(</find>
       <find>Durchsch</find>
+      <find>Kartei</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -225,8 +175,8 @@
         <option value="$PROJECT_DIR$/App/templates/overview__status.html" />
         <option value="$PROJECT_DIR$/App/routes.py" />
         <option value="$PROJECT_DIR$/App/templates/stats.html" />
-        <option value="$PROJECT_DIR$/Tools/BullingerDB.py" />
         <option value="$PROJECT_DIR$/update_server.sh" />
+        <option value="$PROJECT_DIR$/Tools/BullingerDB.py" />
       </list>
     </option>
   </component>
@@ -369,13 +319,13 @@
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" sideWeight="0.38134432" side_tool="true" weight="0.32959852" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.91322905" visible="true" weight="0.21353066" />
-      <window_info id="Structure" order="2" sideWeight="0.08677098" side_tool="true" visible="true" weight="0.21353066" />
-      <window_info anchor="bottom" id="Terminal" order="0" weight="0.19236016" />
+      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.8728522" visible="true" weight="0.21353066" />
+      <window_info id="Structure" order="2" sideWeight="0.12714776" side_tool="true" visible="true" weight="0.21353066" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="0" visible="true" weight="0.20600273" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="2" weight="0.32967034" />
       <window_info anchor="bottom" id="Message" order="3" />
-      <window_info anchor="bottom" id="Find" order="4" visible="true" weight="0.040927693" />
+      <window_info anchor="bottom" id="Find" order="4" weight="0.4761255" />
       <window_info anchor="bottom" id="Version Control" order="5" weight="0.32967034" />
       <window_info anchor="bottom" id="Run" order="6" weight="0.31178162" />
       <window_info anchor="bottom" id="Debug" order="7" weight="0.4" />
@@ -687,20 +637,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="1343" column="25" selection-start-line="1343" selection-start-column="25" selection-end-line="1343" selection-end-column="25" />
-          <folding>
-            <element signature="e#118#153#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/update_server.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="7" column="2" selection-start-line="7" selection-start-column="2" selection-end-line="7" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="143">
+          <caret line="1210" column="23" lean-forward="true" selection-start-line="1210" selection-start-column="23" selection-end-line="1210" selection-end-column="23" />
+          <folding>
+            <element signature="e#118#153#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
