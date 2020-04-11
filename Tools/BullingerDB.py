@@ -1205,7 +1205,6 @@ class BullingerDB:
 
     @staticmethod
     def get_changes_per_day_data(file_id, user_name):
-        user_name = "Patricia"
         x, y_all, y_pers, d_a, d_p = [], [], [], CountDict(), CountDict()
         for r in [Person, Datum, Person, Alias, Absender, Empfaenger, Autograph, Kopie, Sprache, Literatur, Gedruckt,
                   Bemerkung, Kopie]:
