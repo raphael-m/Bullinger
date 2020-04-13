@@ -55,15 +55,29 @@ $(document).ready(function () {
 
 $(document).ready(function () {
     $(".navigate_r").click( function () {
-        h = $(this).parent().parent().parent().next().next().find(">:first-child").offset().top;
-        $("#body, html").animate({ scrollTop: h }, { duration: speed });
+        var x = $(this).parent().parent().parent().next().next()
+        var y = x.attr('class');
+        if(y == "h2_box" || y == "h3_box" || y == "h4_box") {
+            var h = x.children(":first-child").offset().top;
+            $("#body, html").animate({ scrollTop: h }, { duration: speed });
+        } else {
+            var x = $(this).parent().parent().parent().parent().parent().next().next();
+            var h = x.children(":first-child").offset().top;
+            $("#body, html").animate({ scrollTop: h }, { duration: speed });
+        }
     });
 });
 
 $(document).ready(function () {
     $(".navigate_l").click( function () {
-        h = $(this).parent().parent().parent().prev().prev().find(">:first-child").offset().top;
-        $("#body, html").animate({ scrollTop: h }, { duration: speed });
+        var x = $(this).parent().parent().parent().prev().prev().attr('class');
+        if(x == "h2_box" || x == "h3_box" || x == "h4_box") {
+            var h = $(this).parent().parent().parent().prev().prev().find(">:first-child").offset().top;
+            $("#body, html").animate({ scrollTop: h }, { duration: speed });
+        } else {
+            var h = $(this).parent().parent().parent().parent().parent().find(">:first-child").offset().top;
+            $("#body, html").animate({ scrollTop: h }, { duration: speed });
+        }
     });
 });
 

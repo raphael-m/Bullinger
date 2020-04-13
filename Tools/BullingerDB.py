@@ -1205,6 +1205,7 @@ class BullingerDB:
 
     @staticmethod
     def get_changes_per_day_data(file_id, user_name):
+
         x, y_all, y_pers, d_a, d_p = [], [], [], CountDict(), CountDict()
         for r in [Person, Datum, Person, Alias, Absender, Empfaenger, Autograph, Kopie, Sprache, Literatur, Gedruckt,
                   Bemerkung, Kopie]:
@@ -1212,59 +1213,32 @@ class BullingerDB:
                 func.count(func.strftime("%Y-%m-%d", r.zeit)),
                 func.strftime("%Y-%m-%d", r.zeit)
             ).filter(r.anwender != Config.ADMIN) \
-                .group_by(func.strftime("%Y-%m-%d", r.zeit)) \
-                .order_by(asc(func.strftime("%Y-%m-%d", r.zeit)))
+                .group_by(func.strftime("%Y-%m-%d", r.zeit))
             q_b = db.session.query(
                 func.count(func.strftime("%Y-%m-%d", r.zeit)),
                 func.strftime("%Y-%m-%d", r.zeit)
             ).filter(r.anwender != Config.ADMIN) \
                 .filter(r.anwender == user_name) \
-                .group_by(func.strftime("%Y-%m-%d", r.zeit)) \
-                .order_by(asc(func.strftime("%Y-%m-%d", r.zeit)))
-            for e in q_a:
-                d_a.append(e[1], e[0])
-            for e in q_b:
-                d_p.append(e[1], e[0])
-        y = d_a.get_pairs_sorted()
-        for e in y:
-            x.append(e[0])
-            if e[0] in d_p:
-                y_all.append(e[1]-d_p[e[0]])
-                y_pers.append(d_p[e[0]])
-            else:
-                y_all.append(e[1])
+                .group_by(func.strftime("%Y-%m-%d", r.zeit))
+            for e in q_a: d_a.append(e[1], e[0])
+            for e in q_b: d_p.append(e[1], e[0])
+
+        times = db.session.query(
+            func.strftime("%Y-%m-%d", Tracker.time).label("t_all"),
+        ).group_by(func.strftime("%Y-%m-%d", Tracker.time))\
+        .order_by(asc(func.strftime("%Y-%m-%d", Tracker.time)))
+
+        for t in times:
+            x.append(t[0])
+            if t[0] in d_p:
+                y_all.append(d_a[t[0]]-d_p[t[0]])
+                y_pers.append(d_p[t[0]])
+            elif t[0] in d_a:
+                y_all.append(d_a[t[0]])
                 y_pers.append(0)
-        """
-        rel = db.session.query(Kartei.anwender.label("A"), Kartei.zeit.label("B"))
-        for r in [Person, Datum, Person, Alias, Absender, Empfaenger, Autograph, Kopie, Sprache, Literatur, Gedruckt, Bemerkung, Kopie]:
-            new = db.session.query(r.anwender.label("A"), r.zeit.label("B"))
-            rel = union(rel, new).alias("new")
-            rel = db.session.query(rel.c.A.label("A"), rel.c.B.label("B"))
-        rel = rel.subquery()
-        rel_all = db.session.query(
-            func.count(func.strftime("%Y-%m-%d", rel.c.B)).label("count"),
-            func.strftime("%Y-%m-%d", rel.c.B).label("date")
-        ).filter(rel.c.A != Config.ADMIN)\
-            .group_by(func.strftime("%Y-%m-%d", rel.c.B)) \
-            .order_by(asc(func.strftime("%Y-%m-%d", rel.c.B)))
-        rel_pers = db.session.query(
-            func.count(func.strftime("%Y-%m-%d", rel.c.B)).label("count"),
-            func.strftime("%Y-%m-%d", rel.c.B).label("date")
-        ).filter(rel.c.A != Config.ADMIN)\
-            .filter(rel.c.A == user_name)\
-            .group_by(func.strftime("%Y-%m-%d", rel.c.B))\
-            .order_by(asc(func.strftime("%Y-%m-%d", rel.c.B)))
-        pd = {k[1]: k[0] for k in rel_pers}
-        x, y_all, y_pers = [], [], []
-        for r in rel_all:
-            x.append(r[1])
-            if r[1] in pd:
-                y_all.append(r[0] - pd[r[1]])
-                y_pers.append(pd[r[1]])
             else:
-                y_all.append(r[0])
+                y_all.append(0)
                 y_pers.append(0)
-        """
 
         # averaged data
         avg = int(sum(y_all)/len(x))
@@ -1297,10 +1271,10 @@ class BullingerDB:
         plt.legend()
         plt.xlabel("#Tage")
         plt.ylabel("#Korrekturen")
-        plt.title("Allgemeine/Persönliche Korrekturen")
+        plt.title("Allgemeine/Persönliche Korrekturen pro Tag")
         fig.savefig('App/static/images/plots/changes_'+file_id+'.png')
         plt.close()
-        return len(x)
+        return len(x), y_all[-1], sum(y_all)
 
     @staticmethod
     def get_page_visits_plot(file_id):
@@ -1325,6 +1299,8 @@ class BullingerDB:
         plt.fill_between(range(0, len(y)), y, color="green", alpha=0.42, label="allgemein")
         plt.fill_between(range(0, len(y_m)), y_m, color="dodgerblue", alpha=0.3, label="Mitarbeiter")
         plt.plot(range(0, len(y_m)), y_avg, 'b-', alpha=0.8, label="Wochendurchschnitt")
+        plt.plot([len(y_m)-1], [y[-1]], 'g', marker="_")
+        plt.plot([len(y_m) - 1], [y_m[-1]], 'b', marker="_")
         plt.xticks([0, len(y) - 1], [a[0][0], a[-1][0]])
         plt.xlabel("Datum [Tage]")
         plt.ylabel("#Aufrufe")
@@ -1333,51 +1309,82 @@ class BullingerDB:
         fig.savefig('App/static/images/plots/visites_'+file_id+'.png')
         plt.close()
 
+        return y[-1], y_m[-1]
+
     @staticmethod
-    def get_user_plot(file_id):
-        fig = plt.figure()
-        time_rel = db.session.query(func.strftime("%Y-%m-%d", Tracker.time)).group_by(func.strftime("%Y-%m-%d", Tracker.time))
-        x = [t[0] for t in time_rel]
+    def get_user_plot(file_id, username):
 
-        qu = db.session.query(func.strftime("%Y-%m-%d", User.time), func.count(User.username)) \
-            .group_by(func.strftime("%Y-%m-%d", User.time)).all()
-        d, s = {}, 0
-        for q in qu:
-            s += q[1]
-            d[q[0]] = s
+        # number of users over t
+        times = db.session.query(
+            func.strftime("%Y-%m-%d", Tracker.time).label("t_all"),
+        ).group_by(func.strftime("%Y-%m-%d", Tracker.time)).subquery()
+        regs = db.session.query(
+            func.strftime("%Y-%m-%d", User.time).label("t"),
+            func.count(func.strftime("%Y-%m-%d", User.time)).label("count"),
+        ).group_by(func.strftime("%Y-%m-%d", User.time)).subquery()
+        reg_data = db.session.query(
+            times.c.t_all,
+            regs.c.count
+        ).outerjoin(regs, times.c.t_all == regs.c.t).order_by(asc(times.c.t_all))
 
+        x_reg, y_reg, cumulated = [], [], 0
+        for row in reg_data:  # (time, count)
+            x_reg.append(row[0])
+            if row[1]: cumulated += row[1]
+            y_reg.append(cumulated)
+
+        # activity
         rel = Tracker.query.filter(Tracker.username != "Gast")\
             .group_by(func.strftime("%Y-%m-%d", Tracker.time), Tracker.username).subquery()
         rel = db.session.query(
-            func.count(rel.c.username).label("count"),
-            func.strftime("%Y-%m-%d", rel.c.time).label("time")
-        ).group_by(func.strftime("%Y-%m-%d", rel.c.time)).all()
-        dd = {r[1]:r[0] for r in rel}
-        a = 0
-        new_users, all_users, active = [], [], []
-        for i in x:
-            a = d[i] if i in d else a
-            new_users.append(a)
-            active.append(0 if i not in dd else dd[i])
+            func.strftime("%Y-%m-%d", rel.c.time).label("time"),
+            func.count(rel.c.username).label("count")
+        ).group_by(func.strftime("%Y-%m-%d", rel.c.time)).subquery()
+        rp = Tracker.query\
+            .filter(Tracker.username != "Gast")\
+            .filter(Tracker.username == username)\
+            .group_by(func.strftime("%Y-%m-%d", Tracker.time), Tracker.username).subquery()
+        rp = db.session.query(
+            func.strftime("%Y-%m-%d", rp.c.time).label("time"),
+            func.count(rp.c.username).label("count")
+        ).group_by(func.strftime("%Y-%m-%d", rp.c.time)).subquery()
+        activity_data = db.session.query(
+            times.c.t_all,
+            rel.c.count,
+            rp.c.count
+        ).outerjoin(rel, times.c.t_all == rel.c.time)\
+        .outerjoin(rp, times.c.t_all == rp.c.time )
 
+        y_active, yp_active = [], []
+        for t in activity_data:
+            if not t[1]:
+                y_active.append(0)
+                yp_active.append(0)
+            elif not t[2]:
+                y_active.append(t[1])
+                yp_active.append(0)
+            else:
+                y_active.append(t[1]-t[2])
+                yp_active.append(t[2])
+
+        fig = plt.figure()
         plt.subplot(2, 1, 1)
-        plt.plot(x, new_users, "b-")
-        plt.xticks([0, len(x)-1], ['', ''])
         plt.title("Registrierte Mitarbeiter")
-        plt.ylabel("Anzahl")
-        # plt.rc('axes', axisbelow=True)
-        # plt.rc('grid', linestyle=":", color='gray')
+        plt.ylabel("#registriert")
+        plt.plot(x_reg, y_reg, "b-")
+        plt.xticks([0, len(x_reg)-1], ['', ''])
         plt.grid(True)
 
         plt.subplot(2, 1, 2)
-        plt.bar(range(len(x)), active, color="dodgerblue", alpha=0.42)
-        avg = sum(active)/len(x)
-        plt.plot(x, len(x)*[avg], "g--", alpha=0.8, label="Durchschnitt")
+        plt.bar(range(len(x_reg)), yp_active, color="blue", alpha=0.9)
+        plt.bar(range(len(x_reg)), y_active, bottom=yp_active, color="dodgerblue", alpha=0.5)
+        avg = (sum(y_active)+sum(yp_active))/len(x_reg)
+        plt.plot(x_reg, len(x_reg)*[avg], "g--", alpha=0.8, label="Durchschnitt")
         plt.text(1, avg+2, str(round(avg, 2))+" / Tag", style='italic', fontsize=10, bbox={'facecolor': 'green', 'alpha': 0.2, 'pad': 5})
-        plt.xticks([0, len(x)-1], [x[0], x[-1]])
-        plt.title("aktive Mitarbeiter")
+        plt.title("Aktive Mitarbeiter")
         plt.xlabel("Datum [Tage]")
-        plt.ylabel("Anzahl")
+        plt.ylabel("#aktiv")
+        plt.xticks([0, len(x_reg)-1], [x_reg[0], x_reg[-1]])
         locs, labels = plt.yticks()
         plt.yticks([each for each in range(0, int(locs[-1]), int(locs[-1]/5))])
         plt.rc('grid', linestyle=":", color='grey')
@@ -1387,110 +1394,88 @@ class BullingerDB:
         fig.tight_layout()
         fig.savefig('App/static/images/plots/users_' + file_id + '.png')
         plt.close()
-        return new_users[-1], avg
-
+        return y_reg[-1], avg, y_reg[-1]-y_reg[-2], y_active[-1]+yp_active[-1]
 
     @staticmethod
     def get_progress_plot(file_id):
-        fig = plt.figure()
 
+        dates = db.session.query(
+            func.strftime("%Y-%m-%d", Tracker.time).label("t_all"),
+        ).group_by(func.strftime("%Y-%m-%d", Tracker.time)).subquery()
         q = BullingerDB.get_most_recent_only(db.session, Kartei)
         k = q.subquery()
-        tot = len(q.all())
-        a = db.session.query(k.c.status, func.strftime("%Y-%m-%d", k.c.zeit), func.count(k.c.zeit))\
+        a = db.session.query(k.c.status.label("s"), func.strftime("%Y-%m-%d", k.c.zeit).label("t"), func.count(k.c.zeit).label("c"))\
             .filter(k.c.status == "abgeschlossen")\
-            .group_by(func.strftime("%Y-%m-%d", k.c.zeit)).all()
-        xa, ca = [t[1] for t in a], [t[2] for t in a]
-        cac = [sum(ca[:i+1]) for i in range(len(ca))]
-        da = {xa[i]: (ca[i], cac[i]) for i in range(len(xa))}
-
-        u = db.session.query(k.c.status, func.strftime("%Y-%m-%d", k.c.zeit), func.count(k.c.zeit))\
+            .group_by(func.strftime("%Y-%m-%d", k.c.zeit)).subquery()
+        u = db.session.query(k.c.status.label("s"), func.strftime("%Y-%m-%d", k.c.zeit).label("t"), func.count(k.c.zeit).label("c"))\
             .filter(k.c.status == "unklar")\
-            .group_by(func.strftime("%Y-%m-%d", k.c.zeit)).all()
-        xu, cu = [t[1] for t in u], [t[2] for t in u]
-        cuc = [sum(cu[:i+1]) for i in range(len(cu))]
-        du = {xu[i]: (cu[i], cuc[i]) for i in range(len(xu))}
-
-        e = db.session.query(k.c.status, func.strftime("%Y-%m-%d", k.c.zeit), func.count(k.c.zeit))\
+            .group_by(func.strftime("%Y-%m-%d", k.c.zeit)).subquery()
+        e = db.session.query(k.c.status.label("s"), func.strftime("%Y-%m-%d", k.c.zeit).label("t"), func.count(k.c.zeit).label("c"))\
             .filter(k.c.status == "ungültig")\
-            .group_by(func.strftime("%Y-%m-%d", k.c.zeit)).all()
-        xe, ce = [t[1] for t in e], [t[2] for t in e]
-        cec = [sum(ce[:i+1]) for i in range(len(ce))]
-        de = {xe[i]: (ce[i], cec[i]) for i in range(len(xe))}
+            .group_by(func.strftime("%Y-%m-%d", k.c.zeit)).subquery()
+        rel = db.session.query(dates.c.t_all, a.c.c, u.c.c, e.c.c)\
+            .outerjoin(a, dates.c.t_all == a.c.t)\
+            .outerjoin(u, dates.c.t_all == u.c.t)\
+            .outerjoin(e, dates.c.t_all == e.c.t)
+        x, tot = [], 0
+        ya, yu, ye = [], [], []
+        ca, cu, ce = 0, 0, 0
+        yac, yuc, yec = [], [], []
+        for t in rel:
+            x.append(t[0])
+            c = 0
+            if t[3]:
+                c += t[3]
+                ce += t[3]
+            ye.append(c)
+            yec.append(ce)
+            if t[2]:
+                c += t[2]
+                cu += t[2]
+            yu.append(c)
+            yuc.append(cu+yec[-1])
+            if t[1]:
+                c += t[1]
+                ca += t[1]
+            ya.append(c)
+            yac.append(ca+yuc[-1])
 
-        prev = None
-        data_a, data_u, data_e = [], [], []
-        data_ac, data_uc, data_ec, data_oc, data_noc, data_tot = [], [], [], [], [], []
-        xx = sorted(list(set(xa+xu+xe)))
-        for x in xx:
-            data_a.append(da[x][0] if x in da else 0)
-            ac_ = da[x][1] if x in da else (da[prev][1] if prev in da else 0)
-            data_ac.append(ac_)
-
-            data_u.append(du[x][0] if x in du else 0)
-            uc_ = du[x][1] if x in du else (du[prev][1] if prev in du else 0)
-            data_uc.append(uc_)
-
-            data_e.append(de[x][0] if x in de else 0)
-            ec_ = de[x][1] if x in de else (de[prev][1] if prev in de else 0)
-            data_ec.append(ec_)
-            data_tot.append(data_a[-1]+data_u[-1]+data_e[-1])
-            s = ac_ + uc_ + ec_
-            data_noc.append(s)
-            data_oc.append(tot - s)
-            prev = x
-
-        t1 = datetime.strptime(xx[0], "%Y-%m-%d")
-        t2 = datetime.strptime(xx[-1], "%Y-%m-%d")
-        days = (t2-t1).days
-        ppd = tot/data_noc[-1] * days - days
+        number_of_state_changes_today = ya[-1]
+        days_remaining = len(q.all())/yac[-1] * len(x) - len(x) if len(yac) and yac[-1] else 0
 
         # averaged data
-        # avg = int(sum(y_tot)/len(x))
         frame, f = 7, 0
         if frame % 2 == 0: frame += 1
         f = int((frame-1)/2)
-        y_avg_base = data_tot[1:f+1][::-1]+data_tot+data_tot[-f-1:-1][::-1]
-        y_avg = [sum(y_avg_base[k:k+frame])/frame for k in range(len(data_tot))]
+        y_avg_base = ya[1:f+1][::-1]+ya+ya[-f-1:-1][::-1]
+        y_avg = [sum(y_avg_base[k:k+frame])/frame for k in range(len(ya))]
+        fig = plt.figure()
 
         plt.subplot(2, 1, 1)
-        # plt.plot(xx, data_tot, "k-", label="total")
-        # plt.plot(xx, data_a, "g-", label="abgeschlossen")
-        # plt.plot(xx, data_u, "y-", label="unklar")
-        # plt.plot(xx, data_e, "r-", label="ungültig")
-        plt.plot(xx, y_avg, "k-", label="Durchschnitt")
-        plt.fill_between(xx, data_tot, alpha=0.3, color="dodgerblue", label="total")
-        plt.fill_between(xx, data_a, alpha=0.3, color="green", label="abgeschlossen")
-        plt.fill_between(xx, data_u, alpha=0.5, color="yellow", label="unklar")
-        plt.fill_between(xx, data_e, alpha=0.3, color="red", label="ungültig")
-
-        # m, b = np.polyfit(range(1, len(xx)+1), data_a, 1)
-        # plt.plot(xx, [b+m*i for i in range(len(xx))], 'g', linestyle=':', alpha=0.42)
+        plt.plot(x, y_avg, "k-", label="Durchschnitt")
+        plt.fill_between(x, ya, alpha=0.3, color="green", label="abgeschlossen")
+        plt.fill_between(x, yu, alpha=0.5, color="yellow", label="unklar")
+        plt.fill_between(x, ye, alpha=0.3, color="red", label="ungültig")
+        plt.plot([x[-1]], [ya[-1]], "g", marker="_")
+        plt.plot([x[-1]], [yu[-1]], "y", marker="_")
+        plt.plot([x[-1]], [ye[-1]], "r", marker="_")
 
         plt.legend(bbox_to_anchor=(1.04, 1), loc="upper left")
-        plt.xticks([0, len(xx)-1], ['', ''])
-        plt.title("Statusänderungen")
+        plt.xticks([0, len(x)-1], ['', ''])
+        plt.title("Statusänderungen pro Tag")
         plt.ylabel("#Änderungen")
-        # plt.rc('axes', axisbelow=True)
-        # plt.rc('grid', linestyle=":", color='gray')
         plt.grid(True)
 
         plt.subplot(2, 1, 2)
-        plt.plot(xx, data_noc, "k-", label="bearbeitet")
-        # plt.plot(xx, data_ec, "r-", label="ungültig")
-        # plt.plot(xx, data_uc, "y-", label="unklar")
-        # plt.plot(xx, data_ac, "g-", label="abgeschlossen")
-        # plt.plot(xx, data_oc, "b-", label="offen")
-        plt.plot(xx, data_oc, "b-", alpha=0.6, label="offen")
-        plt.fill_between(xx, data_ac, alpha=0.3, color="green", label="abgeschlossen")
-        plt.fill_between(xx, data_uc, alpha=0.3, color="yellow", label="unklar")
-        plt.fill_between(xx, data_ec, alpha=0.3, color="red", label="ungültig")
+        plt.fill_between(x, yac, alpha=0.3, color="green", label="abgeschlossen")
+        plt.fill_between(x, yuc, alpha=0.3, color="yellow", label="unklar")
+        plt.fill_between(x, yec, alpha=0.3, color="red", label="ungültig")
 
         plt.legend(bbox_to_anchor=(1.04, 1), loc="upper left")
-        plt.xticks([0, len(xx)-1], [1, len(xx)])
-        plt.title("kumulierte Statusänderungen")
+        plt.xticks([0, len(x)-1], [1, len(x)])
+        plt.title("Kumulierte Statusänderungen")
         plt.xlabel("#Tage")
-        plt.ylabel("total")
+        plt.ylabel("#Änderungen")
         plt.rc('grid', linestyle=":", color='grey')
         plt.rc('axes', axisbelow=True)
         plt.grid(True)
@@ -1498,7 +1483,7 @@ class BullingerDB:
         fig.savefig('App/static/images/plots/progress_' + file_id + '.png')
         plt.close()
 
-        return int(ppd)
+        return int(days_remaining), number_of_state_changes_today, yac[-1]
 
     @staticmethod
     def get_timeline_data_all(name=None, forename=None, location=None):

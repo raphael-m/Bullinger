@@ -2,27 +2,22 @@
 
 {% block content %}
 
-<h1>
-    >
-    FAQ - Fragen & Antworten
+<h1>> FAQ - Fragen & Antworten
     {% include "user_status.html" %}
 </h1>
 <div class="main_box">
     <div class="h2_box">
-        <h2>Karteikarten-Attribute</h2>
+        <h2>Karteikarten-Attribute {% include "title_navigation_tr.html" %}</h2>
         <div class="h2_section">
-            <div class="h3_box">
-                <div class="h3_section">
-                    <ul>
-                        <li id="href_faq_adress" class="faq_toc">Absender/Empfänger</li>
-                        <li id="href_faq_date" class="faq_toc">Datum</li>
-                        <li id="href_faq_copy" class="faq_toc">Autograph/Kopie</li>
-                        <li id="href_faq_lang" class="faq_toc">Sprache und erster Satz</li>
-                        <li id="href_faq_state" class="faq_toc">Status</li>
-                        <li id="href_faq_var" class="faq_toc">Allgemeines</li>
-                    </ul>
-                </div>
-            </div>
+            <ul>
+                <li id="href_faq_adress" class="faq_toc">Absender/Empfänger</li>
+                <li id="href_faq_date" class="faq_toc">Datum</li>
+                <li id="href_faq_copy" class="faq_toc">Autograph/Kopie</li>
+                <li id="href_faq_lang" class="faq_toc">Sprache und erster Satz</li>
+                <li id="href_faq_state" class="faq_toc">Status</li>
+                <li id="href_faq_var" class="faq_toc">Allgemeines</li>
+            </ul>
+            <div class="h3_separator"></div>
             <div class="h3_box">
                 <h3 id="faq_adress">Absender/Empfänger {% include "title_navigation.html" %}</h3>
                 <div class="h3_section">
@@ -38,6 +33,7 @@
                             <p>Setzen Sie den Status auf "Unklar".</p>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Wie gebe ich einen Namen mit einem Namenszusatz ein (z.B. "Georg von Stetten")?</h4>
                         <div class="rule"></div>
@@ -45,6 +41,7 @@
                             <p>Geben Sie als Nachname "von Stetten" und als Vorname "Georg" ein.</p>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Wie soll ich Abkürzungen wie d.J. (der Jüngere) d.Ä. (der Ältere) eintragen?</h4>
                         <div class="rule"></div>
@@ -52,6 +49,7 @@
                             <p>Geben Sie den Vornamen und als Ergänzung "der Jüngere" bzw. "der Ältere" ein.</p>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Wie gebe ich einen Namen für eine Gruppe ein (z.B. "Pfarrherren von Schaffhausen")?</h4>
                         <div class="rule"></div>
@@ -59,6 +57,7 @@
                             <p>Geben Sie als Nachname "Pfarrherren" ein, lassen Sie das Feld "Vorname" leer. Und tragen Sie "Schaffhausen" als Ort ein.</p>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Was bedeutet "Nicht verifiziert" bei der Absender- bzw. Empfänger-Angabe?</h4>
                         <div class="rule"></div>
@@ -68,6 +67,7 @@
                             <p>Alle anderen Adressen werden als verifizierte Adressen gespeichert und stehen umgehend systemweit zur automatischen Vervollständigung zu Verfügung.</p>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Was mache ich, wenn die Karteikarten Schreibvarianten für Namen oder Orte enthalten
                             (z.B. "Ambrosius Blarer" vs. "Ambrosius Blaurer"; oder "Petrus Paulus Vergerius" vs.
@@ -82,6 +82,7 @@
                             </p>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Was mache ich, wenn die Karteikarten Schreibfehler (z.B. "Tubingen" statt "Tübingen")
                             oder Namens-Abkürzungen (z.B. "Ger." für "Gereon") enthalten?</h4>
@@ -92,18 +93,8 @@
                             </p>
                         </div>
                     </div>
-                    <!--
-                    <div class="h4_box">
-                        <h4></h4>
-                        <div class="rule"></div>
-                        <div class="h4_section">
-                            <p></p>
-
-                        </div>
-                    </div>
-                    -->
-                </div>
-            </div>
+                </div>  <!-- h3_section -->
+            </div>  <!-- h3_box -->
             <div class="h3_separator"></div>
             <div class="h3_box">
                 <h3 id="faq_date">Datum {% include "title_navigation.html" %}</h3>
@@ -120,6 +111,7 @@
                             </p>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Was bedeutet "s.d." bei Monat B?</h4>
                         <div class="rule"></div>
@@ -132,7 +124,7 @@
                             </p>
                         </div>
                     </div>
-
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Was bedeuten "s.d.", "s.n." "s.l." oder "s.a." auf den Karteikarten und wie muss ich diese
                             Einträge in die Datenbank übertragen?</h4>
@@ -150,6 +142,7 @@
                             </p>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Was soll ich machen, wenn die Datumsangabe (teilweise) in Klammern steht?</h4>
                         <div class="rule"></div>
@@ -163,6 +156,7 @@
                             </p>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Was soll ich machen, wenn weitere Angaben zum Datum auf der Karteikarte vermerkt sind?</h4>
                         <div class="rule"></div>
@@ -170,6 +164,7 @@
                             <p>Tragen Sie diese bitte als Bemerkung zum Datum ein.</p>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Wie soll ich eine Verweiskarte in die Datenbank eintragen?</h4>
                         <div class="rule"></div>
@@ -180,6 +175,7 @@
                             </p>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Warum sind die Monate im Auswahlmenü "Datum" bei mir in Englisch (oder einer anderen Sprache als Deutsch)?</h4>
                         <div class="rule"></div>
@@ -187,8 +183,8 @@
                             <p>Die Sprache dieses Auswahlmenüs ergibt sich aus der Spracheinstellung Ihres Browsers. Stören Sie sich nicht daran. In unserer Datenbank werden die Monate sprach-unabhängig gespeichert.</p>
                         </div>
                     </div>
-                </div>
-            </div>
+                </div>  <!-- h3_section -->
+            </div>  <!-- h3_box -->
             <div class="h3_separator"></div>
             <div class="h3_box">
                 <h3 id="faq_copy">Autograph/Kopie {% include "title_navigation.html" %}</h3>
@@ -203,6 +199,7 @@
                             </p>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Was bedeutet "Kopie"?</h4>
                         <div class="rule"></div>
@@ -210,6 +207,7 @@
                             <p>Die Kopie ist eine Abschrift des Briefes.</p>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Wofür steht "Zürich StA"?</h4>
                         <div class="rule"></div>
@@ -218,6 +216,7 @@
                             <p>Wenn es sich um den Standort "Zürich StA" handelt, geben Sie die Angabe bitte immer als "Zürich StA" ein (ohne Komma und ohne andere Zeichen).</p>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Wofür steht "Zürich ZB"?</h4>
                         <div class="rule"></div>
@@ -225,6 +224,7 @@
                             <p><a href="https://www.zb.uzh.ch/">Zentralbibliothek Zürich</a> (= die Bibliothek von Stadt und Kanton Zürich)</p>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Wofür steht "ZZB"?</h4>
                         <div class="rule"></div>
@@ -232,6 +232,7 @@
                             <p>ZZB steht für Zentralbibliothek Zürich. Wenn es sich um den Standort "ZZB" handelt, geben Sie die Angabe bitte immer als "Zürich ZB" ein (ohne Komma und ohne andere Zeichen).</p>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Wie sieht eine typische Signatur beim Staatsarchiv (StA) Zürich aus? Wie soll ich die StA-Signatur eingeben?</h4>
                         <div class="rule"></div>
@@ -249,6 +250,7 @@
                             </ul>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Wie sieht eine typische Signatur bei der Zentralbibliothek (ZB) Zürich aus? Wie soll ich die ZB-Signatur eingeben?</h4>
                         <div class="rule"></div>
@@ -266,6 +268,7 @@
                             </ul>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Was soll ich tun, wenn die Signatur nicht der typischen Signatur des Standortes entspricht?</h4>
                         <div class="rule"></div>
@@ -291,6 +294,7 @@
                             <p>Wenn auf der Karteikarte mehrere Sprachen angegeben sind, dann tragen Sie alle dort vermerkten Sprachen in das Feld ein (mit Komma getrennt).</p>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Woher kommt der Eintrag zu "Sprache" in der Datenbank?</h4>
                         <div class="rule"></div>
@@ -300,6 +304,7 @@
                             <p>Wenn auf der Karteikarte mehrere Sprachen angegeben sind, dann tragen Sie alle dort vermerkten Sprachen in das Feld ein (mit Komma getrennt).</p>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Was bedeutet "Gedruckt" in der Datenbank?</h4>
                         <div class="rule"></div>
@@ -307,6 +312,7 @@
                             <p>Zum entsprechenden Brief ist bereits einen Abdruck publiziert. Tragen Sie die entsprechende Literaturangabe in das Feld ein. Wenn Sie die Literaturangabe nicht entziffern können, tragen Sie eine entsprechende Bemerkung in das Feld "Anmerkungen / Notiz zu dieser Karteikarte" ein und setzen den Status "unklar".</p>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Was bedeutet "BW" im Feld "Gedruckt"?</h4>
                         <div class="rule"></div>
@@ -316,6 +322,7 @@
                             </p>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Was bedeutet "Literatur" in der Datenbank?</h4>
                         <div class="rule"></div>
@@ -323,7 +330,7 @@
                             <p>Der entsprechende Brief ist in einer Publikation erwähnt. Tragen Sie die entsprechende Literaturangabe in das Feld ein. Wenn Sie die Literaturangabe nicht entziffern können, tragen Sie eine entsprechende Bemerkung in das Feld "Anmerkungen / Notiz zu dieser Karteikarte" ein und setzen den Status "Unklar".</p>
                         </div>
                     </div>
-
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Was bedeuten hochgestellte Zeichen bei der Literaturangabe auf der Karteikarte?</h4>
                         <div class="rule"></div>
@@ -335,7 +342,7 @@
                             </p>
                         </div>
                     </div>
-
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Was bedeutet "Ü" bei der Literaturangabe auf der Karteikarte?</h4>
                         <div class="rule"></div>
@@ -347,7 +354,7 @@
                             </p>
                         </div>
                     </div>
-
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Was bedeutet "Erster Satz" in der Datenbank?</h4>
                         <div class="rule"></div>
@@ -357,7 +364,7 @@
                                 des Briefes zu ermöglichen.</p>
                         </div>
                     </div>
-
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Was muss ich beim Feld "Erster Satz" beachten?</h4>
                         <div class="rule"></div>
@@ -374,7 +381,7 @@
                             </p>
                         </div>
                     </div>
-
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Muss ich den ersten Satz übersetzen?</h4>
                         <div class="rule"></div>
@@ -411,6 +418,7 @@
                             </p>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Was bedeutet "Status Offen / Unklar / Ungültig / Abgeschlossen"?</h4>
                         <div class="rule"></div>
@@ -428,7 +436,7 @@
             </div>
             <div class="h3_separator"></div>
             <div class="h3_box">
-                <h3 id="faq_var">Allgemeines {% include "title_navigation.html" %}</h3>
+                <h3 id="faq_var">Allgemeines {% include "title_navigation_lt.html" %}</h3>
                 <div class="h3_section">
                     <div class="h4_box">
                         <h4>Warum sind die Felder "Photokopie" und "Abschrift" grau?</h4>
@@ -437,6 +445,7 @@
                             <p>Die Informationen zu "Photokopie" und "Abschrift" auf den Karteikarten sind nicht mehr aktuell und werden deshalb nicht in die Datenbank übertragen.</p>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Was mache ich mit Hinweiskarten?</h4>
                         <div class="rule"></div>
@@ -444,6 +453,7 @@
                             <p>Bitte setzen Sie den Status auf "Unklar" und klicken Sie auf "Speichern und weiter".</p>
                         </div>
                     </div>
+                    <div class="h4_separator"></div>
                     <div class="h4_box">
                         <h4>Warum stehen in der Datenbank manchmal bereits mehr Information als auf der Karteikarte?</h4>
                         <div class="rule"></div>
@@ -457,12 +467,8 @@
                     </div>
                 </div>
             </div>
-            <div class="h3_separator"></div>
         </div>
     </div>
-    <div class="clearing"></div>
-    <div class="h2_separator"></div>
-
 </div>
 
 {% endblock %}

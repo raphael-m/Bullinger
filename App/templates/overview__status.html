@@ -10,11 +10,11 @@
     fertig!
 </p>
 
-{% if not vars["page_index"] %}
+{% if not vars["page_url"] == '/stats' %}
 <p> &#8594; <a class="text_link" href="{{url_for('stats')}}">Statistiken</a></p>
 {% endif %}
 
-<img class="parallel" src="{{url_for('static', filename='images/plots/overview_'+vars['file_id']+'.png')}}"/>
+<img class="parallel" alt="Statusübersicht" src="{{url_for('static', filename='images/plots/overview_'+vars['file_id']+'.png')}}"/>
 
 <div class="parallel">
     <table class="js-sort-table paleBlueRows">

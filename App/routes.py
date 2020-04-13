@@ -270,22 +270,33 @@ def stats(n_top=50):
     n_top, id_file = int(n_top), str(int(time.time()))
     data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(None, id_file)
     w1, w2, m1, m2 = BullingerDB.create_plot_user_stats(current_user.username, id_file)
-    BullingerDB.get_page_visits_plot(id_file)
-    users, user_avg = BullingerDB.get_user_plot(id_file)
+    visits_today, visits_today_staff = BullingerDB.get_page_visits_plot(id_file)
+    users, user_avg, n_new_users_today, active_today = BullingerDB.get_user_plot(id_file, current_user.username)
+    days_remaining, state_changes_today, state_changes_total = BullingerDB.get_progress_plot(id_file)
+    days_active, changes_today, changes_total = BullingerDB.get_changes_per_day_data(id_file, current_user.username)
     return render_template(
         "stats.html",
         title="Statistiken",
         vars={
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "page_url": "/stats",
             "file_id": id_file,
             "stats": data_percentages,
             "workers_corr": w1,
             "workers_quit": w2,
             "corr_max": m1,
             "quit_max": m2,
-            "days_active": BullingerDB.get_changes_per_day_data(id_file, current_user.username),
-            "days_remaining": BullingerDB.get_progress_plot(id_file),
+            "days_active": days_active,
+            "days_remaining": days_remaining,
+            "changes_today": changes_today,
+            "changes_total": changes_total,
+            "new_users_today": n_new_users_today,
+            "active_users_today": active_today,
+            "state_changes_today": state_changes_today,
+            "state_changes_total": state_changes_total,
+            "visits_today": visits_today,
+            "visits_today_staff": visits_today_staff,
             "status_description": ' '.join([str(num_of_cards), 'Karteikarten:']),
             "visits": BullingerDB.get_number_of_page_visits(visits_only=True),
             "registered_users": users,
@@ -676,7 +687,9 @@ def get_persons_all():
 
 
 @app.route('/persons/alias', methods=['POST', 'GET'])
+@login_required
 def alias():
+    BullingerDB.track(current_user.username, '/alias', datetime.now())
     p_data, form = [], PersonNameForm()
     if form.validate_on_submit():
         alias = Alias.query.filter_by(
@@ -708,12 +721,14 @@ def alias():
     })
 
 @app.route('/delete_alias_1/<nn>/<vn>', methods=['POST', 'GET'])
+@login_required
 def delete_alias_1(nn, vn):
     for a in Alias.query.filter_by(p_name=nn, p_vorname=vn, is_active=1).all(): a.is_active = 0
     db.session.commit()
     return redirect(url_for('alias'))
 
 @app.route('/delete_alias_2/<nn>/<vn>', methods=['POST', 'GET'])
+@login_required
 def delete_alias_2(nn, vn):
     for a in Alias.query.filter_by(a_name=nn, a_vorname=vn, is_active=1).all(): a.is_active = 0
     db.session.commit()

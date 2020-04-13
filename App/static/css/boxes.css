@@ -33,6 +33,13 @@
     width: 50%;
 }
 
+.textblock {
+    margin-left: 0px;
+    padding-left: 0px;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+}
+
 .note {
     margin: 0px;
     padding: 0px;
