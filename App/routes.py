@@ -347,6 +347,26 @@ def places():
     )
 
 
+@app.route('/overview_place/<place>', methods=['GET'])
+def overview_place(place):
+    BullingerDB.track(current_user.username, '/places', datetime.now())
+    id_file = str(int(time.time()))
+    table = BullingerDB.get_data_overview_place(place)
+    print(table)
+    return render_template(
+        "overview_places_freq.html",
+        title="Ortschaften",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "file_id": id_file,
+            "places": table,
+        }
+    )
+
+
+
+
 @app.route('/correspondents', methods=['GET'])
 def correspondents():
     BullingerDB.track(current_user.username, '/correspondents', datetime.now())

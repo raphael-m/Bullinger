@@ -78,7 +78,7 @@ class BullingerPlots:
         if len(rx) > 31: plt.axvline(x=33, color="black")
         plt.bar(sx, sy, width=bar_width, align='center', alpha=0.8, color='blue', label="gesendet ("+str(round(avg_s, 2))+"/Monat)")
         plt.bar(rx, ry, width=bar_width, align='center', alpha=0.8, color='lime', label="empfangen ("+str(round(avg_r, 2))+"/Monat)")
-        plt.title("Bullingers Korrespondenz\n \"Heinrich Bullinger\" "+"("+month+" "+str(year)+")")
+        plt.title("Bullingers Korrespondenzen\n \"Heinrich Bullinger\" "+"("+month+" "+str(year)+")")
         plt.xlabel("Zeit [Tage]")
         plt.ylabel('#Briefe')
         plt.xticks(sx, x_ticks)

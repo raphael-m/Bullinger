@@ -961,6 +961,32 @@ class BullingerDB:
         )
 
     @staticmethod
+    def get_data_overview_place(place):
+        recent_index, recent_sender, recent_receiver = \
+            BullingerDB.get_most_recent_only(db.session, Kartei).subquery(),\
+            BullingerDB.get_most_recent_only(db.session, Absender).subquery(),\
+            BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
+        pers = db.session.query(Person.id.label("id"), Person.ort.label("place")).subquery()
+        qa = db.session.query(
+            recent_index.c.id_brief.label("id"),
+            pers.c.place.label("place")
+        ).outerjoin(recent_sender, recent_index.c.id_brief == recent_sender.c.id_brief)\
+            .outerjoin(pers, pers.c.id == recent_sender.c.id_person)\
+            .filter(pers.c.place == place)
+        qe = db.session.query(
+            recent_index.c.id_brief.label("id"),
+            pers.c.place.label("place")
+        ).outerjoin(recent_receiver, recent_index.c.id_brief == recent_receiver.c.id_brief)\
+            .outerjoin(pers, pers.c.id == recent_receiver.c.id_person)\
+            .filter(pers.c.place == place)
+        sq = union_all(qa, qe).alias("all")
+        q = db.session.query(
+            sq.c.id.label("id"),
+            sq.c.place.label("place"),
+        ).order_by(asc(sq.c.id))
+        return [[r[0], r[1]] for r in q]
+
+    @staticmethod
     def get_data_overview_places():
         recent_index, recent_sender, recent_receiver = \
             BullingerDB.get_most_recent_only(db.session, Kartei).subquery(),\
