@@ -213,7 +213,6 @@ def overview_month(year, month):
 def overview_persons():
     BullingerDB.track(current_user.username, '/persons', datetime.now())
     persons = BullingerDB.get_persons_by_var(None, None, get_links=True)
-    print(persons)
     return render_template(
         'overview_persons.html',
         title="Korrespondenten",
@@ -239,7 +238,6 @@ def overview_state(state):
 @app.route('/overview/<name>/<forename>/<place>', methods=['GET'])
 def overview_cards_of_person(name, forename, place):
     name, forename, place = name.replace("#&&", "/"), forename.replace("#&&", "/"), place.replace("#&&", "/")
-    print(name, forename, place)
     BullingerDB.track(current_user.username, '/overview/'+name, datetime.now())
     data = BullingerDB.get_overview_person(
         None if name == Config.SN else name,
@@ -352,7 +350,6 @@ def overview_place(place):
     BullingerDB.track(current_user.username, '/places', datetime.now())
     id_file = str(int(time.time()))
     table = BullingerDB.get_data_overview_place(place)
-    print(table)
     return render_template(
         "overview_places_freq.html",
         title="Ortschaften",
