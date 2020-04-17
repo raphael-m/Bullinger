@@ -13,34 +13,52 @@
 
 			<p>Mit der Auswahl eines Jahres/Monats erhalten Sie Zugriff auf die einzelnen Karteikarten.</p>
 			{% include "elem_quickstart.html" %}
-			<p>lat. "s.d. = sine die" (ohne Datum)</p>
+			<p>lat. "s.d. = sine dato" (ohne Datum)</p>
 
 			<table class="js-sort-table paleBlueRows">
-				<thead class="my_table_head">
-					<tr class="my_table_head_row">
-						<th class="js-sort-number my_table_head_cell">Jahr</th>
-						<th class="js-sort-number my_table_head_cell">Anzahl Briefe</th>
-						<th class="js-sort-number my_table_head_cell">offen</th>
-						<th class="js-sort-number my_table_head_cell">unklar</th>
-						<th class="js-sort-number my_table_head_cell">abgeschlossen</th>
-						<th class="js-sort-number my_table_head_cell">ungültig</th>
+				<thead class="t_head">
+					<tr class="t_row">
+						<th class="js-sort-number th_cell">Jahr</th>
+						<th class="js-sort-number th_cell">Anzahl Briefe</th>
+						<th class="js-sort-number th_cell">offen</th>
+						<th class="js-sort-number th_cell">unklar</th>
+						<th class="js-sort-number th_cell">ungültig</th>
+						<th class="js-sort-number th_cell">abgeschlossen</th>
 					</tr>
 				</thead>
 				<tbody>
 				{% for d in vars["table"] %}
-					<tr class="my_table_row">
-						<td class="my_table_cell"><a href="{{url_for('overview_year', year=d[0][0])}}">{{ d[0][0] }}</a></td>
-						<td class="my_table_cell">{{ d[1]+d[2]+d[3]+d[4] }}</td>
-						<td class="my_table_cell">{{ d[1] }}</td>
-						<td class="my_table_cell">{{ d[2] }}</td>
-						<td class="my_table_cell">{{ d[3] }}</td>
-						<td class="my_table_cell">{{ d[4] }}</td>
+					{% if d[1]+d[2]+d[3]+d[4] > 0 %}
+					<tr class="t_row">
+						<td class="t_cell"><a href="{{url_for('overview_year', year=d[0])}}">{{ d[0] }}</a></td>
+						<td class="t_cell">{{ d[1]+d[2]+d[3]+d[4] }}</td>
+						<td class="t_cell">{{ d[1] }}</td>
+						<td class="t_cell">{{ d[2] }}</td>
+						<td class="t_cell">{{ d[3] }}</td>
+						<td class="t_cell">{{ d[4] }}</td>
 					</tr>
+					{% endif %}
 				{% endfor %}
+					{% set sum = vars["sums"][0]+vars["sums"][1]+vars["sums"][2]+vars["sums"][3] %}
+					<thead class="t_head">
+						<tr class="t_row">
+							<td class="t_cell_sums">TOTAL</td>
+							<td class="t_cell_sums">{{ sum }}</td>
+							<td class="t_cell_sums">{{ vars["sums"][0] }} ({{ (100*vars["sums"][0]/sum)|round(2) }}%)</td>
+							<td class="t_cell_sums">{{ vars["sums"][1] }} ({{ (100*vars["sums"][1]/sum)|round(2) }}%)</td>
+							<td class="t_cell_sums">{{ vars["sums"][2] }} ({{ (100*vars["sums"][2]/sum)|round(2) }}%)</td>
+							<td class="t_cell_sums">{{ vars["sums"][3] }} ({{ (100*vars["sums"][3]/sum)|round(2) }}%)</td>
+						</tr>
+					</thead>
 				</tbody>
+
+
 			</table>
 
-			<p>Treffer: {{ vars["hits"] }}</p>
+			<p>Treffer: {{ vars["table"] | length }}</p>
+			<br>
+
+			<img alt="Bullingers Korrespondenz" src="{{url_for('static', filename='images/plots/correspondence_'+vars['file_id']+'.png')}}"/>
 
 		</div>
 	</div>

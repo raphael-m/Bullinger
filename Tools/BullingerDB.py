@@ -22,8 +22,7 @@ all_colors = [k for k, v in pltc.cnames.items()]
 matplotlib.use('agg')
 
 ADMIN = 'Admin'  # username (setup)
-L_PROGRESS = ["offen", "abgeschlossen", "unklar", "ungültig"]  # labels (plots)
-C_PROGRESS = ["navy", "forestgreen", "orange", "red"]
+
 
 
 class BullingerDB:
@@ -35,6 +34,10 @@ class BullingerDB:
 
     def update_timestamp(self):
         self.t = datetime.now()
+
+    @staticmethod
+    def create_new_timestamp_str():
+        return str(int(time.time()))
 
     def delete_all(self):
         self.dbs.query(User).delete()
@@ -681,33 +684,96 @@ class BullingerDB:
     def get_most_recent_only(database, relation):
         sub_query = database.query(
             relation.id_brief,
-            func.max(relation.zeit).label('max_date')
+            func.max(relation.zeit).label('zeit')
         ).group_by(relation.id_brief).subquery('t2')
         return database.query(relation).join(
             sub_query,
             and_(relation.id_brief == sub_query.c.id_brief,
-                 relation.zeit == sub_query.c.max_date)
+                 relation.zeit == sub_query.c.zeit)
         )
+
+    @staticmethod
+    def get_data_overview_years():
+        """ data table []"""
+        sq_index, sq_dates =\
+            BullingerDB.get_most_recent_only(db.session, Kartei).subquery(),\
+            BullingerDB.get_most_recent_only(db.session, Datum).subquery()
+        years = db.session.query(sq_dates.c.jahr_a.label("year_all")).group_by(sq_dates.c.jahr_a)
+        sq_years = years.subquery()
+        sq_state = lambda state:\
+            db.session.query(
+                sq_dates.c.jahr_a.label("year_"+state),
+                func.count(sq_index.c.status).label(state),
+            ).join(sq_dates, sq_index.c.id_brief == sq_dates.c.id_brief)\
+             .filter(sq_index.c.status == state)\
+             .group_by(sq_dates.c.jahr_a).subquery()
+        sqo, sqf, squ, sqi = sq_state("offen"), sq_state("abgeschlossen"), sq_state("unklar"), sq_state("ungültig")
+        qo, qu, qi, qf =\
+            dict(db.session.query(sq_years.c.year_all, sqo.c.offen).outerjoin(sq_years, sq_years.c.year_all == sqo.c.year_offen)),\
+            dict(db.session.query(sq_years.c.year_all, squ.c.unklar).outerjoin(sq_years, sq_years.c.year_all == squ.c.year_unklar)),\
+            dict(db.session.query(sq_years.c.year_all, sqi.c.ungültig).outerjoin(sq_years, sq_years.c.year_all == sqi.c.year_ungültig)),\
+            dict(db.session.query(sq_years.c.year_all, sqf.c.abgeschlossen).outerjoin(sq_years, sq_years.c.year_all == sqf.c.year_abgeschlossen)),
+        sum_o, sum_unk, sum_ung, sum_a = 0, 0, 0, 0
+        data = []
+        for y in years:
+            year = y[0] if y[0] else Config.SD
+            offen = qo[y[0]] if y[0] in qo else 0; unklar = qu[y[0]] if y[0] in qu else 0
+            ungueltig = qi[y[0]] if y[0] in qi else 0; abgeschlossen = qf[y[0]] if y[0] in qf else 0
+            sum_o += offen; sum_unk += unklar; sum_ung += ungueltig; sum_a += abgeschlossen
+            data.append([year, offen, unklar, ungueltig, abgeschlossen])
+        return data, [sum_o, sum_unk, sum_ung, sum_a]
+
+    @staticmethod
+    def get_data_overview_month_of(year):
+        """ data table []"""
+        year = None if year == Config.SD else int(year)
+        sq_index, sq_dates =\
+            BullingerDB.get_most_recent_only(db.session, Kartei).subquery(),\
+            BullingerDB.get_most_recent_only(db.session, Datum).subquery()
+        month = db.session.query(sq_dates.c.monat_a.label("month_all")).group_by(sq_dates.c.monat_a)
+        sq_month = month.subquery()
+        sq_state = lambda state:\
+            db.session.query(
+                sq_dates.c.monat_a.label("month_"+state),
+                func.count(sq_index.c.status).label(state),
+            ).join(sq_dates, sq_index.c.id_brief == sq_dates.c.id_brief)\
+             .filter(sq_index.c.status == state) \
+             .filter(sq_dates.c.jahr_a == year) \
+             .group_by(sq_dates.c.monat_a).subquery()
+        sqo, sqf, squ, sqi = sq_state("offen"), sq_state("abgeschlossen"), sq_state("unklar"), sq_state("ungültig")
+        qo, qu, qi, qf =\
+            dict(db.session.query(sq_month.c.month_all, sqo.c.offen).outerjoin(sq_month, sq_month.c.month_all == sqo.c.month_offen)),\
+            dict(db.session.query(sq_month.c.month_all, squ.c.unklar).outerjoin(sq_month, sq_month.c.month_all == squ.c.month_unklar)),\
+            dict(db.session.query(sq_month.c.month_all, sqi.c.ungültig).outerjoin(sq_month, sq_month.c.month_all == sqi.c.month_ungültig)),\
+            dict(db.session.query(sq_month.c.month_all, sqf.c.abgeschlossen).outerjoin(sq_month, sq_month.c.month_all == sqf.c.month_abgeschlossen)),
+        data, oc, uc, ic, ac = [], 0, 0, 0, 0
+        for y in month:
+            month = BullingerDB.convert_month_int2str(y[0]) if BullingerDB.convert_month_int2str(y[0]) else Config.SD
+            o, u, i, a = qo[y[0]] if y[0] in qo else 0, qu[y[0]] if y[0] in qu else 0, qi[y[0]] if y[0] in qi else 0, qf[y[0]] if y[0] in qf else 0
+            if o+u+i+a:
+                data.append([month, o, u, i, a])
+                oc += o; uc += u; ic += i; ac += a
+        return data, oc, uc, ic, ac
 
     # Overviews
     @staticmethod
     def _get_data_overview(year=None, state=None):
-        y = None if year == Config.SD else year
-        recent_index = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
-        recent_dates = BullingerDB.get_most_recent_only(db.session, Datum).subquery()
-        base = db.session.query(
-            recent_index.c.id_brief,
-            recent_index.c.status,
-            recent_dates.c.jahr_a,
-            recent_dates.c.monat_a
-        ).join(recent_dates, recent_dates.c.id_brief == recent_index.c.id_brief)
-        if state: base = base.filter(recent_index.c.status == state)
-        if year: base = base.filter(recent_dates.c.jahr_a == y)
-        col = recent_dates.c.jahr_a if not y else recent_dates.c.monat_a
-        null_count = len(base.filter(col.is_(None)).all())
-        base = base.subquery()
-        col = base.c.jahr_a if not y else base.c.monat_a
-        data = dict(db.session.query(col, func.count(col)).group_by(col).all())
+        year = None if year == Config.SD else year
+        sq_index = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
+        sq_dates = BullingerDB.get_most_recent_only(db.session, Datum).subquery()
+        q = db.session.query(
+            sq_index.c.id_brief,
+            sq_index.c.status,
+            sq_dates.c.jahr_a,
+            sq_dates.c.monat_a
+        ).join(sq_dates, sq_index.c.id_brief == sq_dates.c.id_brief)\
+            .filter(sq_index.c.status == state if state else True)\
+            .filter(sq_dates.c.jahr_a == year if year else True)
+        attr = sq_dates.c.jahr_a if not year else sq_dates.c.monat_a
+        null_count = len(q.filter(attr.is_(None)).all())
+        q = q.subquery()
+        attr = q.c.jahr_a if not year else q.c.monat_a
+        data = dict(db.session.query(attr, func.count(attr)).group_by(attr).all())
         if None in data: del data[None]
         count = sum([data[k] for k in data if data[k]])
         return data, null_count, count+null_count
@@ -727,9 +793,260 @@ class BullingerDB:
             ni = di[x] if x in di else 0
             val = BullingerDB.convert_month_to_str(x) if year else x
             data_overview.append([[val, x], no, nu, na, ni])
-        plot_url = PieChart.create_plot_overview_stats(file_id, [co, ca, cu, ci], L_PROGRESS, C_PROGRESS)
+        plot_url = BullingerPlots.create_plot_overview_stats(file_id, [co, ca, cu, ci])
         num_of_cards, data_percentages = BullingerDB.get_status_evaluation(co, ca, cu, ci)
         return data_overview, data_percentages, plot_url, num_of_cards
+
+    @staticmethod
+    def create_correspondence_plot(file_id):
+
+        recent_index = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
+        recent_dates = BullingerDB.get_most_recent_only(db.session, Datum).subquery()
+        recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
+        recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
+
+        corr = lambda rel: db.session.query(
+            recent_dates.c.jahr_a,
+            func.count(recent_index.c.id_brief).label("count"),
+        ).outerjoin(recent_dates, recent_index.c.id_brief == recent_dates.c.id_brief)\
+         .outerjoin(rel, rel.c.id_brief == recent_dates.c.id_brief)\
+         .outerjoin(Person, rel.c.id_person == Person.id)\
+         .filter(Person.name == "Bullinger", Person.vorname == "Heinrich")\
+         .group_by(recent_dates.c.jahr_a)\
+         .order_by(recent_dates.c.jahr_a)
+
+        bar_width = 0.5
+        shift = bar_width/2
+        sx, sy, sy_none, x_ticks = dict(), dict(), 0, dict()
+        for t in corr(recent_sender):
+            if t[0]:
+                sy[t[0]] = t[1]
+                x_ticks[t[0]] = str(t[0])
+            else: sy_none = t[1]
+        rx, ry, ry_none = dict(), dict(), 0
+        for t in corr(recent_receiver):
+            if t[0]:
+                ry[t[0]] = t[1]
+            else: ry_none = t[1]
+        xs, xt, ys, xr, yr = [], [], [], [], []
+        for i in db.session.query(recent_dates.c.jahr_a)\
+                .filter(recent_dates.c.jahr_a != None)\
+                .group_by(recent_dates.c.jahr_a)\
+                .order_by(asc(recent_dates.c.jahr_a)).all():
+            xs.append(i[0]-shift)
+            ys.append(0 if i[0] not in sy else sy[i[0]])
+            xr.append(i[0]+shift)
+            yr.append(0 if i[0] not in ry else ry[i[0]])
+            xt.append(str(i[0]) if i[0] % 5 == 0 else '')
+        t = xs[-1]-xs[0] if len(xs) > 1 else 1
+        offset = 6
+        from_to = str(int(xs[0]))+"-"+str(int(xs[-1])) if len(xs) > 1 else (str(int(xs[0])) if len(xs) == 1 else '')
+        from_to = "("+from_to+")" if from_to else ''
+        if sy_none or ry_none:
+            if xs:
+                for i in range(int(xs[-1]+1), int(xs[-1]+offset)):
+                    xs += [i-shift]
+                    xr += [i+shift]
+                    ys += [0]
+                    yr += [0]
+                    xt += ['']
+                ys[-1] = sy_none
+                yr[-1] = ry_none
+                xt[-1] = Config.SD
+            else:
+                xs += [-shift]
+                xr += [shift]
+                ys += sy_none
+                yr += ry_none
+                xt += [Config.SD]
+
+        BullingerPlots.create_plot_correspondence(
+            file_id, xs, ys, xr, yr, xt, bar_width, t, offset, from_to
+        )
+
+    @staticmethod
+    def create_correspondence_plot_of_year(file_id, year):
+        recent_index = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
+        recent_dates = BullingerDB.get_most_recent_only(db.session, Datum).subquery()
+        recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
+        recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
+
+        corr = lambda rel: db.session.query(
+            recent_dates.c.monat_a,
+            func.count(recent_index.c.id_brief).label("count"),
+        ).outerjoin(recent_dates, recent_index.c.id_brief == recent_dates.c.id_brief)\
+         .outerjoin(rel, rel.c.id_brief == recent_dates.c.id_brief)\
+         .outerjoin(Person, rel.c.id_person == Person.id)\
+         .filter(Person.name == "Bullinger", Person.vorname == "Heinrich")\
+         .filter(recent_dates.c.jahr_a == year)\
+         .group_by(recent_dates.c.monat_a)\
+         .order_by(recent_dates.c.monat_a)
+
+        bar_width = 0.5
+        shift = bar_width/2
+        sx, sy, sy_none = dict(), dict(), 0
+        for t in corr(recent_sender):
+            if t[0]: sy[t[0]] = t[1]
+            else: sy_none = t[1]
+        rx, ry, ry_none = dict(), dict(), 0
+        for t in corr(recent_receiver):
+            if t[0]: ry[t[0]] = t[1]
+            else: ry_none = t[1]
+        xs, xt, ys, xr, yr = [], [], [], [], []
+        for i in range(1, 13):
+            xs.append(i-shift)
+            ys.append(0 if i not in sy else sy[i])
+            xr.append(i+shift)
+            yr.append(0 if i not in ry else ry[i])
+            xt.append(str(i))
+        if sy_none or ry_none:
+            xs += [13, 14-shift]
+            ys += [0, sy_none]
+            xr += [13, 14+shift]
+            yr += [0, ry_none]
+            xt += ['', Config.SD]
+
+        BullingerPlots.create_plot_correspondence_year(
+            file_id, xs, ys, xr, yr, xt, bar_width
+        )
+
+    @staticmethod
+    def create_correspondence_plot_of_month(file_id, year, month):
+        year = int(year) if year != Config.SD else None
+        m = month
+        month = BullingerDB.convert_month_to_int(month)
+        recent_index = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
+        recent_dates = BullingerDB.get_most_recent_only(db.session, Datum).subquery()
+        recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
+        recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
+
+        corr = lambda rel: db.session.query(
+            recent_dates.c.tag_a,
+            func.count(recent_index.c.id_brief).label("count"),
+        ).outerjoin(recent_dates, recent_index.c.id_brief == recent_dates.c.id_brief)\
+         .outerjoin(rel, rel.c.id_brief == recent_dates.c.id_brief)\
+         .outerjoin(Person, rel.c.id_person == Person.id)\
+         .filter(Person.name == "Bullinger", Person.vorname == "Heinrich")\
+         .filter(recent_dates.c.jahr_a == year) \
+         .filter(recent_dates.c.monat_a == month) \
+         .group_by(recent_dates.c.tag_a)\
+         .order_by(recent_dates.c.tag_a)
+
+        bar_width = 0.5
+        shift = bar_width/2
+        sx, sy, sy_none = dict(), dict(), 0
+        for t in corr(recent_sender):
+            if t[0]: sy[t[0]] = t[1]
+            else: sy_none = t[1]
+        rx, ry, ry_none = dict(), dict(), 0
+        for t in corr(recent_receiver):
+            if t[0]: ry[t[0]] = t[1]
+            else: ry_none = t[1]
+        xs, xt, ys, xr, yr = [], [], [], [], []
+        for i in range(1, 32):
+            xs.append(i-shift)
+            ys.append(0 if i not in sy else sy[i])
+            xr.append(i+shift)
+            yr.append(0 if i not in ry else ry[i])
+            xt.append(str(i) if i % 2 == 0 else '')
+        if sy_none or ry_none:
+            xs += [33, 34, 35-shift]
+            ys += [0, 0, sy_none]
+            xr += [33, 34, 35+shift]
+            yr += [0, 0, ry_none]
+            xt += ['', '', Config.SD]
+
+        BullingerPlots.create_plot_correspondence_month(
+            file_id, xs, ys, xr, yr, xt, bar_width, m, year
+        )
+
+    @staticmethod
+    def get_data_overview_places():
+        recent_index, recent_sender, recent_receiver = \
+            BullingerDB.get_most_recent_only(db.session, Kartei).subquery(),\
+            BullingerDB.get_most_recent_only(db.session, Absender).subquery(),\
+            BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
+        pers = db.session.query(Person.id.label("id"), Person.ort.label("place")).subquery()
+        qa = db.session.query(
+            recent_index.c.id_brief.label("id"),
+            pers.c.place.label("place")
+        ).outerjoin(recent_sender, recent_index.c.id_brief == recent_sender.c.id_brief)\
+         .outerjoin(pers, pers.c.id == recent_sender.c.id_person).subquery()
+        qe = db.session.query(
+            recent_index.c.id_brief.label("id"),
+            pers.c.place.label("place")
+        ).outerjoin(recent_receiver, recent_index.c.id_brief == recent_receiver.c.id_brief)\
+         .outerjoin(pers, pers.c.id == recent_receiver.c.id_person).subquery()
+        fqa = db.session.query(
+            qa.c.place.label("place"),
+            func.count(qa.c.place).label("count")
+        ).group_by(qa.c.place)
+        fqe = db.session.query(
+            qe.c.place.label("place"),
+            func.count(qe.c.place).label("count")
+        ).group_by(qe.c.place)
+        fa = fqa.subquery()
+        fe = fqe.subquery()
+        sq = union_all(fqa, fqe).alias("all")
+        q = db.session.query(
+            sq.c.place.label("place"),
+            func.sum(sq.c.count).label("count")
+        ).group_by(sq.c.place).order_by(desc(func.sum(sq.c.count))).subquery()  # 764
+        s = db.session.query(
+            q.c.place.label("place"),
+            q.c.count.label("tot"),
+            fa.c.count.label("abs"),
+            fe.c.count.label("em"),
+        ).outerjoin(fa, fa.c.place == q.c.place)\
+         .outerjoin(fe, fe.c.place == q.c.place)
+        # --------------------------------------
+        """
+        isp_sender = lambda rel, status : db.session.query(
+            func.count(recent_index.c.status).label("count_"+status),
+            pers.c.place.label("place")
+        ).outerjoin(rel, recent_index.c.id_brief == rel.c.id_brief)\
+         .outerjoin(pers, pers.c.id == rel.c.id_person)\
+         .filter(recent_index.c.status == status)\
+         .group_by(pers.c.place.label("place"))
+
+        qos = isp_sender(recent_sender, "offen")
+        qus = isp_sender(recent_sender, "unklar")
+        qis = isp_sender(recent_sender, "ungültig")
+        qas = isp_sender(recent_sender, "abgeschlossen")
+
+        qor = isp_sender(recent_receiver, "offen")
+        qur = isp_sender(recent_receiver, "unklar")
+        qir = isp_sender(recent_receiver, "ungültig")
+        qar = isp_sender(recent_receiver, "abgeschlossen")
+
+        qo_ = union_all(qos, qor).alias("open")
+        qu_ = union_all(qus, qur).alias("unclear")
+        qi_ = union_all(qis, qir).alias("invalid")
+        qa_ = union_all(qas, qar).alias("abgeschlossen")
+
+        o_ = db.session.query(qo_.c.place.label("place"), func.sum(qo_.c.count_offen)).group_by(qo_.c.place).subquery()
+        u_ = db.session.query(qu_.c.place.label("place"), func.sum(qu_.c.count_unklar)).group_by(qu_.c.place).subquery()
+        i_ = db.session.query(qi_.c.place.label("place"), func.sum(qi_.c.count_ungültig)).group_by(qi_.c.place).subquery()
+        a_ = db.session.query(qa_.c.place.label("place"), func.sum(qa_.c.count_abgeschlossen)).group_by(qa_.c.place).subquery()
+
+        query = db.session.query(
+            s.c.place.label("place"),
+            s.c.tot.label("tot"),
+            s.c.abs.label("a_count"),
+            s.c.em.label("e_count"),
+            qo_.c.count_offen,
+            qu_.c.count_unklar,
+            qi_.c.count_ungültig,
+            qa_.c.count_abgeschlossen
+        ).outerjoin(o_, o_.c.place == s.c.place)\
+            .outerjoin(u_, u_.c.place == s.c.place) \
+            .outerjoin(i_, i_.c.place == s.c.place) \
+            .outerjoin(a_, a_.c.place == s.c.place) \
+
+        for x in query: print(x)
+        """
+        # --------------------------------------
+        return [[r[0], r[1] if r[1] else 0, r[2] if r[2] else 0, r[3] if r[3] else 0] for r in s]
 
     @staticmethod
     def normalize_str_input(value):
@@ -821,38 +1138,34 @@ class BullingerDB:
 
     @staticmethod
     def get_data_overview_month(year, month):
-        year = BullingerDB.normalize_int_input(year)
-        m_num = BullingerDB.convert_month_to_int(month)
-        data, null = [], []
-        rel = BullingerDB.get_most_recent_only(db.session, Datum).subquery()
-        dates = db.session.query(
-                rel.c.id_brief,
-                rel.c.jahr_a,
-                rel.c.monat_a,
-                rel.c.tag_a,
-            ).filter(rel.c.jahr_a == year)\
-            .filter(rel.c.monat_a == m_num)\
-            .all()
-        for d in dates:
-            recent_index = BullingerDB.get_most_recent_only(db.session, Kartei).filter_by(id_brief=d.id_brief).first()
-            r = recent_index.rezensionen
-            s = recent_index.status
-            if d.tag_a: data.append([d.id_brief, d.tag_a, d.monat_a, d.jahr_a, r, s])
-            else: null.append([d.id_brief, d.tag_a, d.monat_a, d.jahr_a, r, s])
-        data, new = null + sorted(data, key=itemgetter(1)), []
-        for d in data:
-            day = str(d[1])+'. ' if d[1] else Config.SD
-            mon = BullingerDB.convert_month_to_str(m_num)
-            mon = Config.SD if not mon else mon
-            y = str(d[3]) if d[3] else Config.SD
-            new.append([d[0], [' '.join([day, mon, y]), m_num], d[4], d[5]])
-        data = new
-        cd = CountDict()
-        for row in data+null: cd.add(row[3])
-        num_of_cards, data_percentages = BullingerDB.get_status_evaluation(cd["offen"], cd["abgeschlossen"], cd["unklar"], cd["ungültig"])
-        file_id = str(int(time.time()))
-        PieChart.create_plot_overview_stats(file_id, [cd["offen"], cd["abgeschlossen"], cd["unklar"], cd["ungültig"]], L_PROGRESS, C_PROGRESS)
-        return data, data_percentages, file_id, num_of_cards
+        year, month_num, sq_date, sq_index =\
+            BullingerDB.normalize_int_input(year),\
+            BullingerDB.convert_month_to_int(month),\
+            BullingerDB.get_most_recent_only(db.session, Datum).subquery(),\
+            BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
+        query = db.session.query(
+            sq_date.c.id_brief,  # 0
+            sq_date.c.jahr_a,
+            sq_date.c.monat_a,
+            sq_date.c.tag_a,
+            sq_index.c.rezensionen,
+            sq_index.c.status,  # 5
+        ).join(sq_index, sq_date.c.id_brief == sq_index.c.id_brief)\
+            .filter(sq_date.c.jahr_a == year, sq_date.c.monat_a == month_num)\
+            .order_by(asc(sq_date.c.jahr_a)).order_by(asc(sq_date.c.jahr_a))
+        data, cd = [], CountDict()
+        for q in query:
+            data.append([q[0], BullingerDB.format_date(q[3], q[2], q[1]), q[4], q[5]])
+            cd.add(q[5])
+        return data, cd["offen"], cd["abgeschlossen"], cd["unklar"], cd["ungültig"]
+
+    @staticmethod
+    def format_date(day: int, month: int, year: int):
+        # input: data from db; output: one string, e.g. "4. April 1988"
+        day, mon = (str(day) + '.' if day else Config.SD), BullingerDB.convert_month_to_str(month)
+        if not mon: mon = Config.SD
+        year = str(year) if year else Config.SD
+        return ' '.join([day, mon, year])
 
     @staticmethod
     def get_status_evaluation(o, a, u, i):
@@ -864,10 +1177,10 @@ class BullingerDB:
             data[Config.S_UNKNOWN] = [u, round(100 * u / number_of_cards, 3)]
             data[Config.S_INVALID] = [i, round(100 * i / number_of_cards, 3)]
         else:
-            data[Config.S_OPEN] = [o, Config.NONE]
-            data[Config.S_FINISHED] = [a, Config.NONE]
-            data[Config.S_UNKNOWN] = [u, Config.NONE]
-            data[Config.S_INVALID] = [i, Config.NONE]
+            data[Config.S_OPEN] = [o, 0]
+            data[Config.S_FINISHED] = [a, 0]
+            data[Config.S_UNKNOWN] = [u, 0]
+            data[Config.S_INVALID] = [i, 0]
         return [number_of_cards, data]
 
     @staticmethod
@@ -979,16 +1292,17 @@ class BullingerDB:
         x1 = np.arange(len(dc))
         y1 = [c[0] for c in dc]
         avg = int(sum(y1)/len(x1))
-        plt.axvline(x=avg, color='g', linestyle='--', alpha=0.4)
+        plt.axvline(x=avg, color='g', linestyle='--', alpha=0.4, label="Durchschnitt ("+str(round(avg, 2))+")")
 
-        plt.text(avg+200, 2, "≈ "+str(avg), style='italic',
-                 fontsize=10, bbox={'facecolor': 'green', 'alpha': 0.2, 'pad': 10})
+        #plt.text(avg+200, 2, "≈ "+str(avg), style='italic',
+        #         fontsize=10, bbox={'facecolor': 'green', 'alpha': 0.2, 'pad': 10})
 
         plt.barh(x1, y1, align='center', alpha=0.8, color=co)
         plt.yticks(x1, x)
-        plt.xlabel('#Korrekturen')
+        plt.xlabel('Korrekturen')
         plt.ylabel("Mitarbeiter")
         plt.title("Korrigierte Karteikarteneinträgen")
+        plt.legend()
         fig.savefig('App/static/images/plots/user_stats_changes_' + file_name + '.png')
         plt.close()
 
@@ -1003,15 +1317,16 @@ class BullingerDB:
         x2 = np.arange(len(dc))
         y2 = [c[0] for c in dc]
         avg = int(sum(y2)/len(x2))
-        plt.axvline(x=avg, color='g', linestyle='--', alpha=0.4)
+        plt.axvline(x=avg, color='g', linestyle='--', alpha=0.4, label="Durchschnitt ("+str(round(avg, 2))+")")
         plt.barh(x2, y2, align='center', alpha=0.8, color=co)
 
-        plt.text(avg+20, 3, "≈ "+str(avg), style='italic',
-                 fontsize=10, bbox={'facecolor': 'green', 'alpha': 0.2, 'pad': 10})
+        # plt.text(avg+20, 3, "≈ "+str(avg), style='italic',
+        #         fontsize=10, bbox={'facecolor': 'green', 'alpha': 0.2, 'pad': 10})
 
         plt.yticks(x2, x)
-        plt.xlabel('#Abschlüsse')
+        plt.xlabel('Abschlüsse')
         plt.title("Abgeschlossene Karteikarten")
+        plt.legend()
         fig.savefig('App/static/images/plots/user_stats_finished_' + file_name + '.png')
         plt.close()
         return len(y1), len(y2), y1[-1], y2[-1]
@@ -1075,14 +1390,22 @@ class BullingerDB:
 
     @staticmethod
     def get_top_n_sender_ignoring_place():
-        return [[r[0] if r[0] else Config.SN, r[1] if r[1] else Config.SN, r[2]] for r in BullingerDB.get_top_data(0) if r[2] > 0]
+        return [[r[0] if r[0] else Config.SN,
+                 r[1] if r[1] else Config.SN,
+                 r[2],
+                 r[0].replace('/', "#&&") if r[0] else Config.SN,
+                 r[1].replace('/', "#&&") if r[1] else Config.SN] for r in BullingerDB.get_top_data(0) if r[2] > 0]
 
     @staticmethod
     def get_top_n_receiver_ignoring_place():
-        return [[r[0] if r[0] else Config.SN, r[1] if r[1] else Config.SN, r[3]] for r in BullingerDB.get_top_data(1) if r[3] > 0]
+        return [[r[0] if r[0] else Config.SN,
+                 r[1] if r[1] else Config.SN,
+                 r[3],
+                 r[0].replace('/', "#&&") if r[0] else Config.SN,
+                 r[1].replace('/', "#&&") if r[1] else Config.SN] for r in BullingerDB.get_top_data(1) if r[3] > 0]
 
     @staticmethod
-    def get_persons_by_var(variable, mode):
+    def get_persons_by_var(variable, mode, get_links=False):
         """ mode=0: variable=Name
             mode=1: variable=Vorname
             mode=2: variable=Ort
@@ -1136,12 +1459,21 @@ class BullingerDB:
                 p_all.c.p_forename,
                 p_all.c.p_place
             ).order_by(desc(func.sum(p_all.c.s_count)))
-        return [[r[0] if r[0] else Config.SN,
-                 r[1] if r[1] else Config.SN,
-                 r[2] if r[2] else Config.SL, r[3], r[4]] for r in results]
+        if not get_links:
+            return [[r[0] if r[0] else Config.SN,
+                     r[1] if r[1] else Config.SN,
+                     r[2] if r[2] else Config.SL, r[3], r[4]] for r in results]
+        else:
+            return [[r[0] if r[0] else Config.SN,
+                     r[1] if r[1] else Config.SN,
+                     r[2] if r[2] else Config.SL, r[3], r[4],
+                     r[0].replace('/', "#&&") if r[0] else Config.SN,
+                     r[1].replace('/', "#&&") if r[1] else Config.SN,
+                     r[2].replace('/', "#&&") if r[2] else Config.SL] for r in results]
+
 
     @staticmethod
-    def get_overview_person(name, forename, place):
+    def get_overview_person(name, forename, place, get_links=False):
         recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
         recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
         # sender
@@ -1175,10 +1507,19 @@ class BullingerDB:
             p_all.c.p_forename,
             p_all.c.p_place,
         ).order_by(asc(p_all.c.id_a))
-        return [[r[0],
-                 r[1] if r[1] else Config.SN,
-                 r[2] if r[2] else Config.SN,
-                 r[3] if r[3] else Config.SL] for r in results]
+        if not get_links:
+            return [[r[0],
+                     r[1] if r[1] else Config.SN,
+                     r[2] if r[2] else Config.SN,
+                     r[3] if r[3] else Config.SL] for r in results]
+        else: return [[r[0],
+                       r[1] if r[1] else Config.SN,
+                       r[2] if r[2] else Config.SN,
+                       r[3] if r[3] else Config.SL,
+                       r[1].replace('/', "#&&") if r[0] else Config.SN,
+                       r[2].replace('/', "#&&") if r[1] else Config.SN,
+                       r[3].replace('/', "#&&") if r[2] else Config.SL] for r in results]
+
 
     @staticmethod
     def get_overview_languages(lang):
@@ -1258,9 +1599,9 @@ class BullingerDB:
         plt.bar(x, y_pers, align='center', alpha=0.9, color="blue")
         plt.bar(x, y_all, bottom=y_pers, align='center', alpha=0.5, color="dodgerblue")
         plt.plot(x, y_avg, 'k', alpha=1, label="Wochendurchschnitt")
-        ax.axhline(y=avg, color='g', linestyle='--', alpha=0.8, label="Durchschnitt")
+        ax.axhline(y=avg, color='g', linestyle='--', alpha=0.8, label="Durchschnitt ("+str(round(avg, 2))+"/Tag)")
 
-        plt.text(2.3, avg+70, str(avg)+" / Tag", style='italic', fontsize=10, bbox={'facecolor': 'green', 'alpha': 0.2, 'pad': 5})
+        # plt.text(2.3, avg+70, str(avg)+" / Tag", style='italic', fontsize=10, bbox={'facecolor': 'green', 'alpha': 0.2, 'pad': 5})
 
         # regression
         # m, b = np.polyfit(x, y, 1)
@@ -1269,8 +1610,8 @@ class BullingerDB:
         ax.set_xticks([0, len(x)-1])
         ax.set_xticklabels([1, str(len(x))], rotation=0)
         plt.legend()
-        plt.xlabel("#Tage")
-        plt.ylabel("#Korrekturen")
+        plt.xlabel("Zeit [Tage]")
+        plt.ylabel("Korrekturen")
         plt.title("Allgemeine/Persönliche Korrekturen pro Tag")
         fig.savefig('App/static/images/plots/changes_'+file_id+'.png')
         plt.close()
@@ -1303,7 +1644,7 @@ class BullingerDB:
         plt.plot([len(y_m) - 1], [y_m[-1]], 'b', marker="_")
         plt.xticks([0, len(y) - 1], [a[0][0], a[-1][0]])
         plt.xlabel("Datum [Tage]")
-        plt.ylabel("#Aufrufe")
+        plt.ylabel("Aufrufe")
         plt.title("Seitenaufrufe")
         plt.legend(loc="upper left")
         fig.savefig('App/static/images/plots/visites_'+file_id+'.png')
@@ -1370,7 +1711,7 @@ class BullingerDB:
         fig = plt.figure()
         plt.subplot(2, 1, 1)
         plt.title("Registrierte Mitarbeiter")
-        plt.ylabel("#registriert")
+        plt.ylabel("Registrierungen")
         plt.plot(x_reg, y_reg, "b-")
         plt.xticks([0, len(x_reg)-1], ['', ''])
         plt.grid(True)
@@ -1379,18 +1720,18 @@ class BullingerDB:
         plt.bar(range(len(x_reg)), yp_active, color="blue", alpha=0.9)
         plt.bar(range(len(x_reg)), y_active, bottom=yp_active, color="dodgerblue", alpha=0.5)
         avg = (sum(y_active)+sum(yp_active))/len(x_reg)
-        plt.plot(x_reg, len(x_reg)*[avg], "g--", alpha=0.8, label="Durchschnitt")
-        plt.text(1, avg+2, str(round(avg, 2))+" / Tag", style='italic', fontsize=10, bbox={'facecolor': 'green', 'alpha': 0.2, 'pad': 5})
+        plt.plot(x_reg, len(x_reg)*[avg], "g--", alpha=0.8, label="Durchschnitt ("+str(round(avg, 2))+"/Tag)")
+        # plt.text(1, avg+2, str(round(avg, 2))+" / Tag", style='italic', fontsize=10, bbox={'facecolor': 'green', 'alpha': 0.2, 'pad': 5})
         plt.title("Aktive Mitarbeiter")
         plt.xlabel("Datum [Tage]")
-        plt.ylabel("#aktiv")
+        plt.ylabel("aktive Helfer")
         plt.xticks([0, len(x_reg)-1], [x_reg[0], x_reg[-1]])
         locs, labels = plt.yticks()
         plt.yticks([each for each in range(0, int(locs[-1]), int(locs[-1]/5))])
         plt.rc('grid', linestyle=":", color='grey')
         plt.rc('axes', axisbelow=True)
         plt.grid(True)
-        plt.legend()
+        plt.legend(loc="upper left")
         fig.tight_layout()
         fig.savefig('App/static/images/plots/users_' + file_id + '.png')
         plt.close()
@@ -1452,18 +1793,19 @@ class BullingerDB:
         fig = plt.figure()
 
         plt.subplot(2, 1, 1)
-        plt.plot(x, y_avg, "k-", label="Durchschnitt")
+        plt.plot(x, y_avg, "k-", label="Wochen-DS")
         plt.fill_between(x, ya, alpha=0.3, color="green", label="abgeschlossen")
         plt.fill_between(x, yu, alpha=0.5, color="yellow", label="unklar")
         plt.fill_between(x, ye, alpha=0.3, color="red", label="ungültig")
         plt.plot([x[-1]], [ya[-1]], "g", marker="_")
         plt.plot([x[-1]], [yu[-1]], "y", marker="_")
         plt.plot([x[-1]], [ye[-1]], "r", marker="_")
-
+        avg = yac[-1]/len(x)
+        plt.axhline(y=avg, color='b', linestyle='--', alpha=0.7, label="DS (" + str(round(avg, 2)) + "/Tag)")
         plt.legend(bbox_to_anchor=(1.04, 1), loc="upper left")
         plt.xticks([0, len(x)-1], ['', ''])
         plt.title("Statusänderungen pro Tag")
-        plt.ylabel("#Änderungen")
+        plt.ylabel("Änderungen")
         plt.grid(True)
 
         plt.subplot(2, 1, 2)
@@ -1473,9 +1815,9 @@ class BullingerDB:
 
         plt.legend(bbox_to_anchor=(1.04, 1), loc="upper left")
         plt.xticks([0, len(x)-1], [1, len(x)])
-        plt.title("Kumulierte Statusänderungen")
-        plt.xlabel("#Tage")
-        plt.ylabel("#Änderungen")
+        plt.title("Total")
+        plt.xlabel("Zeit [Tage]")
+        plt.ylabel("Änderungen")
         plt.rc('grid', linestyle=":", color='grey')
         plt.rc('axes', axisbelow=True)
         plt.grid(True)

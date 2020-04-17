@@ -32,13 +32,18 @@
 					{% for r in vars["table"] %}
 					<tr class="my_table_row">
 						<td class="my_table_cell"><a href="{{url_for('assignment', id_brief=r[0])}}">{{ r[0] }}</a></td>
-						<td class="my_table_cell"> {{ r[1][0] }} </td>
+						<td class="my_table_cell"> {{ r[1] }} </td>
 						<td class="my_table_cell"> {{ r[2] }} </td>
 						<td class="my_table_cell"> {{ r[3] }} </td>
 					</tr>
 					{% endfor %}
 				</tbody>
 			</table>
+
+			<p>Treffer: {{ vars["table"] | length }}</p>
+
+			<img alt="Bullingers Korrespondenz ({{ vars['month'] }} {{ vars['year'] }})" src="{{url_for('static', filename='images/plots/correspondence_'+vars['file_id']+'.png')}}"/>
+
 		</div>
 	</div>
 
@@ -48,6 +53,7 @@
 			{% include "overview__status.html" %}
 		</div>
 	</div>
+
 </div>
 
 {% endblock %}

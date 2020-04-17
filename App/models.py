@@ -163,9 +163,8 @@ class Person(db.Model):
         self.zeit = time
 
     def __repr__(self):
-        return '<Person {} {} {} {} {} {} {} {} {}>'.format(
-            self.id, self.name, self.vorname, self.ort, self.bemerkung, self.empfangen, self.gesendet,
-            self.anwender, self.zeit
+        return '<Person {} {} {} {} {} {}>'.format(
+            self.id, self.name, self.vorname, self.ort, self.anwender, self.zeit
         )
 
 

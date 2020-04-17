@@ -17,7 +17,7 @@
 	</div>
 	<div class="h2_separator"></div>
 	<div class="h2_box">
-		<h2>Mitarbeiter
+		<h2>Mitarbeiter (freiwillige Helfer)
 			{% include "title_navigation.html" %}
 		</h2>
 		<div class="h2_section">
@@ -34,33 +34,35 @@
 				<div class="h3_section">
 					<p> Bis jetzt haben sich
 							<span class="kw">{{ vars["workers_corr"] }} Personen</span>
-							an den Korrekturen beteiligt.
+							an den Korrekturen beteiligt, wovon
 							<span class="kw"> {{ vars["workers_quit"] }} Personen</span>
-							haben mindestens eine Karteikarte abgeschlossen.
+							mindestens eine Karteikarte abgeschlossen haben.
 					</p>
-					<p> Rekorde:
-						<span class="kw">{{ vars["corr_max"] }} Korrekturen</span>
-						/
-						<span class="kw">{{ vars["quit_max"] }} Abschlüssen.</span>
-						Sie haben
-							{{ vars["user_stats"][0] }} Fehler korrigiert
-							({{ (vars["user_stats"][0]/vars["corr_max"]*100)|round(2) }}%)
-						und
-							{{ vars["user_stats"][1] }}
-						Karteikarten abgeschlossen
-							({{ (vars["user_stats"][1]/vars["quit_max"]*100)|round(2) }}%)
-						.
-					</p>
+					<p>Rekorde:</p>
+					<ul>
+						<li>Generell:
+							<span class="kw">{{ vars["corr_max"] }} Korrekturen</span>
+							/
+							<span class="kw">{{ vars["quit_max"] }} Abschlüsse.</span>
+						</li>
+						<li>Ihre:
+							<span class="kw">{{ vars["user_stats"][0] }} Korrekturen</span>
+							<span class="kw">({{ (vars["user_stats"][0]/vars["corr_max"]*100)|round(2) }}%)</span>
+							/
+							<span class="kw">{{ vars["user_stats"][1] }} Abschlüsse</span>
+							<span class="kw">({{ (vars["user_stats"][1]/vars["quit_max"]*100)|round(2) }}%)</span>
+						</li>
+					</ul>
 					<img class="parallel" alt="Mitarbeiter Rangliste (Korrekturen)" src="{{url_for('static', filename='images/plots/user_stats_changes_'+vars['file_id']+'.png')}}"/>
 					<img class="parallel" alt="Mitarbeiter Rangliste (Abschlüsse)" src="{{url_for('static', filename='images/plots/user_stats_finished_'+vars['file_id']+'.png')}}"/>
 					<div class="clearing"></div>
 					<br>
 					<p>
-						In der Rangliste aufgeführt sind alle registrierten Benutzer (Mitarbeiter), die
+						In der Rangliste aufgeführt sind alle Mitarbeiter, die
 						<span class="kw_italic"> mindestens einen Datenbankeintrag editiert </span>
-						("Korrigierte Datenbankeinträge") oder
-						<span class="kw_italic"> mindestens eine Karteikarte als vollständig digitalisiert </span>
-						("Abgeschlossene Karteikarten") markiert haben.
+						oder
+						<span class="kw_italic"> mindestens eine Karteikarte abgeschlossen </span>
+						haben.
 					</p>
 				</div>  <!-- h3-section -->
 			</div>  <!-- h3-box -->
@@ -89,12 +91,12 @@
 					<div class="clearing"></div>
 
 					{% set cp_tot = vars["stats"]["abgeschlossen"][0]+vars["stats"]["ungültig"][0]+vars["stats"]["unklar"][0] %}
-					<span class="kw">Änderungen (heute/allgemein)</span>
+					<p><span class="kw">Änderungen (heute/total)</span></p>
 					<ul>
-						<li>{{ vars["changes_today"] }}/{{ vars["changes_total"] }} Korrekturen
+						<li>{{ vars["changes_today"] }} / {{ vars["changes_total"] }} Korrekturen
 							({{ (100*vars["changes_today"]/vars["changes_total"])|round(2) }}%)
 						</li>
-						<li>{{ (vars["state_changes_today"])}}/{{cp_tot }} Statusänderungen
+						<li>{{ (vars["state_changes_today"])}} / {{cp_tot }} Statusänderungen
 							({{ (100*vars["state_changes_today"] / cp_tot)|round(2) }}%)
 						</li>
 					</ul>
@@ -108,7 +110,9 @@
 				<div class="h3_section">
 					<p> Wir zählen aktuell
 						<span class="kw">{{ vars["registered_users"] }} registrierte Mitarbeiter</span>
-						<span class="kw">({{ vars["users_active_on_avg"]|round(1) }} täglich aktiv)</span>,
+						(wovon
+						<span class="kw">{{ vars["users_active_on_avg"]|round(1) }} täglich aktiv</span>
+						sind),
 						und <span class="kw">{{ vars["visits"] }} Seitenaufrufe</span> seit dem 12. März 2020
 						(bzw. seit {{vars['days_active']}} Tagen).
 					</p>
@@ -117,7 +121,7 @@
 					<img class="parallel" alt="Anzahl Mitarbeiter" src="{{url_for('static', filename='images/plots/users_'+vars['file_id']+'.png')}}"/>
 					<div class="clearing"></div>
 					<br>
-					<span class="kw">Heute:</span>
+					<p><span class="kw">Heute:</span></p>
 					<ul>
 						<li>
 							{{ vars["new_users_today"] }}
@@ -127,10 +131,10 @@
 							{% if vars['active_users_today'] == 1 %} aktiver {% else %} aktive {% endif %}
 							Mitarbeiter
 						</li>
-						<li>{{ vars["visits_today"] }} Seitenaufrufe,
+						<li>{{ vars["visits_today"] }} Seitenaufrufe, davon
 							{{ vars["visits_today_staff"] }}
-							({{ (100*vars["visits_today_staff"]/vars["visits_today"])|round(2) }}%)
 							durch Mitarbeiter
+							({{ (100*vars["visits_today_staff"]/vars["visits_today"])|round(2) }}%)
 						</li>
 					</ul>
 				</div> <!-- h3-section -->
@@ -145,10 +149,11 @@
 		<div class="h2_section">
 			<p>Übersichten zu den Karteikarten:</p>
 			<ul>
-				<li><a href="{{url_for('overview')}}">Datum (nach Jahren/Monaten)</a></li>
+				<li><a href="{{url_for('overview')}}">Datum (nach Jahren/Monaten/Tagen)</a></li>
 				<li><a href="{{url_for('overview_persons')}}">Personen (mit Ortschaften)</a></li>
 				<li><a href="{{url_for('correspondents')}}">Personen (ohne Ortschaften)</a></li>
 				<li><a href="{{url_for('languages')}}">Sprachen</a></li>
+				<li><a href="{{url_for('places')}}">Ortschaften</a></li>
 			</ul>
 		</div>  <!-- h2-section -->
 	</div>

@@ -3,14 +3,11 @@
 {% block content %}
 
 <h1> > Kartei / Personen (ohne Ortschaften) {% include "user_status.html" %} </h1>
-
 <div class="main_box">
-
 	<h2>Korrespondenten (ohne Ortschaften)</h2>
 	<div class="h2_section">
-
         <p>
-            Aktuell können wir {{ vars["hits_s"] }} Absender und {{ vars["hits_r"] }} Empfänger
+            Aktuell können wir {{ vars["top_s_gbp"] | length }} Absender und {{ vars["top_r_gbp"] | length }} Empfänger
             in unserer Datenbank identifizieren.
         </p>
         <br>
@@ -19,7 +16,7 @@
             <li>lat. "s.n." = "sine nomine" (ohne Namen)</li>
             <li>lat. "s.l." = "sine loco" (ohne Ort)</li>
         </ul>
-
+		<!-- left table -->
 		<div class="parallel">
 			<table class="js-sort-table paleBlueRows">
 				<thead class="my_table_head">
@@ -30,19 +27,18 @@
 					</tr>
 				</thead>
 				<tbody>
-				<!-- n top Empfänger -->
+				<!-- n top receiver -->
 				{% for e in vars["top_r_gbp"] %}
 					<tr class="my_table_row">
-						<td class="my_table_cell"><a href="{{url_for('person_by_name', name=e[0])}}"> {{ e[0] }} </a></td>
-						<td class="my_table_cell"><a href="{{url_for('person_by_forename', forename=e[1])}}"> {{ e[1] }} </a></td>
+						<td class="my_table_cell"><a href="{{url_for('person_by_name', name=e[3])}}"> {{ e[0] }} </a></td>
+						<td class="my_table_cell"><a href="{{url_for('person_by_forename', forename=e[4])}}"> {{ e[1] }} </a></td>
 						<td class="my_table_cell">{{ e[2] }}</td>
 					</tr>
 				{% endfor %}
 				</tbody>
 			</table>
 		</div>
-
-
+		<!-- right table -->
 		<div class="parallel">
 			<table class="js-sort-table paleBlueRows">
 				<thead class="my_table_head">
@@ -53,11 +49,11 @@
 					</tr>
 				</thead>
 				<tbody>
-				<!-- n top Absender -->
+				<!-- n top sender -->
 				{% for s in vars["top_s_gbp"] %}
 					<tr class="my_table_row">
-						<td class="my_table_cell"><a href="{{url_for('person_by_name', name=s[0])}}"> {{ s[0] }} </a></td>
-						<td class="my_table_cell"><a href="{{url_for('person_by_forename', forename=s[1])}}"> {{ s[1] }} </a></td>
+						<td class="my_table_cell"><a href="{{url_for('person_by_name', name=s[3])}}">{{ s[0] }}</a></td>
+						<td class="my_table_cell"><a href="{{url_for('person_by_forename', forename=s[4])}}">{{ s[1] }}</a></td>
 						<td class="my_table_cell">{{ s[2] }}</td>
 					</tr>
 				{% endfor %}
@@ -66,7 +62,6 @@
 		</div>
 	</div>
 	<div class="clearing"></div>
-
 </div>
 
 {% endblock %}

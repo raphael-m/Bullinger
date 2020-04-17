@@ -17,13 +17,13 @@ from collections import defaultdict
 from App.models import *
 from config import Config
 from Tools.NGrams import NGrams
+from Tools.Plots import BullingerPlots
 
 import requests
 import re
 import time
 
 APP_NAME = "KoKoS-Bullinger"
-ADMINS = []
 
 @app.errorhandler(404)
 def not_found(error):
@@ -146,31 +146,18 @@ def register():
 @app.route('/overview', methods=['POST', 'GET'])
 def overview():
     BullingerDB.track(current_user.username, '/overview', datetime.now())
-    data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(None, str(int(time.time())))
+    file_id = BullingerDB.create_new_timestamp_str()
+    BullingerDB.create_correspondence_plot(file_id)
+    data, sums = BullingerDB.get_data_overview_years()
     return render_template(
         'overview.html',
         title="Übersicht",
         vars={
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
-            "table": data_overview,
-            "hits": len(data_overview),
-        }
-    )
-
-
-@app.route('/persons', methods=['POST', 'GET'])
-def overview_persons():
-    BullingerDB.track(current_user.username, '/persons', datetime.now())
-    persons = BullingerDB.get_persons_by_var(None, None)
-    return render_template(
-        'overview_persons.html',
-        title="Korrespondenten",
-        vars={
-            "username": current_user.username,
-            "user_stats": BullingerDB.get_user_stats(current_user.username),
-            "persons": persons,
-            "hits": len(persons),
+            "table": data,
+            "sums": sums,
+            "file_id": file_id
         }
     )
 
@@ -179,16 +166,21 @@ def overview_persons():
 @app.route('/overview_year/<year>', methods=['POST', 'GET'])
 def overview_year(year):
     BullingerDB.track(current_user.username, '/overview/'+year, datetime.now())
-    file_id = str(int(time.time()))
+    file_id = BullingerDB.create_new_timestamp_str()
     data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(year, file_id)
+    data, co, cu, ci, ca = BullingerDB.get_data_overview_month_of(year)
+    data_stats = BullingerDB.get_status_evaluation(co, ca, cu, ci)
+    file_id = str(int(time.time()))
+    BullingerPlots.create_plot_overview_stats(file_id, [co, ca, cu, ci])
+    BullingerDB.create_correspondence_plot_of_year(file_id, int(year) if year != Config.SD else None)
     return render_template('overview_year.html', title="Übersicht", vars={
         "username": current_user.username,
         "user_stats": BullingerDB.get_user_stats(current_user.username),
         "year": year,
-        "table": data_overview,
+        "table": data,
+        "sums": [co, cu, ci, ca],
+        "stats": data_stats[1],
         "file_id": file_id,
-        "num_of_cards": num_of_cards,
-        "stats": data_percentages,
         "status_description": ' '.join([str(num_of_cards), 'Karteikarten vom Jahr', str(year)+':'])
     })
 
@@ -196,24 +188,42 @@ def overview_year(year):
 @app.route('/overview_month/<year>/<month>', methods=['POST', 'GET'])
 def overview_month(year, month):
     BullingerDB.track(current_user.username, '/'.join(['', str(month), str(year)]), datetime.now())
-    if month == Config.SD: month = 0
-    data_overview, data_percentages, file_id, num_of_cards = BullingerDB.get_data_overview_month(year, month)
-    month = BullingerDB.convert_month_to_str(month)
+    data, co, ca, cu, ci = BullingerDB.get_data_overview_month(year, month)
+    data_stats = BullingerDB.get_status_evaluation(co, ca, cu, ci)
+    file_id = str(int(time.time()))
+    BullingerPlots.create_plot_overview_stats(file_id, [co, ca, cu, ci])
+    BullingerDB.create_correspondence_plot_of_month(file_id, year, month)
     return render_template('overview_month.html', title="Monatsübersicht", vars={
         "username": current_user.username,
         "user_stats": BullingerDB.get_user_stats(current_user.username),
         "year": year,
-        "month": month if month else Config.SD,
-        "table": data_overview,
+        "month": month,
+        "table": data,
+        "stats": data_stats[1],
         "file_id": file_id,
-        "num_of_cards": num_of_cards,
-        "stats": data_percentages,
         "status_description": ' '.join([
-            str(num_of_cards)+' Karteikarten' if num_of_cards>1 else 'einzigen Karteikarte',
+            str(len(data))+' Karteikarten' if len(data) > 1 else 'einzigen Karteikarte',
             'vom' if month != Config.SD else 'mit der Angabe',
-            month if month else Config.SD, year+':'
+            month if month else Config.SD, year + ':'
         ])
     })
+
+
+@app.route('/persons', methods=['POST', 'GET'])
+def overview_persons():
+    BullingerDB.track(current_user.username, '/persons', datetime.now())
+    persons = BullingerDB.get_persons_by_var(None, None, get_links=True)
+    print(persons)
+    return render_template(
+        'overview_persons.html',
+        title="Korrespondenten",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "persons": persons,
+        }
+    )
+
 
 @app.route('/overview_state/<state>', methods=['POST', 'GET'])
 def overview_state(state):
@@ -224,16 +234,17 @@ def overview_state(state):
         "user_stats": BullingerDB.get_user_stats(current_user.username),
         "table": data,
         "state": state,
-        "hits": len(data)
     })
 
 @app.route('/overview/<name>/<forename>/<place>', methods=['GET'])
 def overview_cards_of_person(name, forename, place):
+    name, forename, place = name.replace("#&&", "/"), forename.replace("#&&", "/"), place.replace("#&&", "/")
+    print(name, forename, place)
     BullingerDB.track(current_user.username, '/overview/'+name, datetime.now())
     data = BullingerDB.get_overview_person(
         None if name == Config.SN else name,
         None if forename == Config.SN else forename,
-        None if place == Config.SL else place)
+        None if place == Config.SL else place, get_links=True)
     return render_template(
         "overview_general_cards.html",
         title=name + ', ' + forename + ', ' + place,
@@ -244,7 +255,6 @@ def overview_cards_of_person(name, forename, place):
             "forename": forename,
             "place": place,
             "table": data,
-            "hits": len(data),
         }
     )
 
@@ -259,7 +269,6 @@ def overview_languages(lang):
             "user_stats": BullingerDB.get_user_stats(current_user.username),
             "language": lang,
             "table": data,
-            "hits": len(data)
         }
     )
 
@@ -321,6 +330,23 @@ def languages():
         }
     )
 
+@app.route('/places', methods=['GET'])
+def places():
+    BullingerDB.track(current_user.username, '/places', datetime.now())
+    id_file = str(int(time.time()))
+    table = BullingerDB.get_data_overview_places()
+    return render_template(
+        "overview_places_freq.html",
+        title="Ortschaften",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "file_id": id_file,
+            "places": table,
+        }
+    )
+
+
 @app.route('/correspondents', methods=['GET'])
 def correspondents():
     BullingerDB.track(current_user.username, '/correspondents', datetime.now())
@@ -334,19 +360,18 @@ def correspondents():
             "user_stats": BullingerDB.get_user_stats(current_user.username),
             "top_s_gbp": data_sender,
             "top_r_gbp": data_receiver,
-            "hits_s": len(data_sender),
-            "hits_r": len(data_receiver)
         }
     )
 
 
 @app.route('/overview/person_by_name/<name>', methods=['GET'])
 def person_by_name(name):
+    name = name.replace("#&&", "/")
     BullingerDB.track(current_user.username, '/overview/'+name, datetime.now())
-    data = BullingerDB.get_persons_by_var(None if name == Config.SN else name, 0)
+    data = BullingerDB.get_persons_by_var(None if name == Config.SN else name, 0, get_links=True)
     return render_template(
         "overview_general.html",
-        title="Statistiken",
+        title="Person "+name,
         vars={
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
@@ -354,18 +379,18 @@ def person_by_name(name):
             "attribute": "Nachname",
             "value": name,
             "table": data,
-            "hits": str(len(data)),
             "description": "Personen mit Nachname "+name
         }
     )
 
 @app.route('/overview/person_by_forename/<forename>', methods=['GET'])
 def person_by_forename(forename):
+    forename = forename.replace("#&&", "/")
     BullingerDB.track(current_user.username, '/overview/' + forename, datetime.now())
-    data = BullingerDB.get_persons_by_var(None if forename == Config.SN else forename, 1)
+    data = BullingerDB.get_persons_by_var(None if forename == Config.SN else forename, 1, get_links=True)
     return render_template(
         "overview_general.html",
-        title="Statistiken",
+        title="Person "+forename,
         vars={
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
@@ -373,18 +398,18 @@ def person_by_forename(forename):
             "attribute": "Vorname",
             "value": forename,
             "table": data,
-            "hits": str(len(data)),
             "description": "Personen mit Vorname "+forename
         }
     )
 
 @app.route('/overview/person_by_place/<place>', methods=['GET'])
 def person_by_place(place):
+    place = place.replace("#&&", "/")
     BullingerDB.track(current_user.username, '/overview/' + place, datetime.now())
-    data = BullingerDB.get_persons_by_var(None if place == Config.SL else place, 2)
+    data = BullingerDB.get_persons_by_var(None if place == Config.SL else place, 2, get_links=True)
     return render_template(
         "overview_general.html",
-        title="Statistiken",
+        title="Personen von "+place,
         vars={
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
@@ -392,7 +417,6 @@ def person_by_place(place):
             "attribute": "Ort",
             "value": place,
             "table": data,
-            "hits": str(len(data)),
             "description": "Personen von "+place
         }
     )

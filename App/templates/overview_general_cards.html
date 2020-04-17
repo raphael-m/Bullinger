@@ -17,7 +17,7 @@
 			{{ vars["place"] }}
 		</h2>
 		<div class="h2_section">
-			<p> Treffer: {{ vars["hits"] }} </p>'
+			<p> Treffer: {{ vars["table"] | length }} </p>
 
 			<table class="js-sort-table paleBlueRows">
 				<thead class="my_table_head">
@@ -36,21 +36,21 @@
 						</td>
 						<td class="my_table_cell">
 						{% if vars["value"]|string() != d[1] %}
-							<a href="{{url_for('person_by_name', name=d[1])}}">{{ d[1] }}</a>
+							<a href="{{url_for('person_by_name', name=d[4])}}">{{ d[1] }}</a>
 						{% else %}
 							{{ d[1] }}
 						{% endif %}
 						</td>
 						<td class="my_table_cell">
 						{% if vars["value"]|string() != d[2] %}
-							<a href="{{url_for('person_by_forename', forename=d[2])}}">{{ d[2] }}</a>
+							<a href="{{url_for('person_by_forename', forename=d[5])}}">{{ d[2] }}</a>
 						{% else %}
 							{{ d[2] }}
 						{% endif %}
 						</td>
 						<td class="my_table_cell">
 						{% if vars["value"]|string() != d[3] %}
-							<a href="{{url_for('person_by_place', place=d[3])}}">{{ d[3] }}</a>
+							<a href="{{url_for('person_by_place', place=d[6])}}">{{ d[3] }}</a>
 						{% else %}
 							{{ d[3] }}
 						{% endif %}

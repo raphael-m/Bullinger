@@ -21,15 +21,15 @@
 						<th class="js-sort-number my_table_head_cell">Anzahl Briefe</th>
 						<th class="js-sort-number my_table_head_cell">offen</th>
 						<th class="js-sort-number my_table_head_cell">unklar</th>
-						<th class="js-sort-number my_table_head_cell">abgeschlossen</th>
 						<th class="js-sort-number my_table_head_cell">ungültig</th>
+						<th class="js-sort-number my_table_head_cell">abgeschlossen</th>
 					</tr>
 				</thead>
 				<tbody>
 				{% for d in vars["table"] %}
 					<tr class="my_table_row">
 						<td class="my_table_cell">
-							<a href="{{url_for('overview_month', year=vars['year'], month=d[0][1])}}">{{ d[0][0] }}</a>
+							<a href="{{url_for('overview_month', year=vars['year'], month=d[0])}}">{{ d[0] }}</a>
 						</td>
 						<td class="my_table_cell">{{ d[1]+d[2]+d[3]+d[4] }}</td>
 						<td class="my_table_cell">{{ d[1] }}</td>
@@ -38,8 +38,24 @@
 						<td class="my_table_cell">{{ d[4] }}</td>
 					</tr>
 				{% endfor %}
+				{% set sum = vars["sums"][0]+vars["sums"][1]+vars["sums"][2]+vars["sums"][3] %}
+					<thead class="t_head">
+						<tr class="t_row">
+							<td class="t_cell_sums">TOTAL</td>
+							<td class="t_cell_sums">{{ sum }}</td>
+							<td class="t_cell_sums">{{ vars["sums"][0] }} ({{ (100*vars["sums"][0]/sum)|round(2) }}%)</td>
+							<td class="t_cell_sums">{{ vars["sums"][1] }} ({{ (100*vars["sums"][1]/sum)|round(2) }}%)</td>
+							<td class="t_cell_sums">{{ vars["sums"][2] }} ({{ (100*vars["sums"][2]/sum)|round(2) }}%)</td>
+							<td class="t_cell_sums">{{ vars["sums"][3] }} ({{ (100*vars["sums"][3]/sum)|round(2) }}%)</td>
+						</tr>
+					</thead>
 				</tbody>
 			</table>
+
+			<p>Treffer: {{ vars["table"] | length }}</p>
+
+			<img alt="Bullingers Korrespondenz (Jahr {{ vars['year'] }})" src="{{url_for('static', filename='images/plots/correspondence_'+vars['file_id']+'.png')}}"/>
+
 		</div>
 	</div>
 	<div class="h2_box">
