@@ -1542,9 +1542,9 @@ class BullingerDB:
                        r[1] if r[1] else Config.SN,
                        r[2] if r[2] else Config.SN,
                        r[3] if r[3] else Config.SL,
-                       r[1].replace('/', "#&&") if r[0] else Config.SN,
-                       r[2].replace('/', "#&&") if r[1] else Config.SN,
-                       r[3].replace('/', "#&&") if r[2] else Config.SL] for r in results]
+                       r[1].replace('/', "#&&") if r[1] else Config.SN,
+                       r[2].replace('/', "#&&") if r[2] else Config.SN,
+                       r[3].replace('/', "#&&") if r[3] else Config.SL] for r in results]
 
 
     @staticmethod
