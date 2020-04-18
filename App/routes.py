@@ -209,8 +209,9 @@ def overview_month(year, month):
     })
 
 
+@app.route('/persons/', methods=['POST', 'GET'])
 @app.route('/persons', methods=['POST', 'GET'])
-def overview_persons():
+def overview_persons(dummy=None):
     BullingerDB.track(current_user.username, '/persons', datetime.now())
     persons = BullingerDB.get_persons_by_var(None, None, get_links=True)
     return render_template(
@@ -334,7 +335,7 @@ def places():
     id_file = str(int(time.time()))
     table = BullingerDB.get_data_overview_places()
     return render_template(
-        "overview_places_freq.html",
+        "overview_places.html",
         title="Ortschaften",
         vars={
             "username": current_user.username,
@@ -345,23 +346,19 @@ def places():
     )
 
 
-@app.route('/overview_place/<place>', methods=['GET'])
-def overview_place(place):
-    BullingerDB.track(current_user.username, '/places', datetime.now())
-    id_file = str(int(time.time()))
-    table = BullingerDB.get_data_overview_place(place)
+@app.route('/place/<location>', methods=['GET'])
+def place(location):
+    location = location.replace(Config.URL_ESC, "/")
+    BullingerDB.track(current_user.username, '/place/'+location, datetime.now())
     return render_template(
-        "overview_places_freq.html",
-        title="Ortschaften",
+        "overview_place.html",
+        title="Ortschaften - "+location,
         vars={
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
-            "file_id": id_file,
-            "places": table,
+            "place": BullingerDB.get_data_overview_place(location),
         }
     )
-
-
 
 
 @app.route('/correspondents', methods=['GET'])
@@ -393,8 +390,9 @@ def person_by_name(name):
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
             "user_stats_all": BullingerDB.get_user_stats_all(current_user.username),
-            "attribute": "Nachname",
-            "value": name,
+            "attribute": "Personen",
+            "value": "Nachnamen / " + name,
+            "url_back": "overview_persons",
             "table": data,
             "description": "Personen mit Nachname "+name
         }
@@ -413,7 +411,8 @@ def person_by_forename(forename):
             "user_stats": BullingerDB.get_user_stats(current_user.username),
             "user_stats_all": BullingerDB.get_user_stats_all(current_user.username),
             "attribute": "Vorname",
-            "value": forename,
+            "value": "Vorname / " + forename,
+            "url_back": "overview_persons",
             "table": data,
             "description": "Personen mit Vorname "+forename
         }
@@ -432,9 +431,23 @@ def person_by_place(place):
             "user_stats": BullingerDB.get_user_stats(current_user.username),
             "user_stats_all": BullingerDB.get_user_stats_all(current_user.username),
             "attribute": "Ort",
-            "value": place,
+            "value": "Ort / " + place,
+            "url_back": "overview_persons",
             "table": data,
             "description": "Personen von "+place
+        }
+    )
+
+
+@app.route('/file', methods=['POST', 'GET'])
+def file():
+    BullingerDB.track(current_user.username, '/file', datetime.now())
+    return render_template(
+        'file.html',
+        title="Kartei",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
         }
     )
 

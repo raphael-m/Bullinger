@@ -35,3 +35,5 @@ class Config(object):
     # correspondence plot
     BAR_WIDTH = 0.5
     OFFSET = 5
+
+    URL_ESC = "#&&"

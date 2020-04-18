@@ -3,11 +3,8 @@
 {% block content %}
 
 <h1>
-	>
-	<a class="header_link" href="{{url_for('overview')}}">Kartei</a> /
-	{{ vars["name"] }},
-    {{ vars["forename"] }},
-    {{ vars["place"] }}
+	> <a class="header_link" href="{{url_for('file')}}">Kartei</a>
+	/ {{ vars["name"] }}, {{ vars["forename"] }}, {{ vars["place"] }}
 	{% include "user_status.html" %}
 </h1>
 <div class="main_box">

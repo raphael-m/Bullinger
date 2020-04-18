@@ -3,10 +3,9 @@
 {% block content %}
 
 <h1>
-	>
-	<a class="header_link" href="{{url_for('overview')}}">Kartei</a> /
-    Sprachen /
-	{{ vars["language"] }}
+	> <a class="header_link" href="{{url_for('file')}}">Kartei</a>
+	/ Sprachen
+	/ {{ vars["language"] }}
 	{% include "user_status.html" %}
 </h1>
 

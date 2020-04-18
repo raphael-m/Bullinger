@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1> > Kartei {% include "user_status.html" %}</h1>
+
+<div class="main_box">
+
+	<div class="h2_box>">
+
+		<h2>Kartei</h2>
+		<div class="h2_section">
+            <p> Übersichten zu den Karteikarten nach ...</p>
+			<ul>
+				<li><a href="{{url_for('overview')}}">Datum (nach Jahren/Monaten/Tagen)</a></li>
+				<li><a href="{{url_for('overview_persons')}}">Personen (mit Ortschaften)</a></li>
+				<li><a href="{{url_for('correspondents')}}">Personen (ohne Ortschaften)</a></li>
+				<li><a href="{{url_for('languages')}}">Sprachen</a></li>
+				<li><a href="{{url_for('places')}}">Ortschaften</a></li>
+			</ul>
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}

@@ -3,10 +3,10 @@
 {% block content %}
 
 <h1>
-	>
-    <a class="header_link" href="{{url_for('overview')}}">Kartei</a> /
-    <a class="header_link" href="{{url_for('overview_year', year=vars['year'])}}">{{ vars["year"] }}</a> /
-	{{ vars["month"] }}
+	> <a class="header_link" href="{{url_for('file')}}">Kartei</a>
+	/ <a class="header_link" href="{{url_for('overview')}}">Jahre</a>
+	/ <a class="header_link" href="{{url_for('overview_year', year=vars['year'])}}">{{ vars["year"] }}</a>
+	/ {{ vars["month"] }}
 	{% include "user_status.html" %}
 </h1>
 

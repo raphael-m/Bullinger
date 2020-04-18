@@ -959,7 +959,7 @@ class BullingerDB:
         BullingerPlots.create_plot_correspondence_month(
             file_id, xs, ys, xr, yr, xt, bar_width, m, year
         )
-
+    """
     @staticmethod
     def get_data_overview_place(place):
         recent_index, recent_sender, recent_receiver = \
@@ -985,6 +985,7 @@ class BullingerDB:
             sq.c.place.label("place"),
         ).order_by(asc(sq.c.id))
         return [[r[0], r[1]] for r in q]
+    """
 
     @staticmethod
     def get_data_overview_places():
@@ -1020,59 +1021,91 @@ class BullingerDB:
         ).group_by(sq.c.place).order_by(desc(func.sum(sq.c.count))).subquery()  # 764
         s = db.session.query(
             q.c.place.label("place"),
-            q.c.count.label("tot"),
-            fa.c.count.label("abs"),
             fe.c.count.label("em"),
+            fa.c.count.label("abs"),
+            q.c.count.label("tot"),
         ).outerjoin(fa, fa.c.place == q.c.place)\
          .outerjoin(fe, fe.c.place == q.c.place)
-        # --------------------------------------
-        """
-        isp_sender = lambda rel, status : db.session.query(
-            func.count(recent_index.c.status).label("count_"+status),
-            pers.c.place.label("place")
-        ).outerjoin(rel, recent_index.c.id_brief == rel.c.id_brief)\
-         .outerjoin(pers, pers.c.id == rel.c.id_person)\
-         .filter(recent_index.c.status == status)\
-         .group_by(pers.c.place.label("place"))
+        # --------------------------------------------------
 
-        qos = isp_sender(recent_sender, "offen")
-        qus = isp_sender(recent_sender, "unklar")
-        qis = isp_sender(recent_sender, "ungültig")
-        qas = isp_sender(recent_sender, "abgeschlossen")
+        q_index_place = lambda r: db.session.query(
+            recent_index.c.id_brief.label("id"),
+            pers.c.place.label("place"),
+            recent_index.c.rezensionen.label("reviews"),
+            recent_index.c.status.label("state"),
+        ).outerjoin(r, recent_index.c.id_brief == r.c.id_brief)\
+         .outerjoin(pers, pers.c.id == r.c.id_person)
+        qa_ = q_index_place(recent_sender)
+        qe_ = q_index_place(recent_receiver)
+        q_ = union_all(qa_, qe_).alias("all")
+        s_query = lambda state: db.session.query(
+            q_.c.place.label("place"),
+            q_.c.state.label("state"),
+            func.count().label("count")
+        ).group_by(q_.c.place, q_.c.state)\
+         .filter(q_.c.state == state).subquery()
+        q_o, q_a, q_u, q_i = s_query("offen"), s_query("abgeschlossen"), s_query("unklar"), s_query("ungültig")
 
-        qor = isp_sender(recent_receiver, "offen")
-        qur = isp_sender(recent_receiver, "unklar")
-        qir = isp_sender(recent_receiver, "ungültig")
-        qar = isp_sender(recent_receiver, "abgeschlossen")
 
-        qo_ = union_all(qos, qor).alias("open")
-        qu_ = union_all(qus, qur).alias("unclear")
-        qi_ = union_all(qis, qir).alias("invalid")
-        qa_ = union_all(qas, qar).alias("abgeschlossen")
+        s = db.session.query(
+            q.c.place.label("place"),  # 0
+            fe.c.count.label("em"),  # 1
+            fa.c.count.label("abs"),  # 2
+            q.c.count.label("tot"),  # 3
+            q_o.c.count.label("offen"),  # 4
+            q_u.c.count.label("unklar"),  # 5
+            q_i.c.count.label("ungültig"),  # 6
+            q_a.c.count.label("abgeschlossen"),  # 7
+        ).outerjoin(fa, fa.c.place == q.c.place)\
+         .outerjoin(fe, fe.c.place == q.c.place)\
+         .outerjoin(q_o, q_o.c.place == q.c.place)\
+         .outerjoin(q_u, q_u.c.place == q.c.place)\
+         .outerjoin(q_i, q_i.c.place == q.c.place)\
+         .outerjoin(q_a, q_a.c.place == q.c.place)
 
-        o_ = db.session.query(qo_.c.place.label("place"), func.sum(qo_.c.count_offen)).group_by(qo_.c.place).subquery()
-        u_ = db.session.query(qu_.c.place.label("place"), func.sum(qu_.c.count_unklar)).group_by(qu_.c.place).subquery()
-        i_ = db.session.query(qi_.c.place.label("place"), func.sum(qi_.c.count_ungültig)).group_by(qi_.c.place).subquery()
-        a_ = db.session.query(qa_.c.place.label("place"), func.sum(qa_.c.count_abgeschlossen)).group_by(qa_.c.place).subquery()
+        # --------------------------------------------------
+        return [[r[0],  # place 0
+                 r[1] if r[1] else 0,  # receiver 1
+                 r[2] if r[2] else 0,  # sender 2
+                 r[3] if r[3] else 0,  # total 3
+                 r[0].replace("/", Config.URL_ESC),  # link 4
+                 r[4] if r[4] else 0,  # offen # 5
+                 r[5] if r[5] else 0,  # unklar # 6
+                 r[6] if r[6] else 0,  # ungültig  # 7
+                 r[7] if r[7] else 0] for r in s if r[0]]  # abgeschlossen  # 3
 
+    @staticmethod
+    def get_data_overview_place(place):
+        check = "<span style=\"color:green\">&#x2713;</span>"
+        cross = "<span style=\"color:red\">&#x2717;</span>"
+        recent_index, recent_sender, recent_receiver = \
+            BullingerDB.get_most_recent_only(db.session, Kartei).subquery(),\
+            BullingerDB.get_most_recent_only(db.session, Absender).subquery(),\
+            BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
+        pers = db.session.query(Person.id.label("id"), Person.ort.label("place")).subquery()
+        q_index_place = lambda r: db.session.query(
+            recent_index.c.id_brief.label("id"),
+            pers.c.place.label("place"),
+            recent_index.c.rezensionen.label("reviews"),
+            recent_index.c.status.label("state"),
+        ).outerjoin(r, recent_index.c.id_brief == r.c.id_brief)\
+         .outerjoin(pers, pers.c.id == r.c.id_person).subquery()
+        qa_index_place = q_index_place(recent_sender)
+        qe_index_place = q_index_place(recent_receiver)
         query = db.session.query(
-            s.c.place.label("place"),
-            s.c.tot.label("tot"),
-            s.c.abs.label("a_count"),
-            s.c.em.label("e_count"),
-            qo_.c.count_offen,
-            qu_.c.count_unklar,
-            qi_.c.count_ungültig,
-            qa_.c.count_abgeschlossen
-        ).outerjoin(o_, o_.c.place == s.c.place)\
-            .outerjoin(u_, u_.c.place == s.c.place) \
-            .outerjoin(i_, i_.c.place == s.c.place) \
-            .outerjoin(a_, a_.c.place == s.c.place) \
+            qa_index_place.c.id,
+            qa_index_place.c.place,
+            qe_index_place.c.place,
+            qa_index_place.c.reviews,
+            qa_index_place.c.state,
+        ).outerjoin(qe_index_place, qa_index_place.c.id == qe_index_place.c.id)\
+         .filter(or_(qa_index_place.c.place == place, qe_index_place.c.place == place))
+        return [[r[0], place,
+                 check if r[1] == place else cross,
+                 check if r[2] == place else cross,
+                 r[3], r[4],
+                 place.replace("/", Config.URL_ESC)] for r in query]
 
-        for x in query: print(x)
-        """
-        # --------------------------------------
-        return [[r[0], r[1] if r[1] else 0, r[2] if r[2] else 0, r[3] if r[3] else 0] for r in s]
 
     @staticmethod
     def normalize_str_input(value):
@@ -1641,7 +1674,7 @@ class BullingerDB:
         plt.title("Allgemeine/Persönliche Korrekturen pro Tag")
         fig.savefig('App/static/images/plots/changes_'+file_id+'.png')
         plt.close()
-        return len(x), y_all[-1], sum(y_all)
+        return len(x), y_all[-1]+y_pers[-1], sum(y_all)+sum(y_pers)
 
     @staticmethod
     def get_page_visits_plot(file_id):

@@ -3,9 +3,8 @@
 {% block content %}
 
 <h1>
-	>
-    <a class="header_link" href="{{url_for('overview')}}">Kartei</a> /
-	{{ vars["state"] }}
+	> <a class="header_link" href="{{url_for('overview')}}">Kartei</a>
+	/ {{ vars["state"] }}
 	{% include "user_status.html" %}
 </h1>
 

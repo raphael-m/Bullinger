@@ -3,7 +3,9 @@
 {% block content %}
 
 <h1>
-	> Kartei / Personen / Alias
+	> <a class="header_link" href="{{url_for('file')}}">Kartei</a>
+    / <a class="header_link" href="{{url_for('overview_persons')}}">Personen</a>
+    / Alias
 	{% include "user_status.html" %}
 </h1>
 
