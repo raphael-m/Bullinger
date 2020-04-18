@@ -391,7 +391,7 @@ def person_by_name(name):
             "user_stats": BullingerDB.get_user_stats(current_user.username),
             "user_stats_all": BullingerDB.get_user_stats_all(current_user.username),
             "attribute": "Personen",
-            "value": "Nachnamen / " + name,
+            "value": "Nachnamen: " + name,
             "url_back": "overview_persons",
             "table": data,
             "description": "Personen mit Nachname "+name
@@ -411,7 +411,7 @@ def person_by_forename(forename):
             "user_stats": BullingerDB.get_user_stats(current_user.username),
             "user_stats_all": BullingerDB.get_user_stats_all(current_user.username),
             "attribute": "Vorname",
-            "value": "Vorname / " + forename,
+            "value": "Vorname: " + forename,
             "url_back": "overview_persons",
             "table": data,
             "description": "Personen mit Vorname "+forename
@@ -431,7 +431,7 @@ def person_by_place(place):
             "user_stats": BullingerDB.get_user_stats(current_user.username),
             "user_stats_all": BullingerDB.get_user_stats_all(current_user.username),
             "attribute": "Ort",
-            "value": "Ort / " + place,
+            "value": "Ort: " + place,
             "url_back": "overview_persons",
             "table": data,
             "description": "Personen von "+place

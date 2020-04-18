@@ -111,7 +111,7 @@
 					<p> Wir zählen aktuell
 						<span class="kw">{{ vars["registered_users"] }} registrierte Mitarbeiter</span>
 						(wovon
-						<span class="kw">{{ vars["users_active_on_avg"]|round(1) }} täglich aktiv</span>
+						<span class="kw">täglich {{ vars["users_active_on_avg"]|round(1) }} aktiv</span>
 						sind),
 						und <span class="kw">{{ vars["visits"] }} Seitenaufrufe</span> seit dem 12. März 2020
 						(bzw. seit {{vars['days_active']}} Tagen).
