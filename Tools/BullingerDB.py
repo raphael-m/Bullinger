@@ -1106,6 +1106,123 @@ class BullingerDB:
                  r[3], r[4],
                  place.replace("/", Config.URL_ESC)] for r in query]
 
+    # TODO unify autograph copy
+    @staticmethod
+    def get_data_overview_autograph():
+        rel = BullingerDB.get_most_recent_only(db.session, Autograph).subquery()
+        data = db.session.query(
+            rel.c.standort,
+            func.count(rel.c.standort)
+        ).group_by(rel.c.standort)\
+         .order_by(desc(func.count(rel.c.standort)))
+        return [[d[0], d[1]] for d in data if d[0]]
+
+    @staticmethod
+    def get_data_overview_copy():
+        rel = BullingerDB.get_most_recent_only(db.session, Kopie).subquery()
+        data = db.session.query(
+            rel.c.standort,
+            func.count(rel.c.standort)
+        ).group_by(rel.c.standort)\
+         .order_by(desc(func.count(rel.c.standort)))
+        return [[d[0], d[1]] for d in data if d[0]]
+    # --
+
+    @staticmethod
+    def get_data_overview_autocopy():
+        a = BullingerDB.get_most_recent_only(db.session, Autograph).subquery()
+        a0 = db.session.query(a.c.standort.label("standort"))
+        a = db.session.query(a.c.standort.label("standort")).subquery()
+        c = BullingerDB.get_most_recent_only(db.session, Kopie).subquery()
+        c0 = db.session.query(c.c.standort.label("standort"))
+        c = db.session.query(c.c.standort.label("standort")).subquery()
+        s = union_all(a0, c0).alias("Standorte")
+        s = db.session.query(s.c.standort).group_by(s.c.standort).subquery()
+        a = db.session.query(
+            a.c.standort.label("standort"),
+            func.count(a.c.standort).label("count")
+        ).group_by(a.c.standort).subquery()
+        c = db.session.query(
+            c.c.standort.label("standort"),
+            func.count(c.c.standort).label("count")
+        ).group_by(c.c.standort).subquery()
+        data = db.session.query(
+            s.c.standort,
+            a.c.count,
+            c.c.count
+        ).outerjoin(a, a.c.standort == s.c.standort)\
+         .outerjoin(c, c.c.standort == s.c.standort)\
+         .order_by(desc(a.c.count))
+        return [[d[0], d[1] if d[1] else 0, d[2] if d[2] else 0] for d in data if d[0]]
+
+
+    @staticmethod
+    def get_data_overview_autocopy_x(standort):
+        a = BullingerDB.get_most_recent_only(db.session, Autograph).subquery()
+        a0 = db.session.query(
+            a.c.id_brief.label("id"),
+            a.c.standort.label("standort"),
+            a.c.signatur.label("signatur"),
+            literal(1).label("autograph"),
+            literal(0).label("copy")
+        )
+        c = BullingerDB.get_most_recent_only(db.session, Kopie).subquery()
+        c0 = db.session.query(
+            c.c.id_brief.label("id"),
+            c.c.standort.label("standort"),
+            c.c.signatur.label("signatur"),
+            literal(0).label("autograph"),
+            literal(1).label("copy")
+        )
+        s = union_all(a0, c0).alias("Standorte")
+        k = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
+        data = db.session.query(
+            s.c.id,
+            s.c.standort,
+            s.c.signatur,
+            s.c.autograph,
+            s.c.copy,
+            k.c.status,
+        ).join(k, k.c.id_brief == s.c.id)\
+         .filter(s.c.standort == standort)
+        check = "<span style=\"color:green\">&#x2713;</span>"
+        cross = "<span style=\"color:red\">&#x2717;</span>"
+        return [[d[0],  # id
+                 d[1] if d[1] else "",  # standort
+                 d[2] if d[2] else "",  # signatur
+                 check if d[3] else cross,  # a
+                 check if d[4] else cross,  # c
+                 d[5],  # status
+                 ] for d in data]
+
+
+    @staticmethod
+    def get_data_overview_autograph_x(autograph):
+        rel = BullingerDB.get_most_recent_only(db.session, Autograph).subquery()
+        file = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
+        data = db.session.query(
+            rel.c.id_brief,
+            rel.c.standort,
+            rel.c.signatur,
+            file.c.status,
+        ).join(file, file.c.id_brief == rel.c.id_brief)\
+         .filter(rel.c.standort == autograph)\
+         .order_by(rel.c.id_brief)
+        return [[d[0], d[1], d[2] if d[2] else "", d[3]] for d in data if d[0]]
+
+    @staticmethod
+    def get_data_overview_copy_x(copy):
+        rel = BullingerDB.get_most_recent_only(db.session, Kopie).subquery()
+        file = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
+        data = db.session.query(
+            rel.c.id_brief,
+            rel.c.standort,
+            rel.c.signatur,
+            file.c.status,
+        ).join(file, file.c.id_brief == rel.c.id_brief)\
+         .filter(rel.c.standort == copy)\
+         .order_by(rel.c.id_brief)
+        return [[d[0], d[1], d[2] if d[2] else "", d[3]] for d in data if d[0]]
 
     @staticmethod
     def normalize_str_input(value):
@@ -1560,25 +1677,27 @@ class BullingerDB:
             .filter(Person.ort == place)\
             .join(recent_receiver, recent_receiver.c.id_person == Person.id)
         p_all = union_all(p1, p2).alias("united")
+        file = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
         results = db.session.query(
             p_all.c.id_a,
             p_all.c.p_name,
             p_all.c.p_forename,
             p_all.c.p_place,
-        ).order_by(asc(p_all.c.id_a))
+            file.c.status
+        ).join(file, file.c.id_brief == p_all.c.id_a)\
+         .order_by(asc(p_all.c.id_a))
         if not get_links:
             return [[r[0],
                      r[1] if r[1] else Config.SN,
                      r[2] if r[2] else Config.SN,
-                     r[3] if r[3] else Config.SL] for r in results]
+                     r[3] if r[3] else Config.SL, r[4]] for r in results]
         else: return [[r[0],
                        r[1] if r[1] else Config.SN,
                        r[2] if r[2] else Config.SN,
                        r[3] if r[3] else Config.SL,
                        r[1].replace('/', "#&&") if r[1] else Config.SN,
                        r[2].replace('/', "#&&") if r[2] else Config.SN,
-                       r[3].replace('/', "#&&") if r[3] else Config.SL] for r in results]
-
+                       r[3].replace('/', "#&&") if r[3] else Config.SL, r[4]] for r in results]
 
     @staticmethod
     def get_overview_languages(lang):

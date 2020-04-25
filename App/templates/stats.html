@@ -142,22 +142,6 @@
 		</div>  <!-- h2-section -->
 	</div>  <!-- h2-box -->
 	<div class="h2_separator"></div>
-	<div class="h2_box">
-		<h2>Daten
-			{% include "title_navigation_lt.html" %}
-		</h2>
-		<div class="h2_section">
-			<p>Übersichten zu den Karteikarten:</p>
-			<ul>
-				<li><a href="{{url_for('overview')}}">Datum (nach Jahren/Monaten/Tagen)</a></li>
-				<li><a href="{{url_for('overview_persons')}}">Personen (mit Ortschaften)</a></li>
-				<li><a href="{{url_for('correspondents')}}">Personen (ohne Ortschaften)</a></li>
-				<li><a href="{{url_for('languages')}}">Sprachen</a></li>
-				<li><a href="{{url_for('places')}}">Ortschaften</a></li>
-			</ul>
-		</div>  <!-- h2-section -->
-	</div>
-	<div class="h2_separator"></div>  <!-- h2-box -->
 </div>
 
 {% endblock %}

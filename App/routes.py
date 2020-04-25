@@ -12,7 +12,7 @@ from flask import render_template, flash, redirect, url_for, make_response, json
 from flask_login import current_user, login_user, login_required, logout_user
 from sqlalchemy import desc, func, asc
 from Tools.BullingerDB import BullingerDB
-from Tools.Dictionaries import CountDict
+from Tools.Dictionaries import CountDict, ListDict
 from collections import defaultdict
 from App.models import *
 from config import Config
@@ -245,7 +245,7 @@ def overview_cards_of_person(name, forename, place):
         None if forename == Config.SN else forename,
         None if place == Config.SL else place, get_links=True)
     return render_template(
-        "overview_general_cards.html",
+        "overview_person.html",
         title=name + ', ' + forename + ', ' + place,
         vars={
             "username": current_user.username,
@@ -357,6 +357,308 @@ def place(location):
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
             "place": BullingerDB.get_data_overview_place(location),
+        }
+    )
+
+
+@app.route('/kartei/autograph', methods=['GET'])
+def overview_autograph():
+    BullingerDB.track(current_user.username, '/Kartei/Autograph', datetime.now())
+    return render_template(
+        "overview_autocopy.html",
+        title="Autograph",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "relation": "Autograph",
+            "data": BullingerDB.get_data_overview_autograph(),
+        }
+    )
+
+@app.route('/admin/autograph_corrections', methods=['GET'])
+def admin_run_correction():
+
+    # not "abgeschlossen"
+    cards = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
+    index = {i[0]: True for i in db.session.query(cards.c.id_brief).filter(cards.c.status != "abgeschlossen")}
+
+    # Autograph corrections
+    auto = BullingerDB.get_most_recent_only(db.session, Autograph)
+    copy = BullingerDB.get_most_recent_only(db.session, Kopie)
+
+    with open("Data/Corrections/kopie_standort.txt", 'a') as out:
+        for c in copy:
+            first = c.standort
+            if c.standort: c.standort = re.sub(r"\s+", " ", c.standort).strip()
+
+            if c.standort and c.id_brief in index:
+                if c.standort == "Z ZB": c.standort = "Zürich ZB"
+                if c.standort == "ZB": c.standort = "Zürich ZB"
+
+                # remove leading junk
+                m = re.match(r"^([,.:;_\-\s!]+).*", c.standort)
+                if m: c.standort = c.standort.replace(m.group(1), "").strip()
+
+                # standort
+                m = re.match(r"^([Ss]\s*t\s*a\s*n\s*d\s*o\s*r\s*t).*", c.standort)
+                if m: c.standort = c.standort.replace(m.group(1), "").strip()
+
+                # MHStA
+                if c.standort in ["Marburg H StA", "Marburg HStA", "Marburg Hess StA", "Marburg, H StA",
+                                  "Marburg, Hess StA", "Marburg. Hess. StA"]:
+                    c.standort = "Marburg, Hess. StA"
+
+            if c.standort != first:
+                out.write("Standort:\t"+first+"\t-->\t"+c.standort+"\n")
+                print("Standort:\t"+first + "\t-->\t" + c.standort)
+                db.session.commit()
+
+    with open("Data/Corrections/autograph_standort.txt", 'a') as out:
+        for a in auto:
+            first = a.standort
+
+            # ALLE
+            if a.standort: a.standort = re.sub(r"\s+", " ", a.standort).strip()
+            if a.standort in ["Genf BFU"]: a.standort = "Genf BPU"
+            if a.standort in ["Zurich, StA", "Zürich, StA", "Zürich St A", "Zürich St. A.", "Zürich St.A.",
+                              "Zurich. StA", "Zurick StA"]: a.standort = "Zürich StA"
+            if a.standort in ["St.Gallen", "St. Gallen."]: a.standort = "St. Gallen"
+
+            # noch nicht korrigierte
+            if a.standort and a.id_brief in index:
+
+                # remove leading junk
+                m = re.match(r"^([,.:;_\-\s!]+).*", a.standort)
+                if m: a.standort = a.standort.replace(m.group(1), "").strip()
+
+                # standort
+                m = re.match(r"^([Ss]\s*t\s*a\s*n\s*d\s*o\s*r\s*t).*", a.standort)
+                if m: a.standort = a.standort.replace(m.group(1), "").strip()
+
+                # Zürich StA
+                if a.standort in ["Züriek, StA", "Zürieh, StA", "Ziirich. StA", "üricb. StA", "üricli, StA", "üridi StA",
+                                  "Zürik StA", "Zürieh. StA", "zürich StA", "ürih StA", "StA", "Züriek. StA",
+                                  "Ziirich. StA", "Zürich, StA", "Ziirich.StA", "Züricllf StA", "Züriek. StA", "Zürich,SU",
+                                  "Zurich, StA", "Züriek StA", "Zürieh.StA", "Züriek , StA", "Zurick StA", "ZÜrieh StA",
+                                  "Züriek.StA", "2 ürich, StA", "Bürich, StA", "Zürich, 4.", "Züroch, StA", "2cich StA",
+                                  "Züriek StA", "Zürick, StA", "Zürich", "2Ürih, StA", "ZürichStA", "Züriek , StA",
+                                  "St.A.", "2ürih, StA", "Zürich St.A.", "ürieh, StA", "Ziiriek, StA", "2ürioll StA",
+                                  "Zurich.StA", "Ziirek StA", "Zür4eh, StA", "Zurick StA", "Züriell, StA", "Zurich. StA",
+                                  "Zürlek, StA", "Zürik, StA", "Zürich. StA", "Zurich, StA", "ZurichStA", "Zürich ,SU",
+                                  "Zürich, SU", "tA", "( _.. . , . Zürich StA", "( d) : Zürich. StA",
+                                  "(5.Aug.) Zürich StA", "(Entwurf Bullingea Zürich StA", "Biirich StA", "Bü Zürich, StA",
+                                  "Eüricb, StA", "zürich StA", "zürich, StA", "Zurich, StA", "Zürich , StA", "zürich- StA",
+                                  "zürich , StA", "s nHo Zürich StA", "j Zürich, StA", "SSiricb. StA", "Uürich, StA",
+                                  "Zürich StA.", "Zürich StA-,", "Zürich StA-", "Zürioh StA", "Züriek, StA"]:
+                    a.standort = "Zürich StA"
+
+                # Genf BPU
+                if a.standort in ["Genf BHJ", "Genf BRJ", "Genf BFU", "Genf EPU", "Genf BPT", "Genf EFU", "Genf BRU",
+                                  "Genf BKJ", "G nf BFU", "G f BHJ", "G BPU", "Genf BFU f", "Genf BFU, WWt-", "Genf BFÜ",
+                                  "Genf BFÜ,", "Genf BFü", "Genf BTU", "Genf EPü", "Genf HPU", "Genf BRJ", "Genf BPÜ",
+                                  "Genf BTU",]:
+                    a.standort = "Genf BPU"
+
+                if a.standort in ["Schaffausen StB", "Schaff hausen StB", "Schaafhausen StB", "SctLaffh.ausen StB"]:
+                    a.standort = "Schaffhausen StB"
+
+                # Marburg HStA
+                if a.standort in ["Marburg, Hess. StA", "Marburg, Hess StA", "Marburg Hess. StA", "Marburg H StA",
+                                  "Marburg HStA", "Marburg, Hess . StA", "S Hess StA"]:
+                    a.standort = "Marburg, Hess. StA"
+
+                for r in ["G f pu", "Gdnf BRJ", "Genf 1P?2", "Genf 1PÜ", "Genf 3?ui", "Genf BFU", "Genf BFÜ",
+                          "Genf BHJ", "Genf BPTJ", "Genf BPU", "Genf BPtJ", "Genf BTU", "Genf BiPU", "Genf EFU",
+                          "Genf EPU", "Genf EPtJ", "Genf HPU", "Genf KPU", "Genf PU", "Genf Uu", "Genf fcru",
+                          "Genf iTw", "Genf tTu", "Geni BFü", "Genf BPÜ", "Genf BRJ"]:
+                    if r in a.standort: a.standort = a.standort.replace(r, "Genf BPU").strip()
+
+                if a.standort in ["Zürich, ZB", "Zürich,Z", "Zürieh. ZB", "Züriek. ZB", "Züroch, ZB",
+                                  "(Entwurf: Zürich ZB"]:
+                    a.standort = "Zürich ZB"
+
+                # Basel UB
+                if a.standort in ["Basel TJB", "BS61 UB", "Basel ÜB -", "Bssl UB"]: a.standort = "Basel UB"
+
+                # St. Gallen
+                m = re.match(r".*([Ss]\s*t\s*\.?\s*G?\s*a\s*l\s*l\s*e\s*n\s*S?t?B?K?B?).*", a.standort)
+                if m: a.standort = a.standort.replace(m.group(1), "St. Gallen").strip()
+
+                # Zürich StA +
+                m = re.match(r"(Z.*A)", a.standort)
+                if m:
+                    if m.group(1) != "Zürich StA":
+                        a.standort = a.standort.replace(m.group(1), "Zürich StA")
+
+                # Zürich ZB
+                m = re.match(r"(.*Z.*Z[BI]?).*", a.standort)
+                if m:
+                    if a.standort != "Zürich ZB":
+                        a.standort = a.standort.replace(m.group(1), "Zürich ZB")
+
+                m = re.match(r"(.*ZB).*", a.standort)
+                if m:
+                    if a.standort != "Zürich ZB":
+                        a.standort = a.standort.replace(m.group(1), "Zürich ZB")
+
+                m = re.match(r"Zürich ZB(.+)", a.standort)
+                if m:
+                    if a.signatur: a.signatur = (a.signatur + " " + m.group(1)).strip()
+                    else: a.signatur = m.group(1)
+                    out.write("Signatur:\t"+first + "\t-->\t" + a.signatur + "\n")
+                    print("Signatur:\t" + first + "\t-->\t" + a.signatur)
+                    a.standort = "Zürich ZB"
+
+                m = re.match(r"St. Gallen ?K?B?(.+)", a.standort)
+                if m:
+                    if a.signatur: a.signatur = (a.signatur + " " + m.group(1)).strip()
+                    else: a.signatur = m.group(1)
+                    out.write("Signatur:\t"+first + "\t-->\t" + a.signatur + "\n")
+                    print("Signatur:\t" + first + "\t-->\t" + a.signatur)
+                    a.standort = "St. Gallen"
+
+                m = re.match(r"Genf BPU(.+)", a.standort)
+                if m:
+                    if a.signatur: a.signatur = (a.signatur + " " + m.group(1)).strip()
+                    else: a.signatur = m.group(1)
+                    out.write("Signatur:\t"+first + "\t-->\t" + a.signatur + "\n")
+                    print("Signatur:\t" + first + "\t-->\t" + a.signatur)
+                    a.standort = "Genf BPU"
+
+                m = re.match(r"Zürich StA(.+)", a.standort)
+                if m:
+                    for s in ["EU", "Eil", "Eli"]:
+                        if s in m.group(1):
+                            signatur = m.group(1).replace(s, "E II")
+                            if a.signatur:
+                                a.signatur = (a.signatur + " " + signatur).strip()
+                            else: a.signatur = signatur
+                            out.write("***:\t"+first + "\t-->\t" + a.signatur + "\n")
+                            print("***:\t" + first + "\t-->\t" + a.signatur)
+                    a.standort = "Zürich StA"
+
+            if a.standort != first:
+                out.write("Standort:\t"+first+"\t-->\t"+a.standort+"\n")
+                print("Standort:\t"+first + "\t-->\t" + a.standort)
+                db.session.commit()
+
+    """
+    auto = BullingerDB.get_most_recent_only(db.session, Autograph)
+    for a in auto:
+        if a.standort:
+
+            if a.standort == "Genf BHJ"\
+                    or a.standort == "Genf BRJ"\
+                    or a.standort == "Genf BFU"\
+                    or a.standort == "Genf EPU" \
+                    or a.standort == "Genf BPT" \
+                    or a.standort == "Genf EFU" \
+                    or a.standort == "Genf BRU": a.standort = "Genf BPU"
+            a.standort = a.standort.replace("Standort", "")
+            a.standort = a.standort.replace("standort", "")
+            db.session.commit()
+
+    auto = BullingerDB.get_most_recent_only(db.session, Kopie)
+    for a in auto:
+        if a.standort:
+            print(a.id_brief)
+            a.standort = re.sub(r"\s+", " ", a.standort).strip()
+            m = re.match(r"^([.,_\s!-]+).*", a.standort)
+            if m: a.standort = a.standort.replace(m.group(1), "")
+            if a.standort in ["Züriek, StA",
+            "Zürieh, StA", "Ziirich. StA"
+            "Zürik StA", "Zürieh. StA",
+            "StA", "Züriek. StA"
+            "Ziirich.StA", "Züricllf StA",
+            "Zurich, StA", "Züriek StA"
+            "Zürieh.StA", "Züriek , StA"
+            "Züriek.StA", "2 ürich, StA"
+            "Züroch, StA", "2cich StA"
+            "Zürich", "2Ürih, StA"
+            "St.A.", "2ürih, StA"
+            "Ziiriek, StA", "2ürioll StA"
+            "Zurich.StA", "Ziirek StA"
+            "Zür4eh, StA", "Zurick StA"
+            "Züriell, StA", ""
+            "Zürlek, StA",]:
+                a.standort = "Zürich StA"
+            a.standort = a.standort.replace("Standort", "")
+            a.standort = a.standort.replace("standort", "")
+            if a.standort == "ZB": a.standort = "Zürich ZB"
+            if a.standort == "Z ZB": a.standort = "Zürich ZB"
+            db.session.commit()
+    """
+    return redirect(url_for('index', next=request.url))
+
+
+@app.route('/kartei/autograph/<autograph>', methods=['GET'])
+def overview_autograph_x(autograph):
+    BullingerDB.track(current_user.username, '/Kartei/Autograph/'+autograph, datetime.now())
+    return render_template(
+        "overview_autograph_x.html",
+        title="Kartei/Autograph",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "standort": autograph,
+            "data": BullingerDB.get_data_overview_autograph_x(autograph),
+        }
+    )
+
+@app.route('/kartei/autokopie', methods=['GET'])
+def overview_autocopy():
+    BullingerDB.track(current_user.username, '/Kartei/AutoKopie', datetime.now())
+    return render_template(
+        "overview_autokopie.html",
+        title="Kartei/Autograph & Kopie",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "relation": "Autograph & Kopie",
+            "data": BullingerDB.get_data_overview_autocopy(),
+        }
+    )
+
+@app.route('/kartei/autokopie/<standort>', methods=['GET'])
+def overview_autocopy_x(standort):
+    BullingerDB.track(current_user.username, '/Kartei/AutoKopie', datetime.now())
+    return render_template(
+        "overview_autokopie_x.html",
+        title="Kartei/Autograph & Kopie/"+standort,
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "relation": standort,
+            "data": BullingerDB.get_data_overview_autocopy_x(standort),
+        }
+    )
+
+@app.route('/kartei/kopie', methods=['GET'])
+def overview_copy():
+    BullingerDB.track(current_user.username, '/Kartei/Kopie', datetime.now())
+    return render_template(
+        "overview_copy.html",
+        title="Kartei/Kopie",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "relation": "Kopie",
+            "data": BullingerDB.get_data_overview_copy(),
+        }
+    )
+
+
+@app.route('/kartei/kopie/<copy>', methods=['GET'])
+def overview_copy_x(copy):
+    BullingerDB.track(current_user.username, '/Kartei/Autograph/'+copy, datetime.now())
+    return render_template(
+        "overview_copy_x.html",
+        title="Kartei/Autograph",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "standort": copy,
+            "data": BullingerDB.get_data_overview_copy_x(copy),
         }
     )
 
@@ -792,6 +1094,83 @@ def delete_alias_2(nn, vn):
 def clear_not_found():
     Tracker.query.filter_by(url="/not_found").delete()
     db.session.commit()
+    return redirect(url_for('index'))
+
+
+@app.route("/admin/print_pl", methods=["GET"])
+def print_literature_printed():
+
+    # all (alpha)
+    with open("Data/Test/gedruckt_alle.txt", "w") as out:
+        kar = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
+        ged = BullingerDB.get_most_recent_only(db.session, Gedruckt).subquery()
+        ged = db.session.query(
+            kar.c.status,
+            ged.c.id_brief,
+            ged.c.gedruckt
+        ).outerjoin(ged, ged.c.id_brief == kar.c.id_brief)\
+         .order_by(ged.c.gedruckt)
+        for g in ged:
+            if g.gedruckt: out.write(str(g.id_brief) + "\t" + g.gedruckt.replace("\n", " ") + "\n")
+    with open("Data/Test/literatur_alle.txt", "w") as out:
+        kar = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
+        lit = BullingerDB.get_most_recent_only(db.session, Literatur).subquery()
+        lit = db.session.query(
+            kar.c.status,
+            lit.c.id_brief,
+            lit.c.literatur
+        ).outerjoin(lit, lit.c.id_brief == kar.c.id_brief)\
+         .order_by(lit.c.literatur)
+        for l in lit:
+            if l.literatur: out.write(str(l.id_brief) + "\t" + l.literatur.replace("\n", " ") + "\n")
+
+    # quit (alpha)
+    with open("Data/Test/gedruckt_abgeschlossen.txt", "w") as out:
+        kar = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
+        ged = BullingerDB.get_most_recent_only(db.session, Gedruckt).subquery()
+        ged = db.session.query(
+            kar.c.status,
+            ged.c.id_brief,
+            ged.c.gedruckt
+        ).outerjoin(ged, ged.c.id_brief == kar.c.id_brief)\
+         .filter(kar.c.status == "abgeschlossen")\
+         .order_by(ged.c.gedruckt)
+        for g in ged:
+            if g.gedruckt: out.write(str(g.id_brief) + "\t" + g.gedruckt.replace("\n", " ") + "\n")
+    with open("Data/Test/literatur_abgeschlossen.txt", "w") as out:
+        kar = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
+        lit = BullingerDB.get_most_recent_only(db.session, Literatur).subquery()
+        lit = db.session.query(
+            kar.c.status,
+            lit.c.id_brief,
+            lit.c.literatur
+        ).outerjoin(lit, lit.c.id_brief == kar.c.id_brief)\
+         .filter(kar.c.status == "abgeschlossen")\
+         .order_by(lit.c.literatur)
+        for l in lit:
+            if l.literatur: out.write(str(l.id_brief) + "\t" + l.literatur.replace("\n", " ") + "\n")
+
+
+    # classes
+    """
+    dgc = []
+    for g in BullingerDB.get_most_recent_only(db.session, Gedruckt):
+        if g.gedruckt: ged = g.gedruckt
+        else: continue
+        is_known = False
+        for row in dgc:
+            flag = False
+            for entry in row:
+                s = NGrams.compute_similarity(entry, g.gedruckt, 3)
+                print(s)
+                if s > 0.5: flag = True
+            if flag:
+                row.append(ged)
+                is_known = True
+        if not is_known: dgc.append([ged])
+    print(dgc)
+    """
+
     return redirect(url_for('index'))
 
 '''
