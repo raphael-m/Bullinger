@@ -23,6 +23,10 @@
                     <tr class="my_table_head_row">
                         <th class="js-sort-string my_table_head_cell">{{ vars["relation"] }}</th>
                         <th class="js-sort-number my_table_head_cell">Frequenz</th>
+                        <th class="js-sort-number my_table_head_cell">offen</th>
+                        <th class="js-sort-number my_table_head_cell">unklar</th>
+                        <th class="js-sort-number my_table_head_cell">ungültig</th>
+                        <th class="js-sort-number my_table_head_cell">abgeschlossen</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,6 +36,10 @@
                             <a href="{{url_for('overview_copy_x', copy=p[0])}}">{{ p[0] }}</a>
                         </td>
                         <td class="my_table_cell">{{ p[1] }}</td>
+                        <td class="my_table_cell">{{ p[2] }}</td>
+                        <td class="my_table_cell">{{ p[3] }}</td>
+                        <td class="my_table_cell">{{ p[4] }}</td>
+                        <td class="my_table_cell">{{ p[5] }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

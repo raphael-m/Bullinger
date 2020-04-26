@@ -39,7 +39,9 @@
                         <td class="my_table_cell">{{ p[2]|safe }}</td>
                         <td class="my_table_cell">{{ p[3]|safe }}</td>
                         <td class="my_table_cell">{{ p[4] }}</td>
-                        <td class="my_table_cell">{{ p[5] }}</td>
+                        <td class="my_table_cell">
+                            <a href="{{url_for('overview_state', state=p[5])}}">{{ p[5] }}</a>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>

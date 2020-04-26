@@ -614,7 +614,7 @@ def overview_autocopy():
         vars={
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
-            "relation": "Autograph & Kopie",
+            "relation": "Autographen & Kopien",
             "data": BullingerDB.get_data_overview_autocopy(),
         }
     )
@@ -666,16 +666,16 @@ def overview_copy_x(copy):
 @app.route('/correspondents', methods=['GET'])
 def correspondents():
     BullingerDB.track(current_user.username, '/correspondents', datetime.now())
-    data_sender = BullingerDB.get_top_n_sender_ignoring_place()
-    data_receiver = BullingerDB.get_top_n_receiver_ignoring_place()
+    data, n_sender, n_receiver = BullingerDB.get_data_overview_correspondents()
     return render_template(
         "overview_person_no_loc.html",
         title="Korrespondenten",
         vars={
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
-            "top_s_gbp": data_sender,
-            "top_r_gbp": data_receiver,
+            "data": data,
+            "n_sender": n_sender,
+            "n_receiver": n_receiver
         }
     )
 

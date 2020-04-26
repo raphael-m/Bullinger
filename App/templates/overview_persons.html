@@ -13,25 +13,13 @@
 	<h2>Korrespondenten</h2>
 		<div class="h2_section">
 			<p>
-				In der Kartei können wir aktuell
-				<span class="kw">{{ vars["persons"] | length }} Korrespondenten</span>
-				identifizieren.
-				Dass viele Personen mehrfach darin enthalten sind, liegt zum einen an den bei der automatischen
-				Texterkennung enstandenen Fehlern, und zum anderen an unterschiedlichen Anschriften (Ortschaften)
-				für dieselbe Person.
+				<span class="kw">Treffer:</span>
+				{{ vars["persons"] | length }} Korrespondenten
 			</p>
 			<p>
-				Eine Tabelle, welche Ortschaften ignoriert und Personen mit identischen Namen zusammenfasst
-				und so etwas besser Aufschluss über die jeweilige Anzahl gesendeter und geschriebener
-				Briefe pro Person gibt, finden Sie
-				<a class="text_link" href="{{url_for('correspondents')}}">hier</a>.
+				&#8594; <a class="text_link" href="{{url_for('correspondents')}}">Ortschaften ignorieren</a>
 			</p>
-			<p>
-				Bei der automatischen Erfassung der Karteikartendaten sind wir davon ausgegangen,
-				dass Heinrich Bullinger (Zürich) in jedem der Briefwechsel - als Absender oder Empfänger - involviert war.
-			</p>
-			<p></p>
-
+			<br>
 			<span class="kw">Null-Werte:</span>
 			<ul>
 				<li>lat. "s.n. = sine nomine" (ohne Namen)</li>
@@ -47,6 +35,7 @@
 						<th class="js-sort-string my_table_head_cell">Ort</th>
 						<th class="js-sort-number my_table_head_cell">gesendet</th>
 						<th class="js-sort-number my_table_head_cell">empfangen</th>
+						<th class="js-sort-number my_table_head_cell">Total</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -66,6 +55,7 @@
 						</td>
 						<td class="my_table_cell">{{ d[3] }}</td>
 						<td class="my_table_cell">{{ d[4] }}</td>
+						<td class="my_table_cell">{{ d[8] }}</td>
 					</tr>
 				{% endfor %}
 				</tbody>

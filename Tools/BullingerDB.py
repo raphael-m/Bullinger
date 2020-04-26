@@ -860,8 +860,13 @@ class BullingerDB:
                 yr += ry_none
                 xt += [Config.SD]
 
+        start, i = 1545, 0
+        for i, t in enumerate(xs):
+            if xs[i] >= start and xr[i] >= start: break
+            else: i += 1
+
         BullingerPlots.create_plot_correspondence(
-            file_id, xs, ys, xr, yr, xt, bar_width, t, offset, from_to
+            file_id, xs[i:], ys[i:], xr[i:], yr[i:], xt[i:], bar_width, t, offset, from_to
         )
 
     @staticmethod
@@ -1111,49 +1116,143 @@ class BullingerDB:
     def get_data_overview_autograph():
         rel = BullingerDB.get_most_recent_only(db.session, Autograph).subquery()
         data = db.session.query(
-            rel.c.standort,
-            func.count(rel.c.standort)
-        ).group_by(rel.c.standort)\
-         .order_by(desc(func.count(rel.c.standort)))
-        return [[d[0], d[1]] for d in data if d[0]]
+            rel.c.id_brief.label("id"),
+            rel.c.standort.label("standort"),
+            func.count(rel.c.standort).label("count")
+        ).group_by(rel.c.standort).subquery()
+        k = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
+        k = db.session.query(k.c.id_brief.label("id"), k.c.status.label("status")).subquery()
+        r = db.session.query(rel.c.id_brief.label("id"), rel.c.standort.label("standort")).subquery()
+        ds = lambda status: db.session.query(
+            r.c.standort.label("standort"),
+            func.count().label(status)
+        ).join(k, k.c.id == r.c.id)\
+         .group_by(r.c.standort, k.c.status)\
+         .filter(k.c.status == status).subquery()
+        off, unk, ung, abg = ds("offen"), ds("unklar"), ds("ungültig"), ds("abgeschlossen")
+        dat = db.session.query(
+            data.c.standort,
+            data.c.count,
+            off.c.offen,
+            unk.c.unklar,
+            ung.c.ungültig,
+            abg.c.abgeschlossen
+        ).outerjoin(off, off.c.standort == data.c.standort)\
+         .outerjoin(unk, unk.c.standort == data.c.standort)\
+         .outerjoin(ung, ung.c.standort == data.c.standort)\
+         .outerjoin(abg, abg.c.standort == data.c.standort)\
+         .order_by(desc(data.c.count))
+        return [[d[0],
+                 d[1] if d[1] else 0,
+                 d[2] if d[2] else 0,
+                 d[3] if d[3] else 0,
+                 d[4] if d[4] else 0,
+                 d[5] if d[5] else 0] for d in dat if d[0]]
 
     @staticmethod
     def get_data_overview_copy():
         rel = BullingerDB.get_most_recent_only(db.session, Kopie).subquery()
         data = db.session.query(
-            rel.c.standort,
-            func.count(rel.c.standort)
-        ).group_by(rel.c.standort)\
-         .order_by(desc(func.count(rel.c.standort)))
-        return [[d[0], d[1]] for d in data if d[0]]
-    # --
+            rel.c.id_brief.label("id"),
+            rel.c.standort.label("standort"),
+            func.count(rel.c.standort).label("count")
+        ).group_by(rel.c.standort).subquery()
+        k = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
+        k = db.session.query(k.c.id_brief.label("id"), k.c.status.label("status")).subquery()
+        r = db.session.query(rel.c.id_brief.label("id"), rel.c.standort.label("standort")).subquery()
+        ds = lambda status: db.session.query(
+            r.c.standort.label("standort"),
+            func.count().label(status)
+        ).join(k, k.c.id == r.c.id)\
+         .group_by(r.c.standort, k.c.status)\
+         .filter(k.c.status == status).subquery()
+        off, unk, ung, abg = ds("offen"), ds("unklar"), ds("ungültig"), ds("abgeschlossen")
+        dat = db.session.query(
+            data.c.standort,
+            data.c.count,
+            off.c.offen,
+            unk.c.unklar,
+            ung.c.ungültig,
+            abg.c.abgeschlossen
+        ).outerjoin(off, off.c.standort == data.c.standort)\
+         .outerjoin(unk, unk.c.standort == data.c.standort)\
+         .outerjoin(ung, ung.c.standort == data.c.standort)\
+         .outerjoin(abg, abg.c.standort == data.c.standort)\
+         .order_by(desc(data.c.count))
+        return [[d[0],
+                 d[1] if d[1] else 0,
+                 d[2] if d[2] else 0,
+                 d[3] if d[3] else 0,
+                 d[4] if d[4] else 0,
+                 d[5] if d[5] else 0] for d in dat if d[0]]
 
     @staticmethod
     def get_data_overview_autocopy():
+        sq_a = BullingerDB.get_most_recent_only(db.session, Autograph).subquery()
+        a0 = db.session.query(sq_a.c.standort.label("standort"))
+        sq_a = db.session.query(sq_a.c.standort.label("standort")).subquery()
+        sq_c = BullingerDB.get_most_recent_only(db.session, Kopie).subquery()
+        c0 = db.session.query(sq_c.c.standort.label("standort"))
+        sq_c = db.session.query(sq_c.c.standort.label("standort")).subquery()
+        s0 = union_all(a0, c0).alias("Standorte")
+        s = db.session.query(s0.c.standort).group_by(s0.c.standort).subquery()
+        sq_a = db.session.query(
+            sq_a.c.standort.label("standort"),
+            func.count(sq_a.c.standort).label("count")
+        ).group_by(sq_a.c.standort).subquery()
+        sq_c = db.session.query(
+            sq_c.c.standort.label("standort"),
+            func.count(sq_c.c.standort).label("count")
+        ).group_by(sq_c.c.standort).subquery()
+
+        # Status
+        file = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
         a = BullingerDB.get_most_recent_only(db.session, Autograph).subquery()
-        a0 = db.session.query(a.c.standort.label("standort"))
-        a = db.session.query(a.c.standort.label("standort")).subquery()
+        a = db.session.query(a.c.id_brief.label("id"), a.c.standort.label("standort"))
         c = BullingerDB.get_most_recent_only(db.session, Kopie).subquery()
-        c0 = db.session.query(c.c.standort.label("standort"))
-        c = db.session.query(c.c.standort.label("standort")).subquery()
-        s = union_all(a0, c0).alias("Standorte")
-        s = db.session.query(s.c.standort).group_by(s.c.standort).subquery()
-        a = db.session.query(
-            a.c.standort.label("standort"),
-            func.count(a.c.standort).label("count")
-        ).group_by(a.c.standort).subquery()
-        c = db.session.query(
-            c.c.standort.label("standort"),
-            func.count(c.c.standort).label("count")
-        ).group_by(c.c.standort).subquery()
+        c = db.session.query(c.c.id_brief.label("id"), c.c.standort.label("standort"))
+        r = union_all(a, c).alias("rel")
+        # auto = BullingerDB.get_most_recent_only(db.session, Autograph).subquery()
+        qis = db.session.query(
+            r.c.id.label("id"),
+            r.c.standort.label("standort")
+        ).group_by(r.c.id, r.c.standort).subquery()
+        dat = lambda status: db.session.query(
+            qis.c.standort.label("standort"),
+            func.count().label(status+"_count")
+        ).join(file, file.c.id_brief == qis.c.id)\
+         .filter(file.c.status == status)\
+         .group_by(qis.c.standort, file.c.status).subquery()
+        abg = dat("abgeschlossen")
+        off = dat("offen")
+        unk = dat("unklar")
+        ung = dat("ungültig")
+
+        # all
         data = db.session.query(
             s.c.standort,
-            a.c.count,
-            c.c.count
-        ).outerjoin(a, a.c.standort == s.c.standort)\
-         .outerjoin(c, c.c.standort == s.c.standort)\
-         .order_by(desc(a.c.count))
-        return [[d[0], d[1] if d[1] else 0, d[2] if d[2] else 0] for d in data if d[0]]
+            sq_a.c.count,
+            sq_c.c.count,
+            off.c.offen_count,
+            unk.c.unklar_count,
+            ung.c.ungültig_count,
+            abg.c.abgeschlossen_count
+        ).outerjoin(sq_a, sq_a.c.standort == s.c.standort)\
+         .outerjoin(sq_c, sq_c.c.standort == s.c.standort)\
+         .outerjoin(off, off.c.standort == s.c.standort)\
+         .outerjoin(unk, unk.c.standort == s.c.standort)\
+         .outerjoin(ung, ung.c.standort == s.c.standort)\
+         .outerjoin(abg, abg.c.standort == s.c.standort)\
+         .order_by(desc(sq_a.c.count))
+
+        return [[d[0],  # standort
+                 d[1] if d[1] else 0,  # autographen
+                 d[2] if d[2] else 0,  # kopien
+                 d[3] if d[3] else 0,  # off
+                 d[4] if d[4] else 0,  # unk
+                 d[5] if d[5] else 0,  # ung
+                 d[6] if d[6] else 0,  # abg
+                 ] for d in data if d[0]]
 
 
     @staticmethod
@@ -1525,9 +1624,7 @@ class BullingerDB:
     """
 
     @staticmethod
-    def get_top_data(mode):
-        """ mode = 0: sender
-            mode = 1: empfänger """
+    def get_data_overview_correspondents():
         recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
         recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
         # sender
@@ -1554,31 +1651,27 @@ class BullingerDB:
             .group_by(Person.name, Person.vorname, Person.ort)
         # full outer join and sum over groups
         p_all = union_all(p1, p2).alias("united")
-        return db.session.query(
-                p_all.c.p_name,
-                p_all.c.p_forename,
-                func.sum(p_all.c.s_count),
-                func.sum(p_all.c.r_count)
-            ).group_by(
-                p_all.c.p_name,
-                p_all.c.p_forename,
-            ).order_by(desc(func.sum(p_all.c.s_count if not mode else p_all.c.r_count)))
-
-    @staticmethod
-    def get_top_n_sender_ignoring_place():
-        return [[r[0] if r[0] else Config.SN,
-                 r[1] if r[1] else Config.SN,
-                 r[2],
-                 r[0].replace('/', "#&&") if r[0] else Config.SN,
-                 r[1].replace('/', "#&&") if r[1] else Config.SN] for r in BullingerDB.get_top_data(0) if r[2] > 0]
-
-    @staticmethod
-    def get_top_n_receiver_ignoring_place():
-        return [[r[0] if r[0] else Config.SN,
-                 r[1] if r[1] else Config.SN,
-                 r[3],
-                 r[0].replace('/', "#&&") if r[0] else Config.SN,
-                 r[1].replace('/', "#&&") if r[1] else Config.SN] for r in BullingerDB.get_top_data(1) if r[3] > 0]
+        data = db.session.query(
+            p_all.c.p_name,
+            p_all.c.p_forename,
+            func.sum(p_all.c.s_count),
+            func.sum(p_all.c.r_count),
+            func.sum(p_all.c.s_count)+func.sum(p_all.c.r_count)
+        ).group_by(
+            p_all.c.p_name,
+            p_all.c.p_forename,
+        ).order_by(desc(func.sum(p_all.c.s_count)+func.sum(p_all.c.r_count)))
+        r, s, e = [], 0, 0
+        for d in data:
+            r.append([d[0].replace('/', "#&&") if d[0] else Config.SN,
+                         d[1].replace('/', "#&&") if d[1] else Config.SN,
+                         d[2] if d[2] else 0,
+                         d[3] if d[3] else 0,
+                         d[2]+d[3] if d[2] and d[3] else (d[2] if d[2] else (d[3] if d[3] else 0))
+                      ])
+            if d[2]: s += 1
+            if d[3]: e += 1
+        return r, s, e
 
     @staticmethod
     def get_persons_by_var(variable, mode, get_links=False):
@@ -1629,23 +1722,25 @@ class BullingerDB:
                 p_all.c.p_forename,
                 p_all.c.p_place,
                 func.sum(p_all.c.s_count),
-                func.sum(p_all.c.r_count)
+                func.sum(p_all.c.r_count),
+                func.sum(p_all.c.s_count)+func.sum(p_all.c.r_count)
             ).group_by(
                 p_all.c.p_name,
                 p_all.c.p_forename,
                 p_all.c.p_place
-            ).order_by(desc(func.sum(p_all.c.s_count)))
+            ).order_by(desc(func.sum(p_all.c.s_count)+func.sum(p_all.c.r_count)))
         if not get_links:
             return [[r[0] if r[0] else Config.SN,
                      r[1] if r[1] else Config.SN,
-                     r[2] if r[2] else Config.SL, r[3], r[4]] for r in results]
+                     r[2] if r[2] else Config.SL, r[3], r[4], r[5]] for r in results]
         else:
             return [[r[0] if r[0] else Config.SN,
                      r[1] if r[1] else Config.SN,
                      r[2] if r[2] else Config.SL, r[3], r[4],
                      r[0].replace('/', "#&&") if r[0] else Config.SN,
                      r[1].replace('/', "#&&") if r[1] else Config.SN,
-                     r[2].replace('/', "#&&") if r[2] else Config.SL] for r in results]
+                     r[2].replace('/', "#&&") if r[2] else Config.SL,
+                     r[5]] for r in results]
 
 
     @staticmethod
@@ -1889,7 +1984,7 @@ class BullingerDB:
         fig = plt.figure()
         plt.subplot(2, 1, 1)
         plt.title("Registrierte Mitarbeiter")
-        plt.ylabel("Registrierungen")
+        plt.ylabel("Anzahl")
         plt.plot(x_reg, y_reg, "b-")
         plt.xticks([0, len(x_reg)-1], ['', ''])
         plt.grid(True)
@@ -1902,7 +1997,7 @@ class BullingerDB:
         # plt.text(1, avg+2, str(round(avg, 2))+" / Tag", style='italic', fontsize=10, bbox={'facecolor': 'green', 'alpha': 0.2, 'pad': 5})
         plt.title("Aktive Mitarbeiter")
         plt.xlabel("Datum [Tage]")
-        plt.ylabel("aktive Helfer")
+        plt.ylabel("Anzahl")
         plt.xticks([0, len(x_reg)-1], [x_reg[0], x_reg[-1]])
         locs, labels = plt.yticks()
         plt.yticks([each for each in range(0, int(locs[-1]), int(locs[-1]/5))])

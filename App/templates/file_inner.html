@@ -1,9 +1,9 @@
 {% block content %}
 
 <div class="h2_box>">
-    <h2>Kartei</h2>
+    <h2>Kartei {% include "title_navigation.html" %}</h2>
     <div class="h2_section">
-        <p> Übersichten zu den Karteikarten nach ...</p>
+        <p> Übersichten zu den Karteikarten:</p>
         <ul>
             <li><a href="{{url_for('overview')}}">Datum</a></li>
             <li>
@@ -14,8 +14,11 @@
             <li>
                 <a href="{{url_for('places')}}">Ortschaften</a>
             </li>
-            <li><a href="{{url_for('overview_autocopy')}}">Autograph & Kopie</a>
-                (<a href="{{url_for('overview_autograph')}}">entweder</a>/<a href="{{url_for('overview_copy')}}">oder</a>)
+            <li><a href="{{url_for('overview_autocopy')}}">Autographen & Kopien</a>
+                (nur
+                    <a href="{{url_for('overview_autograph')}}">Autographen</a>
+                oder
+                    <a href="{{url_for('overview_copy')}}">Kopien</a>)
             </li>
             <li>
                 <a href="{{url_for('languages')}}">Sprachen</a>
