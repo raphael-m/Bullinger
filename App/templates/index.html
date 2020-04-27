@@ -74,7 +74,9 @@
     </div>
     <div class="h2_separator"></div>
 
-    {% include "file_inner.html" %}
+
+    {# include "file_inner.html" #}
+
 
     <div class="h2_box">
         <h2>Links {% include "title_navigation.html" %}</h2>
@@ -82,15 +84,13 @@
             <p>
                 <span class="kw">Hintergrund-Informationen</span> zum bisherigen Editions-Projekt finden Sie
                 <a class="text_link" href="https://www.irg.uzh.ch/de/bullinger-edition/briefwechsel.html">hier</a>.
-            </p>
-            <p>
                 Rund 3000 Briefe sind schon transkribiert und ediert, und können online durchsucht werden.
                 Das Suchsystem für die bisher edierten <span class="kw">Briefe</span> finden Sie
                 <a class="text_link" href="http://teoirgsed.uzh.ch/">hier</a>.
             </p>
             <div class="textblock">
                 <p><span class="kw">Berichterstattungen</span></p>
-                <ul>
+                <ul class="items">
                     <li>
                         <a href="https://www.uzhfoundation.ch/de/unsere-themen/weitere-projekte/bullinger-briefe">
                             UZH Foundation</a>
@@ -142,7 +142,7 @@
                     Kirchgasse 9,
                     Zürich
                 </p>
-                <ul>
+                <ul class="items">
                     <li>
                         <a href="mailto:bodenmann.reinhard@theol.uzh.ch">Dr. habil. Reinhard Bodenmann</a>
                         (Leiter der Heinrich Bullinger-Briefwechseledition)
@@ -160,7 +160,7 @@
                     Andreasstrasse 15,
                     Zürich
                 </p>
-                <ul>
+                <ul class="items">
                     <li>
                         <a href="mailto:volk@cl.uzh.ch">Prof. Dr. Martin Volk</a>
                         (Projektleiter)
@@ -180,14 +180,16 @@
                 </ul>
             </div>
             <div class="textblock">
-                Bei inhaltlichen Fragen oder Unklarheiten beim Kontrollieren der Datenbank-Einträge
-                kontaktieren Sie bitte die
-                <a href="mailto:bullinger-digital@protonmail.com">Projektkoordination</a>,
-                bei technischen Fragen zum Korrektur-System den
-                <a href="mailto:bernard.schroffenegger@uzh.ch">Admin</a>.
-                Für allgemeine Bemerkungen und Hinweise steht auch ein
-                <a href="/guestbook">Gästebuch</a>
-                zur Verfügung.
+                <p>
+                    Bei inhaltlichen Fragen oder Unklarheiten beim Kontrollieren der Datenbank-Einträge
+                    kontaktieren Sie bitte die
+                    <a href="mailto:bullinger-digital@protonmail.com">Projektkoordination</a>,
+                    bei technischen Fragen zum Korrektur-System den
+                    <a href="mailto:bernard.schroffenegger@uzh.ch">Admin</a>.
+                    Für allgemeine Bemerkungen und Hinweise steht auch ein
+                    <a href="/guestbook">Gästebuch</a>
+                    zur Verfügung.
+                </p>
             </div>
         </div>
     </div>

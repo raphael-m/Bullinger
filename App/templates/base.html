@@ -49,10 +49,10 @@
                 <li><a {%- if request.path.startswith("/overview") or request.path.startswith("/assignment") %} class="active"{% endif %} href="/overview">Jahre</a></li>
                 <li><a {%- if request.path=="/persons" %} class="active"{% endif %} href="/persons">Personen</a></li>
                 -->
-                <li><a {%- if request.path=="/file" %} class="active"{% endif %} href="/file">Kartei</a></li>
-                <li><a {%- if request.path=="/stats" %} class="active"{% endif %} href="/stats">Statistiken</a></li>
-                <li><a {%- if request.path=="/faq" %} class="active"{% endif %} href="/faq">FAQ</a></li>
-                <li><a href="/quick_start">Los!</a></li>
+                <li><a {%- if request.path=="/Kartei" %} class="active"{% endif %} href="/Kartei">Kartei</a></li>
+                <li><a {%- if request.path=="/Statistiken" %} class="active"{% endif %} href="/Statistiken">Statistiken</a></li>
+                <li><a {%- if request.path=="/FAQ" %} class="active"{% endif %} href="/FAQ">FAQ</a></li>
+                <li><a href="/Kartei/Karteikarten/Zufall">Los!</a></li>
             </ul>
             <div class="bu-header-account">
                 <div class="bu-header-account-initials">

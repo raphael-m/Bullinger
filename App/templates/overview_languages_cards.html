@@ -19,6 +19,7 @@
 					<tr class="my_table_head_row">
 						<th class="js-sort-number my_table_head_cell">Brief ID</th>
 						<th class="js-sort-string my_table_head_cell">Sprache</th>
+						<th class="js-sort-string my_table_head_cell">Status</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -33,6 +34,9 @@
 						{% else %}
 							{{ d[0] }}
 						{% endif %}
+						</td>
+						<td class="my_table_cell">
+							<a href="{{url_for('overview_state', state=d[2])}}">{{ d[2] }}</a>
 						</td>
 					</tr>
 				{% endfor %}

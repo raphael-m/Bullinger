@@ -12,13 +12,6 @@ body {
     box-sizing: border-box;
 }
 
-#head {
-    height: 60px;
-    color: white;
-    background: #123;
-    border-bottom: 1px solid white;
-}
-
 #main {
     min-width: 21cm;
 }
@@ -26,7 +19,7 @@ body {
 #foot {
     height: 2em;
     line-height: 2em;
-    font-size: 0.7em;
+    font-size: 0.8em;
     text-align: center;
     color: white;
     background: #123;
@@ -39,7 +32,7 @@ body {
 
 .title_navigation {
     float: right;
-    font-size: 1.1em;
+    font-size: 1em;
 }
 
 /* key words */

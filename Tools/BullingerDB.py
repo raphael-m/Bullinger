@@ -1697,6 +1697,7 @@ class BullingerDB:
             mode=1: variable=Vorname
             mode=2: variable=Ort
             return [[brief_id, nn, vn, ort, rezensionen, status], ...] """
+        if variable == Config.SN or variable == Config.SL: variable = None
         recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
         recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
         # sender
@@ -1763,6 +1764,9 @@ class BullingerDB:
 
     @staticmethod
     def get_overview_person(name, forename, place, get_links=False):
+        if name == Config.SN: name = None
+        if forename == Config.SN: forename = None
+        if place == Config.SL: place = None
         recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
         recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
         # sender
@@ -1814,13 +1818,22 @@ class BullingerDB:
 
     @staticmethod
     def get_overview_languages(lang):
+        if lang == Config.NONE: lang = None
         recent_langs = BullingerDB.get_most_recent_only(db.session, Sprache).subquery()
+        recent_file = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
         data = db.session.query(
                 recent_langs.c.id_brief.label("id_brief"),
-                recent_langs.c.sprache.label("sprache")
+                recent_langs.c.sprache.label("sprache"),
+                recent_file.c.status.label("status")
             ).filter(recent_langs.c.sprache == lang)\
-            .order_by(asc(recent_langs.c.id_brief))
-        return [[d.id_brief, d.sprache if d.sprache else Config.NONE] for d in data]
+             .join(recent_file, recent_file.c.id_brief == recent_langs.c.id_brief)\
+             .order_by(asc(recent_langs.c.id_brief))
+        return [[d.id_brief, d.sprache if d.sprache else Config.NONE, d.status] for d in data]
+
+    @staticmethod
+    def get_overview_states():
+        recent_file = BullingerDB.get_most_recent_only(db.session, Kartei)
+        return [[r.id_brief, r.status] for r in recent_file]
 
     @staticmethod
     def get_number_of_page_visits(visits_only=False):
@@ -1892,8 +1905,8 @@ class BullingerDB:
         plt.plot(x, y_avg, 'k', alpha=1, label="Wochendurchschnitt")
         ax.axhline(y=avg, color='b', linestyle='--', alpha=0.8, label="Durchschnitt ("+str(round(avg, 2))+"/Tag)")
 
-        # plt.text(2.3, avg+70, str(avg)+" / Tag", style='italic', fontsize=10, bbox={'facecolor': 'green', 'alpha': 0.2, 'pad': 5})
-
+        # plt.text(2.3, avg+70, str(avg)+" / Tag", style='italic', fontsize=10,
+        #   bbox={'facecolor': 'green', 'alpha': 0.2, 'pad': 5})
         # regression
         # m, b = np.polyfit(x, y, 1)
         # plt.plot(x, [b+m*i for i in range(len(x))], 'b', linestyle=':', alpha=0.42)
@@ -2120,6 +2133,9 @@ class BullingerDB:
 
     @staticmethod
     def get_timeline_data_all(name=None, forename=None, location=None):
+        name = name if name and name != '0' and name != 'None' else None
+        forename = forename if forename and forename != '0' and forename != 'None' else None
+        location = location if location and location != '0' and location != 'None' else None
         recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
         recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
         # sender
@@ -2172,123 +2188,3 @@ class BullingerDB:
             data[r[0]]["location"] = r[7] if r[7] else Config.SN,
             data[r[0]]["is_sender"] = True
         return data
-
-        """
-        print(name, prename, location)
-        recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
-        recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
-        # sender
-        p1 = db.session.query(
-                Person.id.label("p_id_a"),
-                Person.name.label("p_name"),
-                Person.vorname.label("p_forename"),
-                Person.ort.label("p_place"),
-                recent_sender.c.id_person.label("p_id_b"),
-                recent_sender.c.id_brief.label("id_a"))\
-            .join(recent_sender, recent_sender.c.id_person == Person.id)\
-            .filter(or_(Person.name == 'Bullinger', Person.name == name) if name else True)\
-            .filter(or_(Person.vorname == 'Heinrich', Person.vorname == prename) if prename else True)\
-            .filter(or_(Person.ort == 'Zürich', Person.ort == location) if location else True)\
-            .subquery().alias("p1")
-        # receiver
-        p2 = db.session.query(
-                Person.id.label("p_id_a"),
-                Person.name.label("p_name"),
-                Person.vorname.label("p_forename"),
-                Person.ort.label("p_place"),
-                recent_receiver.c.id_person.label("p_id_b"),
-                recent_receiver.c.id_brief.label("id_a"))\
-            .join(recent_receiver, recent_receiver.c.id_person == Person.id)\
-            .filter(or_(Person.name == 'Bullinger', Person.name == name) if name else True)\
-            .filter(or_(Person.vorname == 'Heinrich', Person.vorname == prename) if prename else True)\
-            .filter(or_(Person.ort == 'Zürich', Person.ort == location) if location else True)\
-            .subquery().alias("p2")
-        results = db.session.query(
-            Datum.id_brief,  # 0
-            Datum.jahr_a,
-            Datum.monat_a,
-            Datum.tag_a,
-            p1.c.id_a,
-            p1.c.p_id_b,
-            p1.c.p_name, # 6
-            p1.c.p_forename,
-            p1.c.p_place,
-            p2.c.id_a,
-            p2.c.p_id_b,
-            p2.c.p_name,  # 11
-            p2.c.p_forename,
-            p2.c.p_place)\
-        .join(p1, p1.c.id_a == Datum.id_brief)\
-        .join(p2, p2.c.id_a == Datum.id_brief)
-        data = dict()
-        for r in results:
-            data[r[0]] = dict()
-            data[r[0]]["year"] = r[1] if r[1] else 0,
-            data[r[0]]["month"] = r[2] if r[2] else 0,
-            data[r[0]]["day"] = r[3] if r[3] else 0,
-            if r[6] == "Bullinger" and r[7] == "Heinrich" and r[8] == "Zürich":
-                data[r[0]]["name"] = r[11] if r[11] else Config.SN,
-                data[r[0]]["forename"] = r[12] if r[12] else Config.SN,
-                data[r[0]]["location"] = r[13] if r[13] else Config.SN,
-                data[r[0]]["is_sender"] = True
-            else:
-                data[r[0]]["name"] = r[6] if r[6] else Config.SN,
-                data[r[0]]["forename"] = r[7] if r[7] else Config.SN,
-                data[r[0]]["place"] = r[8] if r[8] else Config.SN,
-                data[r[0]]["is_sender"] = False
-        return data
-        """
-
-
-    @staticmethod
-    def get_persons_as_autosuggestion():
-        pass
-        """
-        recent_sender = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
-        recent_receiver = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
-        # sender
-        p1 = db.session.query(
-            Person.id.label("p_id_a"),
-            Person.name.label("p_name"),
-            Person.vorname.label("p_forename"),
-            Person.ort.label("p_place"),
-            func.count(Person.id).label("s_count"),
-            literal(0).label("r_count"),
-            recent_sender.c.id_brief.label("id_a"),
-            recent_sender.c.id_person.label("p_id_b")) \
-            .join(recent_sender, recent_sender.c.id_person == Person.id) \
-            .group_by(Person.name, Person.vorname, Person.ort)
-        # receiver
-        p2 = db.session.query(
-            Person.id.label("p_id_a"),
-            Person.name.label("p_name"),
-            Person.vorname.label("p_forename"),
-            Person.ort.label("p_place"),
-            literal(0).label("s_count"),
-            func.count(Person.id).label("r_count"),
-            recent_receiver.c.id_brief.label("id_a"),
-            recent_receiver.c.id_person.label("p_id_b")) \
-            .filter(
-            Person.name == variable if mode is 0
-            else Person.vorname == variable if mode is 1
-            else Person.ort == variable if mode is 2
-            else True) \
-            .join(recent_receiver, recent_receiver.c.id_person == Person.id) \
-            .group_by(Person.name, Person.vorname, Person.ort)
-        # full outer join and sum over groups
-        p_all = union_all(p1, p2).alias("united")
-        results = db.session.query(
-            p_all.c.p_name,
-            p_all.c.p_forename,
-            p_all.c.p_place,
-            func.sum(p_all.c.s_count),
-            func.sum(p_all.c.r_count)
-        ).group_by(
-            p_all.c.p_name,
-            p_all.c.p_forename,
-            p_all.c.p_place
-        ).order_by(desc(func.sum(p_all.c.s_count)))
-        return [[r[0] if r[0] else Config.SN,
-                 r[1] if r[1] else Config.SN,
-                 r[2] if r[2] else Config.SL, r[3], r[4]] for r in results]
-        """
