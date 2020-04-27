@@ -14,41 +14,89 @@
 
 	<h2>{{ vars["relation"] }}</h2>
 	<div class="h2_section">
-
-		<p>Treffer: {{ vars["data"] | length }}</p>
+        <p>
+            <span class="kw">Treffer:</span> {{ vars["data"] | length }} Standorte
+        </p>
+        <ul>
+            <li>
+                {{ vars["counts"]["autographen"] }} Autographen (A) und
+                {{ vars["counts"]["kopien"] }} Kopien (K), Total
+                {{ vars["counts"]["autographen"] + vars["counts"]["kopien"] }} (A&K)
+            </li>
+            <li>
+                {{ vars["counts"]["offen"]
+                    + vars["counts"]["unklar"]
+                    + vars["counts"]["ungültig"]
+                    + vars["counts"]["abgeschlossen"]
+                }} Karteikaten (&#x03A3;), davon
+                    {{ vars["counts"]["abgeschlossen"] }} abgeschlossen (&#x2713;),
+                    {{ vars["counts"]["offen"] }} offen (!),
+                    {{ vars["counts"]["unklar"] }} unklar (?), und
+                    {{ vars["counts"]["ungültig"] }} ungültig (&#x2717;).
+            </li>
+        </ul>
 
 		<div class="parallel">
             <table class="js-sort-table paleBlueRows">
                 <thead class="my_table_head">
                     <tr class="my_table_head_row">
+                        <th class="js-sort-number my_table_head_cell">A&K</th>
+                        <th class="js-sort-number my_table_head_cell">A</th>
+                        <th class="js-sort-number my_table_head_cell">K</th>
                         <th class="js-sort-string my_table_head_cell">Standort</th>
-                        <th class="js-sort-number my_table_head_cell">Autographen</th>
-                        <th class="js-sort-number my_table_head_cell">Kopien</th>
-                        <th class="js-sort-number my_table_head_cell">Objekte</th>
-                        <th class="js-sort-number my_table_head_cell">Karteikarten</th>
-                        <th class="js-sort-number my_table_head_cell">offen</th>
-                        <th class="js-sort-number my_table_head_cell">unklar</th>
-                        <th class="js-sort-number my_table_head_cell">ungültig</th>
-                        <th class="js-sort-number my_table_head_cell">abgeschlossen</th>
+                        <th class="js-sort-number my_table_head_cell">
+                            <span style="color:dodgerblue">!</span>
+                        </th>
+                        <th class="js-sort-number my_table_head_cell">
+                            <span style="color:yellow">?</span>
+                        </th>
+                        <th class="js-sort-number my_table_head_cell">
+                            <span style="color:red">&#x2717;</span>
+                        </th>
+                        <th class="js-sort-number my_table_head_cell">
+                            <span style="color:lime">&#x2713;</span>
+                        </th>
+                        <th class="js-sort-number my_table_head_cell">&#x03A3;</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for p in vars["data"] %}
                     <tr class="my_table_row">
+                        <td class="my_table_cell">{{ p[1]+p[2] }}</td>
+                        <td class="my_table_cell">{{ p[1] }}</td>
+                        <td class="my_table_cell">{{ p[2] }}</td>
                         <td class="my_table_cell">
                             <a href="{{url_for('overview_autocopy_x', standort=p[0])}}">{{ p[0] }}</a>
                         </td>
-                        <td class="my_table_cell">{{ p[1] }}</td>
-                        <td class="my_table_cell">{{ p[2] }}</td>
-                        <td class="my_table_cell">{{ p[1]+p[2] }}</td>
-                        <td class="my_table_cell">{{ p[3]+p[4]+p[5]+p[6] }}</td>
                         <td class="my_table_cell">{{ p[3] }}</td>
                         <td class="my_table_cell">{{ p[4] }}</td>
                         <td class="my_table_cell">{{ p[5] }}</td>
                         <td class="my_table_cell">{{ p[6] }}</td>
+                        <td class="my_table_cell">{{ p[3]+p[4]+p[5]+p[6] }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
+                <thead class="t_head">
+                    <tr class="t_row">
+                        <td class="t_cell_sums">
+                            {{ vars["counts"]["autographen"] + vars["counts"]["kopien"] }}
+                        </td>
+                        <td class="t_cell_sums">{{ vars["counts"]["autographen"] }}</td>
+                        <td class="t_cell_sums">{{ vars["counts"]["kopien"] }}</td>
+                        <td class="t_cell_sums">{{ vars["counts"]["standorte"] }}</td>
+                        <td class="t_cell_sums">{{ vars["counts"]["offen"] }}</td>
+                        <td class="t_cell_sums">{{ vars["counts"]["unklar"] }}</td>
+                        <td class="t_cell_sums">{{ vars["counts"]["ungültig"] }}</td>
+                        <td class="t_cell_sums">{{ vars["counts"]["abgeschlossen"] }}</td>
+                        <td class="t_cell_sums">
+                            {{ vars["counts"]["offen"]
+                                + vars["counts"]["unklar"]
+                                + vars["counts"]["ungültig"]
+                                + vars["counts"]["abgeschlossen"]
+                            }}
+                        </td>
+                    </tr>
+                </thead>
             </table>
 		</div>
 	</div>

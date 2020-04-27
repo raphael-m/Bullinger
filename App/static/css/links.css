@@ -41,3 +41,7 @@ a:active {
 .faq_toc:hover, .stats_toc:hover {
     background-color: Silver;
 }
+
+.reset_alias:hover {
+    text-decoration: underline;
+}

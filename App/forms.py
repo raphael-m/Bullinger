@@ -45,8 +45,8 @@ class GuestBookForm(FlaskForm):
 
 class PersonNameForm(FlaskForm):
 
-    p_name = StringField('Name', validators=[DataRequired()])
-    p_forename = StringField('Vorname', validators=[DataRequired()])
-    a_name = StringField('Name', validators=[DataRequired()])
-    a_forename = StringField('Vorname', validators=[DataRequired()])
+    p_name = StringField('Name')
+    p_forename = StringField('Vorname')
+    a_name = StringField('Name')
+    a_forename = StringField('Vorname')
     submit = SubmitField('Speichern')

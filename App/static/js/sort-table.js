@@ -297,11 +297,12 @@ if (typeof NodeList.prototype.forEach !== "function") {
 
 $(document).ready(function () {
     $(".name_selector").click( function (){
-        var vn = $(this).parent().prev().text();
-        var nn = $(this).parent().prev().prev().text();
+        var vn = $(this).parent().prev().prev().text();
+        var nn = $(this).parent().prev().prev().prev().text();
         $('#p_name').val(nn);
         $('#p_forename').val(vn);
-
+        $("html, body").animate({ scrollTop: 0 }, "fast");
+        search();
     });
 });
 
@@ -323,3 +324,53 @@ function getConfirmation() {
       return false;
    }
 }
+
+
+/* alias */
+$(document).ready(function () {
+    $(".reset_alias").click( function (){
+        $(".person_name_input").find(">:first-child").val("");
+        $(".person_forename_input").find(">:first-child").val("");
+        show_all();
+    });
+});
+
+function hide_all() {
+    $(".my_table_row").each(function() { $(this).hide(); });
+    $(".my_table_head").each(function() { $(this).hide(); });
+}
+
+function show_all() {
+    $(".my_table_row").each(function() { $(this).show(); });
+    $(".my_table_head").each(function() { $(this).show(); });
+}
+
+function search() {
+    hide_all();
+    var nn = $(".person_name_input").find(">:first-child").val();
+    var vn = $(".person_forename_input").find(">:first-child").val();
+    $(".my_table_cell.c0").each(function() {
+        if ($(this).text().includes(nn) == true && $(this).next().text().includes(vn) == true){
+            $(this).parent().show();
+            $(this).parent().parent().prev().show();
+        }
+    });
+    $(".my_table_head_cell.c0").each(function() {
+        if ($(this).text().includes(nn) == true && $(this).next().text().includes(vn) == true){
+            $(this).parent().parent().show();
+            $(this).parent().parent().next().children().show();
+        }
+    });
+}
+
+$(document).ready(function () {
+    $(".person_name_input").keyup( function (){
+        search();
+    });
+});
+
+$(document).ready(function () {
+    $(".person_forename_input").keyup( function (){
+        search();
+    });
+});

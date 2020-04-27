@@ -4,6 +4,7 @@
 
 <h1>
 	> <a class="header_link" href="{{url_for('file')}}">Kartei</a>
+	/ <a class="header_link" href="{{url_for('overview_persons')}}">Personen</a>
 	/ {{ vars["name"] }}, {{ vars["forename"] }}, {{ vars["place"] }}
 	{% include "user_status.html" %}
 </h1>

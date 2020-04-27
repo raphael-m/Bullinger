@@ -1223,27 +1223,44 @@ class BullingerDB:
         ).join(file, file.c.id_brief == qis.c.id)\
          .filter(file.c.status == status)\
          .group_by(qis.c.standort, file.c.status).subquery()
-        abg = dat("abgeschlossen")
-        off = dat("offen")
-        unk = dat("unklar")
-        ung = dat("ungültig")
+        abg, off, unk, ung = dat("abgeschlossen"), dat("offen"), dat("unklar"), dat("ungültig")
 
         # all
-        data = db.session.query(
-            s.c.standort,
-            sq_a.c.count,
-            sq_c.c.count,
-            off.c.offen_count,
-            unk.c.unklar_count,
-            ung.c.ungültig_count,
-            abg.c.abgeschlossen_count
-        ).outerjoin(sq_a, sq_a.c.standort == s.c.standort)\
-         .outerjoin(sq_c, sq_c.c.standort == s.c.standort)\
-         .outerjoin(off, off.c.standort == s.c.standort)\
-         .outerjoin(unk, unk.c.standort == s.c.standort)\
-         .outerjoin(ung, ung.c.standort == s.c.standort)\
-         .outerjoin(abg, abg.c.standort == s.c.standort)\
-         .order_by(desc(sq_a.c.count))
+        data, cq = \
+            db.session.query(
+                    s.c.standort,
+                    sq_a.c.count,
+                    sq_c.c.count,
+                    off.c.offen_count,
+                    unk.c.unklar_count,
+                    ung.c.ungültig_count,
+                    abg.c.abgeschlossen_count
+                ).outerjoin(sq_a, sq_a.c.standort == s.c.standort)\
+                 .outerjoin(sq_c, sq_c.c.standort == s.c.standort)\
+                 .outerjoin(off, off.c.standort == s.c.standort)\
+                 .outerjoin(unk, unk.c.standort == s.c.standort)\
+                 .outerjoin(ung, ung.c.standort == s.c.standort)\
+                 .outerjoin(abg, abg.c.standort == s.c.standort)\
+                 .order_by(desc(sq_a.c.count)), \
+            db.session.query(
+                    func.count(s.c.standort),  # 0 standort
+                    func.sum(sq_a.c.count),  # 1 auto
+                    func.sum(sq_c.c.count),  # 2 copy
+                    func.sum(off.c.offen_count),  # 3 off
+                    func.sum(unk.c.unklar_count),  # 4 unkl
+                    func.sum(ung.c.ungültig_count),  # 5 ung
+                    func.sum(abg.c.abgeschlossen_count)  # 6 abg
+                ).outerjoin(sq_a, sq_a.c.standort == s.c.standort)\
+                 .outerjoin(sq_c, sq_c.c.standort == s.c.standort)\
+                 .outerjoin(off, off.c.standort == s.c.standort)\
+                 .outerjoin(unk, unk.c.standort == s.c.standort)\
+                 .outerjoin(ung, ung.c.standort == s.c.standort)\
+                 .outerjoin(abg, abg.c.standort == s.c.standort)\
+                 .order_by(desc(sq_a.c.count)).first()
+
+        c = dict()
+        c["standorte"], c["autographen"], c["kopien"], c["offen"], c["unklar"], c["ungültig"], c["abgeschlossen"] = \
+            cq[0], cq[1], cq[2], cq[3], cq[4], cq[5], cq[6]
 
         return [[d[0],  # standort
                  d[1] if d[1] else 0,  # autographen
@@ -1252,7 +1269,7 @@ class BullingerDB:
                  d[4] if d[4] else 0,  # unk
                  d[5] if d[5] else 0,  # ung
                  d[6] if d[6] else 0,  # abg
-                 ] for d in data if d[0]]
+                 ] for d in data if d[0]], c
 
 
     @staticmethod
@@ -1554,9 +1571,10 @@ class BullingerDB:
 
     @staticmethod
     def create_plot_user_stats(user_name, file_name):
+        min_changes, min_finished = 20, 5
         color_private, color_public = "lime", "midnightblue"
         fig = plt.figure()
-        dc = [(u.changes, 1 if u.username == user_name else 0) for u in User.query.order_by(asc(User.changes)).all() if u.changes > 0]
+        dc = [(u.changes, 1 if u.username == user_name else 0) for u in User.query.order_by(asc(User.changes)).all() if u.changes > min_changes]
         co = [color_private if t[1] else color_public for t in dc]
 
         # changes
@@ -1586,7 +1604,7 @@ class BullingerDB:
         ax = plt.axes()
         ax.grid(b=True, which='minor', axis='both', color='#888888', linestyle=':', alpha=0.2)
         ax.grid(b=True, which='major', axis='both', color='#000000', linestyle=':', alpha=0.2)
-        dc = [(u.finished, 1 if u.username == user_name else 0) for u in User.query.order_by(asc(User.finished)).all() if u.finished > 0]
+        dc = [(u.finished, 1 if u.username == user_name else 0) for u in User.query.order_by(asc(User.finished)).all() if u.finished > min_finished]
         co = [color_private if t[1] else color_public for t in dc]
         x = ('' if not c[1] else user_name for c in dc)
         x2 = np.arange(len(dc))
@@ -1872,7 +1890,7 @@ class BullingerDB:
         plt.bar(x, y_pers, align='center', alpha=0.9, color="blue")
         plt.bar(x, y_all, bottom=y_pers, align='center', alpha=0.5, color="dodgerblue")
         plt.plot(x, y_avg, 'k', alpha=1, label="Wochendurchschnitt")
-        ax.axhline(y=avg, color='g', linestyle='--', alpha=0.8, label="Durchschnitt ("+str(round(avg, 2))+"/Tag)")
+        ax.axhline(y=avg, color='b', linestyle='--', alpha=0.8, label="Durchschnitt ("+str(round(avg, 2))+"/Tag)")
 
         # plt.text(2.3, avg+70, str(avg)+" / Tag", style='italic', fontsize=10, bbox={'facecolor': 'green', 'alpha': 0.2, 'pad': 5})
 
@@ -1993,7 +2011,7 @@ class BullingerDB:
         plt.bar(range(len(x_reg)), yp_active, color="blue", alpha=0.9)
         plt.bar(range(len(x_reg)), y_active, bottom=yp_active, color="dodgerblue", alpha=0.5)
         avg = (sum(y_active)+sum(yp_active))/len(x_reg)
-        plt.plot(x_reg, len(x_reg)*[avg], "g--", alpha=0.8, label="Durchschnitt ("+str(round(avg, 2))+"/Tag)")
+        plt.plot(x_reg, len(x_reg)*[avg], "b--", alpha=0.8, label="Durchschnitt ("+str(round(avg, 2))+"/Tag)")
         # plt.text(1, avg+2, str(round(avg, 2))+" / Tag", style='italic', fontsize=10, bbox={'facecolor': 'green', 'alpha': 0.2, 'pad': 5})
         plt.title("Aktive Mitarbeiter")
         plt.xlabel("Datum [Tage]")

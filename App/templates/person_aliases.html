@@ -20,15 +20,7 @@
                 Heinrich Bullinger. Die Tabelle dient uns dazu, Schreiber eindeutig zu identifizieren, die mit
                 unterschiedlichen Namensvarianten in der Datenbank vorkommen.
             </p>
-            <p>
-                Bitte achten Sie darauf, jede Person in der linken Spalte nur einmal einzutragen.
-            </p>
-            <p>
-                Vielen Dank.
-            </p>
-
             <br>
-
             <p class="kw">Namensvarianten erfassen:</p>
 
             <form action="" method="post">
@@ -79,17 +71,27 @@
                   </div>
                     <div>
                         {{ form.submit() }}
+                        <span class="reset_alias" style="color: blue">(Zurücksetzen)</span>
                     </div>
                 </div>
 
             </form>
 
             <table class="js-sort-table paleBlueRows">
+				<thead class="my_table_head">
+					<tr class="my_table_head_row">
+						<th class="js-sort-number my_table_head_cell">NAME</th>
+						<th class="js-sort-number my_table_head_cell">VORNAME</th>
+                        <th class="js-sort-number my_table_head_cell">FREQUENZ</th>
+                        <th class="js-sort-number my_table_head_cell">AKTION</th>
+					</tr>
+				</thead>
             {% for b in vars["primary_names"] %}
 				<thead class="my_table_head">
 					<tr class="my_table_head_row">
-						<th class="js-sort-number my_table_head_cell">{{ b[0] }}</th>
-						<th class="js-sort-number my_table_head_cell">{{ b[1] }}</th>
+						<th class="js-sort-number my_table_head_cell c0">{{ b[0] }}</th>
+						<th class="js-sort-number my_table_head_cell c1">{{ b[1] }}</th>
+                        <th class="js-sort-number my_table_head_cell">{{ b[3] }}</th>
                         <th class="js-sort-number my_table_head_cell">
                             <span class="name_selector" style="color: #32cd32">[+]</span>
                         </th>
@@ -98,11 +100,22 @@
                 {% for d in b[2] %}
                 <tbody>
                     <tr class="my_table_row">
-                        <td class="my_table_cell">{{ d[0] }}</td>
-                        <td class="my_table_cell">{{ d[1] }}</td>
-                            <th class="js-sort-number my_table_head_cell">
-                        <a class="delete_selector" id="{{url_for('delete_alias_2', nn=d[0], vn=d[1])}}">[x]</a>
-                    </th>
+                        <td class="my_table_cell c0">{{ d[0] }}</td>
+                        <td class="my_table_cell c1">{{ d[1] }}</td>
+                        <td class="my_table_cell">{{ d[2] }}</td>
+                        <td class="my_table_cell">
+                        {% if d[0] and d[1] %}
+                            <a class="delete_selector" id="{{url_for('delete_alias_2', nn=d[0], vn=d[1])}}">
+                        {% elif d[0] %}
+                            <a class="delete_selector" id="{{url_for('delete_alias_2', nn=d[0], vn=0)}}">
+                        {% elif d[1] %}
+                            <a class="delete_selector" id="{{url_for('delete_alias_2', nn=0, vn=d[1])}}">
+                        {% else %}
+                            <a class="delete_selector" id="{{url_for('delete_alias_2', nn=0, vn=0)}}">
+                        {% endif %}
+                                <span style="color:red">&#x2717;</span>
+                            </a>
+                        </td>
                     </tr>
 				</tbody>
                 {% endfor %}

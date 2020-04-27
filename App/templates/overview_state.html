@@ -14,9 +14,7 @@
 		<h2>Statusübersicht: {{ vars["state"] }}</h2>
 		<div class="h2_section">
 
-            <p>Karteikarten mit Status "{{ vars["state"] }}"</p>
-
-            <p>Treffer: "{{ vars["table"] | length }}"</p>
+            <p>Treffer: {{ vars["table"] | length }}</p>
 
 			<table class="js-sort-table paleBlueRows">
 				<thead class="my_table_head">

@@ -10,7 +10,7 @@ from App import app, login_manager
 from App.forms import *
 from flask import render_template, flash, redirect, url_for, make_response, jsonify, request
 from flask_login import current_user, login_user, login_required, logout_user
-from sqlalchemy import desc, func, asc
+from sqlalchemy import desc, func, asc, union_all, and_
 from Tools.BullingerDB import BullingerDB
 from Tools.Dictionaries import CountDict, ListDict
 from collections import defaultdict
@@ -608,6 +608,7 @@ def overview_autograph_x(autograph):
 @app.route('/kartei/autokopie', methods=['GET'])
 def overview_autocopy():
     BullingerDB.track(current_user.username, '/Kartei/AutoKopie', datetime.now())
+    data, counts = BullingerDB.get_data_overview_autocopy()
     return render_template(
         "overview_autokopie.html",
         title="Kartei/Autograph & Kopie",
@@ -615,7 +616,8 @@ def overview_autocopy():
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
             "relation": "Autographen & Kopien",
-            "data": BullingerDB.get_data_overview_autocopy(),
+            "data": data,
+            "counts": counts
         }
     )
 
@@ -1048,26 +1050,73 @@ def alias():
     BullingerDB.track(current_user.username, '/alias', datetime.now())
     p_data, form = [], PersonNameForm()
     if form.validate_on_submit():
-        alias = Alias.query.filter_by(
-            p_name=form.p_name.data, p_vorname=form.p_forename.data,
-            a_name=form.a_name.data, a_vorname=form.a_forename.data).first()
-        if alias:
-            if not alias.is_active:
-                alias.is_active = 1
-                db.session.commit()
-            return redirect(url_for('alias'))
-        else:
-            db.session.add(Alias(
-                p_name=form.p_name.data, p_vorname=form.p_forename.data,
-                a_name =form.a_name.data, a_vorname=form.a_forename.data,
-                user=current_user.username, time=datetime.now()
-            )); db.session.commit()
+        pn, pvn = form.p_name.data.strip(), form.p_forename.data.strip()
+        an, avn = form.a_name.data.strip(), form.a_forename.data.strip()
+        if (pn or pvn) and (an or avn):
+            alias = Alias.query.filter_by(
+                p_name=form.p_name.data.strip(), p_vorname=form.p_forename.data.strip(),
+                a_name=form.a_name.data.strip(), a_vorname=form.a_forename.data.strip()).first()
+            if alias:
+                if not alias.is_active:
+                    alias.is_active = 1
+                    db.session.commit()
+                return redirect(url_for('alias'))
+            else:
+                db.session.add(Alias(
+                    p_name=form.p_name.data, p_vorname=form.p_forename.data,
+                    a_name =form.a_name.data, a_vorname=form.a_forename.data,
+                    user=current_user.username, time=datetime.now()
+                )); db.session.commit()
 
-    for m in db.session.query(Alias.p_name, Alias.p_vorname).group_by(Alias.p_name, Alias.p_vorname).all():
+    q_alias = db.session.query(
+        Alias.p_name.label("nn"),
+        Alias.p_vorname.label("vn"),
+        Alias.a_name.label("ann"),
+        Alias.a_vorname.label("avn")
+    ).filter(Alias.is_active == 1)\
+     .group_by(Alias.a_name, Alias.a_vorname).subquery()
+
+    q_abs = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
+    q_emp = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
+    q_pa = db.session.query(
+        q_abs.c.id_person.label("id"),
+        Person.name.label("nn"),
+        Person.vorname.label("vn"),
+    ).join(Person, q_abs.c.id_person == Person.id)
+    q_pe = db.session.query(
+        q_emp.c.id_person.label("id"),
+        Person.name.label("nn"),
+        Person.vorname.label("vn"),
+    ).join(Person, q_emp.c.id_person == Person.id)
+    rel = union_all(q_pa, q_pe).alias("all")
+
+    r = db.session.query(
+        rel.c.nn.label("name"),
+        rel.c.vn.label("vorname"),
+        func.count().label("count")
+    ).group_by(rel.c.nn, rel.c.vn).subquery()
+
+    r2 = db.session.query(
+        rel.c.nn.label("name2"),
+        rel.c.vn.label("vorname2"),
+        func.count().label("count2")
+    ).group_by(rel.c.nn, rel.c.vn).subquery()
+
+    dat = db.session.query(
+        q_alias.c.nn.label("enn"),
+        q_alias.c.vn.label("evn"),
+        q_alias.c.ann.label("ann"),
+        q_alias.c.avn.label("avn"),
+        r.c.count,
+        r2.c.count2
+    ).outerjoin(r, and_(r.c.name == q_alias.c.nn, r.c.vorname == q_alias.c.vn)) \
+     .outerjoin(r2, and_(r2.c.name2 == q_alias.c.ann, r2.c.vorname2 == q_alias.c.avn)).subquery()
+
+    for m in db.session.query(dat.c.enn, dat.c.evn, dat.c.count).group_by(dat.c.enn, dat.c.evn).all():
         data = []
-        for a in Alias.query.filter_by(p_name=m.p_name, p_vorname=m.p_vorname, is_active=1).all():
-            data.append([a.a_name, a.a_vorname])
-        if len(data): p_data.append([m.p_name, m.p_vorname, data])
+        for a in db.session.query(dat.c.ann, dat.c.avn, dat.c.count2).filter(dat.c.enn == m[0], dat.c.evn == m[1]).all():
+            data.append([a[0], a[1], a[2]])
+        if len(data): p_data.append([m[0], m[1], data, m[2]])
 
     form.process()
     return render_template('person_aliases.html', title="Alias", form=form, vars={
@@ -1086,6 +1135,8 @@ def delete_alias_1(nn, vn):
 @app.route('/delete_alias_2/<nn>/<vn>', methods=['POST', 'GET'])
 @login_required
 def delete_alias_2(nn, vn):
+    if nn == "0": nn = ""
+    if vn == "0": vn = ""
     for a in Alias.query.filter_by(a_name=nn, a_vorname=vn, is_active=1).all(): a.is_active = 0
     db.session.commit()
     return redirect(url_for('alias'))
