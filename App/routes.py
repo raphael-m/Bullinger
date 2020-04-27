@@ -74,7 +74,7 @@ def print_user():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     BullingerDB.track(current_user.username, '/login', datetime.now())
-    if current_user.is_authenticated: return redirect(url_for('assignment'))
+    if current_user.is_authenticated: return redirect(url_for('quick_start'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
@@ -82,7 +82,7 @@ def login():
             flash('ungültige Login-Daten')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
-        return redirect(url_for('assignment'))
+        return redirect(url_for('quick_start'))
     return render_template('account_login.html', title='Anmelden', form=form, username=current_user.username)
 
 @app.route('/logout')
@@ -105,7 +105,7 @@ def register():
         db.session.commit()
         u = User.query.filter_by(username=form.username.data).first()
         login_user(u, remember=True)
-        return redirect(url_for('assignment'))
+        return redirect(url_for('quick_start'))
     return render_template('account_register.html', title='Registrieren', form=form, username=current_user.username)
 
 # Overviews
