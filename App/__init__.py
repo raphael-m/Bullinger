@@ -65,7 +65,7 @@ class AuthException(HTTPException):
 
 # no cyclic imports (!)
 from App import routes, models
-from App.models import Kartei, User, Datum, Person, Absender, Empfaenger, Autograph, Kopie, Sprache, Literatur,\
+from App.models import Kartei, User, Datum, Person, Alias, Absender, Empfaenger, Autograph, Kopie, Sprache, Literatur,\
     Gedruckt, Bemerkung, Notiz, Tracker
 
 # Admin
@@ -75,6 +75,7 @@ admin = Admin(app)
 admin.add_view(ModelView(User, db.session))
 admin.add_view(ModelView(Kartei, db.session))
 admin.add_view(ModelView(Person, db.session))
+admin.add_view(ModelView(Alias, db.session))
 admin.add_view(ModelView(Datum, db.session))
 admin.add_view(ModelView(Absender, db.session))
 admin.add_view(ModelView(Empfaenger, db.session))

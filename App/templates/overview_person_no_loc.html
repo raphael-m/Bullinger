@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>
+	> <a class="header_link" href="{{url_for('file')}}">Kartei</a>
+	/ Personen (ohne Ortschaften)
+	{% include "user_status.html" %}
+</h1>
+<div class="main_box">
+	<h2>Korrespondenten (ohne Ortschaften)</h2>
+	<div class="h2_section">
+		<p>
+			<span class="kw">Treffer:</span>
+			{{ vars["n_sender"] }} Absender und {{ vars["n_receiver"] }} Empfänger,
+			allgemein {{ vars["data"] | length }}.
+		</p>
+		<p>
+			&#8594; <a class="text_link" href="{{url_for('overview_persons')}}">Ortschaften berücksichtigen</a>
+		</p>
+		<p>
+			&#8594; <a class="text_link" href="{{url_for('alias')}}">Alias erfassen</a>
+		</p>
+		<br>
+        <span class="kw">Null-Werte:</span>
+        <ul>
+            <li>lat. "s.n." = "sine nomine" (ohne Namen)</li>
+            <li>lat. "s.l." = "sine loco" (ohne Ort)</li>
+        </ul>
+		<table class="js-sort-table paleBlueRows">
+			<thead class="my_table_head">
+				<tr class="my_table_head_row">
+					<th class="js-sort-string my_table_head_cell">Name</th>
+					<th class="js-sort-string my_table_head_cell">Vorname</th>
+					<th class="js-sort-number my_table_head_cell">gesendet</th>
+					<th class="js-sort-number my_table_head_cell">empfangen</th>
+					<th class="js-sort-number my_table_head_cell">Total</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for e in vars["data"] %}
+				<tr class="my_table_row">
+					<td class="my_table_cell"><a href="{{url_for('person_by_name', name=e[3])}}"> {{ e[0] }} </a></td>
+					<td class="my_table_cell"><a href="{{url_for('person_by_forename', forename=e[4])}}"> {{ e[1] }} </a></td>
+					<td class="my_table_cell">{{ e[2] }}</td>
+					<td class="my_table_cell">{{ e[3] }}</td>
+					<td class="my_table_cell">{{ e[4] }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{% endblock %}

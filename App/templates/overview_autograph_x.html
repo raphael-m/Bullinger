@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>
+    > <a class="header_link" href="{{url_for('file')}}">Kartei</a>
+    / <a class="header_link" href="{{url_for('overview_autograph')}}">Autograph</a>
+    / {{ vars["standort"] }}
+    {% include "user_status.html" %}
+</h1>
+
+<div class="main_box">
+
+	<div class="h2_box>">
+
+	<h2>{{ vars["standort"] }}</h2>
+	<div class="h2_section">
+
+		<p>Treffer: {{ vars["data"] | length }}</p>
+
+		<div class="parallel">
+            <table class="js-sort-table paleBlueRows">
+                <thead class="my_table_head">
+                    <tr class="my_table_head_row">
+                        <th class="js-sort-string my_table_head_cell">Brief ID</th>
+                        <th class="js-sort-number my_table_head_cell">Standort</th>
+                        <th class="js-sort-number my_table_head_cell">Signatur</th>
+                        <th class="js-sort-number my_table_head_cell">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for p in vars["data"] %}
+                    <tr class="my_table_row">
+                        <td class="my_table_cell">
+                            <a href="{{url_for('assignment', id_brief=p[0])}}">{{ p[0] }}</a>
+                        </td>
+                        <td class="my_table_cell">{{ p[1] }}</td>
+                        <td class="my_table_cell">{{ p[2] }}</td>
+                        <td class="my_table_cell">
+                            <a href="{{url_for('overview_state', state=p[3])}}">{{ p[3] }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+		</div>
+	</div>
+    </div>
+    <div class="clearing"></div>
+
+</div>
+
+{% endblock %}

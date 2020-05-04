@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>
+	> <a class="header_link" href="{{url_for('file')}}">Kartei</a>
+	/ <a class="header_link" href="{{url_for('overview_persons')}}">Personen</a>
+	/ {{ vars["name"] }}, {{ vars["forename"] }}, {{ vars["place"] }}
+	{% include "user_status.html" %}
+</h1>
+<div class="main_box">
+	<div class="h2_box">
+		<h2>Alle Karteikarten von/an
+			{{ vars["forename"] }} {{ vars["name"] }},
+			{{ vars["place"] }}
+		</h2>
+		<div class="h2_section">
+			<p> Treffer: {{ vars["table"] | length }} </p>
+
+			<table class="js-sort-table paleBlueRows">
+				<thead class="my_table_head">
+					<tr class="my_table_head_row">
+						<th class="js-sort-number my_table_head_cell">Brief ID</th>
+						<th class="js-sort-string my_table_head_cell">Name</th>
+						<th class="js-sort-string my_table_head_cell">Vorname</th>
+						<th class="js-sort-string my_table_head_cell">Ort</th>
+                        <th class="js-sort-string my_table_head_cell">Status</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for d in vars["table"] %}
+					<tr class="my_table_row">
+						<td class="my_table_cell">
+							<a href="{{url_for('assignment', id_brief=d[0])}}">{{ d[0] }}</a>
+						</td>
+						<td class="my_table_cell">
+						{% if vars["value"]|string() != d[1] %}
+							<a href="{{url_for('person_by_name', name=d[4])}}">{{ d[1] }}</a>
+						{% else %}
+							{{ d[1] }}
+						{% endif %}
+						</td>
+						<td class="my_table_cell">
+						{% if vars["value"]|string() != d[2] %}
+							<a href="{{url_for('person_by_forename', forename=d[5])}}">{{ d[2] }}</a>
+						{% else %}
+							{{ d[2] }}
+						{% endif %}
+						</td>
+						<td class="my_table_cell">
+						{% if vars["value"]|string() != d[3] %}
+							<a href="{{url_for('person_by_place', place=d[6])}}">{{ d[3] }}</a>
+						{% else %}
+							{{ d[3] }}
+						{% endif %}
+						</td>
+                        <td class="my_table_cell">
+						{% if vars["value"]|string() != d[7] %}
+							<a href="{{url_for('overview_state', state=d[7])}}">{{ d[7] }}</a>
+						{% else %}
+							{{ d[3] }}
+						{% endif %}
+						</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

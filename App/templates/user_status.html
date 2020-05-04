@@ -1,14 +1,16 @@
 
 {% block status %}
 
-<div id="status_info">
+<span id="status_info">
     {% if vars["username"]|string() == "Gast" %}
         nicht angemeldet
     {% else %}
-        {{ vars["username"] }} -
-        Änderungen: {{ vars["user_stats"][0] }},
-        abgeschlossen: {{ vars["user_stats"][1] }}
+        Angemeldet als {{ vars["username"] }}
+        <!--
+            Änderungen: {{ vars["user_stats"][0] }},
+            abgeschlossen: {{ vars["user_stats"][1] }}
+        -->
     {% endif %}
-</div>
+</span>
 
 {% endblock %}

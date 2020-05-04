@@ -12,13 +12,6 @@ body {
     box-sizing: border-box;
 }
 
-#head {
-    height: 60px;
-    color: white;
-    background: #123;
-    border-bottom: 1px solid white;
-}
-
 #main {
     min-width: 21cm;
 }
@@ -26,7 +19,7 @@ body {
 #foot {
     height: 2em;
     line-height: 2em;
-    font-size: 0.7em;
+    font-size: 0.8em;
     text-align: center;
     color: white;
     background: #123;
@@ -36,6 +29,11 @@ body {
 }
 
 #status_info { float: right; }
+
+.title_navigation {
+    float: right;
+    font-size: 1em;
+}
 
 /* key words */
 
@@ -55,4 +53,13 @@ body {
 
 .kw_highlight {
     color: yellow;
+}
+
+.kw_italic {
+    font-style: italic;
+}
+
+.navigate_l, .navigate_t, .navigate_b, .navigate_r {
+    float: left;
+    color: gray;
 }

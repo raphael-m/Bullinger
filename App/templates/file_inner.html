@@ -1,0 +1,35 @@
+{% block content %}
+
+<div class="h2_box>">
+    <h2>Kartei {% include "title_navigation.html" %}</h2>
+    <div class="h2_section">
+        <p> Übersichten zu den Karteikarten:</p>
+        <ul>
+            <li><a href="{{url_for('overview')}}">Datum</a></li>
+            <li>
+                <a href="{{url_for('overview_persons')}}">Personen</a>
+                (mit/<a href="{{url_for('correspondents')}}">ohne</a>
+                Ortschaften) und
+                <a href="{{url_for('alias')}}">Aliasse</a>
+            </li>
+            <li>
+                <a href="{{url_for('places')}}">Ortschaften</a>
+            </li>
+            <li><a href="{{url_for('overview_autocopy')}}">Autographen & Kopien</a>
+                (nur
+                    <a href="{{url_for('overview_autograph')}}">Autographen</a>
+                oder
+                    <a href="{{url_for('overview_copy')}}">Kopien</a>)
+            </li>
+            <li>
+                <a href="{{url_for('languages')}}">Sprachen</a>
+            </li>
+            <li>
+                <a href="{{url_for('overview_states')}}">Status</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="h2_separator"></div>
+
+{% endblock %}

@@ -163,10 +163,33 @@ class Person(db.Model):
         self.zeit = time
 
     def __repr__(self):
-        return '<Person {} {} {} {} {} {} {} {} {}>'.format(
-            self.id, self.name, self.vorname, self.ort, self.bemerkung, self.empfangen, self.gesendet,
-            self.anwender, self.zeit
+        return '<Person {} {} {} {} {} {}>'.format(
+            self.id, self.name, self.vorname, self.ort, self.anwender, self.zeit
         )
+
+
+class Alias(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    p_name = db.Column(db.String(LENGTH_M))
+    p_vorname = db.Column(db.String(LENGTH_M))
+    a_name = db.Column(db.String(LENGTH_M))
+    a_vorname = db.Column(db.String(LENGTH_M))
+    is_active = db.Column(db.Integer)
+    anwender = db.Column(db.String(LENGTH_S))
+    zeit = db.Column(db.String(LENGTH_S))
+
+    def __init__(self, p_name=None, p_vorname=None, a_name=None, a_vorname=None, is_active=1, user=None, time=datetime.now()):
+        self.p_name = p_name
+        self.p_vorname = p_vorname
+        self.a_name = a_name
+        self.a_vorname = a_vorname
+        self.is_active = is_active
+        self.anwender = user
+        self.zeit = time
+
+    def __repr__(self):
+        return '<Alias {} {}>'.format(self.p_id, self.a_id)
 
 
 class Autograph(db.Model):

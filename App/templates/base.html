@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
     <head>
         {% block head %}
         <meta charset="UTF-8">
@@ -19,9 +19,10 @@
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/table.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/header.css') }}">
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="{{ url_for('static', filename='js/sort-table.js') }}"></script>
         <script src="{{ url_for('static', filename='js/sort-table.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/page_scroll.js') }}"></script>
 
         <link href="https://fonts.googleapis.com/css?family=Noto+Serif&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
@@ -39,16 +40,19 @@
         <div class="bu-header">
             <div class="bu-header-logo">
                 <a href="/">
-                    <img src="{{url_for('static', filename='images/logo.svg')}}" width="266" />
+                    <img alt="UZH-Logo" src="{{url_for('static', filename='images/logo.svg')}}" width="266" />
                 </a>
             </div>
             <ul class="bu-header-menu">
                 <li><a {%- if request.path=="/" %} class="active"{% endif %} href="/">Allgemeines</a></li>
+                <!--
                 <li><a {%- if request.path.startswith("/overview") or request.path.startswith("/assignment") %} class="active"{% endif %} href="/overview">Jahre</a></li>
                 <li><a {%- if request.path=="/persons" %} class="active"{% endif %} href="/persons">Personen</a></li>
-                <li><a {%- if request.path=="/stats" %} class="active"{% endif %} href="/stats">Statistiken</a></li>
-                <li><a {%- if request.path=="/faq" %} class="active"{% endif %} href="/faq">FAQ</a></li>
-                <li><a href="/quick_start">Los!</a></li>
+                -->
+                <li><a {%- if request.path=="/Kartei/Personen" %} class="active"{% endif %} href="/Kartei">Personen</a></li>
+                <li><a {%- if request.path=="/Statistiken" %} class="active"{% endif %} href="/Statistiken">Statistiken</a></li>
+                <li><a {%- if request.path=="/FAQ" %} class="active"{% endif %} href="/FAQ">FAQ</a></li>
+                <li><a href="/Kartei/Karteikarten/Zufall">Los!</a></li>
             </ul>
             <div class="bu-header-account">
                 <div class="bu-header-account-initials">

@@ -31,3 +31,9 @@ class Config(object):
 
     BASIC_AUTH_USERNAME = 'Admin'  # fake
     BASIC_AUTH_PASSWORD = '_whatever0987!'  # leads to nowhere
+
+    # correspondence plot
+    BAR_WIDTH = 0.5
+    OFFSET = 5
+
+    URL_ESC = "#&&"

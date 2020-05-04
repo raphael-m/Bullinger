@@ -4,11 +4,11 @@
 source venv/bin/activate
 rm App/static/images/plots/*.png
 
-# git pull || git reset --hard origin/master
-git pull
+git pull || git reset --hard origin/master
+# git pull
 
-pip freeze > requirements.txt
-pip install -r requirements.txt
+# pip freeze > requirements.txt
+# pip install -r requirements.txt
 
 pkill gunicorn
 

@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>
+	> <a class="header_link" href="{{url_for('file')}}">Kartei</a>
+    / <a class="header_link" href="{{url_for('overview_persons')}}">Personen</a>
+    / Alias
+	{% include "user_status.html" %}
+</h1>
+
+<div class="main_box">
+
+	<div class="h2_box>">
+
+		<h2>Namen und Aliasse</h2>
+		<div class="h2_section">
+
+            <p> Die folgende Tabelle enthält Namensentsprechungen aus den Karteikarten zu den Briefen von und an
+                Heinrich Bullinger. Die Tabelle dient uns dazu, Schreiber eindeutig zu identifizieren, die mit
+                unterschiedlichen Namensvarianten in der Datenbank vorkommen.
+            </p>
+            <br>
+            <p class="kw">Namensvarianten erfassen:</p>
+
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+
+                <div class="p_container">
+                  <div class="p_inner">
+                    <div class="p_child">
+                        <!-- username -->
+                        <div class="person_name_input">{{ form.p_name(size=32, placeholder="Nachname (häufigste Variante)") }}</div>
+                        <div class="error_msg">
+                            {% for error in form.p_name.errors %}
+                            <div class="error_notification"><span>[{{ error }}]</span></div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="p_child">
+                        <!-- forename -->
+                        <div class="person_forename_input">{{ form.p_forename(size=32, placeholder="Vorname (häufigste Variante)") }}</div>
+                        <div class="error_msg">
+                            {% for error in form.p_forename.errors %}
+                            <div class="error_notification"><span>[{{ error }}]</span></div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="p_container">
+                  <div class="p_inner">
+                    <div class="p_child">
+                        <!-- username -->
+                        <div class="person_name_input">{{ form.a_name(size=32, placeholder="Nachname (Alias)") }}</div>
+                        <div class="error_msg">
+                            {% for error in form.p_name.errors %}
+                            <div class="error_notification"><span>[{{ error }}]</span></div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="p_child">
+                        <!-- forename -->
+                        <div class="person_forename_input">{{ form.a_forename(size=32, placeholder="Vorname (Alias)") }}</div>
+                        <div class="error_msg">
+                            {% for error in form.p_forename.errors %}
+                            <div class="error_notification"><span>[{{ error }}]</span></div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                  </div>
+                    <div>
+                        {{ form.submit() }}
+                        <span class="reset_alias" style="color: blue">(Zurücksetzen)</span>
+                    </div>
+                </div>
+
+            </form>
+
+            <table class="js-sort-table paleBlueRows">
+				<thead class="my_table_head">
+					<tr class="my_table_head_row">
+						<th class="js-sort-number my_table_head_cell">NAME</th>
+						<th class="js-sort-number my_table_head_cell">VORNAME</th>
+                        <th class="js-sort-number my_table_head_cell">FREQUENZ</th>
+                        <th class="js-sort-number my_table_head_cell">AKTION</th>
+					</tr>
+				</thead>
+            {% for b in vars["primary_names"] %}
+				<thead class="my_table_head">
+					<tr class="my_table_head_row">
+						<th class="js-sort-number my_table_head_cell c0">{{ b[0] }}</th>
+						<th class="js-sort-number my_table_head_cell c1">{{ b[1] }}</th>
+                        <th class="js-sort-number my_table_head_cell">{{ b[3] }}</th>
+                        <th class="js-sort-number my_table_head_cell">
+                            <span class="name_selector" style="color: #32cd32">[+]</span>
+                        </th>
+					</tr>
+				</thead>
+                {% for d in b[2] %}
+                <tbody>
+                    <tr class="my_table_row">
+                        <td class="my_table_cell c0">{{ d[0] }}</td>
+                        <td class="my_table_cell c1">{{ d[1] }}</td>
+                        <td class="my_table_cell">{{ d[2] }}</td>
+                        <td class="my_table_cell">
+                        {% if d[0] and d[1] %}
+                            <a class="delete_selector" id="{{url_for('delete_alias_2', nn=d[0], vn=d[1])}}">
+                        {% elif d[0] %}
+                            <a class="delete_selector" id="{{url_for('delete_alias_2', nn=d[0], vn=0)}}">
+                        {% elif d[1] %}
+                            <a class="delete_selector" id="{{url_for('delete_alias_2', nn=0, vn=d[1])}}">
+                        {% else %}
+                            <a class="delete_selector" id="{{url_for('delete_alias_2', nn=0, vn=0)}}">
+                        {% endif %}
+                                <span style="color:red">&#x2717;</span>
+                            </a>
+                        </td>
+                    </tr>
+				</tbody>
+                {% endfor %}
+            {% endfor %}
+			</table>
+
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}

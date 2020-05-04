@@ -6,15 +6,16 @@
 </p>
 <p>
     Wir sind zu
-    <span class="kw">{{ vars["stats"]["ungültig"][1] + vars["stats"]["abgeschlossen"][1]}}%</span>
+    <span class="kw">{{ (vars["stats"]["ungültig"][1] + vars["stats"]["abgeschlossen"][1])|round(2) }}%</span>
     fertig!
 </p>
 
-{% if not vars["page_index"] %}
+{% if not vars["page_url"] == '/stats' %}
 <p> &#8594; <a class="text_link" href="{{url_for('stats')}}">Statistiken</a></p>
 {% endif %}
 
-<img class="parallel" src="{{url_for('static', filename=vars['url_plot'])}}"/>
+<img class="parallel" alt="Statusübersicht" src="{{url_for('static', filename='images/plots/overview_'+vars['file_id']+'.png')}}"/>
+
 <div class="parallel">
     <table class="js-sort-table paleBlueRows">
         <thead class="my_table_head">
@@ -27,13 +28,23 @@
         <tbody>
         {% for key in vars["stats"] %}
             <tr class="my_table_row">
-                <td class="my_table_cell">{{ key }}</td>
+                <td class="my_table_cell">
+                    <a href="{{url_for('overview_state', state=key)}}"> {{ key }} </a>
+                </td>
                 <td class="my_table_cell">{{ vars["stats"][key][0] }}</td>
-                <td class="my_table_cell">{{ vars["stats"][key][1] }}</td>
+                <td class="my_table_cell">{{ (vars["stats"][key][1])|round(2) }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+
+    <p><span class="kw">Beschreibung:</span></p>
+    <ul>
+        <li>offen: un- oder nur teilweise bearbeitet</li>
+        <li>unklar: Schwierigkeiten</li>
+        <li>ungültig: Ausschuss</li>
+        <li>abgeschlossen: erfolgreich digitalisiert</li>
+    </ul>
 </div>
 <div class="clearing"></div>
 {% endblock %}

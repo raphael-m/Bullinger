@@ -8,8 +8,8 @@ import statistics
 from Tools.BullingerData import *
 import matplotlib.pyplot as plt
 import numpy as np
+from config import *
 plt.rcdefaults()
-
 
 # colors ('black'/'b', 'white'/'w')
 cb0, cb1, cb2, cb3 = 'royalblue', 'cornflowerblue', 'dodgerblue', 'navy'  # 'b'
@@ -21,6 +21,84 @@ cga, cgb, cgc, cgd = 'slategray', 'dimgrey', 'darkgrey', 'lightgray'  # 'grey'/'
 # More: https://i.stack.imgur.com/lFZum.png
 
 ROUND = 0
+
+
+class BullingerPlots:
+
+    @staticmethod  # Histogram
+    def create_plot_correspondence(file_id, sx, sy, rx, ry, x_ticks, bar_width, t, offset, from_to):
+        fig = plt.figure()
+        ax = plt.axes()
+        ax.grid(b=True, which='minor', axis='both', color='#888888', linestyle=':', alpha=0.2)
+        ax.grid(b=True, which='major', axis='both', color='#000000', linestyle=':', alpha=0.2)
+        avg_s, avg_r = sum(sy)/t, sum(ry)/t
+        plt.axhline(y=avg_r, color='g', linestyle='--', alpha=0.4)  # avg
+        plt.axhline(y=avg_s, color='b', linestyle='--', alpha=0.4)
+        if x_ticks[-1] == Config.SD:
+            if len(sx) > 0: plt.axvline(x=sx[-1]-offset/4, color="black")
+        plt.bar(sx, sy, width=bar_width, align='center', alpha=0.8, color='blue', label="gesendet ("+str(round(avg_s, 2))+"/Jahr)")
+        plt.bar(rx, ry, width=bar_width, align='center', alpha=0.8, color='lime', label="empfangen ("+str(round(avg_r, 2))+"/Jahr)")
+        plt.title("Bullingers Korrespondenzen\n \"Heinrich Bullinger\" "+from_to)
+        plt.xlabel("Zeit [Jahre]")
+        plt.ylabel('#Briefe')
+        plt.xticks(sx, x_ticks)
+        plt.legend()  # loc="upper left"
+        fig.savefig('App/static/images/plots/correspondence_' + file_id + '.png')
+        plt.close()
+
+    @staticmethod
+    def create_plot_correspondence_year(file_id, sx, sy, rx, ry, x_ticks, bar_width):
+        fig = plt.figure()
+        ax = plt.axes()
+        ax.grid(b=True, which='minor', axis='both', color='#888888', linestyle=':', alpha=0.2)
+        ax.grid(b=True, which='major', axis='both', color='#000000', linestyle=':', alpha=0.2)
+        avg_s, avg_r = sum(sy)/12, sum(ry)/12
+        plt.axhline(y=avg_r, color='g', linestyle='--', alpha=0.4)  # avg
+        plt.axhline(y=avg_s, color='b', linestyle='--', alpha=0.4)
+        if len(rx) > 12: plt.axvline(x=13, color="black")
+        plt.bar(sx, sy, width=bar_width, align='center', alpha=0.8, color='blue', label="gesendet ("+str(round(avg_s, 2))+"/Monat)")
+        plt.bar(rx, ry, width=bar_width, align='center', alpha=0.8, color='lime', label="empfangen ("+str(round(avg_r, 2))+"/Monat)")
+        plt.title("Bullingers Korrespondenzen\n \"Heinrich Bullinger\" "+"(Januar - Dezember)")
+        plt.xlabel("Zeit [Monate]")
+        plt.ylabel('#Briefe')
+        plt.xticks(sx, x_ticks)
+        plt.legend()  # loc="upper left"
+        fig.savefig('App/static/images/plots/correspondence_' + file_id + '.png')
+        plt.close()
+
+    @staticmethod
+    def create_plot_correspondence_month(file_id, sx, sy, rx, ry, x_ticks, bar_width, month, year):
+        fig = plt.figure()
+        ax = plt.axes()
+        ax.grid(b=True, which='minor', axis='both', color='#888888', linestyle=':', alpha=0.2)
+        ax.grid(b=True, which='major', axis='both', color='#000000', linestyle=':', alpha=0.2)
+        avg_s, avg_r = sum(sy)/31, sum(ry)/31
+        plt.axhline(y=avg_r, color='g', linestyle='--', alpha=0.4)  # avg
+        plt.axhline(y=avg_s, color='b', linestyle='--', alpha=0.4)
+        if len(rx) > 31: plt.axvline(x=33, color="black")
+        plt.bar(sx, sy, width=bar_width, align='center', alpha=0.8, color='blue', label="gesendet ("+str(round(avg_s, 2))+"/Monat)")
+        plt.bar(rx, ry, width=bar_width, align='center', alpha=0.8, color='lime', label="empfangen ("+str(round(avg_r, 2))+"/Monat)")
+        plt.title("Bullingers Korrespondenzen\n \"Heinrich Bullinger\" "+"("+month+" "+str(year)+")")
+        plt.xlabel("Zeit [Tage]")
+        plt.ylabel('#Briefe')
+        plt.xticks(sx, x_ticks)
+        plt.legend()  # loc="upper left"
+        fig.savefig('App/static/images/plots/correspondence_' + file_id + '.png')
+        plt.close()
+
+    @staticmethod  # Pie
+    def create_plot_overview_stats(file_id, sizes):
+        labels = ["offen", "abgeschlossen", "unklar", "ungültig"]
+        colors = ["navy", "forestgreen", "orange", "red"]
+        fig = plt.figure()
+        explode = (0, 0.2, 0, 0)
+        patches, texts = plt.pie(sizes, explode=explode, colors=colors, shadow=True, startangle=90)
+        plt.legend(patches, labels, loc="upper right")
+        plt.axis('equal')
+        plt.tight_layout()
+        fig.savefig('App/static/images/plots/overview_'+file_id+'.png')
+        plt.close()
+        return 'images/plots/overview_'+file_id+'.png'
 
 
 class ScatterPlot:
@@ -113,19 +191,3 @@ class BarChart:
         plt.ylabel('Anzahl Karteikarten')
         fig.savefig('App/static/images/plots/overview_' + file_id + '.png')
         plt.close()
-
-
-class PieChart:
-
-    @staticmethod
-    def create_plot_overview_stats(file_id, sizes, labels, colors):
-        fig = plt.figure()
-        patches, texts = plt.pie(sizes, colors=colors, shadow=True, startangle=90)
-        plt.legend(patches, labels, loc="best")
-        plt.axis('equal')
-        plt.tight_layout()
-        fig.savefig('App/static/images/plots/overview_'+file_id+'.png')
-        plt.close()
-        return 'images/plots/overview_'+file_id+'.png'
-
-

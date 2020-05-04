@@ -42,6 +42,12 @@ table.paleBlueRows tfoot td {
     font-size: 14px;
 }
 
+.t_row, .t_cell {}
+
+.t_row_sums, .t_cell_sums {
+
+}
+
 .comment_user,
 .comment_date,
 .comment_time {

@@ -4,14 +4,14 @@
 
 <h1>
     >
-    KoKoS-Bullinger (Kollaboratives-Korrektur-System)
+    Kollaboratives Korrektur System für Bullingers Briefwechsel
     {% include "user_status.html" %}
 </h1>
 
 <div class="main_box">
 
     <div class="h2_box">
-        <h2>Worum geht es?</h2>
+        <h2>Worum geht es? {% include "title_navigation_tr.html" %}</h2>
         <div class="h2_section">
             <div class="parallel intro_left">
                 <div class="container">
@@ -34,7 +34,7 @@
                     </p>
                     <p>
                         Die handschriftlichen Originale liegen mehrheitlich im Staatsarchiv Zürich und in der
-                        Zentralbibliothek Zürich. Ein Teil der Briefe (1524 bis 1547) ist bereits editiert. Ziel unseres
+                        Zentralbibliothek Zürich. Ein Teil der Briefe (1524 bis 1547) ist bereits ediert. Ziel unseres
                         Projektes "Bullinger digital" ist es, die übrigen Briefe digital zu erschliessen und über das
                         Internet zugänglich zu machen. Dazu haben wir in einem ersten Schritt eine Datenbank aufgebaut,
                         in welcher zu jedem Brief die wesentlichen Meta-Daten wie Absender, Empfänger, Ort und
@@ -59,14 +59,14 @@
     <div class="h2_separator"></div>
 
     <div class="h2_box">
-        <h2>Projektziele</h2>
+        <h2>Projektziele {% include "title_navigation.html" %}</h2>
         <div class="h2_section">
             <ul>
                 <li><span class="kw">Aktuell: Aufbau eines Karteisystems zum Bullinger-Briefwechsel</span>
                     <a class="text_link" href="https://de.wikipedia.org/wiki/Citizen_Science">(Citizen Science)</a>
                 </li>
                 <li>Ausbau der Datenbank mit allen Dokumenten aus dem Bullinger-Briefwechsel</li>
-                <li>automatische Erschliessung der noch nicht editieren Briefe (Scannen, Handschriften-OCR)</li>
+                <li>automatische Erschliessung der noch nicht edierten Briefe (Scannen, Handschriften-OCR)</li>
                 <li>Aufbau eines massgeschneiderten Systems zur maschinellen Übersetzung Latein &#8594; Deutsch</li>
                 <li>Modernisierung und Erweiterung des Suchsystems</li>
             </ul>
@@ -74,28 +74,80 @@
     </div>
     <div class="h2_separator"></div>
 
+
+    {# include "file_inner.html" #}
+
+
     <div class="h2_box">
-        <h2>Links</h2>
+        <h2>Links {% include "title_navigation.html" %}</h2>
         <div class="h2_section">
-            <p> <span class="kw">Hintergrund-Informationen</span> zum bisherigen Editions-Projekt finden Sie
+            <p>
+                <span class="kw">Hintergrund-Informationen</span> zum bisherigen Editions-Projekt finden Sie
                 <a class="text_link" href="https://www.irg.uzh.ch/de/bullinger-edition/briefwechsel.html">hier</a>.
-                Rund 3000 Briefe sind schon transkribiert und editiert, und können online durchsucht werden.
-                Das Suchsystem für die bisher editieren <span class="kw">Briefe</span> finden Sie
+                Rund 3000 Briefe sind schon transkribiert und ediert, und können online durchsucht werden.
+                Das Suchsystem für die bisher edierten <span class="kw">Briefe</span> finden Sie
                 <a class="text_link" href="http://teoirgsed.uzh.ch/">hier</a>.
             </p>
+            <div class="textblock">
+                <p><span class="kw">Berichterstattungen</span></p>
+                <ul class="items">
+                    <li>
+                        <a href="https://www.uzhfoundation.ch/de/unsere-themen/weitere-projekte/bullinger-briefe">
+                            UZH Foundation</a>
+                        (Die Stiftung der UZH)
+                        - <span class="kw_italic">Die Bullingerbriefe: Zürichs Erbe ins digitale Zeitalter bringen</span>
+                    </li>
+                    <li>
+                        <a href="https://www.inside-it.ch/de/post/digitalisierungs-projekt-der-uzh-sucht-freiwillige-20200323">
+                            Inside-IT</a>
+                        (Das Portal für IT-Verantwortliche)
+                        - <span class="kw_italic">Digitalisierungs-Projekt der Uni Zürich sucht Freiwillige</span>
+                    </li>
+                    <li>
+                        <a href="https://infoclio.ch/de/citizen-science-projekt-bullinger-digital%E2%80%99-%E2%80%93-jetzt-mitmachen">
+                            Infoclio</a>
+                        (Das Schweizer Fachportal für die Geschichtswissenschaften)
+                        - <span class="kw_italic">Citizen Science-Projekt "Bullinger Digital"</span>
+                    </li>
+                    <li>
+                        <a href="https://www.schweiz-forscht.ch/de/citizen-science-projekte/item/460-korrekturkampagne-bullinger-digital">
+                            Schweiz Forscht</a>
+                        - <span class="kw_italic">Korrekturkampagne "Bullinger Digital"</span>
+                    </li>
+                    <li>
+                        <a href="https://youngscience.at/de/angebote/projekte-zum-mitforschen/mitforschen-von-daheim/">
+                            Young Science Zentrum</a>
+                        - <span class="kw_italic">Bullinger digital - korrigiere und ergänze den Briefwechsel</span>
+                    </li>
+                    <li>
+                        <a href="https://www.zhref.ch/intern/kommunikation/notabene/downloads/zhref-notabene-3-2020.pdf">
+                            notabene</a>
+                        (Reformierte Kirche Kanton Zürich)
+                        - <span class="kw_italic">Freiwillige helfen mit, Briefe aus dem 16. Jahrhundert der Öffentlichkeit zugänglich zu machen</span>
+                    </li>
+                    <li>
+                        <a href="https://reformiert.info/de/korrekturkampagne-lbullinger-digitalr-18801.html">
+                            Reformiert.
+                        </a>
+                        - <span class="kw_italic">Korrekturkampagne «Bullinger digital» (soviel Sie mögen)</span>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
     <div class="h2_separator"></div>
 
     <div class="h2_box">
-        <h2>Kontakt</h2>
+        <h2>Kontakt {% include "title_navigation_lt.html" %}</h2>
         <div class="h2_section">
-            <p>
-                <span class="kw">Institut für Schweizerische Reformationsgeschichte</span>
-                (Theologische Fakultät der Universität Zürich),
-                Kirchgasse 9,
-                Zürich
-                <ul>
+            <div class="textblock">
+                <p>
+                    <span class="kw">Institut für Schweizerische Reformationsgeschichte</span>
+                    (Theologische Fakultät der Universität Zürich),
+                    Kirchgasse 9,
+                    Zürich
+                </p>
+                <ul class="items">
                     <li>
                         <a href="mailto:bodenmann.reinhard@theol.uzh.ch">Dr. habil. Reinhard Bodenmann</a>
                         (Leiter der Heinrich Bullinger-Briefwechseledition)
@@ -105,13 +157,15 @@
                         (Wissenschaftliche Mitarbeiterin an der Heinrich-Bullinger-Briefwechseledition)
                     </li>
                 </ul>
-            </p>
-            <p>
-                <span class="kw">Institut für Computerlinguistik</span>
-                (Philosophische Fakultät der Universität Zürich),
-                Andreasstrasse 15,
-                Zürich
-                <ul>
+            </div>
+            <div class="textblock">
+                <p>
+                    <span class="kw">Institut für Computerlinguistik</span>
+                    (Philosophische Fakultät der Universität Zürich),
+                    Andreasstrasse 15,
+                    Zürich
+                </p>
+                <ul class="items">
                     <li>
                         <a href="mailto:volk@cl.uzh.ch">Prof. Dr. Martin Volk</a>
                         (Projektleiter)
@@ -129,27 +183,31 @@
                         (Webdesigner)
                     </li>
                 </ul>
-            </p>
-            <p>
-                Bei inhaltlichen Fragen oder Unklarheiten beim Kontrollieren der Datenbank-Einträge
-                kontaktieren Sie bitte die
-                <a href="mailto:bullinger-digital@protonmail.com">Projektkoordination</a>.
-                Bei technischen Fragen zum Korrektur-System kontaktieren Sie bitte den
-                <a href="mailto:bernard.schroffenegger@uzh.ch">Administrator</a>.
-                Für allgemeine Bemerkungen und Hinweise steht auch ein
-                <a href="/guestbook">Gästebuch</a>
-                zur Verfügung.
-            </p>
+            </div>
+            <div class="textblock">
+                <p>
+                    Bei inhaltlichen Fragen oder Unklarheiten beim Kontrollieren der Datenbank-Einträge
+                    kontaktieren Sie bitte die
+                    <a href="mailto:bullinger-digital@protonmail.com">Projektkoordination</a>,
+                    bei technischen Fragen zum Korrektur-System den
+                    <a href="mailto:bernard.schroffenegger@uzh.ch">Admin</a>.
+                    Für allgemeine Bemerkungen und Hinweise steht auch ein
+                    <a href="/Kommentare">Gästebuch</a>
+                    zur Verfügung.
+                </p>
+            </div>
         </div>
     </div>
     <div class="h2_separator"></div>
 </div>
 
+<!--
 <div class="page_views">
     Seitenaufruf
     #{{ vars["num_page_visits"] }}
     seit dem {{ vars["since"] }}
     ({{ vars["date"] }})
 </div>
+-->
 
 {% endblock %}

@@ -10,75 +10,43 @@ from App import app, login_manager
 from App.forms import *
 from flask import render_template, flash, redirect, url_for, make_response, jsonify, request
 from flask_login import current_user, login_user, login_required, logout_user
-from sqlalchemy import desc
+from sqlalchemy import desc, func, asc, union_all, and_
 from Tools.BullingerDB import BullingerDB
-from Tools.Dictionaries import CountDict
+from Tools.Dictionaries import CountDict, ListDict
 from collections import defaultdict
 from App.models import *
 from config import Config
 from Tools.NGrams import NGrams
+from Tools.Plots import BullingerPlots
 
 import requests
 import re
 import time
 
 APP_NAME = "KoKoS-Bullinger"
-ADMINS = []
 
 @app.errorhandler(404)
 def not_found(error):
-    # BullingerDB.track(current_user.username, '/not_found', datetime.now())
-    # print(error)
-    return make_response(jsonify({'error': 'Not found'}), 404)
-
-def is_admin():
-    if current_user.username == 'Admin': return True
-    else: return False
+    return make_response(jsonify({'error': 'Dieser Link existiert nicht.'}), 404)
 
 @login_manager.user_loader
 def load_user(id_user):
     return User.query.get(int(id_user))
 
-"""
-@app.route('/admin', methods=['POST', 'GET'])
-@login_required
-def admin():
-    if is_admin(): return render_template('admin.html', title="Admin")
-    return redirect(url_for('index', next=request.url))
-"""
+def is_admin():
+    if current_user.username == 'Admin': return True
+    else: return False
 
-@app.route('/', methods=['POST', 'GET'])
-@app.route('/home', methods=['POST', 'GET'])
-@app.route('/index', methods=['POST', 'GET'])
+@app.route('/', methods=['GET'])
+@app.route('/home', methods=['GET'])
+@app.route('/index', methods=['GET'])
+@app.route('/KoKoS', methods=['GET'])
 def index():
-    """ start page """
     BullingerDB.track(current_user.username, '/home', datetime.now())
-    # letters_sent, letters_received = BullingerDB.get_bullinger_number_of_letters()
-    n, t0, date = BullingerDB.get_number_of_page_visits()
     return render_template("index.html", title=APP_NAME, vars={
         "username": current_user.username,
         "user_stats": BullingerDB.get_user_stats(current_user.username),
-        # "num_sent": letters_sent,
-        # "num_received": letters_received,
-        "num_page_visits": n,
-        "since": t0,
-        "date": date,
     })
-
-"""
-@app.route('/admin', methods=['POST', 'GET'])
-@login_required
-def admin():
-    return redirect(url_for('index'))
-"""
-@login_required
-@app.route('/admin/setup', methods=['POST', 'GET'])
-def setup():
-    if is_admin():
-        # BullingerDB(db.session).setup("Karteikarten/HBBW@out")  # ~1h
-        return redirect(url_for('index'))
-    # logout_user()
-    return redirect(url_for('login', next=request.url))
 
 @app.route('/admin/delete_user/<username>', methods=['POST', 'GET'])
 @login_required
@@ -99,15 +67,14 @@ def print_user():
                 f.write(" - ".join([u.username, u.e_mail, u.password_hash])+'\n')
         with open("Data/user_addresses.txt", 'w') as f:
             for u in users:
-                f.write(u.e_mail+', ')
+                if "DELETED" not in u.e_mail: f.write(u.e_mail+', ')
         return redirect(url_for('admin.index'))
     return redirect(url_for('login', next=request.url))
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     BullingerDB.track(current_user.username, '/login', datetime.now())
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
+    if current_user.is_authenticated: return redirect(url_for('quick_start'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
@@ -115,7 +82,7 @@ def login():
             flash('ungültige Login-Daten')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
-        return redirect(url_for('index'))
+        return redirect(url_for('quick_start'))
     return render_template('account_login.html', title='Anmelden', form=form, username=current_user.username)
 
 @app.route('/logout')
@@ -138,94 +105,100 @@ def register():
         db.session.commit()
         u = User.query.filter_by(username=form.username.data).first()
         login_user(u, remember=True)
-        return redirect(url_for('index'))
+        return redirect(url_for('quick_start'))
     return render_template('account_register.html', title='Registrieren', form=form, username=current_user.username)
 
 # Overviews
-# - year
 @app.route('/overview', methods=['POST', 'GET'])
+@app.route('/Kartei/Datum', methods=['POST', 'GET'])
 def overview():
-    BullingerDB.track(current_user.username, '/overview', datetime.now())
-    data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(None)
-    persons = BullingerDB.get_persons_by_var(None, None)
+    BullingerDB.track(current_user.username, '/Kartei/Datum', datetime.now())
+    file_id = BullingerDB.create_new_timestamp_str()
+    BullingerDB.create_correspondence_plot(file_id)
+    data, sums = BullingerDB.get_data_overview_years()
     return render_template(
-        'overview.html',
+        'overview_years.html',
         title="Übersicht",
         vars={
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
-            "table": data_overview,
-            "persons": persons,
-            "hits": len(persons),
-            "table_language": BullingerDB.get_language_stats(),
+            "table": data,
+            "sums": sums,
+            "file_id": file_id
         }
     )
 
-
-@app.route('/persons', methods=['POST', 'GET'])
-def overview_persons():
-    BullingerDB.track(current_user.username, '/persons', datetime.now())
-    persons = BullingerDB.get_persons_by_var(None, None)
-    return render_template(
-        'overview_persons.html',
-        title="Übersicht",
-        vars={
-            "username": current_user.username,
-            "user_stats": BullingerDB.get_user_stats(current_user.username),
-            "persons": persons,
-            "hits": len(persons),
-        }
-    )
-
-
-# - months
 @app.route('/overview_year/<year>', methods=['POST', 'GET'])
+@app.route('/Kartei/Datum/<year>', methods=['POST', 'GET'])
 def overview_year(year):
-    BullingerDB.track(current_user.username, '/overview/'+year, datetime.now())
-    data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(year)
+    BullingerDB.track(current_user.username, '/Kartei/Datum/'+year, datetime.now())
+    file_id = BullingerDB.create_new_timestamp_str()
+    data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(year, file_id)
+    data, co, cu, ci, ca = BullingerDB.get_data_overview_month_of(year)
+    data_stats = BullingerDB.get_status_evaluation(co, ca, cu, ci)
+    file_id = str(int(time.time()))
+    BullingerPlots.create_plot_overview_stats(file_id, [co, ca, cu, ci])
+    BullingerDB.create_correspondence_plot_of_year(file_id, int(year) if year != Config.SD else None)
     return render_template('overview_year.html', title="Übersicht", vars={
         "username": current_user.username,
         "user_stats": BullingerDB.get_user_stats(current_user.username),
         "year": year,
-        "table": data_overview,
-        "url_plot": plot_url,
-        "num_of_cards": num_of_cards,
-        "stats": data_percentages,
+        "table": data,
+        "sums": [co, cu, ci, ca],
+        "stats": data_stats[1],
+        "file_id": file_id,
         "status_description": ' '.join([str(num_of_cards), 'Karteikarten vom Jahr', str(year)+':'])
     })
 
-# -days
 @app.route('/overview_month/<year>/<month>', methods=['POST', 'GET'])
+@app.route('/Kartei/Datum/<year>/<month>', methods=['POST', 'GET'])
 def overview_month(year, month):
-    BullingerDB.track(current_user.username, '/'.join(['', str(month), str(year)]), datetime.now())
-    if month == Config.SD: month = 0
-    data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview_month(year, month)
-    month = BullingerDB.convert_month_to_str(month)
-    return render_template('overview_month.html', title="Monatsübersicht", vars={
-        "username": current_user.username,
-        "user_stats": BullingerDB.get_user_stats(current_user.username),
-        "year": year,
-        "month": month if month else Config.SD,
-        "table": data_overview,
-        "url_plot": plot_url,
-        "num_of_cards": num_of_cards,
-        "stats": data_percentages,
-        "status_description": ' '.join([
-            str(num_of_cards)+' Karteikarten' if num_of_cards>1 else 'einzigen Karteikarte',
-            'vom' if month != Config.SD else 'mit der Angabe',
-            month if month else Config.SD, year+':'
-        ])
-    })
-
-@app.route('/overview/<name>/<forename>/<place>', methods=['GET'])
-def overview_cards_of_person(name, forename, place):
-    BullingerDB.track(current_user.username, '/overview/'+name, datetime.now())
-    data = BullingerDB.get_overview_person(
-        None if name == Config.SN else name,
-        None if forename == Config.SN else forename,
-        None if place == Config.SL else place)
+    BullingerDB.track(current_user.username, "/Kartei/Datum/"+year+"/"+month, datetime.now())
+    data, co, ca, cu, ci = BullingerDB.get_data_overview_month(year, month)
+    data_stats = BullingerDB.get_status_evaluation(co, ca, cu, ci)
+    file_id = str(int(time.time()))
+    BullingerPlots.create_plot_overview_stats(file_id, [co, ca, cu, ci])
+    BullingerDB.create_correspondence_plot_of_month(file_id, year, month)
     return render_template(
-        "overview_general_cards.html",
+        'overview_month.html',
+        title="Monatsübersicht",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "year": year,
+            "month": month,
+            "table": data,
+            "stats": data_stats[1],
+            "file_id": file_id,
+            "status_description": ' '.join([
+                str(len(data))+' Karteikarten' if len(data) > 1 else 'einzigen Karteikarte',
+                'vom' if month != Config.SD else 'mit der Angabe',
+                month if month else Config.SD, year + ':'
+            ])
+        }
+    )
+
+
+@app.route('/Kartei/Personen', methods=['POST', 'GET'])
+def overview_persons():
+    BullingerDB.track(current_user.username, '/Kartei/Personen', datetime.now())
+    persons = BullingerDB.get_persons_by_var(None, None, get_links=True)
+    return render_template(
+        'overview_persons.html',
+        title="Korrespondenten",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "persons": persons,
+        }
+    )
+
+@app.route('/Kartei/Personen/<name>/<forename>/<place>', methods=['GET'])
+def overview_cards_of_person(name, forename, place):
+    name, forename, place = name.replace("#&&", "/"), forename.replace("#&&", "/"), place.replace("#&&", "/")
+    BullingerDB.track(current_user.username, '/Kartei/Personen/'+name+"/"+forename+"/"+place, datetime.now())
+    return render_template(
+        "overview_person.html",
         title=name + ', ' + forename + ', ' + place,
         vars={
             "username": current_user.username,
@@ -233,117 +206,416 @@ def overview_cards_of_person(name, forename, place):
             "name": name,
             "forename": forename,
             "place": place,
-            "table": data,
-            "hits": len(data),
+            "table": BullingerDB.get_overview_person(name, forename, place, get_links=True),
         }
     )
 
-@app.route('/overview/<lang>', methods=['GET'])
+@app.route('/Kartei/Sprachen', methods=['GET'])
+def languages():
+    BullingerDB.track(current_user.username, '/languages', datetime.now())
+    id_file = str(int(time.time()))
+    stats_languages = BullingerDB.get_language_stats()
+    BullingerDB.create_plot_lang(stats_languages, id_file)
+    return render_template(
+        "overview_languages.html",
+        title="Sprachen",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "file_id": id_file,
+            "lang_stats": stats_languages,
+        }
+    )
+
+@app.route('/Kartei/Sprachen/<lang>', methods=['GET'])
 def overview_languages(lang):
-    BullingerDB.track(current_user.username, 'overview/'+lang, datetime.now())
-    data = BullingerDB.get_overview_languages(None if lang == Config.NONE else lang)
+    BullingerDB.track(current_user.username, 'Kartei/Sprachen/'+lang, datetime.now())
     return render_template(
         "overview_languages_cards.html",
         vars={
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
             "language": lang,
-            "table": data,
-            "hits": len(data)
+            "table": BullingerDB.get_overview_languages(lang),
         }
     )
 
-@app.route('/stats', methods=['GET'])
-@app.route('/stats/<n_top>', methods=['GET'])
+@app.route('/Kartei/Status', methods=['GET'])
+def overview_states():
+    BullingerDB.track(current_user.username, 'Kartei/Status/', datetime.now())
+    return render_template(
+        "overview_states.html",
+        title="Statusübersicht (alle)",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "table": BullingerDB.get_overview_states(),
+        }
+    )
+
+@app.route('/Kartei/Status/<state>', methods=['GET'])
+def overview_state(state):
+    BullingerDB.track(current_user.username, '/Kartei/Status/'+state, datetime.now())
+    data = BullingerDB.get_overview_state(state)
+    return render_template(
+        'overview_state.html',
+        title="Statusübersicht ("+state+")",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "table": data,
+            "state": state,
+        }
+    )
+
+@app.route('/Statistiken', methods=['GET'])
 def stats(n_top=50):
-    BullingerDB.track(current_user.username, '/stats', datetime.now())
+    BullingerDB.track(current_user.username, '/Statistiken', datetime.now())
     n_top, id_file = int(n_top), str(int(time.time()))
-    stats_languages = BullingerDB.get_language_stats()
-    data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(None)
-    BullingerDB.create_plot_user_stats(current_user.username, id_file)
-    BullingerDB.create_plot_lang(stats_languages, id_file)
+    data_overview, data_percentages, plot_url, num_of_cards = BullingerDB.get_data_overview(None, id_file)
+    w1, w2, m1, m2 = BullingerDB.create_plot_user_stats(current_user.username, id_file)
+    visits_today, visits_today_staff = BullingerDB.get_page_visits_plot(id_file)
+    users, user_avg, n_new_users_today, active_today = BullingerDB.get_user_plot(id_file, current_user.username)
+    days_remaining, state_changes_today, state_changes_total = BullingerDB.get_progress_plot(id_file)
+    days_active, changes_today, changes_total = BullingerDB.get_changes_per_day_data(id_file, current_user.username)
     return render_template(
         "stats.html",
         title="Statistiken",
         vars={
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
-            "user_stats_all": BullingerDB.get_user_stats_all(current_user.username),
-            "n_top": n_top,
+            "page_url": "/stats",
             "file_id": id_file,
-            "lang_stats": stats_languages,
-            # "top_s": BullingerDB.get_top_n_sender(n_top),
-            # "top_r": BullingerDB.get_top_n_receiver(n_top),
-            "top_s_gbp": BullingerDB.get_top_n_sender_ignoring_place(n_top),
-            "top_r_gbp": BullingerDB.get_top_n_receiver_ignoring_place(n_top),
             "stats": data_percentages,
-            "url_plot": plot_url,
-            "url_changes_per_day": BullingerDB.get_changes_per_day_data(id_file),
+            "workers_corr": w1,
+            "workers_quit": w2,
+            "corr_max": m1,
+            "quit_max": m2,
+            "days_active": days_active,
+            "days_remaining": days_remaining,
+            "changes_today": changes_today,
+            "changes_total": changes_total,
+            "new_users_today": n_new_users_today,
+            "active_users_today": active_today,
+            "state_changes_today": state_changes_today,
+            "state_changes_total": state_changes_total,
+            "visits_today": visits_today,
+            "visits_today_staff": visits_today_staff,
             "status_description": ' '.join([str(num_of_cards), 'Karteikarten:']),
-            "page_index": "stats"
+            "visits": BullingerDB.get_number_of_page_visits(visits_only=True),
+            "registered_users": users,
+            "users_active_on_avg": user_avg
         }
     )
 
-@app.route('/overview/person_by_name/<name>', methods=['GET'])
+
+@app.route('/Kartei/Ortschaften', methods=['GET'])
+def places():
+    BullingerDB.track(current_user.username, '/Kartei/Ortschaften', datetime.now())
+    return render_template(
+        "overview_places.html",
+        title="kartei/Ortschaften",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "places": BullingerDB.get_data_overview_places(),
+        }
+    )
+
+
+@app.route('/Kartei/Ortschaften/<location>', methods=['GET'])
+def place(location):
+    location = location.replace(Config.URL_ESC, "/")
+    BullingerDB.track(current_user.username, '/Kartei/Ortschaften/'+location, datetime.now())
+    return render_template(
+        "overview_place.html",
+        title="Ortschaften - "+location,
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "place": BullingerDB.get_data_overview_place(location),
+        }
+    )
+
+
+@app.route('/Kartei/Autographen', methods=['GET'])
+def overview_autograph():
+    BullingerDB.track(current_user.username, '/Kartei/Autographen', datetime.now())
+    return render_template(
+        "overview_autocopy.html",
+        title="Autograph",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "relation": "Autographen",
+            "data": BullingerDB.get_data_overview_autograph(),
+        }
+    )
+
+
+@app.route('/Kartei/Autographen/<autograph>', methods=['GET'])
+def overview_autograph_x(autograph):
+    BullingerDB.track(current_user.username, '/Kartei/Autograph/'+autograph, datetime.now())
+    return render_template(
+        "overview_autograph_x.html",
+        title="Kartei/Autograph",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "standort": autograph,
+            "data": BullingerDB.get_data_overview_autograph_x(autograph),
+        }
+    )
+
+@app.route('/Kartei/Autographen&Kopien', methods=['GET'])
+def overview_autocopy():
+    BullingerDB.track(current_user.username, '/Kartei/Autographe&Kopien', datetime.now())
+    data, counts = BullingerDB.get_data_overview_autocopy()
+    return render_template(
+        "overview_autokopie.html",
+        title="Kartei/Autograph & Kopie",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "relation": "Autographen & Kopien",
+            "data": data,
+            "counts": counts
+        }
+    )
+
+@app.route('/Kartei/Autographen&Kopien/<standort>', methods=['GET'])
+def overview_autocopy_x(standort):
+    BullingerDB.track(current_user.username, '/Kartei/Autographe&Kopien/'+standort, datetime.now())
+    return render_template(
+        "overview_autokopie_x.html",
+        title="Autographen/Kopien, "+standort,
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "relation": standort,
+            "data": BullingerDB.get_data_overview_autocopy_x(standort),
+        }
+    )
+
+@app.route('/Kartei/Kopien', methods=['GET'])
+def overview_copy():
+    BullingerDB.track(current_user.username, '/Kartei/Kopien', datetime.now())
+    return render_template(
+        "overview_copy.html",
+        title="Kartei/Kopien",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "relation": "Kopien",
+            "data": BullingerDB.get_data_overview_copy(),
+        }
+    )
+
+
+@app.route('/Kartei/Kopie/<copy>', methods=['GET'])
+def overview_copy_x(copy):
+    BullingerDB.track(current_user.username, '/Kartei/Kopien/'+copy, datetime.now())
+    return render_template(
+        "overview_copy_x.html",
+        title="Kartei/Autograph",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "standort": copy,
+            "data": BullingerDB.get_data_overview_copy_x(copy),
+        }
+    )
+
+
+@app.route('/Kartei/Personen/heimatlos', methods=['GET'])
+def correspondents():
+    BullingerDB.track(current_user.username, '/Kartei/Personen/heimatlos', datetime.now())
+    data, n_sender, n_receiver = BullingerDB.get_data_overview_correspondents()
+    return render_template(
+        "overview_person_no_loc.html",
+        title="Korrespondenten",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "data": data,
+            "n_sender": n_sender,
+            "n_receiver": n_receiver
+        }
+    )
+
+
+@app.route('/Kartei/Personen/Namen/<name>', methods=['GET'])
 def person_by_name(name):
+    name = name.replace("#&&", "/")
     BullingerDB.track(current_user.username, '/overview/'+name, datetime.now())
-    data = BullingerDB.get_persons_by_var(None if name == Config.SN else name, 0)
+    data = BullingerDB.get_persons_by_var(name, 0, get_links=True)
     return render_template(
         "overview_general.html",
-        title="Statistiken",
+        title="Person "+name,
         vars={
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
             "user_stats_all": BullingerDB.get_user_stats_all(current_user.username),
-            "attribute": "Nachname",
-            "value": name,
+            "attribute": "Personen",
+            "value": "Nachnamen: " + name,
+            "url_back": "overview_persons",
             "table": data,
-            "hits": str(len(data)),
             "description": "Personen mit Nachname "+name
         }
     )
 
-@app.route('/overview/person_by_forename/<forename>', methods=['GET'])
+@app.route('/Kartei/Personen/Vornamen/<forename>', methods=['GET'])
 def person_by_forename(forename):
-    BullingerDB.track(current_user.username, '/overview/' + forename, datetime.now())
-    data = BullingerDB.get_persons_by_var(None if forename == Config.SN else forename, 1)
+    forename = forename.replace("#&&", "/")
+    BullingerDB.track(current_user.username, '/Kartei/Personen/Vornamen/' + forename, datetime.now())
+    data = BullingerDB.get_persons_by_var(forename, 1, get_links=True)
     return render_template(
         "overview_general.html",
-        title="Statistiken",
+        title="Person "+forename,
         vars={
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
             "user_stats_all": BullingerDB.get_user_stats_all(current_user.username),
             "attribute": "Vorname",
-            "value": forename,
+            "value": "Vorname: " + forename,
+            "url_back": "overview_persons",
             "table": data,
-            "hits": str(len(data)),
             "description": "Personen mit Vorname "+forename
         }
     )
 
-@app.route('/overview/person_by_place/<place>', methods=['GET'])
+@app.route('/Kartei/Personen/Ortschaften/<place>', methods=['GET'])
 def person_by_place(place):
-    BullingerDB.track(current_user.username, '/overview/' + place, datetime.now())
-    data = BullingerDB.get_persons_by_var(None if place == Config.SL else place, 2)
+    place = place.replace("#&&", "/")
+    BullingerDB.track(current_user.username, '/Kartei/Personen/Ortschaften/'+place, datetime.now())
+    data = BullingerDB.get_persons_by_var(place, 2, get_links=True)
     return render_template(
         "overview_general.html",
-        title="Statistiken",
+        title="Personen von "+place,
         vars={
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
             "user_stats_all": BullingerDB.get_user_stats_all(current_user.username),
             "attribute": "Ort",
-            "value": place,
+            "value": "Ort: " + place,
+            "url_back": "overview_persons",
             "table": data,
-            "hits": str(len(data)),
             "description": "Personen von "+place
         }
     )
 
-@app.route('/faq', methods=['POST', 'GET'])
+@app.route('/Kartei/Personen/Alias', methods=['POST', 'GET'])
+@login_required
+def alias():
+    BullingerDB.track(current_user.username, '/alias', datetime.now())
+    p_data, form = [], PersonNameForm()
+    if form.validate_on_submit():
+        pn, pvn = form.p_name.data.strip(), form.p_forename.data.strip()
+        an, avn = form.a_name.data.strip(), form.a_forename.data.strip()
+        if (pn or pvn) and (an or avn):
+            alias = Alias.query.filter_by(
+                p_name=form.p_name.data.strip(), p_vorname=form.p_forename.data.strip(),
+                a_name=form.a_name.data.strip(), a_vorname=form.a_forename.data.strip()).first()
+            if alias:
+                if not alias.is_active:
+                    alias.is_active = 1
+                    db.session.commit()
+                return redirect(url_for('alias'))
+            else:
+                db.session.add(Alias(
+                    p_name=form.p_name.data, p_vorname=form.p_forename.data,
+                    a_name =form.a_name.data, a_vorname=form.a_forename.data,
+                    user=current_user.username, time=datetime.now()
+                )); db.session.commit()
+
+    q_alias = db.session.query(
+        Alias.p_name.label("nn"),
+        Alias.p_vorname.label("vn"),
+        Alias.a_name.label("ann"),
+        Alias.a_vorname.label("avn")
+    ).filter(Alias.is_active == 1)\
+     .group_by(Alias.a_name, Alias.a_vorname).subquery()
+
+    q_abs = BullingerDB.get_most_recent_only(db.session, Absender).subquery()
+    q_emp = BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
+    q_pa = db.session.query(
+        q_abs.c.id_person.label("id"),
+        Person.name.label("nn"),
+        Person.vorname.label("vn"),
+    ).join(Person, q_abs.c.id_person == Person.id)
+    q_pe = db.session.query(
+        q_emp.c.id_person.label("id"),
+        Person.name.label("nn"),
+        Person.vorname.label("vn"),
+    ).join(Person, q_emp.c.id_person == Person.id)
+    rel = union_all(q_pa, q_pe).alias("all")
+
+    r = db.session.query(
+        rel.c.nn.label("name"),
+        rel.c.vn.label("vorname"),
+        func.count().label("count")
+    ).group_by(rel.c.nn, rel.c.vn).subquery()
+
+    r2 = db.session.query(
+        rel.c.nn.label("name2"),
+        rel.c.vn.label("vorname2"),
+        func.count().label("count2")
+    ).group_by(rel.c.nn, rel.c.vn).subquery()
+
+    dat = db.session.query(
+        q_alias.c.nn.label("enn"),
+        q_alias.c.vn.label("evn"),
+        q_alias.c.ann.label("ann"),
+        q_alias.c.avn.label("avn"),
+        r.c.count,
+        r2.c.count2
+    ).outerjoin(r, and_(r.c.name == q_alias.c.nn, r.c.vorname == q_alias.c.vn)) \
+     .outerjoin(r2, and_(r2.c.name2 == q_alias.c.ann, r2.c.vorname2 == q_alias.c.avn)).subquery()
+
+    for m in db.session.query(dat.c.enn, dat.c.evn, dat.c.count).group_by(dat.c.enn, dat.c.evn).all():
+        data = []
+        for a in db.session.query(dat.c.ann, dat.c.avn, dat.c.count2).filter(dat.c.enn == m[0], dat.c.evn == m[1]).all():
+            data.append([a[0], a[1], a[2]])
+        if len(data): p_data.append([m[0], m[1], data, m[2]])
+
+    form.process()
+    return render_template('person_aliases.html', title="Alias", form=form, vars={
+        "username": current_user.username,
+        "user_stats": BullingerDB.get_user_stats(current_user.username),
+        "primary_names": p_data
+    })
+
+@app.route('/delete_alias_1/<nn>/<vn>', methods=['POST', 'GET'])
+@login_required
+def delete_alias_1(nn, vn):
+    for a in Alias.query.filter_by(p_name=nn, p_vorname=vn, is_active=1).all(): a.is_active = 0
+    db.session.commit()
+    return redirect(url_for('alias'))
+
+@app.route('/delete_alias_2/<nn>/<vn>', methods=['POST', 'GET'])
+@login_required
+def delete_alias_2(nn, vn):
+    if nn == "0": nn = ""
+    if vn == "0": vn = ""
+    for a in Alias.query.filter_by(a_name=nn, a_vorname=vn, is_active=1).all(): a.is_active = 0
+    db.session.commit()
+    return redirect(url_for('alias'))
+
+@app.route('/Kartei', methods=['POST', 'GET'])
+def file():
+    BullingerDB.track(current_user.username, '/Kartei', datetime.now())
+    return render_template(
+        'file.html',
+        title="Kartei",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+        }
+    )
+
+@app.route('/FAQ', methods=['POST', 'GET'])
 def faq():
-    BullingerDB.track(current_user.username, '/faq', datetime.now())
+    BullingerDB.track(current_user.username, '/FAQ', datetime.now())
     return render_template(
         'faq.html',
         title="FAQ",
@@ -354,9 +626,9 @@ def faq():
     )
 
 
-@app.route('/guestbook', methods=['POST', 'GET'])
+@app.route('/Kommentare', methods=['POST', 'GET'])
 def guestbook():
-    BullingerDB.track(current_user.username, '/gästebuch', datetime.now())
+    BullingerDB.track(current_user.username, '/Gästebuch', datetime.now())
     guest_book = GuestBookForm()
     if guest_book.validate_on_submit() and guest_book.save.data:
         BullingerDB.save_comment(guest_book.comment.data, current_user.username, datetime.now())
@@ -373,10 +645,10 @@ def guestbook():
     )
 
 
-@app.route('/quick_start', methods=['POST', 'GET'])
+@app.route('/Kartei/Karteikarten/Zufall', methods=['POST', 'GET'])
 @login_required
 def quick_start():
-    BullingerDB.track(current_user.username, '/start', datetime.now())
+    BullingerDB.track(current_user.username, '/LOS', datetime.now())
     i = BullingerDB.quick_start()
     if i: return redirect(url_for('assignment', id_brief=str(i)))
     return redirect(url_for('stats'))  # we are done !
@@ -402,64 +674,7 @@ def assignment(id_brief):
         card_index=id_brief,
         html_content=html_content)
 
-# 1
-@app.route('/api/wiki_data/<id_brief>', methods=['GET'])
-def send_wiki_data_by_id(id_brief):
-    link = None
-    r = Empfaenger.query.filter_by(id_brief=id_brief).order_by(desc(Empfaenger.zeit)).first()
-    receiver = Person.query.get(r.id_person) if r else None
-    r_wiki_url, r_photo = "", ""
-    if receiver:
-        p = Person.query.filter_by(name=receiver.name, vorname=receiver.vorname, ort=receiver.ort).first()
-        r_wiki_url, r_photo = p.wiki_url, p.photo
-        if receiver.name != 'Bullinger': link = receiver.name
-    s = Absender.query.filter_by(id_brief=id_brief).order_by(desc(Absender.zeit)).first()
-    sender = Person.query.get(s.id_person) if s else None
-    s_wiki_url, s_photo = "", ""
-    if sender:
-        p = Person.query.filter_by(name=sender.name, vorname=sender.vorname, ort=sender.ort).first()
-        s_wiki_url, s_photo = p.wiki_url, p.photo
-        if sender.name != 'Bullinger': link = sender.name
-    return jsonify({
-        "s_wiki_url": s_wiki_url,
-        "s_photo_url": s_photo,
-        "r_wiki_url": r_wiki_url,
-        "r_photo_url": r_photo,
-        "url_person_overview": "/overview/person_by_name/" + link if link else 's.n.'
-    })
 
-# 2
-@app.route('/api/wiki_data/<name>/<forename>/<location>', methods=['GET'])
-def send_wiki_data_by_address(name, forename, location):
-    link = None
-    wiki_url, photo_url = "", ""
-    r = Person.query.filter_by(name=name, vorname=forename, ort=location).first()
-    if r:
-        wiki_url, photo_url = r.wiki_url, r.photo
-        link = r.name
-    return jsonify({
-        "wiki_url": wiki_url,
-        "photo_url": photo_url,
-        "url_person_overview": "/overview/person_by_name/" + link if link else 's.n.'
-    })
-
-
-# 3
-@app.route('/api/wiki_data/<name>/<forename>', methods=['GET'])
-def send_wiki_data_by_address_3(name, forename):
-    link = None
-    wiki_url, photo_url = "", ""
-    pers = Person.query.filter_by(name=name, vorname=forename).all()
-    for r in pers:
-        link = r.name
-        if r.wiki_url or r.photo:
-            wiki_url, photo_url = r.wiki_url, r.photo
-            break
-    return jsonify({
-        "wiki_url": wiki_url,
-        "photo_url": photo_url,
-        "url_person_overview": "/overview/person_by_name/" + link if link else 's.n.'
-    })
 
 
 @app.route('/api/assignments/<id_brief>', methods=['GET'])
@@ -614,13 +829,67 @@ def get_persons():  # verified persons only
     return jsonify([])
 
 
-# 4 Steven
+# WIKIDATA
+@app.route('/api/wiki_data/<id_brief>', methods=['GET'])
+def send_wiki_data_by_id(id_brief):
+    link = None
+    r = Empfaenger.query.filter_by(id_brief=id_brief).order_by(desc(Empfaenger.zeit)).first()
+    receiver = Person.query.get(r.id_person) if r else None
+    r_wiki_url, r_photo = "", ""
+    if receiver:
+        p = Person.query.filter_by(name=receiver.name, vorname=receiver.vorname, ort=receiver.ort).first()
+        r_wiki_url, r_photo = p.wiki_url, p.photo
+        if receiver.name != 'Bullinger': link = receiver.name
+    s = Absender.query.filter_by(id_brief=id_brief).order_by(desc(Absender.zeit)).first()
+    sender = Person.query.get(s.id_person) if s else None
+    s_wiki_url, s_photo = "", ""
+    if sender:
+        p = Person.query.filter_by(name=sender.name, vorname=sender.vorname, ort=sender.ort).first()
+        s_wiki_url, s_photo = p.wiki_url, p.photo
+        if sender.name != 'Bullinger': link = sender.name
+    return jsonify({
+        "s_wiki_url": s_wiki_url,
+        "s_photo_url": s_photo,
+        "r_wiki_url": r_wiki_url,
+        "r_photo_url": r_photo,
+        "url_person_overview": "/overview/person_by_name/" + link if link else 's.n.'
+    })
+
+@app.route('/api/wiki_data/<name>/<forename>/<location>', methods=['GET'])
+def send_wiki_data_by_address(name, forename, location):
+    link = None
+    wiki_url, photo_url = "", ""
+    r = Person.query.filter_by(name=name, vorname=forename, ort=location).first()
+    if r:
+        wiki_url, photo_url = r.wiki_url, r.photo
+        link = r.name
+    return jsonify({
+        "wiki_url": wiki_url,
+        "photo_url": photo_url,
+        "url_person_overview": "/overview/person_by_name/" + link if link else 's.n.'
+    })
+
+@app.route('/api/wiki_data/<name>/<forename>', methods=['GET'])
+def send_wiki_data_by_address_3(name, forename):
+    link = None
+    wiki_url, photo_url = "", ""
+    pers = Person.query.filter_by(name=name, vorname=forename).all()
+    for r in pers:
+        link = r.name
+        if r.wiki_url or r.photo:
+            wiki_url, photo_url = r.wiki_url, r.photo
+            break
+    return jsonify({
+        "wiki_url": wiki_url,
+        "photo_url": photo_url,
+        "url_person_overview": "/overview/person_by_name/" + link if link else 's.n.'
+    })
+
+
+# TIME-LINES
 @app.route('/api/get_correspondence/<name>/<forename>/<location>', methods=['GET'])
 def get_correspondences_all(name, forename, location):
     BullingerDB.track(current_user.username, '/api/correspondences', datetime.now())
-    name = name if name and name != '0' and name != 'None' else None
-    forename = forename if forename and forename != '0' and forename != 'None' else None
-    location = location if location and location != '0' and location != 'None' else None
     return jsonify(BullingerDB.get_timeline_data_all(name=name, forename=forename, location=location))
 
 
@@ -628,384 +897,3 @@ def get_correspondences_all(name, forename, location):
 def get_persons_all():
     BullingerDB.track(current_user.username, '/api/get_persons', datetime.now())
     return jsonify(BullingerDB.get_persons_by_var(None, None))
-
-
-@app.route('/api/clear/not_found', methods=['GET'])
-def clear_not_found():
-    Tracker.query.filter_by(url="/not_found").delete()
-    db.session.commit()
-    return redirect(url_for('index'))
-
-'''
-@app.route('/api/post_process', methods=['GET'])
-def post_process():
-    BullingerDB.post_process_db()
-    return jsonify(BullingerDB.get_persons_by_var(None, None))
-
-
-@app.route('/admin/run_corrections', methods=['GET'])
-@login_required
-def run_corrections():
-    if is_admin():
-        name_corrections_general = [
-            [[None, "Matthias", "Reichenweier"], ["Erb", "Matthias", "Reichenweier"]],
-            [[None, "Mathias", "Reichenweier"], ["Erb", "Mathias", "Reichenweier"]],
-            [[None, "Mathias", "Rappoltsweiler"], ["Erb", "Mathias", "Rappoltsweiler"]],
-            [[None, "Matthias", "Rappoltsweiler"], ["Erb", "Matthias", "Rappoltsweiler"]],
-            [[None, "Mathias", None], ["Erb", "Mathias", None]],
-            [[None, "Richard", "London"], ["Cox", "Richard", "London"]],
-            [[None, "Richard", "Westminster"], ["Cox", "Richard", "Westminster"]],
-            [[None, "Richard", None], ["Cox", "Richard", None]],
-            [["Chur", None, None], ["Egli", "Tobias", None]],
-            [["Schlüsselberger", None, "Girenbad"], ["Schlüsselberger", "Gabriel", "Girenbad"]],
-            [[None, "Stetten Georg", "Augsburg"], ["von Stetten", "Georg", "Augsburg"]],
-            [["Stetten", "Georg rem", "Augsburg"], ["von Stetten", "Georg", "Augsburg"]],
-            [["Stetten", "Georg vog", "Augsburg"], ["von Stetten", "Georg", "Augsburg"]],
-            [["Stetten", "Georg rem", "Augsburg"], ["von Stetten", "Georg", "Augsburg"]],
-            [["Stottern", "Georg vom", "Augsburg"], ["von Stetten", "Georg", "Augsburg"]],
-            [["Johannes", "Georgiern", "Bern"], ["Haller", "Johannes", "Bern"]],
-            [["", "Johannes", "Bern"], ["Haller", "Johannes", "Bern"]],
-            [[None, "Lasco Johannes", "London"], ["Lasco", "Johannes", "Bern"]],
-            [[None, "Lasco Johannes", "Emden"], ["Lasco", "Johannes", "Emden"]],
-            [["Stetten", "Georg Ton", "Augsburg"], ["von Stetten", "Georg", "Augsburg"]],
-            [[None, "Bellievre Jean", "Augsburg"], ["de Bellièvre", "Jean", "Solothurn"]],
-            [[None, "Antorff Antwerpen", "Neue Zeitung"], ["Uss", "Antorff (Antwerpen)", "(Neue Zeitung)"]],
-            [[None, "Chur", "Neue Zeitung"], ["Uss", "Chur", "Neue Zeitung"]],
-            [[None, "Stetten Georg dJ", "Augsburg"], ["von Stetten", "Georg der Jüngere", "Augsburg"]],
-            [[None, "Wittgenstein Ludwig", "Heidelberg"], ["Wittgenstein", "Ludwig", "Heidelberg"]],
-            [[None, "llicius Philipp", "Chur"], ["Gallicius", "Philipp", "Chur"]],
-            [[None, "lvin Johannes", "Genf"], ["Calvin", "Johannes", "Genf"]],
-            [["BlarerAmbrosius", None, "Winterthur"], ["Blarer", "Ambrosius", "Winterthur"]],
-            [["Schenk", None, "Augsburg"], ["Schenck", "Matthias", "Augsburg"]],
-            [["Sozin", None, "Basel"], ["Sozin", "Laelius", "Basel"]],
-            [["StGallen", "Prediger", "St. Gallen"], ["Prediger", None, "St. Gallen"]],
-            [["StGaller", "Prediger", "St. Gallen"], ["Prediger", None, "St. Gallen"]],
-            [["StGaller", "Geistliche", "St. Gallen"], ["Geistliche", None, "St. Gallen"]],
-            [["firner", "Johann Konrad", "Schaffhausen"], ["firner", "Johann Konrad", "Ulmer"]],
-            [["luSlnger", "Bs Rudolf", None], ["Bullinger", "Hans Rudolf", None]],
-            [["luiliier", "Hans Rudolf", None], ["Bullinger", "Hans Rudolf", None]],
-            [["lullInger", "Haus Rudelf", None], ["Bullinger", "Hans Rudolf", None]],
-            [["lullInger", "Sans Budelf", None], ["Bullinger", "Hans Rudolf", None]],
-            [["lullingr", "Harns Bmdelf", None], ["Bullinger", "Hans Rudolf", None]],
-            [["lulllager", "ams Rudolf", None], ["Bullinger", "Hans Rudolf", None]],
-        ]
-        name_corrections = [
-            [['Efll', 'feil'], ['Egli']],
-            [['Finok'], ['Finck']],
-            [['Schüler'], ['Schuler']],
-            [['Fabrieus', 'Fabriim', 'Fihbri', 'Fabrieins', 'Fabrieiu', 'Fabrlelms', 'Fafcrieius', 'Fahriims'], ['Fabricius']],
-            [['Beilvre', 'BeliiSvre', 'BelliSvre', 'Bellilve'], ['de Bellièvre']],
-            [['BircJmann', 'Bircftmann', 'Bircjpnann', 'Bircjtmann', 'Bircjtmann', 'Bircmann', 'Birermann', 'Bjfrrcmann'], ['Birckmann']]
-        ]
-        forename_corrections = [
-            [['Matblas', 'Mathfcls', 'Mattblas', 'Mehlas'], ['Mathias']],
-            [['Tkeoder', 'Hheodor'], ['Theodor']],
-            [['Tpbias'], ['Tobias']],
-            [['Victcr'], ['Victor']],
-            [['Jeharmes', 'Jekazmes', 'Jokajmes', 'Jokämme', 'Jokannee', 'Joknnss', 'Jokaaae', 'Jakaanea', 'Jekeaaes', 'Jeharmes', 'Jehaaaea', 'Jokanaes'], ['Johannes']],
-        ]
-        place_corrections = [
-            [['Cttujf', 'Cjbur', 'Gbur', 'tfhur', 'CL uv', 'CU w', 'Chfir', 'Chjpft', 'Ckar', 'Qiur', 'Cbra'], ['Chur']],
-            [['Saanen'], ['Samaden']],
-            [['Gi ef', 'Gjf', 's l Genf'], ['Genf']],
-            [['S l', 'S t Xe', 's'], [None]]
-        ]
-        with open("Data/name_corr.txt", 'w') as f:
-            for pair in name_corrections_general:
-                fp = Person.query.filter_by(name=pair[0][0], vorname=pair[0][1], ort=pair[0][2]).all()
-                if fp:
-                    np = Person.query.filter_by(name=pair[1][0], vorname=pair[1][1], ort=pair[1][2]).first()
-                    if not np:
-                        np = Person(name=pair[1][0], forename=pair[1][1], place=pair[1][2], user=Config.ADMIN, time=datetime.now())
-                        db.session.add(np)
-                        db.session.commit()
-                        np = Person.query.filter_by(name=pair[1][0], vorname=pair[1][1], ort=pair[1][2]).first()
-                        f.write('NEW: '+(pair[1][0] if pair[1][0] else 's.n.')+", "+(pair[1][1] if pair[1][1] else 's.n.')+", "+(pair[1][2] if pair[1][2] else 's.l.')+"\n")
-                    for p in fp:
-                        f.write((p.name if p.name else 's.n.')+', '+(p.vorname if p.vorname else 's.n.')+', '+(p.ort if p.ort else 's.l.')+'\t-->\t'+(np.name if np.name else 's.n.')+', '+(np.vorname if np.vorname else 's.n.')+', '+(np.ort if np.ort else 's.l.')+"\n")
-                        for e in Empfaenger.query.filter_by(id_person=p.id).all():
-                            e.id_person = np.id
-                            db.session.commit()
-                            f.write('changed Empfänger on #'+str(e.id_brief)+".\n")
-                        for a in Absender.query.filter_by(id_person=p.id).all():
-                            a.id_person = np.id
-                            db.session.commit()
-                            f.write('changed Absender on #' + str(a.id_brief)+".\n")
-
-            for pair in name_corrections:
-                for n in pair[0]:
-                    for p in Person.query.filter_by(name=n).all():
-                        np = Person.query.filter_by(name=pair[1][0], vorname=p.vorname, ort=p.ort).first()
-                        if not np:
-                            np = Person(name=pair[1][0], forename=p.vorname, place=p.ort, user=Config.ADMIN, time=datetime.now())
-                            db.session.add(np)
-                            db.session.commit()
-                            np = Person.query.filter_by(name=pair[1][0], vorname=p.vorname, ort=p.ort).first()
-                            f.write('NEW: '+pair[1][0]+", "+(np.vorname if np.vorname else 's.n.')+", "+(np.ort if np.ort else 's.l.')+"\n")
-                        f.write((p.name if p.name else 's.n.')+', '+(p.vorname if p.vorname else 's.n.')+', '+(p.ort if p.ort else 's.l.')+'\t-->\t'+pair[1][0]+", "+(p.vorname if p.vorname else 's.n.')+", "+(p.ort if p.ort else 's.l.')+"\n")
-                        for e in Empfaenger.query.filter_by(id_person=p.id).all():
-                            e.id_person = np.id
-                            db.session.commit()
-                            f.write('changed Empfänger on #'+str(e.id_brief)+".\n")
-                        for a in Absender.query.filter_by(id_person=p.id).all():
-                            a.id_person = np.id
-                            db.session.commit()
-                            f.write('changed Absender on #' + str(a.id_brief)+".\n")
-
-            for pair in forename_corrections:
-                for n in pair[0]:
-                    for p in Person.query.filter_by(vorname=n).all():
-                        np = Person.query.filter_by(name=p.name, vorname=pair[1][0], ort=p.ort).first()
-                        if not np:
-                            np = Person(name=p.name, forename=pair[1][0], place=p.ort, user=Config.ADMIN, time=datetime.now())
-                            db.session.add(np)
-                            db.session.commit()
-                            np = Person.query.filter_by(name=p.name, vorname=pair[1][0], ort=p.ort).first()
-                            f.write('NEW: '+(p.name if p.name else 's.n.')+", "+pair[1][0]+", "+(np.ort if p.ort else 's.l.')+"\n")
-                        f.write((p.name if p.name else 's.n.')+', '+(p.vorname if p.vorname else 's.n.')+', '+(p.ort if p.ort else 's.l.')+'\t-->\t'+(p.name if p.name else 's.n.')+", "+pair[1][0]+", "+(p.ort if p.ort else 's.l.')+"\n")
-                        for e in Empfaenger.query.filter_by(id_person=p.id).all():
-                            e.id_person = np.id
-                            db.session.commit()
-                            f.write('changed Empfänger on card #'+str(e.id_brief)+".\n")
-                        for a in Absender.query.filter_by(id_person=p.id).all():
-                            a.id_person = np.id
-                            db.session.commit()
-                            f.write('changed Absender on card #' + str(a.id_brief)+".\n")
-
-            for pair in place_corrections:
-                for n in pair[0]:
-                    for p in Person.query.filter_by(ort=n).all():
-                        np = Person.query.filter_by(name=p.name, vorname=p.vorname, ort=pair[1][0]).first()
-                        if not np:
-                            np = Person(name=p.name, forename=p.vorname, place=pair[1][0], user=Config.ADMIN, time=datetime.now())
-                            db.session.add(np)
-                            db.session.commit()
-                            np = Person.query.filter_by(name=p.name, vorname=p.vorname, ort=pair[1][0]).first()
-                            f.write('NEW: '+(p.name if p.name else 's.n.')+", "+(p.vorname if p.vorname else 's.n.')+", "+pair[1][0]+"\n")
-                        f.write((p.name if p.name else 's.n.')+', '+(p.vorname if p.vorname else 's.n.')+', '+(p.ort if p.ort else 's.l.')+'\t-->\t'+(p.name if p.name else 's.n.')+", "+(p.vorname if p.vorname else 's.n.')+", "+(pair[1][0] if pair[1][0] else 's.l.')+"\n")
-                        for e in Empfaenger.query.filter_by(id_person=p.id).all():
-                            e.id_person = np.id
-                            db.session.commit()
-                            f.write('changed Empfänger on #'+str(e.id_brief)+".\n")
-                        for a in Absender.query.filter_by(id_person=p.id).all():
-                            a.id_person = np.id
-                            db.session.commit()
-                            f.write('changed Absender on #' + str(a.id_brief)+".\n")
-
-        with open("Data/sign_corr.txt", 'w') as f:
-            f.write("AUTOGRAPH\n\n")
-            for a in Autograph.query.filter_by(standort="Zürich StA").all():
-                start = a.signatur
-                if a.signatur:
-                    for s in ["E ii", "E il", "E li", "E ll", "Eii", "Eil", "Eli", "Ell", "EU", "E U", "EII2", "II", "EIX"]:
-                        if a.signatur[:len(s)] == s:
-                            a.signatur = a.signatur.replace(s, '')
-                            a.signatur = 'E II '+a.signatur.strip()
-                            db.session.commit()
-                    if 'f' in a.signatur:
-                        new = a.signatur.replace('f', '').strip() + ' f'
-                        if new != a.signatur:
-                            a.signatur = new
-                            db.session.commit()
-                    for s in [' ,,,,', ',,,, ', ',,, ', ' ,,,', ' ,,', ',, ', ' ,',  ', ']:
-                        a.signatur = a.signatur.replace(s, ' ')
-                    for s in [',,,,,', ',,,,', ',,,', ',,']:
-                        a.signatur = a.signatur.replace(s, ' ')
-                    if a.signatur != start:
-                        f.write('#'+str(a.id_brief)+':\t'+start + "\t-->\t" + a.signatur + "\n")
-            f.write("\n\nKOPIE\n\n")
-            for a in Kopie.query.filter_by(standort="Zürich StA").all():
-                start = a.signatur
-                if a.signatur:
-                    for s in ["E ii", "E il", "E li", "E ll", "Eii", "Eil", "Eli", "Ell", "EU", "E U", "EII2", "II", "EIX"]:
-                        if a.signatur[:len(s)] == s:
-                            a.signatur = a.signatur.replace(s, '')
-                            a.signatur = 'E II '+a.signatur.strip()
-                            db.session.commit()
-                    if 'f' in a.signatur:
-                        new = a.signatur.replace('f', '').strip() + ' f'
-                        if new != a.signatur:
-                            a.signatur = new
-                            db.session.commit()
-                    for s in [' ,,,,', ',,,, ', ',,, ', ' ,,,', ' ,,', ',, ', ' ,',  ', ']:
-                        a.signatur = a.signatur.replace(s, ' ')
-                    for s in [',,,,,', ',,,,', ',,,', ',,']:
-                        a.signatur = a.signatur.replace(s, ' ')
-                    if a.signatur != start:
-                        f.write('#'+str(a.id_brief)+':\t'+start + "\t-->\t" + a.signatur + "\n")
-
-        return redirect(url_for('index'))
-    return redirect(url_for('login', next=request.url))
-
-
-@app.route('/admin/run_corrections2', methods=['GET'])
-@login_required
-def run_corrections2():
-    if is_admin():
-
-        zsta = "Zürich StA"
-        with open("Data/zsta_corr2.txt", 'w') as f:
-            f.write("AUTOGRAPH\n\n")
-            for a in Autograph.query.all():
-                p = NGrams.compute_similarity(zsta, a.standort, 3)
-                if p > 0.8 and a.standort != zsta:
-                    f.write('#' + str(a.id_brief) + ':\t' + a.standort + "\t-->\t" + zsta + "\n")
-                    a.standort = zsta
-                    db.session.commit()
-            f.write("\n\nKOPIE\n\n")
-            for a in Kopie.query.all():
-                p = NGrams.compute_similarity(zsta, a.standort, 3)
-                if p > 0.8 and a.standort != zsta:
-                    f.write('#' + str(a.id_brief) + ':\t' + a.standort + "\t-->\t" + zsta + "\n")
-                    a.standort = zsta
-                    db.session.commit()
-
-        zzb = "Zürich ZB"
-        with open("Data/zb_corr2.txt", 'w') as f:
-            f.write("AUTOGRAPH\n\n")
-            for a in Autograph.query.all():
-                p = NGrams.compute_similarity(zzb, a.standort, 3)
-                if p > 0.8 and a.standort != zzb:
-                    f.write('#' + str(a.id_brief) + ':\t' + a.standort + "\t-->\t" + zzb + "\n")
-                    a.standort = zzb
-                    db.session.commit()
-            f.write("\n\nKOPIE\n\n")
-            for a in Kopie.query.all():
-                p = NGrams.compute_similarity(zzb, a.standort, 3)
-                if p > 0.8 and a.standort != zzb:
-                    f.write('#' + str(a.id_brief) + ':\t' + a.standort + "\t-->\t" + zzb + "\n")
-                    a.standort = zzb
-                    db.session.commit()
-
-        with open("Data/sign_corr2.txt", 'w') as f:
-            f.write("AUTOGRAPH\n\n")
-            for a in Autograph.query.filter_by(standort="Zürich StA").all():
-                start = a.signatur
-                if a.signatur:
-                    for s in ["E ii", "E il", "E li", "E ll", "Eii", "Eil", "Eli", "Ell", "EU", "E U", "EII2", "II", "EIX"]:
-                        if a.signatur[:len(s)] == s:
-                            a.signatur = a.signatur.replace(s, '')
-                            a.signatur = 'E II '+a.signatur.strip()
-                            db.session.commit()
-                    m = re.match(r".*[^\W\d]{4,}.*", a.signatur)
-                    if not m:
-                        if 'f' in a.signatur:
-                            new = a.signatur.replace('f', '').strip() + ' f'
-                            if new != a.signatur:
-                                a.signatur = new
-                                db.session.commit()
-                    m = re.match(r".*(\s*\,\,+\s*).*", a.signatur)
-                    if m:
-                        a.signatur = a.signatur.replace(m.group(1), ', ')
-                        db.session.commit()
-                    m = re.match(r".*\d(\s*\,\s*)\d.*", a.signatur)
-                    if m and m.group(0):
-                        a.signatur = a.signatur.replace(m.group(1), ',')
-                        db.session.commit()
-                    if a.signatur != start:
-                        f.write('#'+str(a.id_brief)+':\t'+start + "\t-->\t" + a.signatur + "\n")
-            f.write("\n\nKOPIE\n\n")
-            for a in Kopie.query.filter_by(standort="Zürich StA").all():
-                start = a.signatur
-                if a.signatur:
-                    for s in ["E ii", "E il", "E li", "E ll", "Eii", "Eil", "Eli", "Ell", "EU", "E U", "EII2", "II", "EIX"]:
-                        if a.signatur[:len(s)] == s:
-                            a.signatur = a.signatur.replace(s, '')
-                            a.signatur = 'E II '+a.signatur.strip()
-                            db.session.commit()
-                    m = re.match(r".*[^\W\d]{4,}.*", a.signatur)
-                    if not m:
-                        if 'f' in a.signatur:
-                            new = a.signatur.replace('f', '').strip() + ' f'
-                            if new != a.signatur:
-                                a.signatur = new
-                                db.session.commit()
-                    m = re.match(r".*(\s*\,\,+\s*).*", a.signatur)
-                    if m:
-                        a.signatur = a.signatur.replace(m.group(1), ', ')
-                        db.session.commit()
-                    m = re.match(r".*\d(\s*\,\s*)\d.*", a.signatur)
-                    if m:
-                        a.signatur = a.signatur.replace(m.group(1), ',')
-                        db.session.commit()
-                    if a.signatur != start:
-                        f.write('#'+str(a.id_brief)+':\t'+start + "\t-->\t" + a.signatur + "\n")
-
-        return redirect(url_for('index'))
-    return redirect(url_for('login', next=request.url))
-
-@app.route('/admin/convert_images', methods=['GET'])
-def convert_to_images():
-    input_path = "Karteikarten/PDF_new"
-    output_path = "Karteikarten/PNG_new/HBBW_Karteikarte_"
-    # output_path = "App/static/cards/HBBW_Karteikarte_"
-
-    i = 1
-    for file in FileSystem.get_file_paths(input_path):
-        for page in convert_from_path(file, 600):
-            print(file)
-            path = output_path+(5-len(str(i)))*'0'+str(i)+'.png'
-            page.save(path, 'PNG')
-            i += 1
-'''
-
-'''
-@app.route('/api/print_nn_vn_pairs', methods=['GET'])
-def print_persons():
-    persons = BullingerDB.get_persons_by_var(None, None)
-    with open("Data/persons.txt", 'a') as out:
-        pairs = set()
-        for p in persons:
-            if (p[0], p[1]) not in pairs:
-                pairs.add((p[0], p[1]))
-        for p in persons:
-            if (p[0], p[1]) in pairs:
-                out.write("#\t" + p[0] + '\t' + p[1] + '\n')
-                pairs.remove((p[0], p[1]))
-    return jsonify([])
-
-
-@app.route('/api/print_locations', methods=['GET'])
-def print_locations():
-    with open("Data/locations.txt", 'w') as out:
-        locs = set()
-        d = CountDict()
-        for p in Person.query.all():
-            if p.ort:
-                d.add(p.ort)
-        print(d.get_pairs_sorted(by_value=True, reverse=True))
-        for loc in d.get_pairs_sorted(by_value=True, reverse=True):
-            if loc[0]:
-                out.write("#\t" + loc[0] + '\n')
-    return jsonify([])
-
-
-@app.route('/api/compute_similarities', methods=['GET'])
-def print_similarities():
-    precisio = 4
-    with open("Data/persons_corr.txt", 'w') as corr:
-        with open("Data/persons.txt", 'r') as in_file:
-            for line in in_file.readlines():
-                if line.strip('\n') and line[0] != '#' and '\t' in line:
-                    nn, vn = line.strip('\n').split('\t')
-                    for p in Person.query.all():
-                        s = (NGrams.compute_similarity(nn, p.name, precisio)+NGrams.compute_similarity(vn, p.vorname, precisio))/2
-                        if s > 0.74 and s != 1.0:
-                            corr.write(p.name + " " + p.vorname + "\t--->\t" + nn + " " + vn + "\n")
-                            p.name, p.vorname = nn, vn
-                            db.session.commit()
-    with open("Data/locations_corr.txt", 'w') as corr:
-        with open("Data/locations.txt", 'r') as in_file:
-            for line in in_file.readlines():
-                if line.strip('\n') and line[0] != '#':
-                    loc = line.strip()
-                    for p in Person.query.all():
-                        if p.ort:
-                            s = NGrams.compute_similarity(loc, p.ort, precisio)
-                            if s > 0.74 and s != 1.0:
-                                print(p.ort + "\t--->\t" + loc, s)
-                                corr.write(p.ort + "\t--->\t" + loc + "\n")
-                                p.ort = loc
-                                db.session.commit()
-    return jsonify([])
-'''

@@ -31,3 +31,17 @@ a:active {
     color: limegreen;
     /*font-weight: bold;*/
 }
+
+.faq_toc, .stats_toc {
+    cursor pointer;
+    color: blue;
+    font-weight: bold;
+}
+
+.faq_toc:hover, .stats_toc:hover {
+    background-color: Silver;
+}
+
+.reset_alias:hover {
+    text-decoration: underline;
+}
