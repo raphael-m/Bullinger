@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6d2cb28e-bb45-42c9-b203-59c8af68dfbb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/App/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tools/BullingerDB.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tools/BullingerDB.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,11 +18,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="244">
-              <caret line="1838" column="43" selection-start-line="1838" selection-start-column="43" selection-end-line="1838" selection-end-column="43" />
+            <state relative-caret-position="335">
+              <caret line="2188" column="61" selection-start-line="2188" selection-start-column="61" selection-end-line="2188" selection-end-column="61" />
               <folding>
                 <element signature="e#118#153#0" expanded="true" />
               </folding>
@@ -34,47 +33,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/routes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="196">
-              <caret line="672" column="38" selection-start-line="672" selection-start-column="27" selection-end-line="672" selection-end-column="38" />
+            <state relative-caret-position="391">
+              <caret line="892" column="43" selection-start-line="892" selection-start-column="43" selection-end-line="892" selection-end-column="43" />
               <folding>
                 <element signature="e#172#206#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/static/css/main.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="130">
-              <caret line="34" column="16" selection-start-line="34" selection-start-column="16" selection-end-line="34" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/static/css/std.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="388">
-              <caret line="62" selection-start-line="62" selection-end-line="62" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/templates/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1935">
-              <caret line="129" column="39" selection-start-line="129" selection-start-column="39" selection-end-line="129" selection-end-column="39" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/App/templates/base.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="242">
-              <caret line="51" column="61" selection-start-line="51" selection-start-column="61" selection-end-line="51" selection-end-column="61" />
             </state>
           </provider>
         </entry>
@@ -109,7 +72,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>litera</find>
       <find>run_co</find>
       <find>/places</find>
       <find>/correspo</find>
@@ -137,8 +99,9 @@
       <find>Kartei/Spra</find>
       <find>Kartei/Status/</find>
       <find>/Kartei/Status</find>
-      <find>Aktive Mi</find>
       <find>'assignment</find>
+      <find>Aktive Mi</find>
+      <find>api/get_corr</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -189,7 +152,6 @@
         <option value="$PROJECT_DIR$/App/templates/overview_languages_cards.html" />
         <option value="$PROJECT_DIR$/App/templates/overview_states.html" />
         <option value="$PROJECT_DIR$/App/templates/file_inner.html" />
-        <option value="$PROJECT_DIR$/Tools/BullingerDB.py" />
         <option value="$PROJECT_DIR$/App/templates/overview_state.html" />
         <option value="$PROJECT_DIR$/App/static/css/main.css" />
         <option value="$PROJECT_DIR$/App/templates/stats.html" />
@@ -198,6 +160,7 @@
         <option value="$PROJECT_DIR$/App/routes.py" />
         <option value="$PROJECT_DIR$/App/templates/index.html" />
         <option value="$PROJECT_DIR$/App/templates/base.html" />
+        <option value="$PROJECT_DIR$/Tools/BullingerDB.py" />
       </list>
     </option>
   </component>
@@ -322,12 +285,11 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="825" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" sideWeight="0.38134432" side_tool="true" weight="0.32959852" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.75" visible="true" weight="0.17547569" />
+      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.75" visible="true" weight="0.17547569" />
       <window_info id="Structure" order="2" sideWeight="0.25" side_tool="true" weight="0.29027113" />
-      <window_info anchor="bottom" id="Terminal" order="0" visible="true" weight="0.25648022" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="0" visible="true" weight="0.34515688" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="2" weight="0.32967034" />
       <window_info anchor="bottom" id="Message" order="3" />
@@ -633,6 +595,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/App/static/css/boxes.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="85" selection-start-line="85" selection-end-line="85" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="51" column="61" selection-start-line="51" selection-start-column="61" selection-end-line="51" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1935">
+          <caret line="129" column="39" selection-start-line="129" selection-start-column="39" selection-end-line="129" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/App/static/css/std.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="388">
@@ -647,44 +630,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/static/css/boxes.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="85" selection-start-line="85" selection-end-line="85" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="244">
-          <caret line="1838" column="43" selection-start-line="1838" selection-start-column="43" selection-end-line="1838" selection-end-column="43" />
-          <folding>
-            <element signature="e#118#153#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/routes.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="672" column="38" selection-start-line="672" selection-start-column="27" selection-end-line="672" selection-end-column="38" />
+        <state relative-caret-position="391">
+          <caret line="892" column="43" selection-start-line="892" selection-start-column="43" selection-end-line="892" selection-end-column="43" />
           <folding>
             <element signature="e#172#206#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/index.html">
+    <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1935">
-          <caret line="129" column="39" selection-start-line="129" selection-start-column="39" selection-end-line="129" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="51" column="61" selection-start-line="51" selection-start-column="61" selection-end-line="51" selection-end-column="61" />
+        <state relative-caret-position="335">
+          <caret line="2188" column="61" selection-start-line="2188" selection-start-column="61" selection-end-line="2188" selection-end-column="61" />
+          <folding>
+            <element signature="e#118#153#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

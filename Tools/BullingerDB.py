@@ -2186,5 +2186,5 @@ class BullingerDB:
             data[r[0]]["name"] = r[5] if r[5] else Config.SN,
             data[r[0]]["forename"] = r[6] if r[6] else Config.SN,
             data[r[0]]["location"] = r[7] if r[7] else Config.SN,
-            data[r[0]]["is_sender"] = True
+            data[r[0]]["is_sender"] = True if r[8] else False
         return data
