@@ -29,6 +29,10 @@ class Kartei(db.Model):
     id_brief = db.Column(db.Integer, index=True)
     rezensionen = db.Column(db.Integer)
     status = db.Column(db.String(LENGTH_S))
+    ist_link = db.Column(db.Integer)
+    link_jahr = db.Column(db.Integer)
+    link_monat = db.Column(db.Integer)
+    link_tag = db.Column(db.Integer)
     pfad_OCR = db.Column(db.String(LENGTH_M))
     pfad_PDF = db.Column(db.String(LENGTH_M))
     anwender = db.Column(db.String(LENGTH_S))
@@ -216,6 +220,29 @@ class Autograph(db.Model):
 
 
 class Kopie(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    id_brief = db.Column(db.Integer, index=True)
+    standort = db.Column(db.String(LENGTH_M))
+    signatur = db.Column(db.String(LENGTH_M))
+    bemerkung = db.Column(db.String(LENGTH_B))
+    anwender = db.Column(db.String(LENGTH_S))
+    zeit = db.Column(db.String(LENGTH_S))
+
+    def __init__(self, id_brief=None, location=None, signature=None, remark=None, user=None, time=datetime.now()):
+        self.id_brief = id_brief
+        self.standort = location
+        self.signatur = signature
+        self.bemerkung = remark
+        self.anwender = user
+        self.zeit = time
+
+    def __repr__(self):
+        return '<Kopie {} {} {} {} {} {} {}>'.format(
+            self.id, self.id_brief, self.standort, self.signatur, self.bemerkung, self.anwender, self.zeit)
+
+
+class KopieB(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     id_brief = db.Column(db.Integer, index=True)

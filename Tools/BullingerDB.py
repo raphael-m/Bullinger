@@ -420,21 +420,37 @@ class BullingerDB:
         db.session.commit()
     '''
 
-    def save_date(self, i, data_date, user, t):
+    def save_link(self, i, data, user, t):
+        file_old, n = Kartei.query.filter_by(id_brief=i).order_by(desc(Kartei.zeit)).first(), 0
+        if file_old:
+            new_file, n = BullingerDB.update_file(data, file_old)
+            self.push2db(new_file, i, user, t)
+        else:
+            new_file, n = Kartei(), 6
+            new_file.rezensionen = 1
+            new_file.status = data["state"]
+            new_file.ist_link = 1 if data["card"]["is_linked"] else None
+            new_file.link_jahr = data["card"]["date_linked"]["year"] if data["card"]["date_linked"]["year"] else None
+            new_file.link_monat = data["card"]["date_linked"]["month"] if data["card"]["date_linked"]["month"] else None
+            new_file.link_tag = data["card"]["date_linked"]["day"] if data["card"]["date_linked"]["day"] else None
+            self.push2db(new_file, i, user, t)
+        return n
+
+    def save_date(self, i, data_link, user, t):
         datum_old, n = Datum.query.filter_by(id_brief=i).order_by(desc(Datum.zeit)).first(), 0
         if datum_old:
-            new_date, n = BullingerDB.update_date(data_date, datum_old)
+            new_date, n = BullingerDB.update_date(data_link, datum_old)
             self.push2db(new_date, i, user, t)
-        elif data_date["year"] or data_date["month"] or data_date["day"] \
-                or data_date["year_b"] or data_date["month_b"] or data_date["day_b"]:
+        elif data_link["year"] or data_link["month"] or data_link["day"] \
+                or data_link["year_b"] or data_link["month_b"] or data_link["day_b"]:
             self.push2db(Datum(
-                year_a=None if not data_date["year"] else data_date["year"],
-                month_a=None if not data_date["month"] else data_date["month"],
-                day_a=None if not data_date["day"] else data_date["day"],
-                year_b=None if not data_date["year_b"] else data_date["year_b"],
-                month_b=None if not data_date["month_b"] else data_date["month_b"],
-                day_b=None if not data_date["day_b"] else data_date["day_b"],
-                remark=None if not data_date["remarks"] else data_date["remarks"]
+                year_a=None if not data_link["year"] else data_link["year"],
+                month_a=None if not data_link["month"] else data_link["month"],
+                day_a=None if not data_link["day"] else data_link["day"],
+                year_b=None if not data_link["year_b"] else data_link["year_b"],
+                month_b=None if not data_link["month_b"] else data_link["month_b"],
+                day_b=None if not data_link["day_b"] else data_link["day_b"],
+                remark=None if not data_link["remarks"] else data_link["remarks"]
             ), i, user, t)
             n = 7
         return n
@@ -457,6 +473,24 @@ class BullingerDB:
         if datum_old.bemerkung != data_date["remarks"]: n += 1  # remark
         new_datum.bemerkung = None if not data_date["remarks"] else data_date["remarks"]
         return (new_datum, n) if n > 0 else (None, 0)
+
+    @staticmethod
+    def update_file(data, file_old):
+        new_file, n = Kartei(), 0
+        new_file.rezensionen = file_old.rezensionen+1
+        if file_old.status != data["state"]: n += 1
+        new_file.status = data["state"]
+        if file_old.ist_link != data["card"]["is_linked"]: n += 1
+        new_file.ist_link = 1 if data["card"]["is_linked"] else None
+        if file_old.link_jahr != data["card"]["date_linked"]["year"]: n += 1
+        new_file.link_jahr = data["card"]["date_linked"]["year"] if data["card"]["date_linked"]["year"] else None
+        if file_old.link_monat != data["card"]["date_linked"]["month"]: n += 1
+        new_file.link_monat = data["card"]["date_linked"]["month"] if data["card"]["date_linked"]["month"] else None
+        if file_old.link_tag != data["card"]["date_linked"]["day"]: n += 1
+        new_file.link_tag = data["card"]["date_linked"]["day"] if data["card"]["date_linked"]["day"] else None
+        new_file.pfad_OCR = file_old.pfad_OCR
+        new_file.pfad_PDF = file_old.pfad_PDF
+        return (new_file, n) if n > 0 else (None, 0)
 
     def save_autograph(self, i, d, user, t):
         autograph_old, n = Autograph.query.filter_by(id_brief=i).order_by(desc(Autograph.zeit)).first(), 0
@@ -545,9 +579,30 @@ class BullingerDB:
             n = 3
         return n
 
+    def save_copy_b(self, i, d, user, t):
+        copy_old, n = KopieB.query.filter_by(id_brief=i).order_by(desc(KopieB.zeit)).first(), 0
+        if copy_old:
+            new_copy, n = BullingerDB.update_copy_b(d, copy_old)
+            self.push2db(new_copy, i, user, t)
+        elif d["location"] or d["signature"] or d["remarks"]:
+            self.push2db(KopieB(location=d["location"], signature=d["signature"], remark=d["remarks"]), i, user, t)
+            n = 3
+        return n
+
     @staticmethod
     def update_copy(d, copy_old):
         new_copy, n = Kopie(), 0
+        if copy_old.standort != d["location"]: n += 1
+        new_copy.standort = d["location"]
+        if copy_old.signatur != d["signature"]: n += 1
+        new_copy.signatur = d["signature"]
+        if copy_old.bemerkung != d["remarks"]: n += 1
+        new_copy.bemerkung = d["remarks"]
+        return (new_copy, n) if n > 0 else (None, 0)
+
+    @staticmethod
+    def update_copy_b(d, copy_old):
+        new_copy, n = KopieB(), 0
         if copy_old.standort != d["location"]: n += 1
         new_copy.standort = d["location"]
         if copy_old.signatur != d["signature"]: n += 1
