@@ -178,7 +178,7 @@ def overview_month(year, month):
         }
     )
 
-
+@app.route('/Kartei/Personen/', methods=['POST', 'GET'])
 @app.route('/Kartei/Personen', methods=['POST', 'GET'])
 def overview_persons():
     BullingerDB.track(current_user.username, '/Kartei/Personen', datetime.now())
@@ -675,8 +675,6 @@ def assignment(id_brief):
         html_content=html_content)
 
 
-
-
 @app.route('/api/assignments/<id_brief>', methods=['GET'])
 @login_required
 def send_data(id_brief):
@@ -697,6 +695,7 @@ def send_data(id_brief):
         s_wiki_url, s_photo = p.wiki_url, p.photo
     autograph = Autograph.query.filter_by(id_brief=id_brief).order_by(desc(Autograph.zeit)).first()
     copy = Kopie.query.filter_by(id_brief=id_brief).order_by(desc(Kopie.zeit)).first()
+    copyB = KopieB.query.filter_by(id_brief=id_brief).order_by(desc(KopieB.zeit)).first()
     literatur = Literatur.query.filter_by(id_brief=id_brief).order_by(desc(Literatur.zeit)).first()
     sprache = Sprache.query.filter_by(id_brief=id_brief).order_by(desc(Sprache.zeit))
     sp = "; ".join([x.sprache for x in sprache if x.sprache and x.zeit == sprache.first().zeit]) if sprache else ''
@@ -719,6 +718,12 @@ def send_data(id_brief):
                 "month_b": (date.monat_b if date.monat_b else 0) if date else 0,
                 "day_b": (date.tag_b if date.tag_b else None) if date else None,
                 "remarks": (date.bemerkung if date.bemerkung else '') if date else ''
+            },
+            "is_linked": True if kartei.ist_link else False,
+            "date_linked": {
+                "year": (kartei.link_jahr if kartei.link_jahr else None),
+                "month": (kartei.link_monat if kartei.link_monat else 0),
+                "day": (kartei.link_tag if kartei.link_tag else None)
             },
             "sender": {
                 "firstname": sender.vorname if sender else '',
@@ -748,6 +753,11 @@ def send_data(id_brief):
                 "signature": copy.signatur if copy else '',
                 "remarks": copy.bemerkung if copy else ''
             },
+            "copy_b": {
+                "location": copyB.standort if copyB else '',
+                "signature": copyB.signatur if copyB else '',
+                "remarks": copyB.bemerkung if copyB else ''
+            },
             "language": sp,
             "literature": literatur.literatur if literatur else '',
             "printed": gedruckt.gedruckt if gedruckt else '',
@@ -766,7 +776,7 @@ def send_data(id_brief):
 def _normalize_input(data):
     for key in ["language", "literature", "printed", "first_sentence", "remarks"]:  # 1st level
         data["card"][key] = BullingerDB.normalize_str_input(data["card"][key])
-    for key in ["autograph", "copy"]:  # 2nd level
+    for key in ["autograph", "copy", "copy_b"]:  # 2nd level
         for k in data["card"][key]:
             data["card"][key][k] = BullingerDB.normalize_str_input(data["card"][key][k])
     for key in ["sender", "receiver"]:  # special case: verified
@@ -779,6 +789,10 @@ def _normalize_input(data):
         elif key == 'month' or key == 'month_b':
             data["card"]["date"][key] = BullingerDB.convert_month_to_int(data["card"]["date"][key])
         else: data["card"]["date"][key] = BullingerDB.normalize_int_input(data["card"]["date"][key])
+    for key in data["card"]["date_linked"]:
+        if key == "month": data["card"]["date_linked"][key] = BullingerDB.convert_month_to_int(data["card"]["date_linked"][key])
+        else: data["card"]["date_linked"][key] = BullingerDB.normalize_int_input(data["card"]["date_linked"][key])
+    data["card"]["is_linked"] = 1 if data["card"]["is_linked"] else None
     return data
 
 @app.route('/api/assignments/<id_brief>', methods=['POST'])
@@ -792,12 +806,14 @@ def save_data(id_brief):
     number_of_changes += bdb.save_the_sender(id_brief, data["card"]["sender"], user, t)
     number_of_changes += bdb.save_the_receiver(id_brief, data["card"]["receiver"], user, t)
     number_of_changes += bdb.save_copy(id_brief, data["card"]["copy"], user, t)
+    number_of_changes += bdb.save_copy_b(id_brief, data["card"]["copy_b"], user, t)
     number_of_changes += bdb.save_literature(id_brief, data["card"]["literature"], user, t)
     number_of_changes += bdb.save_language(id_brief, data["card"]["language"], user, t)
     number_of_changes += bdb.save_printed(id_brief, data["card"]["printed"], user, t)
     number_of_changes += bdb.save_remark(id_brief, data["card"]["first_sentence"], user, t)
+    number_of_changes += bdb.save_link(id_brief, data, user, t)
     bdb.save_comment_card(id_brief, data["card"]["remarks"], user, t)
-    Kartei.update_file_status(db.session, id_brief, data["state"], user, t)
+    # Kartei.update_file_status(db.session, id_brief, data["state"], user, t)
     User.update_user(db.session, user, number_of_changes, data["state"], old_state)
     return redirect(url_for('assignment', id_brief=id_brief))
 
