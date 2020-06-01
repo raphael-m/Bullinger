@@ -171,6 +171,23 @@ class Person(db.Model):
             self.id, self.name, self.vorname, self.ort, self.anwender, self.zeit
         )
 
+class Ortschaften(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    ort = db.Column(db.String(LENGTH_M))
+    laenge = db.Column(db.String(LENGTH_M))
+    breite = db.Column(db.String(LENGTH_M))
+
+    def __init__(
+        self, ort=None, l=None, b=None
+    ):
+        self.ort = ort
+        self.laenge = l
+        self.breite = b
+
+    def __repr__(self):
+        return '<Ortschaft {} {} {} {}>'.format(self.id, self.ort, self.laenge, self.breite)
+
 
 class Alias(db.Model):
 

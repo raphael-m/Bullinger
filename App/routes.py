@@ -901,6 +901,93 @@ def send_wiki_data_by_address_3(name, forename):
         "url_person_overview": "/overview/person_by_name/" + link if link else 's.n.'
     })
 
+# Places
+@app.route('/api/places', methods=['GET', 'POST'])
+def send_places():
+    recent_index, recent_sender, recent_receiver = \
+        BullingerDB.get_most_recent_only(db.session, Kartei).subquery(), \
+        BullingerDB.get_most_recent_only(db.session, Absender).subquery(), \
+        BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
+    pers = db.session.query(Person.id.label("id"), Person.ort.label("place")).subquery()
+    qa = db.session.query(
+        recent_index.c.id_brief.label("id"),
+        pers.c.place.label("place")
+    ).outerjoin(recent_sender, recent_index.c.id_brief == recent_sender.c.id_brief) \
+        .outerjoin(pers, pers.c.id == recent_sender.c.id_person).subquery()
+    qe = db.session.query(
+        recent_index.c.id_brief.label("id"),
+        pers.c.place.label("place")
+    ).outerjoin(recent_receiver, recent_index.c.id_brief == recent_receiver.c.id_brief) \
+        .outerjoin(pers, pers.c.id == recent_receiver.c.id_person).subquery()
+    fqa = db.session.query(
+        qa.c.place.label("place"),
+        func.count(qa.c.place).label("count")
+    ).group_by(qa.c.place)
+    fqe = db.session.query(
+        qe.c.place.label("place"),
+        func.count(qe.c.place).label("count")
+    ).group_by(qe.c.place)
+    fa = fqa.subquery()
+    fe = fqe.subquery()
+    sq = union_all(fqa, fqe).alias("all")
+    q = db.session.query(
+        sq.c.place.label("place"),
+        func.sum(sq.c.count).label("count")
+    ).group_by(sq.c.place).order_by(desc(func.sum(sq.c.count))).subquery()  # 764
+    p = db.session.query(
+        Ortschaften.ort.label("ort"),
+        Ortschaften.laenge.label("l"),
+        Ortschaften.breite.label("b")
+    ).subquery()
+    s = db.session.query(
+        q.c.place.label("place"),  # 0
+        fe.c.count.label("em"),  # 1
+        fa.c.count.label("abs"),  # 2
+        p.c.l,
+        p.c.b
+    ).outerjoin(fa, fa.c.place == q.c.place)\
+        .outerjoin(fe, fe.c.place == q.c.place)\
+        .outerjoin(p, p.c.ort == q.c.place)
+    return jsonify({r[0]: {"received": r[1] if r[1] else 0,
+                           "sent": r[2] if r[2] else 0,
+                           "latitude": float(r[3]) if r[3] else None,
+                           "longitude": float(r[4]) if r[4] else None
+                           } for r in s if r[0]})
+
+@app.route('/api/test', methods=['GET', 'POST'])
+def test():
+    recent_index, recent_sender, recent_receiver = \
+        BullingerDB.get_most_recent_only(db.session, Kartei).subquery(), \
+        BullingerDB.get_most_recent_only(db.session, Absender).subquery(), \
+        BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
+    query = db.session.query(
+        recent_index.c.id_brief,
+        recent_sender.c.bemerkung,
+        recent_receiver.c.bemerkung
+    ).outerjoin(recent_sender, recent_sender.c.id_brief == recent_index.c.id_brief) \
+     .outerjoin(recent_receiver, recent_receiver.c.id_brief == recent_index.c.id_brief)
+    count = 0
+    with open("Data/Bemerkungen.txt", "w") as os:
+        for t in query:
+            if t[1] or t[2]:
+                #print(t[0], t[1], t[2])
+                os.write(str(t[0]) + "\t" + (str(t[1]) if t[1] else "") + "\t" + (str(t[2]) if t[2] else "") + "\n")
+                count += 1
+    print(count)
+    return redirect(url_for('index'))
+
+# read geo_data
+@app.route('/api/read_geo_data', methods=['GET', 'POST'])
+def read_geo_data():
+    with open("Data/geo_data.txt") as src:
+        for line in src:
+            d = line.split("\t")
+            ort, l, b = d[0], None, None
+            if len(d) > 2: l, b = d[1], d[2]
+            db.session.add(Ortschaften(ort=ort, l=l, b=b))
+    db.session.commit()
+    return redirect(url_for('index'))
+
 
 # TIME-LINES
 @app.route('/api/get_correspondence/<name>/<forename>/<location>', methods=['GET'])

@@ -1106,7 +1106,6 @@ class BullingerDB:
          .filter(q_.c.state == state).subquery()
         q_o, q_a, q_u, q_i = s_query("offen"), s_query("abgeschlossen"), s_query("unklar"), s_query("ungültig")
 
-
         s = db.session.query(
             q.c.place.label("place"),  # 0
             fe.c.count.label("em"),  # 1
