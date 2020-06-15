@@ -40,8 +40,8 @@
 			<tbody>
 			{% for e in vars["data"] %}
 				<tr class="my_table_row">
-					<td class="my_table_cell"><a href="{{url_for('person_by_name', name=e[3])}}"> {{ e[0] }} </a></td>
-					<td class="my_table_cell"><a href="{{url_for('person_by_forename', forename=e[4])}}"> {{ e[1] }} </a></td>
+					<td class="my_table_cell"><a href="{{url_for('person_by_name', name=e[0])}}"> {{ e[0] }} </a></td>
+					<td class="my_table_cell"><a href="{{url_for('person_by_forename', forename=e[1])}}"> {{ e[1] }} </a></td>
 					<td class="my_table_cell">{{ e[2] }}</td>
 					<td class="my_table_cell">{{ e[3] }}</td>
 					<td class="my_table_cell">{{ e[4] }}</td>

@@ -490,7 +490,7 @@ class BullingerDB:
         new_file.link_tag = data["card"]["date_linked"]["day"] if data["card"]["date_linked"]["day"] else None
         new_file.pfad_OCR = file_old.pfad_OCR
         new_file.pfad_PDF = file_old.pfad_PDF
-        return (new_file, n) if n > 0 else (None, 0)
+        return (new_file, n) # if n > 0 else (None, 0)
 
     def save_autograph(self, i, d, user, t):
         autograph_old, n = Autograph.query.filter_by(id_brief=i).order_by(desc(Autograph.zeit)).first(), 0
@@ -1105,7 +1105,6 @@ class BullingerDB:
         ).group_by(q_.c.place, q_.c.state)\
          .filter(q_.c.state == state).subquery()
         q_o, q_a, q_u, q_i = s_query("offen"), s_query("abgeschlossen"), s_query("unklar"), s_query("ungültig")
-
 
         s = db.session.query(
             q.c.place.label("place"),  # 0
