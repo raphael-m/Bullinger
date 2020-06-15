@@ -16,6 +16,7 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     BULLINGER_UI_PATH = os.environ.get('BULLINGER_UI_PATH') or 'http://bullinger.raphaelm.ch/'
+    BULLINGER_MAP_PATH = os.environ.get('BULLINGER_MAP_PATH') or 'http://bullinger-map.raphaelm.ch/'
 
     # status cards
     S_OPEN = 'offen'

@@ -659,8 +659,22 @@ def assignment(id_brief):
     BullingerDB.track(current_user.username, '/card/' + str(id_brief), datetime.now())
     ui_path = Config.BULLINGER_UI_PATH
     ui_path = ui_path + ("" if ui_path.endswith("/") else "/")
+    html_content = _sanitize_vue_html(ui_path)
+    return render_template('assignment_vue.html',
+        card_index=id_brief,
+        html_content=html_content)
+
+
+@app.route('/Kartei/Ortschaften/Karte', methods=['GET'])
+def locations_map():
+    map_path = Config.BULLINGER_MAP_PATH
+    html_content = _sanitize_vue_html(map_path)
+    return render_template('assignment_vue.html',
+        html_content=html_content)
+
+def _sanitize_vue_html(address):
     # Load vue html from deployment and strip unneeded tags (html, body, doctype, title, icon, fonts etc.)
-    html_content = requests.get(ui_path).text
+    html_content = requests.get(address).text
     html_content = re.sub("<!DOCTYPE html>", "", html_content)
     html_content = re.sub("</?html.*?>", "", html_content)
     html_content = re.sub("</?meta.*?>", "", html_content)
@@ -669,10 +683,8 @@ def assignment(id_brief):
     html_content = re.sub("</?head>", "", html_content)
     html_content = re.sub("</?body>", "", html_content)
     html_content = re.sub("<link href=(\")?https://fonts.googleapis.com.*?>", "", html_content)
-    html_content = re.sub("(?P<ref> (src|href)=(\")?)/", r"\g<ref>" + ui_path, html_content)
-    return render_template('assignment_vue.html',
-        card_index=id_brief,
-        html_content=html_content)
+    html_content = re.sub("(?P<ref> (src|href)=(\")?)/", r"\g<ref>" + address, html_content)
+    return html_content
 
 
 @app.route('/api/assignments/<id_brief>', methods=['GET'])
