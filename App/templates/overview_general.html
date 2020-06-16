@@ -12,6 +12,8 @@
 	<div class="h2_box">
 		<h2>{{ vars["description"] }}</h2>
 		<div class="h2_section">
+			<p>&#8594; <a class="text_link" href="{{url_for('locations_map')}}">Landkarte</a></p>
+			<br>
 			<p> Treffer: {{ vars["table"] | length }} </p>
 			<table class="js-sort-table paleBlueRows">
 				<thead class="my_table_head">
