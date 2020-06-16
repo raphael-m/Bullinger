@@ -77,13 +77,15 @@
 
             </form>
 
+            <br>
+
             <table class="js-sort-table paleBlueRows">
 				<thead class="my_table_head">
 					<tr class="my_table_head_row">
 						<th class="js-sort-number my_table_head_cell">NAME</th>
 						<th class="js-sort-number my_table_head_cell">VORNAME</th>
                         <th class="js-sort-number my_table_head_cell">FREQUENZ</th>
-                        <th class="js-sort-number my_table_head_cell">AKTION</th>
+                        <th class="js-sort-number my_table_head_cell"></th>
 					</tr>
 				</thead>
             {% for b in vars["primary_names"] %}
@@ -100,10 +102,10 @@
                 {% for d in b[2] %}
                 <tbody>
                     <tr class="my_table_row">
-                        <td class="my_table_cell c0">{{ d[0] }}</td>
-                        <td class="my_table_cell c1">{{ d[1] }}</td>
-                        <td class="my_table_cell">{{ d[2] }}</td>
-                        <td class="my_table_cell">
+                        <td class="tc_alias">{{ d[0] }}</td>
+                        <td class="tc_alias">{{ d[1] }}</td>
+                        <td class="tc_alias">{{ d[2] }}</td>
+                        <td class="tc_alias">
                         {% if d[0] and d[1] %}
                             <a class="delete_selector" id="{{url_for('delete_alias_2', nn=d[0], vn=d[1])}}">
                         {% elif d[0] %}

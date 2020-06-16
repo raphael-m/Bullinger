@@ -407,7 +407,7 @@ def overview_copy():
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
             "relation": "Kopien",
-            "data": BullingerDB.get_data_overview_copy(),
+            "data": BullingerDB.get_data_overview_copy2(),
         }
     )
 
@@ -423,6 +423,20 @@ def overview_copy_x(copy):
             "user_stats": BullingerDB.get_user_stats(current_user.username),
             "standort": copy,
             "data": BullingerDB.get_data_overview_copy_x(copy),
+        }
+    )
+
+
+@app.route('/Kartei/Kopie/Bemerkungen', methods=['GET'])
+def overview_copy_remarks():
+    BullingerDB.track(current_user.username, '/Kartei/Kopien/Bemerkungen', datetime.now())
+    return render_template(
+        "overview_copy_remarks.html",
+        title="Kartei/Kopien (Bemerkungen)",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "data": BullingerDB.get_data_overview_copy_remarks(),
         }
     )
 
@@ -575,8 +589,8 @@ def alias():
     for m in db.session.query(dat.c.enn, dat.c.evn, dat.c.count).group_by(dat.c.enn, dat.c.evn).all():
         data = []
         for a in db.session.query(dat.c.ann, dat.c.avn, dat.c.count2).filter(dat.c.enn == m[0], dat.c.evn == m[1]).all():
-            data.append([a[0], a[1], a[2]])
-        if len(data): p_data.append([m[0], m[1], data, m[2]])
+            data.append([a[0], a[1], a[2] if a[2] else 0])
+        if len(data): p_data.append([m[0], m[1], data, m[2] if m[2] else 0])
 
     form.process()
     return render_template('person_aliases.html', title="Alias", form=form, vars={

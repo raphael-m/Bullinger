@@ -1241,6 +1241,77 @@ class BullingerDB:
                  d[5] if d[5] else 0] for d in dat if d[0]]
 
     @staticmethod
+    def get_data_overview_copy2():
+        rel_a = BullingerDB.get_most_recent_only(db.session, Kopie).subquery()
+        rel_a = db.session.query(rel_a.c.id_brief.label("id_brief"), rel_a.c.standort.label("standort"))
+        rel_b = BullingerDB.get_most_recent_only(db.session, KopieB).subquery()
+        rel_b = db.session.query(rel_b.c.id_brief.label("id_brief"), rel_b.c.standort.label("standort"))
+        rel = union_all(rel_a, rel_b).alias("copies")
+        data = db.session.query(
+            rel.c.id_brief.label("id"),
+            rel.c.standort.label("standort"),
+            func.count(rel.c.standort).label("count")
+        ).group_by(rel.c.standort).subquery()
+        k = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
+        k = db.session.query(k.c.id_brief.label("id"), k.c.status.label("status")).subquery()
+        r = db.session.query(rel.c.id_brief.label("id"), rel.c.standort.label("standort")).subquery()
+        ds = lambda status: db.session.query(
+            r.c.standort.label("standort"),
+            func.count().label(status)
+        ).join(k, k.c.id == r.c.id)\
+         .group_by(r.c.standort, k.c.status)\
+         .filter(k.c.status == status).subquery()
+        off, unk, ung, abg = ds("offen"), ds("unklar"), ds("ungültig"), ds("abgeschlossen")
+        dat = db.session.query(
+            data.c.standort,
+            data.c.count,
+            off.c.offen,
+            unk.c.unklar,
+            ung.c.ungültig,
+            abg.c.abgeschlossen
+        ).outerjoin(off, off.c.standort == data.c.standort)\
+         .outerjoin(unk, unk.c.standort == data.c.standort)\
+         .outerjoin(ung, ung.c.standort == data.c.standort)\
+         .outerjoin(abg, abg.c.standort == data.c.standort)\
+         .order_by(desc(data.c.count))
+        return [[d[0],
+                 d[1] if d[1] else 0,
+                 d[2] if d[2] else 0,
+                 d[3] if d[3] else 0,
+                 d[4] if d[4] else 0,
+                 d[5] if d[5] else 0] for d in dat if d[0]]
+
+
+    @staticmethod
+    def get_data_overview_copy_remarks():
+        rel_a, rel_b = BullingerDB.get_most_recent_only(db.session, Kopie).subquery(),\
+                       BullingerDB.get_most_recent_only(db.session, KopieB).subquery()
+        rel_a, rel_b = db.session.query(
+                rel_a.c.id_brief.label("id_brief"),
+                rel_a.c.standort.label("standort"),
+                rel_a.c.signatur.label("signatur"),
+                rel_a.c.bemerkung.label("bemerkung"),
+            ), db.session.query(
+                rel_b.c.id_brief.label("id_brief"),
+                rel_b.c.standort.label("standort"),
+                rel_b.c.signatur.label("signatur"),
+                rel_b.c.bemerkung.label("bemerkung"),
+            )
+        rel = union_all(rel_a, rel_b).alias("copies")
+        file = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
+        data = db.session.query(
+            rel.c.id_brief,
+            rel.c.standort,
+            rel.c.signatur,
+            rel.c.bemerkung,
+            file.c.status,
+        ).join(file, file.c.id_brief == rel.c.id_brief)\
+         .filter(rel.c.bemerkung != None)\
+         .order_by(rel.c.id_brief)
+        return [[d[0], d[1] if d[1] else "", d[2] if d[2] else "", d[3] if d[3] else "", d[4]] for d in data if d[0]]
+
+
+    @staticmethod
     def get_data_overview_autocopy():
         sq_a = BullingerDB.get_most_recent_only(db.session, Autograph).subquery()
         a0 = db.session.query(sq_a.c.standort.label("standort"))
@@ -1382,7 +1453,19 @@ class BullingerDB:
 
     @staticmethod
     def get_data_overview_copy_x(copy):
-        rel = BullingerDB.get_most_recent_only(db.session, Kopie).subquery()
+        rel_a, rel_b = BullingerDB.get_most_recent_only(db.session, Kopie).subquery(),\
+                       BullingerDB.get_most_recent_only(db.session, KopieB).subquery()
+        rel_a, rel_b = db.session.query(
+                rel_a.c.id_brief.label("id_brief"),
+                rel_a.c.standort.label("standort"),
+                rel_a.c.signatur.label("signatur")
+            ), db.session.query(
+                rel_b.c.id_brief.label("id_brief"),
+                rel_b.c.standort.label("standort"),
+                rel_b.c.signatur.label("signatur")
+            )
+        rel = union_all(rel_a, rel_b).alias("copies")
+        # rel = BullingerDB.get_most_recent_only(db.session, Kopie).subquery()
         file = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
         data = db.session.query(
             rel.c.id_brief,

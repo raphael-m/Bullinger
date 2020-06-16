@@ -1,4 +1,8 @@
 
+.tc_alias {
+    background: #D0E4F5 !important;
+}
+
 table.paleBlueRows {
     margin: 15px 30px;
     border: 1px solid #FFFFFF;
