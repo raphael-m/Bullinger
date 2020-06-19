@@ -177,13 +177,19 @@ class Ortschaften(db.Model):
     ort = db.Column(db.String(LENGTH_M))
     laenge = db.Column(db.String(LENGTH_M))
     breite = db.Column(db.String(LENGTH_M))
+    anwender = db.Column(db.String(LENGTH_S))
+    status = db.Column(db.Integer)
+    zeit = db.Column(db.String(LENGTH_S))
 
     def __init__(
-        self, ort=None, l=None, b=None
+        self, ort=None, l=None, b=None, user=Config.ADMIN, status=1, time=datetime.now()
     ):
         self.ort = ort
         self.laenge = l
         self.breite = b
+        self.status = status
+        self.anwender = user
+        self.zeit = time
 
     def __repr__(self):
         return '<Ortschaft {} {} {} {}>'.format(self.id, self.ort, self.laenge, self.breite)
@@ -298,6 +304,24 @@ class Literatur(db.Model):
 
     def __repr__(self):
         return '<Literatur {} {} {} {} {}>'.format(self.id, self.id_brief, self.literatur, self.anwender, self.zeit)
+
+
+class Referenzen(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    literatur = db.Column(db.String(LENGTH_B))
+    status = db.Column(db.Integer)
+    anwender = db.Column(db.String(LENGTH_S))
+    zeit = db.Column(db.String(LENGTH_S))
+
+    def __init__(self, status=1, literature=None, user=Config.ADMIN, time=datetime.now()):
+        self.literatur = literature
+        self.status = status
+        self.anwender = user
+        self.zeit = time
+
+    def __repr__(self):
+        return '<Referenz {} {} {} {} {}>'.format(self.id, self.literatur, self.status, self.anwender, self.zeit)
 
 
 class Sprache(db.Model):

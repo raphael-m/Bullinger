@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>
+    > <a class="header_link" href="{{url_for('file')}}">Kartei</a>
+    / Referenzen
+    {% include "user_status.html" %}
+</h1>
+
+<div class="main_box">
+	<div class="h2_box>">
+        <h2>Referenzen</h2>
+        <div class="h2_section">
+
+            <!--
+            <p> Suchen:
+                <input type="text" id="search_reference" name="search_reference" placeholder="Suchen">
+            </p>
+            -->
+
+            <table class="js-sort-table paleBlueRows">
+
+                <tr class="my_table_row2">
+                    <td class="my_table_cell tc_uniform">
+                        <input type="text" id="add_ref" name="add_ref" placeholder="Suchen / Neue Referenz hinzufügen">
+                    </td>
+                    <td class="my_table_cell tc_uniform">
+                        <input type="submit" id="save_ref" value="Speichern">
+                    </td>
+                    <td class="my_table_cell tc_uniform"></td>
+                </tr>
+
+                <thead class="my_table_head">
+                    <tr class="my_table_head_row">
+                        <th class="js-sort-string my_table_head_cell">Referenz</th>
+                        <th>ändern</th>
+                        <th class="js-sort-string my_table_head_cell">löschen</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for p in vars["data"] %}
+
+                    {% if vars["edit_id"] != p[0] %}
+                    <tr class="my_table_row">
+                        <td class="my_table_cell tc_uniform">{{ p[1] }}</td>
+                        <td class="my_table_cell tc_uniform">
+                            <a class="edit_reference" id="{{url_for('edit_reference', ref_id=p[0])}}">
+                                <img class="icon_edit" src="{{ url_for('static', filename='images/edit.png') }}" alt="edit reference">
+                            </a>
+                        </td>
+                        <td class="my_table_cell tc_uniform">
+                            <a class="delete_reference" id="{{url_for('delete_reference', ref_id=p[0])}}">
+                                <span style="color:red">&#x2717;</span>
+                            </a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr class="my_table_row">
+                        <form action="" method="post" novalidate>
+                            {{ form.hidden_tag() }}
+                            <td class="my_table_cell tc_uniform">
+                                <div class="prompt_input">{{ form.reference(value=p[1]) }}</div>
+                            </td>
+                            <td class="my_table_cell tc_uniform">{{ form.submit() }}</td>
+                            <td class="my_table_cell tc_uniform"></td>
+                        </form>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+
+                </tbody>
+            </table>
+
+            <p>Treffer: {{ vars["data"] | length }}</p>
+        </div>
+    </div>
+    <div class="clearing"></div>
+</div>
+
+{% endblock %}

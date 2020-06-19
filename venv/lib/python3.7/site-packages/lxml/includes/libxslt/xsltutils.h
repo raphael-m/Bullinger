@@ -80,7 +80,7 @@ extern "C" {
       ((n)->type == XML_PI_NODE)))
 
 /*
- * Our own version of namespaced attributes lookup.
+ * Our own version of namespaced atributes lookup.
  */
 XSLTPUBFUN xmlChar * XSLTCALL
 		xsltGetNsProp	(xmlNodePtr node,

@@ -374,3 +374,105 @@ $(document).ready(function () {
         search();
     });
 });
+
+
+$(document).ready(function () {
+    $(".delete_reference").click( function (){
+        var v = getConfirmation();
+        if (v) {
+            var url = window.location.origin + $(this).attr('id');
+            $(location).attr('href', url);
+        }
+    });
+});
+
+
+$(document).ready(function () {
+    $(".edit_reference").click( function (){
+        var url = window.location.origin + $(this).attr('id');
+        $(location).attr('href', url);
+    });
+});
+
+$(document).ready(function () {
+    $("#add_ref").keyup( function (){
+        search_ref();
+    });
+});
+
+$(document).ready(function () {
+    search_ref();
+});
+
+function search_ref() {
+    var s = $("#add_ref").val();
+    if(s) {
+        search_reference(s);
+    } else {
+        $(".my_table_row").each(function() { $(this).show(); });
+    }
+}
+
+function search_reference(str) {
+    $(".my_table_row").each(function() { $(this).hide(); });
+    $(".my_table_cell").each(function() {
+        if ($(this).text().includes(str) == true){
+            $(this).parent().show();
+        }
+    });
+}
+
+$(document).ready(function () {
+    $("#save_ref").click( function (){
+        var url = window.location.origin + "/Kartei/Referenzen/save/" + $("#add_ref").val();
+        $(location).attr('href', url);
+    });
+});
+
+$(document).ready(function () {
+    $(".delete_loc").click( function (){
+        var v = getConfirmation();
+        if (v) {
+            var url = window.location.origin + $(this).attr('id');
+            $(location).attr('href', url);
+        }
+    });
+});
+
+$(document).ready(function () {
+    $("#save_coords").click( function (){
+        var ort = $("#add_coord_ort").val();
+        var c1 = $("#add_coord_1").val();
+        var c2 = $("#add_coord_2").val();
+        var url = window.location.origin + "/Kartei/Ortschaften/Koordinaten/neu/"+ort+"/"+ c1+"/"+c2
+        $(location).attr('href', url);
+    });
+});
+
+$(document).ready(function () {
+    $("#add_coord_ort").keyup( function (){
+        search_coords_ort();
+    });
+});
+
+$(document).ready(function () {
+    search_coords_ort();
+});
+
+function search_coords_ort() {
+    var s = $("#add_coord_ort").val();
+    if(s) {
+        search_coords(s);
+    } else {
+        $(".my_table_row").each(function() { $(this).show(); });
+    }
+}
+
+function search_coords(str) {
+    $(".my_table_row").each(function() { $(this).hide(); });
+    $(".my_table_cell").each(function() {
+        if ($(this).text().includes(str) == true){
+            $(this).parent().show();
+        }
+    });
+}

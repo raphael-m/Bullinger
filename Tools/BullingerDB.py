@@ -1396,6 +1396,104 @@ class BullingerDB:
                  d[6] if d[6] else 0,  # abg
                  ] for d in data if d[0]], c
 
+    @staticmethod
+    def get_data_overview_literature():
+        qk = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
+        ql = BullingerDB.get_most_recent_only(db.session, Literatur).subquery()
+        data = db.session.query(
+            qk.c.id_brief.label("id_brief"),
+            ql.c.literatur.label("literatur"),
+            qk.c.status.label("status"),
+        ).join(qk, qk.c.id_brief == ql.c.id_brief)\
+         .filter(ql.c.literatur != None)\
+         .order_by(asc(qk.c.id_brief))
+        return [[d[0], d[1], d[2]] for d in data]
+
+    @staticmethod
+    def get_data_overview_printed():
+        qk = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
+        qr = BullingerDB.get_most_recent_only(db.session, Gedruckt).subquery()
+        data = db.session.query(
+            qk.c.id_brief.label("id_brief"),
+            qr.c.gedruckt.label("gedruckt"),
+            qk.c.status.label("status"),
+        ).join(qk, qk.c.id_brief == qr.c.id_brief)\
+         .filter(qr.c.gedruckt != None)\
+         .order_by(asc(qk.c.id_brief))
+        return [[d[0], d[1], d[2]] for d in data]
+
+    @staticmethod
+    def get_data_overview_literature_and_printed():
+        qk, ql, qr = BullingerDB.get_most_recent_only(db.session, Kartei).subquery(),\
+                     BullingerDB.get_most_recent_only(db.session, Literatur).subquery(),\
+                     BullingerDB.get_most_recent_only(db.session, Gedruckt).subquery()
+        data1, data2 = \
+            db.session.query(
+                    qk.c.id_brief.label("id_brief"),
+                    ql.c.literatur.label("ref"),
+                    qk.c.status.label("status"),
+                ).join(qk, qk.c.id_brief == ql.c.id_brief)\
+                 .filter(ql.c.literatur != None)\
+                 .order_by(asc(qk.c.id_brief)),\
+            db.session.query(
+                    qk.c.id_brief.label("id_brief"),
+                    qr.c.gedruckt.label("ref"),
+                    qk.c.status.label("status"),
+                ).join(qk, qk.c.id_brief == qr.c.id_brief)\
+                 .filter(qr.c.gedruckt != None)\
+                 .order_by(asc(qk.c.id_brief))
+        return [[d[0], d[1], d[2], True] for d in data1] + [[d[0], d[1], d[2], False] for d in data2]
+
+    @staticmethod
+    def get_data_overview_references():
+        data = db.session.query(
+            Referenzen.id,
+            Referenzen.literatur
+        ).filter(Referenzen.status == 1)\
+         .order_by(Referenzen.literatur)
+        return [[d[0], d[1]] for d in data]
+
+    @staticmethod
+    def delete_reference(ref_id):
+        Referenzen.query.filter_by(id=ref_id).first().status = 0
+        db.session.commit()
+
+    @staticmethod
+    def edit_reference(ref_id, value, username):
+        Referenzen.query.filter_by(id=ref_id).first().status = 0
+        db.session.add(Referenzen(literature=value, user=username))
+        db.session.commit()
+
+    @staticmethod
+    def save_reference(ref, username):
+        exists = Referenzen.query.filter_by(literatur=ref).first()
+        if not exists:
+            db.session.add(Referenzen(literature=ref, user=username))
+            db.session.commit()
+
+    @staticmethod
+    def get_data_overview_coordinates():
+        data = db.session.query(
+            Ortschaften.id,
+            Ortschaften.ort,
+            Ortschaften.laenge,
+            Ortschaften.breite
+        ).filter(Ortschaften.status == 1)
+        return [[d[0], d[1], d[2] if d[2] else "", d[3] if d[3] else ""] for d in data]
+
+    @staticmethod
+    def save_coordinates(ort, c1, c2, username):
+        x = Ortschaften.query.filter_by(ort=ort).filter_by(status=1).first()
+        if x:
+            if c1: x.laenge = c1
+            if c2: x.breite = c2
+        else: db.session.add(Ortschaften(ort=ort, l=c1, b=c2, user=username))
+        db.session.commit()
+
+    @staticmethod
+    def delete_coordinates(coord_id):
+        Ortschaften.query.filter_by(id=coord_id).first().status = 0
+        db.session.commit()
 
     @staticmethod
     def get_data_overview_autocopy_x(standort):

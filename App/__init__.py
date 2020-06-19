@@ -66,7 +66,7 @@ class AuthException(HTTPException):
 # no cyclic imports (!)
 from App import routes, models
 from App.models import Kartei, User, Datum, Person, Alias, Absender, Empfaenger, Autograph, Kopie, Sprache, Literatur,\
-    Gedruckt, Bemerkung, Notiz, Tracker, KopieB, Ortschaften
+    Referenzen, Gedruckt, Bemerkung, Notiz, Tracker, KopieB, Ortschaften
 
 # Admin
 app.config['FLASK_ADMIN_SWATCH'] = 'cosmo'  # cerulean, slate, cosmo
@@ -85,6 +85,7 @@ admin.add_view(ModelView(Kopie, db.session))
 admin.add_view(ModelView(KopieB, db.session))
 admin.add_view(ModelView(Sprache, db.session))
 admin.add_view(ModelView(Literatur, db.session))
+admin.add_view(ModelView(Referenzen, db.session))
 admin.add_view(ModelView(Gedruckt, db.session))
 admin.add_view(ModelView(Bemerkung, db.session))
 admin.add_view(ModelView(Notiz, db.session))
