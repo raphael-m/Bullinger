@@ -23,34 +23,37 @@
                             <th class="js-sort-string my_table_head_cell">Ort</th>
                             <th class="js-sort-number my_table_head_cell">Breite</th>
                             <th class="js-sort-number my_table_head_cell">Länge</th>
-                            <th class="js-sort-number my_table_head_cell">löschen</th>
+                            <th class="js-sort-number my_table_head_cell">Aktion</th>
                         </tr>
                     </thead>
                     <tbody>
 
-                    <tr class="my_table_row2">
-                        <td class="my_table_cell ">
-                            <input type="text" id="add_coord_ort" name="add_coord_ort" placeholder="Suchen / Neue Referenz hinzufügen">
+                    <tr class="my_table_row2 tc_uniform">
+                        <td class="my_table_cell tc_uniform">
+                            <input type="text" id="add_coord_ort" name="add_coord_ort" placeholder="Suchen/Neu">
                         </td>
-                        <td class="my_table_cell">
+                        <td class="my_table_cell tc_uniform">
                             <input type="text" id="add_coord_1" name="add_coord_coord1" placeholder="Breite">
                         </td>
-                        <td class="my_table_cell">
+                        <td class="my_table_cell tc_uniform">
                             <input type="text" id="add_coord_2" name="add_coord_coord2" placeholder="Länge">
                         </td>
-                        <td class="my_table_cell">
+                        <td class="my_table_cell tc_uniform">
                             <input type="submit" id="save_coords" value="Speichern">
                         </td>
-                        <td class="my_table_cell"></td>
                     </tr>
 
 
                     {% for p in vars["data"] %}
                         <tr class="my_table_row">
-                            <td class="my_table_cell">{{ p[1] }}</td>
-                            <td class="my_table_cell">{{ p[2] }}</td>
-                            <td class="my_table_cell">{{ p[3] }}</td>
-                            <td class="my_table_cell">
+                            <td class="my_table_cell tc_uniform">
+                                <a href="{{url_for('place', location=p[4])}}">
+                                    {{ p[1] }}
+                                </a>
+                            </td>
+                            <td class="my_table_cell tc_uniform">{{ p[2] }}</td>
+                            <td class="my_table_cell tc_uniform">{{ p[3] }}</td>
+                            <td class="my_table_cell tc_uniform">
                                 <a class="delete_loc" id="{{url_for('delete_coordinates', coord_id=p[0])}}">
                                     <span style="color:red">&#x2717;</span>
                                 </a>

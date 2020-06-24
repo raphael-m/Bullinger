@@ -56,3 +56,8 @@ class PersonNameForm(FlaskForm):
     a_name = StringField('Name')
     a_forename = StringField('Vorname')
     submit = SubmitField('Speichern')
+
+
+class HiddenDataForm(FlaskForm):
+
+    data = StringField('data')

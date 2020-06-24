@@ -535,15 +535,15 @@ class BullingerDB:
             new_person = Person(name=d["lastname"], forename=d["firstname"], place=d["location"])
             self.push2db(new_person, i, user, t)  # id
             e_new.id_person = new_person.id
-        else:
-            e_new.id_person = p_new.id
+        else: e_new.id_person = p_new.id
         if e_old and p_old:
             n = BullingerDB.get_number_of_differences_from_person(d, p_old)
             if e_old.bemerkung != d["remarks"]: n += 1
             if e_old.nicht_verifiziert != d["not_verified"]: n += 1
             if n > 0: self.push2db(e_new, i, user, t)
-        else:
-            self.push2db(e_new, i, user, t)
+        else: self.push2db(e_new, i, user, t)
+        if not Ortschaften.query.filter_by(ort=d["location"], status=1).first():
+            db.session.add(Ortschaften(ort=d["location"], user=user))
         self.dbs.commit()
         return n
 
@@ -558,15 +558,16 @@ class BullingerDB:
             new_person = Person(name=d["lastname"], forename=d["firstname"], place=d["location"])
             self.push2db(new_person, i, user, t)  # id
             a_new.id_person = new_person.id
-        else:
-            a_new.id_person = p_new.id
+        else: a_new.id_person = p_new.id
         if a_old and p_old:
             n = BullingerDB.get_number_of_differences_from_person(d, p_old)
             if a_old.bemerkung != d["remarks"]: n += 1
             if a_old.nicht_verifiziert != d["not_verified"]: n += 1
             if n > 0: self.push2db(a_new, i, user, t)
-        else:
-            self.push2db(a_new, i, user, t)
+        else: self.push2db(a_new, i, user, t)
+        if not Ortschaften.query.filter_by(ort=d["location"], status=1).first():
+            db.session.add(Ortschaften(ort=d["location"], user=user))
+        db.session.commit()
         return n
 
     def save_copy(self, i, d, user, t):
@@ -1467,9 +1468,9 @@ class BullingerDB:
     @staticmethod
     def save_reference(ref, username):
         exists = Referenzen.query.filter_by(literatur=ref).first()
-        if not exists:
-            db.session.add(Referenzen(literature=ref, user=username))
-            db.session.commit()
+        if exists: exists.status = 1
+        else: db.session.add(Referenzen(literature=ref, user=username))
+        db.session.commit()
 
     @staticmethod
     def get_data_overview_coordinates():
@@ -1478,15 +1479,20 @@ class BullingerDB:
             Ortschaften.ort,
             Ortschaften.laenge,
             Ortschaften.breite
-        ).filter(Ortschaften.status == 1)
-        return [[d[0], d[1], d[2] if d[2] else "", d[3] if d[3] else ""] for d in data]
+        ).filter(Ortschaften.status == 1)\
+         .order_by(Ortschaften.ort)
+        return [[d[0],
+                 d[1],
+                 d[2] if d[2] else "",
+                 d[3] if d[3] else "",
+                 d[1].replace("/", Config.URL_ESC) if d[1] else ""] for d in data]
 
     @staticmethod
     def save_coordinates(ort, c1, c2, username):
         x = Ortschaften.query.filter_by(ort=ort).filter_by(status=1).first()
         if x:
-            if c1: x.laenge = c1
-            if c2: x.breite = c2
+            x.laenge = c1
+            x.breite = c2
         else: db.session.add(Ortschaften(ort=ort, l=c1, b=c2, user=username))
         db.session.commit()
 

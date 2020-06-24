@@ -380,7 +380,7 @@ $(document).ready(function () {
     $(".delete_reference").click( function (){
         var v = getConfirmation();
         if (v) {
-            var url = window.location.origin + $(this).attr('id');
+            var url = window.location.origin + $(this).attr('id') + $("#scroll_pos").val();
             $(location).attr('href', url);
         }
     });
@@ -389,7 +389,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
     $(".edit_reference").click( function (){
-        var url = window.location.origin + $(this).attr('id');
+        var url = window.location.origin + $(this).attr('id') + $("#scroll_pos").val();
         $(location).attr('href', url);
     });
 });

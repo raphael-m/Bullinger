@@ -59,3 +59,8 @@
 .name_selector {
     cursor: pointer;
 }
+
+#add_coord_ort, #add_coord_1, #add_coord_2 {
+    margin: 0px;
+    padding: 0px;
+}

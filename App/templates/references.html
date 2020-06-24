@@ -8,12 +8,18 @@
     {% include "user_status.html" %}
 </h1>
 
+<script src="{{url_for('static', filename='js/scroll.js')}}"></script>
+<input style="display: none;" type="text" id="scroll_pos" name="scroll_pos" value="{{ vars['scroll_pos'] }}">
+
+
+
 <div class="main_box">
 	<div class="h2_box>">
         <h2>Referenzen</h2>
         <div class="h2_section">
 
             <!--
+
             <p> Suchen:
                 <input type="text" id="search_reference" name="search_reference" placeholder="Suchen">
             </p>
@@ -23,7 +29,7 @@
 
                 <tr class="my_table_row2">
                     <td class="my_table_cell tc_uniform">
-                        <input type="text" id="add_ref" name="add_ref" placeholder="Suchen / Neue Referenz hinzufügen">
+                        <input type="text" id="add_ref" name="add_ref" placeholder="Suchen/neu">
                     </td>
                     <td class="my_table_cell tc_uniform">
                         <input type="submit" id="save_ref" value="Speichern">
@@ -35,7 +41,7 @@
                     <tr class="my_table_head_row">
                         <th class="js-sort-string my_table_head_cell">Referenz</th>
                         <th>ändern</th>
-                        <th class="js-sort-string my_table_head_cell">löschen</th>
+                        <th class="js-sort-string my_table_head_cell">Aktion</th>
                     </tr>
                 </thead>
                 <tbody>
