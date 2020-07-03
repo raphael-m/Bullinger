@@ -35,7 +35,9 @@
                         <td class="my_table_cell">
                             <a href="{{url_for('assignment', id_brief=p[0])}}">{{ p[0] }}</a>
                         </td>
-                        <td class="my_table_cell">{{ p[1] }}</td>
+                        <td class="my_table_cell">
+                            <a href="{{url_for('overview_copy_x', copy=p[1])}}">{{ p[1] }}</a>
+                        </td>
                         <td class="my_table_cell">{{ p[2] }}</td>
                         <td class="my_table_cell">{{ p[3] }}</td>
                         <td class="my_table_cell">

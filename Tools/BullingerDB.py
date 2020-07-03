@@ -1311,6 +1311,42 @@ class BullingerDB:
          .order_by(rel.c.id_brief)
         return [[d[0], d[1] if d[1] else "", d[2] if d[2] else "", d[3] if d[3] else "", d[4]] for d in data if d[0]]
 
+    @staticmethod
+    def get_data_overview_copy_remarks_A():
+        rel, file = BullingerDB.get_most_recent_only(db.session, Kopie).subquery(),\
+                    BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
+        data = db.session.query(
+            rel.c.id_brief,
+            rel.c.standort,
+            rel.c.signatur,
+            rel.c.bemerkung,
+            file.c.status,
+        ).join(file, file.c.id_brief == rel.c.id_brief)\
+         .filter(rel.c.bemerkung.isnot(None))\
+         .order_by(rel.c.id_brief)
+        return [[d[0], d[1] if d[1] else "", d[2] if d[2] else "", d[3] if d[3] else "", d[4]] for d in data if d[0]]
+
+    @staticmethod
+    def get_data_personal_history(username):
+        file = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
+        data = db.session.query(
+            file.c.id_brief,
+            file.c.status,
+            file.c.zeit
+        ).filter(file.c.anwender == username)\
+            .order_by(desc(file.c.zeit))
+        return [[d[0], d[1], d[2][:19]] for d in data]
+
+    @staticmethod
+    def get_data_general_history(username):
+        file = BullingerDB.get_most_recent_only(db.session, Kartei).subquery()
+        data = db.session.query(
+            file.c.id_brief,
+            file.c.status,
+            file.c.anwender,
+            file.c.zeit
+        ).order_by(desc(file.c.zeit))
+        return [[d[0], d[1], d[2] if d[2] == username else "(anonym)", d[3][:19]] for d in data]
 
     @staticmethod
     def get_data_overview_autocopy():

@@ -12,6 +12,8 @@ from flask import render_template, flash, redirect, url_for, make_response, json
 from flask_login import current_user, login_user, login_required, logout_user
 from sqlalchemy import desc, func, asc, union_all, and_
 from Tools.BullingerDB import BullingerDB
+from Tools.Transcription import Transcriptions
+from Tools.Langid import Langid
 from Tools.Dictionaries import CountDict, ListDict
 from collections import defaultdict
 from App.models import *
@@ -627,6 +629,20 @@ def overview_copy_remarks():
     )
 
 
+@app.route('/Kartei/Kopie/Bemerkungen/A', methods=['GET'])
+def overview_copy_remarks_A():
+    BullingerDB.track(current_user.username, '/Kartei/Kopien/Bemerkungen', datetime.now())
+    return render_template(
+        "overview_copy_remarks.html",
+        title="Kartei/Kopien (Bemerkungen)",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "data": BullingerDB.get_data_overview_copy_remarks_A(),
+        }
+    )
+
+
 @app.route('/Kartei/Personen/heimatlos', methods=['GET'])
 def correspondents():
     BullingerDB.track(current_user.username, '/Kartei/Personen/heimatlos', datetime.now())
@@ -701,6 +717,34 @@ def person_by_place(place):
             "url_back": "overview_persons",
             "table": data,
             "description": "Personen von "+place
+        }
+    )
+
+@app.route('/Kartei/Verlauf/Persönlich', methods=['GET'])
+def personal_history():
+    BullingerDB.track(current_user.username, '/Kartei/History', datetime.now())
+    return render_template(
+        "overview_personal_history.html",
+        title="History",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "user_stats_all": BullingerDB.get_user_stats_all(current_user.username),
+            "table": BullingerDB.get_data_personal_history(current_user.username),
+        }
+    )
+
+@app.route('/Kartei/Verlauf/Allgemein', methods=['GET'])
+def general_history():
+    BullingerDB.track(current_user.username, '/Kartei/History', datetime.now())
+    return render_template(
+        "overview_general_history.html",
+        title="History",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "user_stats_all": BullingerDB.get_user_stats_all(current_user.username),
+            "table": BullingerDB.get_data_general_history(current_user.username),
         }
     )
 
@@ -1245,4 +1289,22 @@ def update_coordinates_places():
     ).filter(data.c.ort.notin_([i[0] for i in old])).filter(data.c.ort.isnot("s.l."))
     for i in data: db.session.add(Ortschaften(ort=i[0]))
     db.session.commit()
+    return redirect(url_for('index'))
+
+
+# Processing student transcriptions
+@app.route('/api/process_transcriptions/subscriptions', methods=['GET', 'POST'])
+def add_un():
+    path = "Data/TUSTEP/7_un"
+    # Transcriptions.print_contexts(path, "<vo>")
+    """
+    Transcriptions.correct_od_close_vo(path)
+    Transcriptions.correct_vo_close(path)
+    Transcriptions.correct_subscription_tx(path)
+    Transcriptions.correct_subscription_lz(path)
+    Transcriptions.correct_lz_end(path)
+    Transcriptions.annotate_odtx(path)
+    """
+    Transcriptions.eliminate_exceptional_tags(path)
+    Transcriptions.count_all(path)
     return redirect(url_for('index'))

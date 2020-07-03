@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/Tools/BullingerDB.py" line="1951" mnemonic="7" />
+    <bookmark url="file://$PROJECT_DIR$/Tools/BullingerDB.py" line="1987" mnemonic="7" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6d2cb28e-bb45-42c9-b203-59c8af68dfbb" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/bsc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/bsc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/templates/file_inner.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/file_inner.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/templates/overview_autocopy.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/overview_autocopy.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/templates/overview_copy.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/overview_copy.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/templates/overview_copy_remarks.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/overview_copy_remarks.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/templates/overview_places.html" beforeDir="false" afterPath="$PROJECT_DIR$/App/templates/overview_places.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tools/BullingerDB.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tools/BullingerDB.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tools/Langid.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tools/Langid.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/app.db" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -22,8 +32,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/routes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="235">
-              <caret line="870" column="29" selection-start-line="870" selection-start-column="29" selection-end-line="870" selection-end-column="29" />
+            <state relative-caret-position="303">
+              <caret line="740" column="25" selection-start-line="740" selection-start-column="25" selection-end-line="740" selection-end-column="25" />
               <folding>
                 <element signature="e#172#206#0" expanded="true" />
               </folding>
@@ -32,74 +42,58 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config.py">
+        <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="207">
-              <caret line="18" column="100" selection-start-line="18" selection-start-column="65" selection-end-line="18" selection-end-column="100" />
+            <state relative-caret-position="193">
+              <caret line="1329" column="19" selection-start-line="1329" selection-start-column="19" selection-end-line="1329" selection-end-column="19" />
+              <folding>
+                <element signature="e#118#153#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/templates/file_inner.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="308">
+              <caret line="24" column="116" selection-start-line="24" selection-start-column="116" selection-end-line="24" selection-end-column="116" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/App/templates/index.html">
+        <entry file="file://$PROJECT_DIR$/Scripts/localhost_db_fetch.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="201" column="23" selection-start-line="201" selection-start-column="23" selection-end-line="201" selection-end-column="23" />
+            <state relative-caret-position="60">
+              <caret line="4" column="55" selection-start-line="4" selection-start-column="55" selection-end-line="4" selection-end-column="55" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/static/css/main.css">
+        <entry file="file://$PROJECT_DIR$/App/templates/overview_states.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="502">
-              <caret line="67" column="16" selection-start-line="67" selection-start-column="16" selection-end-line="67" selection-end-column="16" />
+            <state relative-caret-position="331">
+              <caret line="31" selection-start-line="31" selection-end-line="33" selection-end-column="94" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/static/js/scroll.js">
+        <entry file="file://$PROJECT_DIR$/App/templates/overview_personal_history.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" selection-start-line="11" selection-end-line="11" />
+            <state relative-caret-position="414">
+              <caret line="36" column="14" selection-end-line="41" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/templates/overview_coordinates.html">
+        <entry file="file://$PROJECT_DIR$/App/templates/overview_general_history.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="385">
-              <caret line="49" column="72" selection-start-line="49" selection-start-column="72" selection-end-line="49" selection-end-column="72" />
-              <folding>
-                <element signature="n#style#0;n#span#0;n#a#0;n#td#3;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/templates/references.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" selection-start-line="10" selection-end-line="10" selection-end-column="70" />
-              <folding>
-                <element signature="n#style#0;n#input#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#a#0;n#td#2;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="22080">
-              <caret line="1472" column="27" selection-start-line="1472" selection-start-column="27" selection-end-line="1472" selection-end-column="27" />
-              <folding>
-                <element signature="e#118#153#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="172">
+              <caret line="19" column="24" selection-start-line="19" selection-start-column="24" selection-end-line="19" selection-end-column="83" />
             </state>
           </provider>
         </entry>
@@ -116,16 +110,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>/Kartei/Ortscha</find>
-      <find>redire</find>
-      <find>reformiert</find>
-      <find>union</find>
-      <find>Kartei/Kopien</find>
-      <find>/Alias</find>
-      <find>/print</find>
-      <find>/Kartei/Ortschaften/Karte</find>
-      <find>/Personen/Ort</find>
-      <find>redirect(url_for('ad</find>
       <find>Bähler</find>
       <find>point</find>
       <find>delete</find>
@@ -146,6 +130,16 @@
       <find>Koordinaten</find>
       <find>coordinates</find>
       <find>Kartei/Ortschaften/Karte</find>
+      <find>/card</find>
+      <find>&quot;&quot;&quot;</find>
+      <find>/Kartei/Ort</find>
+      <find>/Kartei/Kopie</find>
+      <find>/Kartei/Auto</find>
+      <find>overview_copy_remarks</find>
+      <find>/K</find>
+      <find>/Kartei/Kopie/Ber</find>
+      <find>/Kartei/Status</find>
+      <find>/Kartei/Verla</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -154,12 +148,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/App/templates/overview_autocopy.html" />
-        <option value="$PROJECT_DIR$/App/templates/overview_autokopie.html" />
-        <option value="$PROJECT_DIR$/App/static/css/links.css" />
-        <option value="$PROJECT_DIR$/App/templates/overview_persons.html" />
-        <option value="$PROJECT_DIR$/App/templates/overview.html" />
-        <option value="$PROJECT_DIR$/Trash/routes.txt" />
         <option value="$PROJECT_DIR$/App/templates/overview_languages_cards.html" />
         <option value="$PROJECT_DIR$/App/templates/overview_states.html" />
         <option value="$PROJECT_DIR$/App/templates/overview_state.html" />
@@ -176,9 +164,7 @@
         <option value="$PROJECT_DIR$/Scripts/MFCL.py" />
         <option value="$PROJECT_DIR$/App/templates/faq.html" />
         <option value="$PROJECT_DIR$/Scripts/localhost_db_init.sh" />
-        <option value="$PROJECT_DIR$/App/templates/overview_copy_remarks.html" />
         <option value="$PROJECT_DIR$/App/templates/overview_copy_x.html" />
-        <option value="$PROJECT_DIR$/App/templates/overview_copy.html" />
         <option value="$PROJECT_DIR$/App/templates/person_aliases.html" />
         <option value="$PROJECT_DIR$/App/templates/overview_general.html" />
         <option value="$PROJECT_DIR$/Scripts/localhost_run.sh" />
@@ -190,8 +176,6 @@
         <option value="$PROJECT_DIR$/App/templates/overview_printed.html" />
         <option value="$PROJECT_DIR$/App/templates/overview_literature_and_printed.html" />
         <option value="$PROJECT_DIR$/Data/geo_data.txt" />
-        <option value="$PROJECT_DIR$/App/templates/file_inner.html" />
-        <option value="$PROJECT_DIR$/App/templates/overview_places.html" />
         <option value="$PROJECT_DIR$/App/models.py" />
         <option value="$PROJECT_DIR$/App/static/css/table.css" />
         <option value="$PROJECT_DIR$/App/static/css/form.css" />
@@ -200,17 +184,28 @@
         <option value="$PROJECT_DIR$/App/static/js/scroll.js" />
         <option value="$PROJECT_DIR$/App/templates/references.html" />
         <option value="$PROJECT_DIR$/App/static/js/sort-table.js" />
-        <option value="$PROJECT_DIR$/App/routes.py" />
-        <option value="$PROJECT_DIR$/Tools/BullingerDB.py" />
         <option value="$PROJECT_DIR$/App/static/js/map_loader.js" />
         <option value="$PROJECT_DIR$/App/static/css/main.css" />
+        <option value="$PROJECT_DIR$/Tools/Langid.py" />
         <option value="$PROJECT_DIR$/App/templates/index.html" />
+        <option value="$PROJECT_DIR$/Tools/Transcription.py" />
+        <option value="$PROJECT_DIR$/App/templates/overview_places.html" />
+        <option value="$PROJECT_DIR$/App/templates/overview_autocopy.html" />
+        <option value="$PROJECT_DIR$/App/templates/overview_copy.html" />
+        <option value="$PROJECT_DIR$/App/templates/overview_copy_remarks.html" />
+        <option value="$PROJECT_DIR$/App/templates/overview_personal_history.html" />
+        <option value="$PROJECT_DIR$/Tools/BullingerDB.py" />
+        <option value="$PROJECT_DIR$/App/routes.py" />
+        <option value="$PROJECT_DIR$/App/templates/overview_general_history.html" />
+        <option value="$PROJECT_DIR$/App/templates/file_inner.html" />
+        <option value="$PROJECT_DIR$/Scripts/localhost_db_fetch.sh" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds">
+    <option name="x" value="184" />
     <option name="y" value="23" />
-    <option name="width" value="1440" />
+    <option name="width" value="1256" />
     <option name="height" value="826" />
   </component>
   <component name="ProjectLevelVcsManager">
@@ -242,17 +237,17 @@
             <path>
               <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
               <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
-              <item name="Data" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
               <item name="Doku" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
               <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
               <item name="Scripts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Bullinger_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Bullinger_production" type="462c0819:PsiDirectoryNode" />
+              <item name="Tools" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -268,13 +263,14 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Data/TUSTEP/zip" />
+      <recent name="$PROJECT_DIR$/Data/TUSTEP/src" />
       <recent name="$PROJECT_DIR$/Data/DB_Backups" />
       <recent name="$PROJECT_DIR$/Doku" />
       <recent name="$PROJECT_DIR$/Scripts" />
-      <recent name="$PROJECT_DIR$/Doku/Slides" />
-      <recent name="$PROJECT_DIR$/Tools" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Data/TUSTEP" />
       <recent name="$PROJECT_DIR$/App/static/images" />
       <recent name="$PROJECT_DIR$/Data/DB_Backups" />
       <recent name="$PROJECT_DIR$/Doku/Slides" />
@@ -339,12 +335,13 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="25" width="1440" height="826" extended-state="6" />
+    <frame x="184" y="23" width="1256" height="826" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" sideWeight="0.38134432" side_tool="true" weight="0.32959852" />
-      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.75" visible="true" weight="0.22551093" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.75" visible="true" weight="0.23319837" />
       <window_info id="Structure" order="2" sideWeight="0.25" side_tool="true" weight="0.29027113" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="0" sideWeight="0.49964765" visible="true" weight="0.3092643" />
+      <window_info anchor="bottom" id="Terminal" order="0" sideWeight="0.49964765" visible="true" weight="0.1839237" />
       <window_info anchor="bottom" id="Event Log" order="1" sideWeight="0.5003524" side_tool="true" weight="0.17847411" />
       <window_info anchor="bottom" id="Python Console" order="2" weight="0.32967034" />
       <window_info anchor="bottom" id="Message" order="3" />
@@ -354,360 +351,263 @@
       <window_info anchor="bottom" id="Debug" order="7" weight="0.34379265" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="10" weight="0.26875854" />
+      <window_info anchor="bottom" id="TODO" order="10" weight="0.39645776" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Timeline/server.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" selection-start-line="4" selection-end-line="4" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Timeline/templates/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="239">
-          <caret line="41" column="30" selection-start-line="41" selection-start-column="30" selection-end-line="41" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/faq.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="5" selection-start-line="6" selection-start-column="5" selection-end-line="6" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App.py">
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out1_index/0015.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/Data/Bemerkungen.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2385">
-          <caret line="159" column="24" selection-start-line="159" selection-start-column="24" selection-end-line="159" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Scripts/localhost_usr_fetch.sh">
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out1_index/0386.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/Scripts/localhost_push.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="1" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Scripts/localhost_db_init.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" selection-start-line="10" selection-end-line="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Scripts/localhost_db_fetch.sh">
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out1_index/1541.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/Data/user_addresses.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-column="2093" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/overview_copy_x.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="27" column="49" selection-start-line="27" selection-start-column="49" selection-end-line="27" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/overview_copy.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="20" column="25" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Data/user_data.txt">
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out1_index/1870.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/file.html">
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out1_index/2296.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-431" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out1_index/3336.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/Scripts/localhost_run.sh">
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out1_index/3499.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out1_index/0002.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out1_index/0003.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out1_index/0007.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+        <state relative-caret-position="349">
+          <caret line="42" column="62" selection-start-line="42" selection-start-column="62" selection-end-line="42" selection-end-column="62" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/overview_general.html">
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out1_index/0170.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out1_index/1362.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="89" selection-start-line="14" selection-start-column="89" selection-end-line="14" selection-end-column="89" />
+        <state relative-caret-position="450">
+          <caret line="30" column="31" selection-start-line="30" selection-start-column="31" selection-end-line="30" selection-end-column="31" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/overview_place.html">
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out1_index/0855.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out1_index/0847.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out1_index/0844.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out1_index/0841.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out1_index/0838.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out1_index/0837.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out1_index/0814.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out1_index/0811.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/src/hbbw.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out1_index/0001.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="12">
+          <caret line="15" column="40" selection-start-line="15" selection-start-column="40" selection-end-line="15" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out1_index/0731.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out1_index/0006.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/korrekturen.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out1_index/0000.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
-          <caret line="16" column="32" selection-end-line="54" />
+          <caret line="16" column="36" selection-start-line="16" selection-start-column="36" selection-end-line="16" selection-end-column="36" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="466">
-          <caret line="92" selection-start-line="92" selection-end-line="92" />
-          <folding>
-            <element signature="e#116#148#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/overview_literature_manual.html">
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/out0_original/17057.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/static/css/boxes.css">
+    <entry file="file://$PROJECT_DIR$/Tools/Langid.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="11" selection-start-line="3" selection-start-column="11" selection-end-line="3" selection-end-column="11" />
+        <state relative-caret-position="330">
+          <caret line="22" column="25" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/static/css/links.css">
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/6_autvo/1548_18000_lat.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="233">
-          <caret line="35" column="19" lean-forward="true" selection-start-line="35" selection-start-column="4" selection-end-line="35" selection-end-column="19" />
-        </state>
+        <state relative-caret-position="-64" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/static/css/std.css">
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/6_autvo/1548_18001_lat.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="14" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
-        </state>
+        <state relative-caret-position="-656" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/static/css/reset.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="3" selection-start-line="8" selection-start-column="3" selection-end-line="8" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/static/css/header.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="9" selection-start-column="9" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Data/Literatur/literature_reference.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="64" column="31" selection-start-line="64" selection-start-column="31" selection-end-line="64" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/overview_printed.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="344">
-          <caret line="39" column="27" selection-start-line="39" selection-start-column="27" selection-end-line="39" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/overview_literature_and_printed.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="327">
-          <caret line="37" column="32" selection-start-line="37" selection-start-column="32" selection-end-line="37" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Data/geo_data.txt">
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/6_autvo/1548_18002_de.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/file_inner.html">
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/6_autvo/1548_18003_de.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="18" column="17" selection-start-line="18" selection-start-column="17" selection-end-line="18" selection-end-column="17" />
+        <state relative-caret-position="420">
+          <caret line="28" column="43" selection-start-line="28" selection-start-column="43" selection-end-line="28" selection-end-column="43" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/overview_literature.html">
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/6_autvo/1548_18005_de.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/6_autvo/1548_18007_de.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="29" column="40" selection-end-line="43" />
-        </state>
+        <state relative-caret-position="-281" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/static/css/table.css">
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/6_autvo/1548_18004_de.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="72" column="30" selection-start-line="72" selection-start-column="30" selection-end-line="72" selection-end-column="30" />
-        </state>
+        <state relative-caret-position="-491" />
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/TUSTEP/6_autvo/1548_18102_lat.txt">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/Doku/setup.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="21" column="25" selection-start-line="21" selection-start-column="9" selection-end-line="21" selection-end-column="25" />
+        <state relative-caret-position="326">
+          <caret line="23" column="19" selection-start-line="23" selection-start-column="19" selection-end-line="23" selection-end-column="19" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/static/css/form.css">
+    <entry file="file://$PROJECT_DIR$/Tools/Transcription.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="547">
-          <caret line="64" column="17" selection-start-line="64" selection-start-column="17" selection-end-line="64" selection-end-column="17" />
+        <state relative-caret-position="329">
+          <caret line="89" column="17" lean-forward="true" selection-start-line="89" selection-start-column="17" selection-end-line="89" selection-end-column="17" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/App/templates/overview_places.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="39" column="114" selection-start-line="39" selection-start-column="54" selection-end-line="39" selection-end-column="114" />
+        <state relative-caret-position="123">
+          <caret line="15" column="104" selection-start-line="15" selection-start-column="104" selection-end-line="15" selection-end-column="104" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/models.py">
+    <entry file="file://$PROJECT_DIR$/App/templates/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="188" column="23" selection-start-line="188" selection-start-column="23" selection-end-line="188" selection-end-column="23" />
-          <folding>
-            <element signature="e#112#139#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="175">
+          <caret line="169" column="20" selection-start-line="169" selection-start-column="20" selection-end-line="169" selection-end-column="33" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/forms.py">
+    <entry file="file://$PROJECT_DIR$/App/templates/overview_copy.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="60" column="20" selection-start-line="60" selection-start-column="20" selection-end-line="60" selection-end-column="20" />
-          <folding>
-            <element signature="e#165#196#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/account_login.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="17" selection-start-line="17" selection-end-line="45" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/base.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/static/js/page_scroll.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="72" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="72" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/person_aliases.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-318">
-          <caret line="25" selection-start-line="25" selection-end-line="77" selection-end-column="19" />
+        <state relative-caret-position="250">
+          <caret line="34" column="98" selection-start-line="34" selection-start-column="32" selection-end-line="34" selection-end-column="98" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/App/templates/overview_copy_remarks.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="24" column="49" selection-start-line="24" selection-start-column="49" selection-end-line="24" selection-end-column="49" />
+        <state relative-caret-position="290">
+          <caret line="38" column="73" selection-start-line="38" selection-start-column="73" selection-end-line="38" selection-end-column="73" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/static/js/sort-table.js">
+    <entry file="file://$PROJECT_DIR$/App/templates/overview_general.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="382" column="91" selection-start-line="382" selection-start-column="91" selection-end-line="382" selection-end-column="91" />
+        <state relative-caret-position="330">
+          <caret line="22" column="33" selection-end-line="66" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config.py">
+    <entry file="file://$PROJECT_DIR$/App/templates/overview_autocopy.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="18" column="100" selection-start-line="18" selection-start-column="65" selection-end-line="18" selection-end-column="100" />
+        <state relative-caret-position="208">
+          <caret line="32" selection-start-line="32" selection-end-line="43" selection-end-column="28" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/references.html">
+    <entry file="file://$PROJECT_DIR$/App/templates/overview_states.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" selection-start-line="10" selection-end-line="10" selection-end-column="70" />
-          <folding>
-            <element signature="n#style#0;n#input#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#a#0;n#td#2;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/routes.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="235">
-          <caret line="870" column="29" selection-start-line="870" selection-start-column="29" selection-end-line="870" selection-end-column="29" />
-          <folding>
-            <element signature="e#172#206#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/static/js/map_loader.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="137" selection-start-line="1" selection-start-column="137" selection-end-line="1" selection-end-column="137" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/static/css/main.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="502">
-          <caret line="67" column="16" selection-start-line="67" selection-start-column="16" selection-end-line="67" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/overview_coordinates.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="49" column="72" selection-start-line="49" selection-start-column="72" selection-end-line="49" selection-end-column="72" />
-          <folding>
-            <element signature="n#style#0;n#span#0;n#a#0;n#td#3;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/static/js/scroll.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" selection-start-line="11" selection-end-line="11" />
+        <state relative-caret-position="331">
+          <caret line="31" selection-start-line="31" selection-end-line="33" selection-end-column="94" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Tools/BullingerDB.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22080">
-          <caret line="1472" column="27" selection-start-line="1472" selection-start-column="27" selection-end-line="1472" selection-end-column="27" />
+        <state relative-caret-position="193">
+          <caret line="1329" column="19" selection-start-line="1329" selection-start-column="19" selection-end-line="1329" selection-end-column="19" />
           <folding>
             <element signature="e#118#153#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/templates/index.html">
+    <entry file="file://$PROJECT_DIR$/App/templates/overview_personal_history.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="201" column="23" selection-start-line="201" selection-start-column="23" selection-end-line="201" selection-end-column="23" />
+        <state relative-caret-position="414">
+          <caret line="36" column="14" selection-end-line="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/overview_general_history.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="172">
+          <caret line="19" column="24" selection-start-line="19" selection-start-column="24" selection-end-line="19" selection-end-column="83" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/routes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="303">
+          <caret line="740" column="25" selection-start-line="740" selection-start-column="25" selection-end-line="740" selection-end-column="25" />
+          <folding>
+            <element signature="e#172#206#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/templates/file_inner.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="24" column="116" selection-start-line="24" selection-start-column="116" selection-end-line="24" selection-end-column="116" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scripts/localhost_db_fetch.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="55" selection-start-line="4" selection-start-column="55" selection-end-line="4" selection-end-column="55" />
         </state>
       </provider>
     </entry>
