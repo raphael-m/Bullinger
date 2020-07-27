@@ -74,9 +74,31 @@
     </div>
     <div class="h2_separator"></div>
 
-
     {# include "file_inner.html" #}
 
+    <!--
+    <div class="h2_box">
+        <h2>Übersichtskarte zum Briefwechsel</h2>
+        <div class="h2_section">
+            <div id="map_instance">
+                <link rel=icon href=http://bullinger-map.raphaelm.ch/favicon.ico>
+                <link href=https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css rel=stylesheet integrity=sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN crossorigin=anonymous>
+                <link rel=stylesheet href=https://unpkg.com/leaflet@1.6.0/dist/leaflet.css integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin="">
+                <script src=https://unpkg.com/leaflet@1.6.0/dist/leaflet.js integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
+                <link rel=stylesheet href=https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css>
+                <script src=https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js></script>
+                <link href=http://bullinger-map.raphaelm.ch/css/app.e281a08d.css rel=preload as=style>
+                <link href=http://bullinger-map.raphaelm.ch/js/app.c68b7dd3.js rel=preload as=script>
+                <link href=http://bullinger-map.raphaelm.ch/js/chunk-vendors.2525211d.js rel=preload as=script>
+                <link href=http://bullinger-map.raphaelm.ch/css/app.e281a08d.css rel=stylesheet>
+                <noscript><strong>We're sorry but map-vue doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript>
+                <div id=app></div><script src=http://bullinger-map.raphaelm.ch/js/chunk-vendors.2525211d.js></script>
+                <script src=http://bullinger-map.raphaelm.ch/js/app.c68b7dd3.js></script>
+            </div>
+        </div>
+    </div>
+    <div class="h2_separator"></div>
+    -->
 
     <div class="h2_box">
         <h2>Links {% include "title_navigation.html" %}</h2>
@@ -140,24 +162,6 @@
         <div class="h2_section">
             <div class="textblock">
                 <p>
-                    <span class="kw">Institut für Schweizerische Reformationsgeschichte</span>
-                    (Theologische Fakultät der Universität Zürich),
-                    Kirchgasse 9,
-                    Zürich
-                </p>
-                <ul class="items">
-                    <li>
-                        <a href="mailto:bodenmann.reinhard@theol.uzh.ch">Dr. habil. Reinhard Bodenmann</a>
-                        (Leiter der Heinrich Bullinger-Briefwechseledition)
-                    </li>
-                    <li>
-                        <a href="mailto:steiniger@theol.uzh.ch">Dr. phil. Judith Steiniger</a>
-                        (Wissenschaftliche Mitarbeiterin an der Heinrich-Bullinger-Briefwechseledition)
-                    </li>
-                </ul>
-            </div>
-            <div class="textblock">
-                <p>
                     <span class="kw">Institut für Computerlinguistik</span>
                     (Philosophische Fakultät der Universität Zürich),
                     Andreasstrasse 15,
@@ -184,6 +188,26 @@
             </div>
             <div class="textblock">
                 <p>
+                    <span class="kw">Institut für Schweizerische Reformationsgeschichte</span>
+                    (Theologische Fakultät der Universität Zürich),
+                    Kirchgasse 9,
+                    Zürich
+                </p>
+                <ul class="items">
+                    <!--
+                    <li>
+                        <a href="mailto:bodenmann.reinhard@theol.uzh.ch">Dr. habil. Reinhard Bodenmann</a>
+                        (Leiter der Heinrich Bullinger-Briefwechseledition)
+                    </li>
+                    -->
+                    <li>
+                        <a href="mailto:steiniger@theol.uzh.ch">Dr. phil. Judith Steiniger</a>
+                        (Wissenschaftliche Mitarbeiterin)
+                    </li>
+                </ul>
+            </div>
+            <div class="textblock">
+                <p>
                     Bei inhaltlichen Fragen oder Unklarheiten beim Kontrollieren der Datenbank-Einträge
                     kontaktieren Sie bitte die
                     <a href="mailto:bullinger-digital@protonmail.com">Projektkoordination</a>,
@@ -199,6 +223,7 @@
         </div>
     </div>
     <div class="h2_separator"></div>
+
 </div>
 
 <!--

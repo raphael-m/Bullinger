@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>
+	> <a class="header_link" href="{{url_for('file')}}">Kartei</a>
+	/ Verlauf (Allgemein)
+	{% include "user_status.html" %}
+</h1>
+<div class="main_box">
+	<div class="h2_box">
+		<h2>Persönlicher Verlauf</h2>
+		<div class="h2_section">
+			<p> Treffer: {{ vars["table"] | length }} </p>
+			<table class="js-sort-table paleBlueRows">
+				<thead class="my_table_head">
+					<tr class="my_table_head_row">
+						<th class="js-sort-number my_table_head_cell">ID</th>
+						<th class="js-sort-string my_table_head_cell">Status</th>
+                        <th class="js-sort-string my_table_head_cell">Anwender</th>
+						<th class="js-sort-string my_table_head_cell">Zeit</th>
+					</tr>
+				</thead>
+				<tbody>
+                {% for p in vars["table"] %}
+                    <tr class="my_table_row">
+                        <td class="my_table_cell">
+							<a href="{{url_for('assignment', id_brief=p[0])}}">{{ p[0] }}</a>
+						</td>
+                        <td class="my_table_cell">
+							<a href="{{url_for('overview_state', state=p[1])}}">{{ p[1] }}</a>
+						</td>
+                        <td class="my_table_cell">{{ p[2] }}</td>
+                        <td class="my_table_cell">{{ p[3] }}</td>
+                    </tr>
+                {% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

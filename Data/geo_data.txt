@@ -1,4 +1,4 @@
-Zürich	47.36667	8.55000		
+Zürich	47.36667	8.55000
 Bern	46.94809	7.44744		
 Basel	47.55839	7.57327		
 Chur	46.84986	9.53287		
@@ -13,11 +13,11 @@ Berg	46.82107	8.40133
 Solothurn	47.20791	7.53714		
 Nürnberg	49.45421	11.07752		
 Strassburg	48.58392	7.74553		
-Heidelberg	47.49903	9.22395		
+Heidelberg	49.41222	8.71000	MVolk	5.6.2020
 Chiavenna	46.32063	9.39816		
 Tübingen	48.52266	9.05222		
 Baden	47.47333	8.30592		
-Konstanz	47.58333	9.46667		
+Konstanz	47.66330	9.17590	MVolk	5.6.2020
 Rappoltsweiler	48.19510	7.31938		
 Marburg	50.80904	8.77069		
 Forstegg	47.24992	9.49800		
@@ -32,8 +32,8 @@ Worms	49.63278	8.35916
 Bocksberg	50.62867	10.71644		
 Memmingen	47.98372	10.18527		
 Aarau	47.39254	8.04422		
-Paris	46.98560	6.88960		
-Rappoltstein				
+Paris	48.85660	2.35166	MVolk	5.6.2020
+Rappoltstein	48.19510	7.31938	MVolk	5.6.2020
 Griessenberg				
 Lenzburg	47.38853	8.17503		
 Grönenbach	47.87714	10.22207		
@@ -51,7 +51,7 @@ Ottenbach	47.28228	8.40432
 Oxford	51.75222	-1.25596		
 Wien	48.20849	16.37208		
 Neuburg	47.64959	8.93524		
-Kappel	47.32475	7.84647		
+Kappel	47.22880	8.52722	MVolk	5.6.2020
 Vicosoprano	46.35112	9.62080		
 Wittenberg	47.38782	9.16763		
 Urdorf	47.38507	8.42581		
@@ -62,7 +62,7 @@ Mülhausen	47.75205	7.32866
 Ely	46.36604	6.17196		
 Berg am Irchel	47.56228	8.59305		
 Lauingen	48.56775	10.42706		
-Königsberg	47.28503	8.26393		
+Königsberg	54.73330	20.48330	MVolk	5.6.2020
 Bradgate	52.68857	-1.20606		
 Süs	46.74989	10.07918		
 Gyrsberg				
@@ -84,8 +84,8 @@ Rheinfelden	47.55437	7.79403
 Amberg	49.44287	11.86267		
 Zofingen	47.28779	7.94586		
 Schlachteck				
-Landshut	47.13420	7.55191		
-Rom	46.69350	6.91181		
+Landshut	48.53722	12.15222	MVolk	5.6.2020
+Rom	41.88333	12.48330	MVolk	05.06.2020
 Rottenstein	46.56667	14.41667		
 Schopfheim	47.65105	7.82089		
 Speyer	49.32083	8.43111		
@@ -96,12 +96,10 @@ Fideris	46.91627	9.74145
 Gyrenbad	47.45216	8.84660		
 Mömpelgard	47.50957	6.79823		
 Pfyn	47.59693	8.95420		
-Zürich-Neumarkt				
-s.l.	46.66919	9.95653		
-Lyon	46.67443	6.41375		
-Hessen	47.21700	8.63944		
+Lyon	45.75888	4.84139	MVolk	5.6.2020
+Hessen				
 Emden	53.36745	7.20778		
-Berlaburg				
+Berlaburg	51.04766	8.39252	MVolk	5.6.2020
 Locarno	46.17086	8.79953		
 Freiburg	46.80237	7.15128		
 Wilna	54.68916	25.27980		
@@ -133,7 +131,7 @@ Morbegno	46.13720	9.57415
 Rostock	54.08870	12.14049		
 Tomice	43.85028	19.59833		
 Backnang	48.94743	9.43718		
-Baden-Baden	47.47333	8.30592		
+Baden-Baden	48.76194	8.24083	MVolk	5.6.2020
 Biberstein	47.41641	8.08508		
 Colmar	48.08078	7.35584		
 Erlenbach	46.66021	7.55445		
@@ -198,7 +196,7 @@ Scharfenort	54.30000	18.65000
 Schleiden	50.52896	6.47692		
 Secomini				
 Solangio				
-Speier				
+Speier	49.32083	8.43111	MVolk	5.6.2020
 St. Margrethen	47.45253	9.63741		
 Stackboren				
 Toggenburg	47.20583	9.35402		
@@ -213,8 +211,7 @@ St. Germain	46.24960	7.35256
 Norden	62.00000	14.00000		
 Berleburg	51.05224	8.39227		
 Salisbury	51.06931	-1.79569		
-Mömpelgart				
-Neue Zeitung				
+Mömpelgart	47.50957	6.79823	MVolk	5.6.2020
 Schwanden	46.99541	9.07010		
 Cambridge	52.20000	0.11667		
 Reutlingen	47.52782	8.75086		
@@ -240,14 +237,13 @@ Chambéry	45.56628	5.92079
 Châtillon-sur-Loing				
 England	51.50853	-0.12574		
 Ferrara	44.83333	11.61667		
-Franckenthal				
+Franckenthal	49.53414	8.35357	MVolk	5.6.2020
 Fulham	51.48026	-0.19930		
 Gloucester	51.86568	-2.24310		
 Graubünden	46.65870	9.62296		
 Heiningen	52.86667	12.61667		
 Holborn	58.61667	-3.53333		
 Iwanowicze				
-König von Polen				
 Lambeth	51.49567	-0.11988		
 Luzern	47.05048	8.30635		
 Mailand	45.46427	9.18951		
@@ -272,7 +268,7 @@ Tarnow	50.01381	20.98698
 in England	52.41426	-1.78094		
 Altnau/TG	47.61052	9.26160		
 Anno	49.61236	40.20544		
-Antorff (Antwerpen)				
+Antorff (Antwerpen)	51.22056	4.39972	MVolk	5.6.2020
 Auschwitz	50.03437	19.21037		
 Badziejow				
 Baxterley	52.57066	-1.59490		
@@ -294,7 +290,6 @@ Bülach	47.45152	8.58491
 Calcinato (Brescia)	45.45739	10.40949		
 Cham	47.18213	8.46358		
 Châtillon	46.83053	6.83146		
-Coelims Secundus				
 Compagnie	52.98968	6.89382		
 Coventry	52.40656	-1.51217		
 Crorrea				
@@ -312,7 +307,6 @@ Fehraltorf	47.38775	8.75149
 Frankfurt u Leipzig				
 Frankreich	46.90000	5.03333		
 Frzeslawicz				
-Gesandte in Baden				
 Gilford	51.23536	-0.57427		
 Greenwich	51.47687	-0.00041		
 Guildford	51.23536	-0.57427		
@@ -333,19 +327,13 @@ Klein-Polen	50.06143	19.93658
 Kopenhagen oder Holding				
 Krumau	48.81091	14.31521		
 Kyburg	47.45569	8.74476		
-König vo England				
 König von England	48.77668	9.17855		
-König von EnglandyZuZ				
 König von Frankreich				
-König vonEngland usw				
 Landgraf im Elettgau				
-Landvogt zu Baden				
 Langenthal	47.21526	7.79607		
 Lauingen Neuburg				
 Lavin	46.76726	10.11062		
 Leeder	52.21586	7.87193		
-Lentulo Scipio				
-Locarno Luggarus				
 Lohrbach	49.40035	9.13784		
 Loleehelle				
 London Oxford	51.83652	-1.32016		
@@ -365,7 +353,6 @@ Mittelstetten	48.20468	10.76511
 Moers	51.45342	6.63260		
 Moldau (Rumänien)	46.50000	27.00000		
 Montpellier	43.61092	3.87723		
-MährenMoravi a				
 Nimes	43.83378	4.35962		
 Norwich	52.62783	1.29834		
 Nyon	46.38318	6.23955		
@@ -377,12 +364,10 @@ Ohtsys
 Oransko				
 Orbe	46.72504	6.53069		
 Osseko				
-Pasc enthält				
 Pelsnica				
 Pelsnice				
 Pelsnicze				
 Polen (Krakau)	50.06143	19.93658		
-Polen (Krakau?)				
 Posonium	48.14816	17.10674		
 Querceto	43.29441	10.72779		
 Rafz	47.60438	8.54305		
@@ -401,10 +386,7 @@ Schleusingen	50.51076	10.75658
 Sem	47.11605	8.19597		
 Sittaw Zittaut				
 Solothurn oder Bern				
-St. Germain en Layeaye				
-Steeg	52.02000	6.06111		
-Synode				
-Synode zu N t m e s				
+Steeg	50.06111	7.76944	MVolk	5.6.2020
 Synode zu la Rochelle				
 Teutsch und Welschland				
 Thetford	52.41667	0.75000		
@@ -425,4 +407,3 @@ Zaliczin
 Zapfenburg				
 Ziegenhain	50.91522	9.23754		
 Zollikon	47.34019	8.57407		
-Zollikon oder Zürich				

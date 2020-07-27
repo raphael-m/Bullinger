@@ -111,8 +111,8 @@
   #endif
 #endif
 
-/* Cygwin platform (does not define _WIN32), GNU compiler */
-#if defined(__CYGWIN__)
+/* Cygwin platform, GNU compiler */
+#if defined(_WIN32) && defined(__CYGWIN__)
   #undef EXSLTPUBFUN
   #undef EXSLTPUBVAR
   #undef EXSLTCALL
@@ -124,7 +124,7 @@
     #if !defined(LIBEXSLT_STATIC)
       #define EXSLTPUBVAR __declspec(dllimport) extern
     #else
-      #define EXSLTPUBVAR extern
+      #define EXSLTPUBVAR
     #endif
   #endif
   #define EXSLTCALL __cdecl

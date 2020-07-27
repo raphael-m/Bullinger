@@ -43,6 +43,12 @@ class GuestBookForm(FlaskForm):
     save = SubmitField('Speichern')
 
 
+class ReferenceForm(FlaskForm):
+
+    reference = StringField("Referenz")
+    submit = SubmitField('Speichern')
+
+
 class PersonNameForm(FlaskForm):
 
     p_name = StringField('Name')
@@ -50,3 +56,8 @@ class PersonNameForm(FlaskForm):
     a_name = StringField('Name')
     a_forename = StringField('Vorname')
     submit = SubmitField('Speichern')
+
+
+class HiddenDataForm(FlaskForm):
+
+    data = StringField('data')

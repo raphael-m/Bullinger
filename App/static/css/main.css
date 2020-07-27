@@ -63,3 +63,8 @@ body {
     float: left;
     color: gray;
 }
+
+#map_instance {
+    width: 100%;
+    background-color: green;
+}

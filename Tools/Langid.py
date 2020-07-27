@@ -9,7 +9,7 @@ from Tools.langid import *
 
 class Langid:
 
-    config = ['de', 'la', 'el']  # 'fr'
+    config = ['de', 'la', 'el', 'fr']
     langid.set_languages(config)
 
     @staticmethod
@@ -17,9 +17,9 @@ class Langid:
         if s:
             lang = langid.classify(s)[0]
             return {
-                'de': 'Deutsch',
-                'la': 'Latein',
-                'el': 'Griechisch',
-                'fr': 'Französisch'
+                'de': 'de',
+                'la': 'lat',
+                'el': 'gr',
+                'fr': 'fr'
             }[lang]
         else: return None

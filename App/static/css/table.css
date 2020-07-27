@@ -1,4 +1,12 @@
 
+.tc_alias {
+    background: #D0E4F5 !important;
+}
+
+.tc_uniform {
+    background: #D0E4F5 !important;
+}
+
 table.paleBlueRows {
     margin: 15px 30px;
     border: 1px solid #FFFFFF;
@@ -60,4 +68,14 @@ table.paleBlueRows tfoot td {
     padding: 5px 8px;
     font-size: 0.9em;
     font-style: italic;
+}
+
+.delete_reference, .delete_loc {
+    cursor: pointer;
+}
+
+.icon_edit {
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
 }

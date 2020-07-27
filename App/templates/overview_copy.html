@@ -7,48 +7,46 @@
     / {{ vars["relation"] }}
     {% include "user_status.html" %}
 </h1>
-
 <div class="main_box">
-
 	<div class="h2_box>">
-
-	<h2>{{ vars["relation"] }}</h2>
-	<div class="h2_section">
-
-		<p>Treffer: {{ vars["data"] | length }}</p>
-
-		<div class="parallel">
-            <table class="js-sort-table paleBlueRows">
-                <thead class="my_table_head">
-                    <tr class="my_table_head_row">
-                        <th class="js-sort-string my_table_head_cell">{{ vars["relation"] }}</th>
-                        <th class="js-sort-number my_table_head_cell">Frequenz</th>
-                        <th class="js-sort-number my_table_head_cell">offen</th>
-                        <th class="js-sort-number my_table_head_cell">unklar</th>
-                        <th class="js-sort-number my_table_head_cell">ungültig</th>
-                        <th class="js-sort-number my_table_head_cell">abgeschlossen</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for p in vars["data"] %}
-                    <tr class="my_table_row">
-                        <td class="my_table_cell">
-                            <a href="{{url_for('overview_copy_x', copy=p[0])}}">{{ p[0] }}</a>
-                        </td>
-                        <td class="my_table_cell">{{ p[1] }}</td>
-                        <td class="my_table_cell">{{ p[2] }}</td>
-                        <td class="my_table_cell">{{ p[3] }}</td>
-                        <td class="my_table_cell">{{ p[4] }}</td>
-                        <td class="my_table_cell">{{ p[5] }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-		</div>
-	</div>
+        <h2>{{ vars["relation"] }}</h2>
+        <div class="h2_section">
+            <p>Bemerkungen zur ersten Kopie (A) können noch Verweise auf weitere Kopien enthalten.</p>
+            <p>&#8594; <a class="text_link" href="{{url_for('overview_copy_remarks')}}">Bemerkungen zu Kopie A</a></p>
+            <p>&#8594; <a class="text_link" href="{{url_for('overview_copy_remarks')}}">alle Bemerkungen</a></p>
+            <br/>
+            <p>Treffer: {{ vars["data"] | length }}</p>
+            <div class="parallel">
+                <table class="js-sort-table paleBlueRows">
+                    <thead class="my_table_head">
+                        <tr class="my_table_head_row">
+                            <th class="js-sort-string my_table_head_cell">{{ vars["relation"] }}</th>
+                            <th class="js-sort-number my_table_head_cell">Frequenz</th>
+                            <th class="js-sort-number my_table_head_cell">offen</th>
+                            <th class="js-sort-number my_table_head_cell">unklar</th>
+                            <th class="js-sort-number my_table_head_cell">ungültig</th>
+                            <th class="js-sort-number my_table_head_cell">abgeschlossen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for p in vars["data"] %}
+                        <tr class="my_table_row">
+                            <td class="my_table_cell">
+                                <a href="{{url_for('overview_copy_x', copy=p[0])}}">{{ p[0] }}</a>
+                            </td>
+                            <td class="my_table_cell">{{ p[1] }}</td>
+                            <td class="my_table_cell">{{ p[2] }}</td>
+                            <td class="my_table_cell">{{ p[3] }}</td>
+                            <td class="my_table_cell">{{ p[4] }}</td>
+                            <td class="my_table_cell">{{ p[5] }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
     <div class="clearing"></div>
-
 </div>
 
 {% endblock %}

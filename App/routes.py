@@ -12,6 +12,8 @@ from flask import render_template, flash, redirect, url_for, make_response, json
 from flask_login import current_user, login_user, login_required, logout_user
 from sqlalchemy import desc, func, asc, union_all, and_
 from Tools.BullingerDB import BullingerDB
+from Tools.Transcription import Transcriptions
+from Tools.Langid import Langid
 from Tools.Dictionaries import CountDict, ListDict
 from collections import defaultdict
 from App.models import *
@@ -268,6 +270,192 @@ def overview_state(state):
         }
     )
 
+
+@app.route('/Kartei/Literatur', methods=['GET'])
+def overview_literature():
+    BullingerDB.track(current_user.username, '/Kartei/Literatur', datetime.now())
+    return render_template(
+        'overview_literature.html',
+        title="Literatur",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "data": BullingerDB.get_data_overview_literature(),
+        }
+    )
+
+@app.route('/Kartei/Gedruckt', methods=['GET'])
+def overview_printed():
+    BullingerDB.track(current_user.username, '/Kartei/Gedruckt', datetime.now())
+    return render_template(
+        'overview_printed.html',
+        title="Literatur",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "data": BullingerDB.get_data_overview_printed(),
+        }
+    )
+
+@app.route('/Kartei/Literatur&Gedruckt', methods=['GET'])
+def overview_literature_and_printed():
+    BullingerDB.track(current_user.username, '/Kartei/Literatur&Gedruckt', datetime.now())
+    return render_template(
+        'overview_literature_and_printed.html',
+        title="Literatur",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "data": BullingerDB.get_data_overview_literature_and_printed(),
+        }
+    )
+
+@app.route('/Kartei/Referenzen', methods=['GET', 'POST'])
+def overview_references():
+
+    BullingerDB.track(current_user.username, '/Kartei/Referenzen', datetime.now())
+    return render_template(
+        'references.html',
+        title="Referenzen",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "data": BullingerDB.get_data_overview_references(),
+            "edit_id": None
+        }
+    )
+
+@login_required
+@app.route('/Kartei/Referenzen/delete/<ref_id>', methods=['GET'])
+@app.route('/Kartei/Referenzen/delete/<ref_id>/', methods=['GET'])
+@app.route('/Kartei/Referenzen/delete/<ref_id>/<scroll_pos>', methods=['GET'])
+def delete_reference(ref_id, scroll_pos=0):
+    BullingerDB.track(current_user.username, '/Kartei/Referenzen/delete/'+ref_id, datetime.now())
+    BullingerDB.delete_reference(int(ref_id))
+    return render_template(
+        'references.html',
+        title="Referenzen",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "data": BullingerDB.get_data_overview_references(),
+            "edit_id": None,
+            "scroll_pos": scroll_pos,
+        }
+    )
+
+@login_required
+@app.route('/Kartei/Referenzen/save/<ref>', methods=['GET'])
+def save_reference(ref):
+    BullingerDB.track(current_user.username, '/Kartei/Referenzen/save/'+ref, datetime.now())
+    BullingerDB.save_reference(ref, current_user.username)
+    return render_template(
+        'references.html',
+        title="Referenzen",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "data": BullingerDB.get_data_overview_references(),
+            "edit_id": None,
+        }
+    )
+
+
+@login_required
+@app.route('/Kartei/Referenzen/edit/<ref_id>', methods=['GET', 'POST'])
+@app.route('/Kartei/Referenzen/edit/<ref_id>/', methods=['GET', 'POST'])
+@app.route('/Kartei/Referenzen/edit/<ref_id>/<scroll_pos>', methods=['GET', 'POST'])
+def edit_reference(ref_id, scroll_pos=0):
+    BullingerDB.track(current_user.username, '/Kartei/Referenzen/edit/'+ref_id, datetime.now())
+    form = ReferenceForm()
+    if form.validate_on_submit():
+        if form.reference.data: BullingerDB.edit_reference(ref_id, form.reference.data, current_user.username)
+        return redirect(url_for('overview_references'))
+    return render_template(
+        'references.html',
+        form=form,
+        title="Referenzen",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "data": BullingerDB.get_data_overview_references(),
+            "edit_id": int(ref_id),
+            "scroll_pos": scroll_pos,
+        }
+    )
+
+"""
+@login_required
+@app.route('/api/read_literature', methods=['GET'])
+def read_literatur():
+    with open("Data/Literatur/literature_reference.txt") as src:
+        for line in src:
+            db.session.add(Referenzen(literature=line.strip()))
+            db.session.commit()
+    return redirect(url_for('admin.index'))
+
+
+@login_required
+@app.route('/api/read_geo_data', methods=['GET'])
+def read_geo_data():
+    db.session.query(Ortschaften).delete()
+    with open("Data/geo_data.txt") as src:
+        for line in src:
+            d = line.strip().split("\t")
+            ort, l, b = d[0], None, None
+            if len(d) > 2: l, b = d[1], d[2]
+            db.session.add(Ortschaften(ort=ort, l=l, b=b))
+    db.session.commit()
+    return redirect(url_for('admin.index'))
+"""
+
+@app.route('/Kartei/Ortschaften/Koordinaten', methods=['GET'])
+def coordinates():
+    BullingerDB.track(current_user.username, '/Kartei/Ortschaften/Koordinaten', datetime.now())
+    return render_template(
+        'overview_coordinates.html',
+        title="Koordinaten",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "data": BullingerDB.get_data_overview_coordinates(),
+        }
+    )
+
+
+@login_required
+@app.route('/Kartei/Ortschaften/Koordinaten/delete/<coord_id>', methods=['GET'])
+def delete_coordinates(coord_id):
+    BullingerDB.track(current_user.username, '/Kartei/Koordinaten/delete/'+coord_id, datetime.now())
+    BullingerDB.delete_coordinates(int(coord_id))
+    return render_template(
+        'overview_coordinates.html',
+        title="Koordinaten",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "data": BullingerDB.get_data_overview_coordinates(),
+        }
+    )
+
+
+@login_required
+@app.route('/Kartei/Ortschaften/Koordinaten/neu/<ort>/<c1>/<c2>', methods=['GET'])
+def save_coordinates(ort, c1, c2):
+    ort = ort.replace(Config.URL_ESC, "/")
+    BullingerDB.track(current_user.username, '/Kartei/Ortschaften/Koordinaten/neu/'+ort, datetime.now())
+    BullingerDB.save_coordinates(ort, c1, c2, current_user.username)
+    return render_template(
+        'overview_coordinates.html',
+        title="Koordinaten",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "data": BullingerDB.get_data_overview_coordinates(),
+        }
+    )
+
+
 @app.route('/Statistiken', methods=['GET'])
 def stats(n_top=50):
     BullingerDB.track(current_user.username, '/Statistiken', datetime.now())
@@ -407,7 +595,7 @@ def overview_copy():
             "username": current_user.username,
             "user_stats": BullingerDB.get_user_stats(current_user.username),
             "relation": "Kopien",
-            "data": BullingerDB.get_data_overview_copy(),
+            "data": BullingerDB.get_data_overview_copy2(),
         }
     )
 
@@ -423,6 +611,34 @@ def overview_copy_x(copy):
             "user_stats": BullingerDB.get_user_stats(current_user.username),
             "standort": copy,
             "data": BullingerDB.get_data_overview_copy_x(copy),
+        }
+    )
+
+
+@app.route('/Kartei/Kopie/Bemerkungen', methods=['GET'])
+def overview_copy_remarks():
+    BullingerDB.track(current_user.username, '/Kartei/Kopien/Bemerkungen', datetime.now())
+    return render_template(
+        "overview_copy_remarks.html",
+        title="Kartei/Kopien (Bemerkungen)",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "data": BullingerDB.get_data_overview_copy_remarks(),
+        }
+    )
+
+
+@app.route('/Kartei/Kopie/Bemerkungen/A', methods=['GET'])
+def overview_copy_remarks_A():
+    BullingerDB.track(current_user.username, '/Kartei/Kopien/Bemerkungen', datetime.now())
+    return render_template(
+        "overview_copy_remarks.html",
+        title="Kartei/Kopien (Bemerkungen)",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "data": BullingerDB.get_data_overview_copy_remarks_A(),
         }
     )
 
@@ -504,6 +720,34 @@ def person_by_place(place):
         }
     )
 
+@app.route('/Kartei/Verlauf/Persönlich', methods=['GET'])
+def personal_history():
+    BullingerDB.track(current_user.username, '/Kartei/History', datetime.now())
+    return render_template(
+        "overview_personal_history.html",
+        title="History",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "user_stats_all": BullingerDB.get_user_stats_all(current_user.username),
+            "table": BullingerDB.get_data_personal_history(current_user.username),
+        }
+    )
+
+@app.route('/Kartei/Verlauf/Allgemein', methods=['GET'])
+def general_history():
+    BullingerDB.track(current_user.username, '/Kartei/History', datetime.now())
+    return render_template(
+        "overview_general_history.html",
+        title="History",
+        vars={
+            "username": current_user.username,
+            "user_stats": BullingerDB.get_user_stats(current_user.username),
+            "user_stats_all": BullingerDB.get_user_stats_all(current_user.username),
+            "table": BullingerDB.get_data_general_history(current_user.username),
+        }
+    )
+
 @app.route('/Kartei/Personen/Alias', methods=['POST', 'GET'])
 @login_required
 def alias():
@@ -575,8 +819,8 @@ def alias():
     for m in db.session.query(dat.c.enn, dat.c.evn, dat.c.count).group_by(dat.c.enn, dat.c.evn).all():
         data = []
         for a in db.session.query(dat.c.ann, dat.c.avn, dat.c.count2).filter(dat.c.enn == m[0], dat.c.evn == m[1]).all():
-            data.append([a[0], a[1], a[2]])
-        if len(data): p_data.append([m[0], m[1], data, m[2]])
+            data.append([a[0], a[1], a[2] if a[2] else 0])
+        if len(data): p_data.append([m[0], m[1], data, m[2] if m[2] else 0])
 
     form.process()
     return render_template('person_aliases.html', title="Alias", form=form, vars={
@@ -659,8 +903,23 @@ def assignment(id_brief):
     BullingerDB.track(current_user.username, '/card/' + str(id_brief), datetime.now())
     ui_path = Config.BULLINGER_UI_PATH
     ui_path = ui_path + ("" if ui_path.endswith("/") else "/")
+    html_content = _sanitize_vue_html(ui_path)
+    return render_template('assignment_vue.html',
+        card_index=id_brief,
+        html_content=html_content)
+
+
+@app.route('/Kartei/Ortschaften/Karte', methods=['GET'])
+def locations_map():
+    BullingerDB.track(current_user.username, '/map', datetime.now())
+    map_path = Config.BULLINGER_MAP_PATH
+    html_content = _sanitize_vue_html(map_path)
+    return render_template('assignment_vue.html',
+        html_content=html_content)
+
+def _sanitize_vue_html(address):
     # Load vue html from deployment and strip unneeded tags (html, body, doctype, title, icon, fonts etc.)
-    html_content = requests.get(ui_path).text
+    html_content = requests.get(address).text
     html_content = re.sub("<!DOCTYPE html>", "", html_content)
     html_content = re.sub("</?html.*?>", "", html_content)
     html_content = re.sub("</?meta.*?>", "", html_content)
@@ -669,10 +928,8 @@ def assignment(id_brief):
     html_content = re.sub("</?head>", "", html_content)
     html_content = re.sub("</?body>", "", html_content)
     html_content = re.sub("<link href=(\")?https://fonts.googleapis.com.*?>", "", html_content)
-    html_content = re.sub("(?P<ref> (src|href)=(\")?)/", r"\g<ref>" + ui_path, html_content)
-    return render_template('assignment_vue.html',
-        card_index=id_brief,
-        html_content=html_content)
+    html_content = re.sub("(?P<ref> (src|href)=(\")?)/", r"\g<ref>" + address, html_content)
+    return html_content
 
 
 @app.route('/api/assignments/<id_brief>', methods=['GET'])
@@ -937,8 +1194,9 @@ def send_places():
     p = db.session.query(
         Ortschaften.ort.label("ort"),
         Ortschaften.laenge.label("l"),
-        Ortschaften.breite.label("b")
-    ).subquery()
+        Ortschaften.breite.label("b"),
+        Ortschaften.status.label("status")
+    ).filter(Ortschaften.status == 1).subquery()
     s = db.session.query(
         q.c.place.label("place"),  # 0
         fe.c.count.label("em"),  # 1
@@ -976,6 +1234,7 @@ def test():
     print(count)
     return redirect(url_for('index'))
 
+"""
 # read geo_data
 @app.route('/api/read_geo_data', methods=['GET', 'POST'])
 def read_geo_data():
@@ -987,7 +1246,7 @@ def read_geo_data():
             db.session.add(Ortschaften(ort=ort, l=l, b=b))
     db.session.commit()
     return redirect(url_for('index'))
-
+"""
 
 # TIME-LINES
 @app.route('/api/get_correspondence/<name>/<forename>/<location>', methods=['GET'])
@@ -1000,3 +1259,52 @@ def get_correspondences_all(name, forename, location):
 def get_persons_all():
     BullingerDB.track(current_user.username, '/api/get_persons', datetime.now())
     return jsonify(BullingerDB.get_persons_by_var(None, None))
+
+
+@app.route('/api/update_coordinates_with_new_places', methods=['GET'])
+def update_coordinates_places():
+    recent_index, recent_sender, recent_receiver = \
+        BullingerDB.get_most_recent_only(db.session, Kartei).subquery(), \
+        BullingerDB.get_most_recent_only(db.session, Absender).subquery(), \
+        BullingerDB.get_most_recent_only(db.session, Empfaenger).subquery()
+    pers = db.session.query(Person.id.label("id"), Person.ort.label("place")).subquery()
+    q_index_place = lambda r: db.session.query(
+        recent_index.c.id_brief.label("id"),
+        pers.c.place.label("place"),
+        recent_index.c.rezensionen.label("reviews"),
+        recent_index.c.status.label("state"),
+    ).outerjoin(r, recent_index.c.id_brief == r.c.id_brief)\
+        .outerjoin(pers, pers.c.id == r.c.id_person)\
+        .filter(recent_index.c.status == "abgeschlossen")
+    qa_index_place = q_index_place(recent_sender)
+    qe_index_place = q_index_place(recent_receiver)
+    p = union_all(qa_index_place, qe_index_place)
+    old = db.session.query(Ortschaften.ort).filter(Ortschaften.status == 1).all()
+    data = db.session.query(
+            p.c.place.label("ort")
+        ).filter(p.c.place.isnot(None))\
+        .group_by(p.c.place).subquery()
+    data = db.session.query(
+        data.c.ort
+    ).filter(data.c.ort.notin_([i[0] for i in old])).filter(data.c.ort.isnot("s.l."))
+    for i in data: db.session.add(Ortschaften(ort=i[0]))
+    db.session.commit()
+    return redirect(url_for('index'))
+
+
+# Processing student transcriptions
+@app.route('/api/process_transcriptions/subscriptions', methods=['GET', 'POST'])
+def add_un():
+    path = "Data/TUSTEP/7_un"
+    # Transcriptions.print_contexts(path, "<vo>")
+    """
+    Transcriptions.correct_od_close_vo(path)
+    Transcriptions.correct_vo_close(path)
+    Transcriptions.correct_subscription_tx(path)
+    Transcriptions.correct_subscription_lz(path)
+    Transcriptions.correct_lz_end(path)
+    Transcriptions.annotate_odtx(path)
+    """
+    Transcriptions.eliminate_exceptional_tags(path)
+    Transcriptions.count_all(path)
+    return redirect(url_for('index'))
